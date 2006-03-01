@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.sun.faces.maven</groupId>
+  <artifactId>maven-project</artifactId>
+  <packaging>pom</packaging>
+  <name>Maven Project</name>
+  <version>0.1-SNAPSHOT</version>
+  <description>Artifacts used in the 0.1 build of jsf-extensions and its subprojects.</description>
+  <url>https://jsf-extensions.dev.java.net/</url>
+
+  <scm>
+    <connection>scm:svn:http://jsf-extensions.dev.java.net/svn/jsf-extensions/trunk</connection>
+    <developerConnection>scm:svn:https://jsf-extensions.dev.java.net/svn/jsf-extensions/trunk</developerConnection>
+    <url>https://jsf-extensions.dev.java.net/source/browse/jsf-extensions/</url>
+  </scm>
+
+<!-- PENDING(edburns): when the java.net maven moves to m2, fix this.
+  <distributionManagement>
+    <repository>
+      <id>apache-maven</id>
+      <name>Apache Maven Repository</name>
+      <url>scpexe://minotaur.apache.org/www/www.apache.org/dist/maven-repository</url>
+    </repository>
+    <snapshotRepository>
+      <uniqueVersion>false</uniqueVersion>
+      <id>apache-maven-snapshots</id>
+      <name>Apache Maven Snapshot Repository</name>
+      <url>scpexe://minotaur.apache.org/www/cvs.apache.org/maven-snapshot-repository</url>
+    </snapshotRepository>    
+  </distributionManagement>  
+
+-->
+
+  <modules>
+    <module>master-pom</module>
+  </modules>
+</project>

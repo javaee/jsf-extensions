@@ -1,0 +1,28 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.sun.faces</groupId>
+  <artifactId>jsf-extensions-build</artifactId>
+  <packaging>pom</packaging>
+  <version>0.1-SNAPSHOT</version>
+  <name>Build Project</name>
+  <url>https://jsf-extensions.dev.java.net/</url>
+
+  <scm>
+    <connection>scm:svn:http://jsf-extensions.dev.java.net/svn/jsf-extensions/trunk</connection>
+    <developerConnection>scm:svn:https://jsf-extensions.dev.java.net/svn/jsf-extensions/trunk</developerConnection>
+    <url>https://jsf-extensions.dev.java.net/source/browse/jsf-extensions/</url>
+  </scm>
+
+  <modules>
+    <module>maven</module>
+    <module>flash</module>
+  </modules>
+
+  <build>
+    <defaultGoal>install</defaultGoal>
+  </build>
+
+</project>
+

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.sun.faces.maven</groupId>
+  <artifactId>jsf-extensions-master</artifactId>
+  <packaging>pom</packaging>
+  <name>Master POM</name>
+  <version>0.1-SNAPSHOT</version>
+  <description>This is a master POM that is meant to be used by the various jsf-extensions modules.  It contains information that is 
+     common to all projects.</description>
+  <url>https://jsf-extensions.dev.java.net/</url>
+  <issueManagement>
+    <system>issueZilla</system>
+    <url>https://jsf-extensions.dev.java.net/servlets/ProjectIssues</url>
+  </issueManagement>
+<!-- PENDING(edburns): don't have CI yet.
+  <ciManagement>
+    <system>luntbuild</system>
+    <notifiers>
+      <notifier>
+        <configuration>
+          <address>cvs@jsf-extensions.dev.java.net</address>
+        </configuration>
+      </notifier>
+    </notifiers>
+  </ciManagement>  
+-->
+  <mailingLists>
+    <mailingList>
+      <name>jsf-extensions User List</name>
+      <post>users@jsf-extensions.dev.java.net</post>
+      <archive>https://jsf-extensions.dev.java.net/servlets/SummarizeList?listName=users</archive>
+    </mailingList>
+    <mailingList>
+      <name>jsf-extensions Dev List</name>
+      <post>dev@jsf-extensions.dev.java.net</post>
+      <archive>https://jsf-extensions.dev.java.net/servlets/SummarizeList?listName=dev</archive>
+    </mailingList>
+    <mailingList>
+      <name>jsf-extensions Announce List</name>
+      <post>announce@jsf-extensions.dev.java.net</post>
+      <archive>https://jsf-extensions.dev.java.net/servlets/SummarizeList?listName=announce</archive>
+    </mailingList>
+    <mailingList>
+      <name>jsf-extensions Issues List</name>
+      <post>issues@jsf-extensions.dev.java.net</post>
+      <archive>https://jsf-extensions.dev.java.net/servlets/SummarizeList?listName=issues</archive>
+    </mailingList>
+    <mailingList>
+      <name>jsf-extensions Commits List</name>
+      <post>commits@jsf-extensions.dev.java.net</post>
+      <archive>https://jsf-extensions.dev.java.net/servlets/SummarizeList?listName=commits</archive>
+    </mailingList>
+  </mailingLists>
+  <developers>
+    <developer>
+      <id>edburns</id>
+      <name>Ed Burns</name>
+      <email>ed.burns@sun.com</email>
+      <organization>Sun Microsystems, Inc.</organization>
+      <roles>
+        <role>project-owner</role>
+      </roles>
+      <timezone>-6</timezone>
+    </developer>
+    <developer>
+      <id>jhook</id>
+      <name>Jacob Hookom</name>
+      <email>jacob@hookom.net</email>
+      <organization></organization>
+      <roles>
+        <role>developer</role>
+      </roles>
+      <timezone>-7</timezone>
+    </developer>
+    <developer>
+      <id>awiner</id>
+      <name>Adam Winer</name>
+      <email>adam.winer@oracle.com</email>
+      <organization>Oracle, Inc.</organization>
+      <roles>
+        <role>developer</role>
+      </roles>
+      <timezone>-9</timezone>
+    </developer>
+  </developers>
+  <contributors>
+  </contributors>
+  <licenses>
+    <license>
+      <name>COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0</name>
+      <url>http://www.opensource.org/licenses/cddl1.php</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <scm>
+    <connection>scm:svn:http://jsf-extensions.dev.java.net/svn/jsf-extensions/trunk</connection>
+    <developerConnection>scm:svn:https://jsf-extensions.dev.java.net/svn/jsf-extensions/trunk</developerConnection>
+    <url>https://jsf-extensions.dev.java.net/source/browse/jsf-extensions/</url>
+  </scm>
+  <organization>
+    <name>Sun Microsystems, Inc</name>
+    <url>http://www.sun.com/</url>
+  </organization>
+  <repositories>
+    <repository>
+      <snapshots />
+      <id>ibiblio</id>
+      <url>http://www.ibiblio.org/maven2/</url>
+    </repository>
+    <repository>
+      <snapshots />
+      <id>java.net</id>
+      <name>Maven 1.x Repository</name>
+      <url>https://maven-repository.dev.java.net/nonav/repository/</url>
+      <layout>legacy</layout>
+    </repository>
+  </repositories>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+  <reporting>
+    <plugins>
+      <plugin>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </reporting>
+  <distributionManagement>
+    <repository>
+      <id>apache-maven</id>
+      <name>Apache Maven Repository</name>
+      <url>scpexe://minotaur.apache.org/www/www.apache.org/dist/maven-repository</url>
+    </repository>
+    <snapshotRepository>
+      <uniqueVersion>false</uniqueVersion>
+      <id>apache-maven-snapshots</id>
+      <name>Apache Maven Snapshot Repository</name>
+      <url>scpexe://minotaur.apache.org/www/cvs.apache.org/maven-snapshot-repository</url>
+    </snapshotRepository>
+    <site>
+      <id>apache-site</id>
+      <name>Apache Website</name>
+      <url>scpexe://minotaur.apache.org/www/myfaces.apache.org</url>
+    </site>
+  </distributionManagement>
+</project>

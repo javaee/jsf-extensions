@@ -17,7 +17,7 @@
 
   <modules>
     <module>maven</module>
-    <module>flash</module>
+    <module>run-time</module>
   </modules>
 
   <build>

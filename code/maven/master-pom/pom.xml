@@ -110,8 +110,15 @@
     <repository>
       <snapshots />
       <id>java.net</id>
-      <name>Maven 1.x Repository</name>
+      <name>Java.net Maven 1.x Repository for external projects</name>
       <url>https://maven-repository.dev.java.net/nonav/repository/</url>
+      <layout>legacy</layout>
+    </repository>
+    <repository>
+      <snapshots />
+      <id>java.net.shared</id>
+      <name>Java.net Maven 1.x Repository for glassfish dependencies</name>
+      <url>http://download.java.net/javaee5/external/shared</url>
       <layout>legacy</layout>
     </repository>
   </repositories>
@@ -122,6 +129,49 @@
       <version>3.8.1</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>com-sun-commons-logging</groupId>
+      <artifactId>com-sun-commons-logging</artifactId>
+      <version>1.0.4</version>
+    </dependency>
+    <dependency>
+      <groupId>com-sun-commons-digester</groupId>
+      <artifactId>com-sun-commons-digester</artifactId>
+      <version>1.5</version>
+    </dependency>
+    <dependency>
+      <groupId>com-sun-commons-collections</groupId>
+      <artifactId>com-sun-commons-collections</artifactId>
+      <version>2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>com-sun-commons-beanutils</groupId>
+      <artifactId>com-sun-commons-beanutils</artifactId>
+      <version>1.6.1</version>
+    </dependency>
+    <dependency>
+      <groupId>ant</groupId>
+      <artifactId>ant</artifactId>
+      <version>1.6.2</version>
+    </dependency>
+    <dependency>
+      <groupId>javax.faces</groupId>
+      <artifactId>jsf-api</artifactId>
+      <version>1.2-NIGHTLY_20060329-SNAPSHOT</version>
+      <type>jar</type>
+    </dependency>
+    <dependency>
+      <groupId>portlet-api</groupId>
+      <artifactId>portlet-api</artifactId>
+      <version>1.0</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>javaee</groupId>
+      <artifactId>javaee</artifactId>
+      <version>1.5</version>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
   <reporting>
     <plugins>
@@ -130,22 +180,5 @@
       </plugin>
     </plugins>
   </reporting>
-  <distributionManagement>
-    <repository>
-      <id>apache-maven</id>
-      <name>Apache Maven Repository</name>
-      <url>scpexe://minotaur.apache.org/www/www.apache.org/dist/maven-repository</url>
-    </repository>
-    <snapshotRepository>
-      <uniqueVersion>false</uniqueVersion>
-      <id>apache-maven-snapshots</id>
-      <name>Apache Maven Snapshot Repository</name>
-      <url>scpexe://minotaur.apache.org/www/cvs.apache.org/maven-snapshot-repository</url>
-    </snapshotRepository>
-    <site>
-      <id>apache-site</id>
-      <name>Apache Website</name>
-      <url>scpexe://minotaur.apache.org/www/myfaces.apache.org</url>
-    </site>
-  </distributionManagement>
+  <distributionManagement />
 </project>

@@ -3,9 +3,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.sun.jsf-extensions</groupId>
-  <artifactId>jsf-extensions-run-time</artifactId>
+  <artifactId>jsf-extensions-test-time</artifactId>
   <packaging>jar</packaging>
-  <name>jsf-extensions-run-time</name>
+  <name>jsf-extensions-test-time</name>
   <url>https://jsf-extensions.dev.java.net/</url>
   <description>
     Run time jsf-extensions
@@ -26,17 +26,49 @@
   <build>
 
     <sourceDirectory>src/main/java</sourceDirectory>
+    <defaultGoal>install</defaultGoal>
     <resources>
       <resource>
-        <targetPath>META-INF</targetPath>
         <directory>src/main/resources</directory>
         <includes>
-            <include>faces-config.xml</include>
-            <include>jsf-extensions.tld</include>
+            <include>*.properties</include>
         </includes>
      </resource>
    </resources>
 
   </build>
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>cactus</groupId>
+      <artifactId>cactus</artifactId>
+      <version>13-1.7.1</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>cactus</groupId>
+      <artifactId>cactus-ant</artifactId>
+      <version>13-1.7.1</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.faces</groupId>
+      <artifactId>jsf-impl</artifactId>
+      <version>1.2-NIGHTLY_20060329-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+        <groupId>el-ri</groupId>
+        <artifactId>el-ri</artifactId>
+        <version>1.5</version>
+        <scope>provided</scope>
+    </dependency>
+  </dependencies>
 
 </project>

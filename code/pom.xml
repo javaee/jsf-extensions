@@ -18,6 +18,8 @@
   <modules>
     <module>maven</module>
     <module>run-time</module>
+    <module>test-time</module>
+    <module>run-time-test</module>
   </modules>
 
   <build>

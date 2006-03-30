@@ -101,6 +101,24 @@
     <name>Sun Microsystems, Inc</name>
     <url>http://www.sun.com/</url>
   </organization>
+
+  <build>
+
+   <pluginManagement>
+     <plugins>
+       <plugin>
+         <groupId>org.apache.maven.plugins</groupId>
+         <artifactId>maven-compiler-plugin</artifactId>
+         <configuration>
+           <source>1.5</source>
+           <target>1.5</target>
+         </configuration>
+       </plugin>
+     </plugins>
+   </pluginManagement>
+
+  </build>
+
   <repositories>
     <repository>
       <snapshots />
@@ -124,41 +142,40 @@
   </repositories>
   <dependencies>
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>com-sun-commons-logging</groupId>
       <artifactId>com-sun-commons-logging</artifactId>
       <version>1.0.4</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com-sun-commons-digester</groupId>
       <artifactId>com-sun-commons-digester</artifactId>
       <version>1.5</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com-sun-commons-collections</groupId>
       <artifactId>com-sun-commons-collections</artifactId>
       <version>2.1</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com-sun-commons-beanutils</groupId>
       <artifactId>com-sun-commons-beanutils</artifactId>
       <version>1.6.1</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>ant</groupId>
       <artifactId>ant</artifactId>
       <version>1.6.2</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>javax.faces</groupId>
       <artifactId>jsf-api</artifactId>
       <version>1.2-NIGHTLY_20060329-SNAPSHOT</version>
-      <type>jar</type>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>portlet-api</groupId>

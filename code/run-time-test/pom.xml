@@ -1,0 +1,69 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.sun.jsf-extensions</groupId>
+  <artifactId>jsf-extensions-run-time-test</artifactId>
+  <packaging>war</packaging>
+  <name>jsf-extensions-run-time-test</name>
+  <url>https://jsf-extensions.dev.java.net/</url>
+  <description>
+    Run time jsf-extensions
+  </description>
+
+  <parent>
+    <groupId>com.sun.faces.maven</groupId>
+    <artifactId>jsf-extensions-master</artifactId>
+    <version>0.1-SNAPSHOT</version>
+  </parent>
+
+  <scm>
+    <connection>scm:svn:http://jsf-extensions.dev.java.net/svn/jsf-extensions/trunk</connection>
+    <developerConnection>scm:svn:https://jsf-extensions.dev.java.net/svn/jsf-extensions/trunk</developerConnection>
+    <url>https://jsf-extensions.dev.java.net/source/browse/jsf-extensions/</url>
+  </scm>
+
+  <build>
+    <defaultGoal>install</defaultGoal>
+    <sourceDirectory>src/main/java</sourceDirectory>
+    <finalName>jsf-extensions</finalName>
+    <pluginManagement>
+     <plugins>
+       <plugin>
+         <groupId>org.apache.maven.plugins</groupId>
+         <artifactId>maven-war-plugin</artifactId>
+         <configuration>
+           <warSourceDirectory>src/run-time-test</warSourceDirectory>
+           <warName>jsf-extensions</warName>
+         </configuration>
+       </plugin>
+     </plugins>
+   </pluginManagement>
+  </build>
+
+  <dependencies>
+    <dependency>
+      <groupId>javax.faces</groupId>
+      <artifactId>jsf-impl</artifactId>
+      <version>1.2-NIGHTLY_20060329-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.jsf-extensions</groupId>
+      <artifactId>jsf-extensions-test-time</artifactId>
+      <version>0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.jsf-extensions</groupId>
+      <artifactId>jsf-extensions-run-time</artifactId>
+      <version>0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>portlet-api</groupId>
+      <artifactId>portlet-api</artifactId>
+      <version>1.0</version>
+    </dependency>
+  </dependencies>
+
+
+</project>

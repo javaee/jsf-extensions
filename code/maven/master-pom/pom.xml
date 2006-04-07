@@ -174,7 +174,7 @@
     <dependency>
       <groupId>javax.faces</groupId>
       <artifactId>jsf-api</artifactId>
-      <version>1.2-NIGHTLY_20060329-SNAPSHOT</version>
+      <version>1.2-b19</version>
       <scope>provided</scope>
     </dependency>
     <dependency>

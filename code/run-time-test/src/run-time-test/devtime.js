@@ -159,7 +159,7 @@ function submitViaAJAX(event, handlerName) {
     else {
 	params = "";
     }
-    params = params + "com.sun.faces.PCtxt=" + ":form:subview1:,:form:subview2";
+    params = params + "com.sun.faces.PCtxt=" + ":form:subview1,:form:subview2";
     var requestStruct = prepareRequest(params);
     requestStruct.request.onreadystatechange = processAjaxResponse;
     requestStruct.request.send(requestStruct.params);

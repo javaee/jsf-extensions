@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import javax.faces.component.ContextCallback;
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
@@ -58,6 +59,7 @@ public class ProcessingContextViewRoot extends UIViewRoot {
     }
     
     private transient DelegateRootIterator delegateRootIter = null;
+    private transient boolean invokeOnComponent = false;
 
     /**
      * Holds value of property processingContexts.
@@ -108,49 +110,10 @@ public class ProcessingContextViewRoot extends UIViewRoot {
 
     public static final String PROCESSING_CONTEXTS_REQUEST_PARAM_NAME = "com.sun.faces.PCtxt";
     
-    private static UIComponent findProcessingContextComponent(UIComponent component,
-            String pcId) {
-        String [] componentIds = null;
-        String curId = null;
-        UIComponent result = component;
-        
-        componentIds = pcId.split("" + NamingContainer.SEPARATOR_CHAR);
-        for (String curPcId : componentIds) {
-            curId = result.getId();
-            // If we have found a match...
-            if (null != curId && curPcId.equals(curId)) {
-                result = component;
-                // search no further.
-                break;
-            }
-            
-            // Otherwise, search facets.
-            UIComponent facet = null;
-            if (null != (facet = result.getFacets().get(curPcId))) {
-                result = facet;
-            }
-            else {
-                // If not found as a facet, search children.
-                List<UIComponent> children = result.getChildren();
-                if (0 < children.size()) {
-                    for (UIComponent child : children) {
-                        if (null != (result =
-                                findProcessingContextComponent(child, curPcId))) {
-                            break;
-                        }
-                    }
-                } else {
-                    result = null;
-                }
-            }
-        }
-        
-        return result;
-    }
-    
     private List<UIComponent> getDelegateRoots() {
         // Otherwise, we need to generate the list of delegateRoots.
-        UIComponent cur = null;
+        final UIComponent [] cur = new UIComponent[1];
+        cur[0] = null;
         String pcClientId = null;
 
         List<UIComponent> delegateRoots = new ArrayList<UIComponent>();
@@ -167,9 +130,22 @@ public class ProcessingContextViewRoot extends UIViewRoot {
             // PENDING(edburns): pain point.  An incorrectly specified pcId
             // can cause this method to break.  Need to catch this condition
             // and deal with it gracefully.
-            if (null != (cur = findProcessingContextComponent(this,
-                    pcClientId))) {
-                delegateRoots.add(cur);
+            ContextCallback cb = new ContextCallback() {
+                public void invokeContextCallback(FacesContext facesContext, UIComponent comp) {
+                    cur[0] = comp;
+                }
+                
+            };
+            this.invokeOnComponent = true;
+            try {
+                this.invokeOnComponent(FacesContext.getCurrentInstance(), 
+                        pcClientId, cb);
+            }
+            finally {
+                invokeOnComponent = false;
+            }
+            if (null != cur[0]) {
+                delegateRoots.add(cur[0]);
             }
         }
         return delegateRoots;
@@ -177,7 +153,7 @@ public class ProcessingContextViewRoot extends UIViewRoot {
     
     public Iterator<UIComponent> getFacetsAndChildren() {
         // If we have no processing contexts, we can have no delegateRoots.
-        if (null == getProcessingContexts()) {
+        if (null == getProcessingContexts() || invokeOnComponent) {
             // Therefore, just return the real ViewRoot's facetsAndChildren.
             return super.getFacetsAndChildren();
         }

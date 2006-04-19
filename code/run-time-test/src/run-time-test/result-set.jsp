@@ -1,5 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsf/core"  prefix="f" %>
 <%@ taglib uri="http://java.sun.com/jsf/html"  prefix="h" %>
+<%@ taglib prefix="jsfExt" uri="http://java.sun.com/jsf/extensions" %>
 <%@ taglib uri="http://java.sun.com/blueprints/ui" prefix="d" %>
 
 <f:view>
@@ -19,14 +20,13 @@
   <hr>
 <h3>The Scroller Component</h3>
 
-<h:form id="form">  
+<h:form prependId="false" id="form">  
 
 Rendered via Faces components:
 
-<div style="position: relative;">
+<jsfExt:ajaxZone id="subview1" style="position: relative;">
 <div id="fadeIn" style="position: absolute; display: none"></div>
 <div id="fadeOut">
-<h:panelGroup id="subview1">
 
   <h:dataTable columnClasses="list-column-center,list-column-center,
                                list-column-center, list-column-center"
@@ -72,12 +72,12 @@ Rendered via Faces components:
 
   </h:dataTable>
 
-  </h:panelGroup>
 </div>
 </div>
+</jsfExt:ajaxZone>
 
+<jsfExt:ajaxZone id="subview2">
   <span id="controlSpan" onmouseover="ajaxifyChildren(this);">
-  <h:panelGroup id="subview2">
 
   <d:scroller id="scroller" navFacetOrientation="NORTH" for="table" 
           actionListener="#{ResultSetBean.processScrollEvent}">
@@ -115,10 +115,10 @@ Rendered via Faces components:
       </f:facet>
   </d:scroller>
 
-  </h:panelGroup>
-
 
   </span>
+</jsfExt:ajaxZone>
+
 
 </h:form>
 

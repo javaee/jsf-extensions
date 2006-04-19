@@ -28,6 +28,7 @@
  */
 
 dojo.require("dojo.fx.*");
+dojo.require("dojo.io.*");
 
 var g_jsfJspContexts = new Array();
 
@@ -150,19 +151,36 @@ function moveAsideOnMouseDown(element) {
 
 
 function submitViaAJAX(event, handlerName) {
+    var props = new Object();
     var pruned = pruneSubmitFromEventHandler(event, handlerName);
-    var paramStruct = extractFormParamsFromPrunedHandlerStatements(pruned);
-    var params = paramStruct.params;
-    if (null != params) {
-	params = params + "&";
-    }
-    else {
-	params = "";
-    }
-    params = params + "com.sun.faces.PCtxt=" + ":form:subview1,:form:subview2";
-    var requestStruct = prepareRequest(params);
-    requestStruct.request.onreadystatechange = processAjaxResponse;
-    requestStruct.request.send(requestStruct.params);
+    var paramStruct = extractFormParamsFromPrunedHandlerStatements(pruned, props);
+    props = paramStruct.params;
+    props['com.sun.faces.PCtxt'] = ":form:subview1,:form:subview2";
+    props['sjwuic_update', false];
+    var requestStruct = prepareRequest(props);
+
+    dojo.io.bind({
+        method: "POST",
+        url: window.location,
+        content: content,
+        formNode: window.document.forms[0],
+        load: function(type, data, evt) {
+            var ajaxZones = data.documentElement;
+            for (var i = 0; i < ajaxZones.childNodes.length; i++) {
+                var ajaxZone = ajaxZones.childNodes[i];
+                var id = ajaxZone.attributes.getNamedItem("id").nodeValue;
+
+                var zone = document.getElementById(id);
+                if (zone != null) {
+                    zone.innerHTML = ajaxZone.childNodes[0].nodeValue;
+                }
+            }
+            // To do: Apply focus to replaced HTML?
+            //document.getElementById(focusId).focus();
+        },
+        mimetype: "application/x-www-form-urlencoded",
+    });
+
 
     return false;
 }
@@ -201,14 +219,14 @@ function pruneSubmitFromEventHandler(event, handlerName) {
 }
 
 /**
- * @return an associative array.  key params is the request params.  key
+ * @return an associative array.  key params is the request params 
+ * as an associative array.  key
  * nonAssignmentStatements is an array of statements that are not mere
  * assignment statements.
  */
 
-function extractFormParamsFromPrunedHandlerStatements(prunedHandlerStatements){
+function extractFormParamsFromPrunedHandlerStatements(prunedHandlerStatements, params){
     var result = new Array();
-    var params = null;
     var nonAssignmentStatements = null;
     var expI = 0, i = 0, j = 0;
     var pattern = null;
@@ -245,12 +263,8 @@ function extractFormParamsFromPrunedHandlerStatements(prunedHandlerStatements){
 		}
 		if (null != name && null != value) {
 		    if (null != params) {
-			params = params + "&";
+                        params[name] = value;
 		    }
-		    else {
-			params = "";
-		    }
-		    params = params + name + "=" + value;
 		}
 	    }
 	}
@@ -286,22 +300,8 @@ function prepareRequest(extraParams) {
     // index into the forms[] array.
     var formName = window.document.forms[0].id;
     // build up the post data
-
-    var params = stateFieldName + "=" + encodedState + "&" + formName + "=" + formName + "&" + extraParams;
-    // Again, this is safe to use the 0th form's action because each
-    // form in the page has the same action.
-    var formAction = window.document.forms[0].action;
-    var request = getXMLHttpRequest();
-
-    request.open("POST", formAction, true);
-    request.setRequestHeader("Content-Type", 
-			     "application/x-www-form-urlencoded");
-    
-    var result = new Array();
-    result.request = request;
-    result.params = params;
-
-    return result;
+    extraParams.stateFieldName = encodedState;
+    extraParams.formName = formName;
 }
 
 function getXMLHttpRequest() {

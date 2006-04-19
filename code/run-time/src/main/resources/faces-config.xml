@@ -40,6 +40,12 @@
         </component-extension>
 
     </component>
+    
+    <!-- Component elements -->
+    <component>
+        <component-type>com.sun.faces.AjaxZone</component-type>
+        <component-class>com.sun.faces.components.AjaxZone</component-class>
+    </component>
 
   <render-kit>
 
@@ -53,6 +59,12 @@
       
     </renderer>
 
+    <renderer>
+        <component-family>com.sun.faces.AjaxZone</component-family>
+        <renderer-type>com.sun.faces.AjaxZone</renderer-type>
+        <renderer-class>com.sun.faces.renderkit.AjaxZoneRenderer</renderer-class>
+    </renderer>
+    
   </render-kit>
 
 

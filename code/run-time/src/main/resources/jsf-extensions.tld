@@ -11,6 +11,7 @@
 
 
   <tlib-version>0.03</tlib-version>
+  <jsp-version>2.1</jsp-version>
   <short-name>jsfExt</short-name>
   <uri>http://java.sun.com/jsf/extensions</uri>
   <description>
@@ -68,6 +69,29 @@
         <required>false</required>
         <deferred-value>
 	    <type>java.lang.Object</type>
+        </deferred-value>
+    </attribute>
+  </tag>
+  
+  <tag>
+    <name>ajaxZone</name>
+    <tag-class>com.sun.faces.taglib.jsf_extensions.AjaxZoneTag</tag-class>
+    <attribute>
+      <name>id</name>
+    </attribute>
+    <attribute>
+        <description>
+          <![CDATA[
+
+          <p>Convey CSS style information to the renderer</p>
+
+          ]]>
+
+        </description>
+        <name>style</name>
+        <required>false</required>
+        <deferred-value>
+	    <type>java.lang.String</type>
         </deferred-value>
     </attribute>
   </tag>

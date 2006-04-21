@@ -1,12 +1,12 @@
 package com.sun.faces.renderkit;
 
+import com.sun.faces.components.ProcessingContextViewRoot;
 import java.io.IOException;
 import java.util.Iterator;
-import java.util.StringTokenizer;
+import java.util.Map;
 import javax.el.ValueExpression;
 
 import javax.faces.component.UIComponent;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
@@ -45,7 +45,9 @@ public class AjaxZoneRenderer extends Renderer {
         ResponseWriter writer = context.getResponseWriter();
         String id = component.getClientId(FacesContext.getCurrentInstance());
         if (isAjaxRequest(context, component)) {
-            writer.write("<ajaxZone id=\"" + id + "\">");
+            writer.startElement("processing-context", component);
+            writer.writeAttribute("id",component.getClientId(context),
+                    "clientId");
             writer.write("<![CDATA[");
         } else {
             writer.write("\n");
@@ -120,7 +122,8 @@ public class AjaxZoneRenderer extends Renderer {
 
         ResponseWriter writer = context.getResponseWriter();
         if (isAjaxRequest(context, component)) {
-            writer.write("]]></ajaxZone>");
+            writer.write("]]>");
+            writer.endElement("processing-context");
         } else {
             writer.endElement("div"); //NOI18N
         }
@@ -139,21 +142,10 @@ public class AjaxZoneRenderer extends Renderer {
     // Private methods
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    // Helper method to test if this is an Ajax request and action is not null.
+    // Helper method to test if this is an Ajax request
     private boolean isAjaxRequest(FacesContext context, UIComponent component) {
-        ExternalContext external = context.getExternalContext();
-        String ids = (String) external.getRequestParameterMap().get(IDS_PARAM);
-                    
-        // Parse multiple ajax zone IDs.
-        if (ids != null) {
-            StringTokenizer st = new StringTokenizer(ids, ",");
-            while (st.hasMoreTokens()) {
-                String id = st.nextToken();
-                if (component.getClientId(context).equals(id)) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        Map<String, Object> requestMap = 
+                context.getExternalContext().getRequestMap();
+        return requestMap.containsKey(ProcessingContextViewRoot.PROCESSING_CONTEXTS_REQUEST_PARAM_NAME);
     }
 }

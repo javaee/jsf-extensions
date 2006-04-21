@@ -186,14 +186,17 @@ public class ProcessingContextViewRoot extends UIViewRoot {
             }
             ResponseWriter responseWriter = context.getResponseWriter();
             responseWriter.startElement("processing-context-responses", this);
-            for (UIComponent curRoot : roots) {
-                responseWriter.startElement("processing-context", curRoot);
-                responseWriter.writeAttribute("id",curRoot.getClientId(context), 
-                        "clientId");
-                responseWriter.write("<![CDATA[");
-                curRoot.encodeAll(context);
-                responseWriter.write("]]>");
-                responseWriter.endElement("processing-context");
+            Map<String, Object> requestMap = 
+                    context.getExternalContext().getRequestMap();
+            requestMap.put(PROCESSING_CONTEXTS_REQUEST_PARAM_NAME, 
+                    PROCESSING_CONTEXTS_REQUEST_PARAM_NAME);
+            try {
+                for (UIComponent curRoot : roots) {
+                    curRoot.encodeAll(context);
+                }
+            }
+            finally {
+                requestMap.remove(PROCESSING_CONTEXTS_REQUEST_PARAM_NAME);
             }
             responseWriter.endElement("processing-context-responses");
         }

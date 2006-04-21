@@ -100,31 +100,6 @@ function ajaxifyChildren(target) {
 }
 
 
-
-function processAjaxResponse() {
-    var request = getXMLHttpRequest();
-    
-    if (request.readyState == 4) {
-	if (request.status == 200) {
-	    var subview1 = window.document.getElementById("form:subview1");
-	    var subview2 = window.document.getElementById("form:subview2");
-	    var fadeIn = window.document.getElementById("fadeIn");
-	    var fadeOut = window.document.getElementById("fadeOut");
-	    var pCtxts = 
-		request.responseXML.getElementsByTagName("processing-context");
-	    var newSubview1 = pCtxts[0];
-	    var newSubview2 = pCtxts[1];
-
-	    fadeIn.style.display = "none";
-	    fadeIn.innerHTML = newSubview1.childNodes[0].data;
-	    dojo.fx.html.crossfadeSwitch(fadeOut, fadeIn, 500);
-	    subview2.innerHTML = newSubview2.childNodes[0].data;
-	    var controlSpan = window.document.getElementById("controlSpan");
-	    controlSpan.isAjaxified = null;
-	}
-    }
-}
-
 function takeActionAndTraverseTree(element, action) {
     action(element);
     if (element.hasChildNodes()) {
@@ -307,16 +282,4 @@ function prepareRequest(extraParams) {
     // build up the post data
     extraParams[stateFieldName] = encodedState;
     extraParams[formName] = formName;
-}
-
-function getXMLHttpRequest() {
-  if (!g_request) {
-    if (window.XMLHttpRequest) {
-      g_request = new XMLHttpRequest();
-    } else if (window.ActiveXObject) {
-      isIE = true;
-      g_request = new ActiveXObject("Microsoft.XMLHTTP");
-    }
-  }
-  return (g_request); 
 }

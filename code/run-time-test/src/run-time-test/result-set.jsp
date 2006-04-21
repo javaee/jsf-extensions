@@ -10,7 +10,7 @@
   <link rel="stylesheet" type="text/css"
        href='<%= request.getContextPath() + "/result-set.css" %>'>
   <script type="text/javascript" 
-          src='<%= request.getContextPath() + "/dojo.js" %>'></script>
+          src='<%= request.getContextPath() + "/dojo/dojo.js" %>'></script>
   <script type="text/javascript" 
           src='<%= request.getContextPath() + "/devtime.js" %>'></script>
 </head>
@@ -20,7 +20,7 @@
   <hr>
 <h3>The Scroller Component</h3>
 
-<h:form prependId="false" id="form">  
+<h:form id="form">  
 
 Rendered via Faces components:
 

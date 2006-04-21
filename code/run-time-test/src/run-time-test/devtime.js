@@ -29,6 +29,7 @@
 
 dojo.require("dojo.fx.*");
 dojo.require("dojo.io.*");
+dojo.require("dojo.io.IframeIO");
 
 var g_jsfJspContexts = new Array();
 
@@ -156,30 +157,34 @@ function submitViaAJAX(event, handlerName) {
     var paramStruct = extractFormParamsFromPrunedHandlerStatements(pruned, props);
     props = paramStruct.params;
     props['com.sun.faces.PCtxt'] = ":form:subview1,:form:subview2";
-    props['sjwuic_update', false];
+    props['sjwuic_update'] = false;
+
     var requestStruct = prepareRequest(props);
 
     dojo.io.bind({
         method: "POST",
         url: window.location,
-        content: content,
-        formNode: window.document.forms[0],
+        content: props, 
         load: function(type, data, evt) {
-            var ajaxZones = data.documentElement;
-            for (var i = 0; i < ajaxZones.childNodes.length; i++) {
-                var ajaxZone = ajaxZones.childNodes[i];
-                var id = ajaxZone.attributes.getNamedItem("id").nodeValue;
+	    var subview1 = window.document.getElementById("form:subview1");
+	    var subview2 = window.document.getElementById("form:subview2");
+	    var fadeIn = window.document.getElementById("fadeIn");
+	    var fadeOut = window.document.getElementById("fadeOut");
+	    var pCtxts = 
+		data.getElementsByTagName("processing-context");
+	    var newSubview1 = pCtxts[0];
+	    var newSubview2 = pCtxts[1];
 
-                var zone = document.getElementById(id);
-                if (zone != null) {
-                    zone.innerHTML = ajaxZone.childNodes[0].nodeValue;
-                }
-            }
-            // To do: Apply focus to replaced HTML?
-            //document.getElementById(focusId).focus();
-        },
-        mimetype: "application/x-www-form-urlencoded",
-    });
+	    fadeIn.style.display = "none";
+	    fadeIn.innerHTML = newSubview1.childNodes[0].data;
+	    dojo.fx.html.crossfadeSwitch(fadeOut, fadeIn, 500);
+	    subview2.innerHTML = newSubview2.childNodes[0].data;
+	    var controlSpan = window.document.getElementById("controlSpan");
+	    controlSpan.isAjaxified = null;
+            },
+        mimetype: "text/xml"
+        });
+
 
 
     return false;
@@ -263,7 +268,7 @@ function extractFormParamsFromPrunedHandlerStatements(prunedHandlerStatements, p
 		}
 		if (null != name && null != value) {
 		    if (null != params) {
-                        params[name] = value;
+                         params[name] = value;
 		    }
 		}
 	    }
@@ -300,8 +305,8 @@ function prepareRequest(extraParams) {
     // index into the forms[] array.
     var formName = window.document.forms[0].id;
     // build up the post data
-    extraParams.stateFieldName = encodedState;
-    extraParams.formName = formName;
+    extraParams[stateFieldName] = encodedState;
+    extraParams[formName] = formName;
 }
 
 function getXMLHttpRequest() {

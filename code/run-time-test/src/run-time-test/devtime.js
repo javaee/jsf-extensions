@@ -27,15 +27,12 @@
  * Copyright 2005 Sun Microsystems Inc. All Rights Reserved
  */
 
+var g_zones = [];
+
 dojo.require("dojo.fx.*");
 dojo.require("dojo.io.*");
 dojo.require("dojo.event.*");
-
-var g_jsfJspContexts = new Array();
-
-var g_request = null;
-
-var g_eventPrefix = "jsfex";
+dojo.require("dojo.string.*");
 
 dojo.fx.html.crossfadeSwitch = function(nodeOut, nodeIn, duration, callback, dontPlay){
 	nodeOut = dojo.byId(nodeOut);
@@ -81,11 +78,6 @@ dojo.fx.html.crossfade = function(nodeOut, nodeIn, duration, startOpac, endOpac,
 	return anim;
 }
 
-function handleOnclick(event) {
-    submitViaAJAX(event, "onmousedown");
-    return false;
-}
-
 function ajaxifyChildren(target, eventType, eventHook) {
     if (null == target.isAjaxified && 
         target.hasChildNodes()) {
@@ -94,27 +86,131 @@ function ajaxifyChildren(target, eventType, eventHook) {
 				      moveAsideEventType, eventType, 
 				      eventHook);
 	}
-	target.onclick = handleOnclick;
     }
     target.isAjaxified = true;
     return false;
 }
 
-function moveAsideEventType(element, eventType, eventHook) {
-    var handler = null;
-    var dest = g_eventPrefix + eventType;
-    if (null != element[eventType] && 
-	null != (handler = element.getAttribute(eventType))) {
+function extractParams(originalScript, outProps, invocation) {
 
-	element[eventType] = null;
-	element.setAttribute(eventType, null);
-	element.jsfexonmousedown = handler;
-	element.setAttribute(dest, handler);
+  var allHandlerStatements = null;
+  var prunedHandlerStatements = null;
+  var expI = 0, i = 0, j = 0;
+  var pattern = null;
+  var curStatement = null;
+  var name = null, value = null;
+
+  // Remove any form submit statements
+  allHandlerStatements = originalScript.split(";");
+  if (0 >= allHandlerStatements.length) {
+    return;
+  }
+  prunedHandlerStatements = new Array();
+  for (i = 0; i < allHandlerStatements.length; i++) {
+    // If the current statement does not contain the submit...
+    if (-1 == allHandlerStatements[i].search(".*submit[ ]*\([ ]*\)")) {
+      // copy it to the prunedHandlerStatements.
+      prunedHandlerStatements[j++] = allHandlerStatements[i];
     }
+  }
+
+  // Copy any name/value pair statements to the outProps associative array
+  if (null == prunedHandlerStatements) {
+    return;
+  }
+  for (i = 0; i < prunedHandlerStatements.length; i++) {
+    // Hack: assume we're using the [''] syntax.  A more general
+    // solution would discover this dynamically.
+    if (-1 != (expI = prunedHandlerStatements[i].lastIndexOf("[\'"))) {
+      curStatement = prunedHandlerStatements[i].substring(expI + 2);
+      name = null;
+      value = null;
+      // Extract the parameter name.
+      if (-1 != (expI = curStatement.indexOf("\']"))) {
+        name = curStatement.substring(0, expI);
+        // Extract the parameter value
+        if (-1 != (expI = 
+            prunedHandlerStatements[i].lastIndexOf("\.value"))){
+          if (-1 != (expI = 
+            prunedHandlerStatements[i].indexOf("=", expI))) {
+            value = prunedHandlerStatements[i].substring(expI + 1);
+	    value = dojo.string.trim(value);
+            // strip off the leading and trailing ' if necessary
+            if (null != value && "\'" == value.charAt(0)) {
+              if ("\'" == value.charAt(value.length - 1)) {
+                  value = value.substring(1, value.length - 1);
+              }
+            }
+            // strip off the leading and trailing " if necessary
+            if (null != value && '\"' == value.charAt(0)) {
+              if ('\"' == value.charAt(value.length - 1)) {
+                  value = value.substring(1, value.length - 1);
+              }
+            }
+
+          }
+        }
+        if (null != name && null != value) {
+          outProps[name] = value;
+        }
+      }
+    }
+  }    
+}
+
+
+function moveAsideEventType(element, eventType, eventHook) {
+    handler = new Object();
+    handler["eventHook"] = eventHook;
+    handler["eventType"] = eventType;
+    handler["element"] = element;
+    handler["originalScript"] = element[eventType];
+    handler["aroundHandler"] = function (invocation) {
+	// invocation.args[0] is the event.
+	var props = new Object();
+
+	dj_global[this["eventHook"]](this["originalScript"].toString(), 
+				  props, invocation);
+	props['com.sun.faces.PCtxt'] = ":form:subview1,:form:subview2";
+	
+	var requestStruct = prepareRequest(props);
+	
+	dojo.io.bind({
+	    method: "POST",
+		    url: window.location,
+		    content: props, 
+		    load: function(type, data, evt) {
+		    var subview1 = window.document.getElementById("form:subview1");
+		    var subview2 = window.document.getElementById("form:subview2");
+		    var fadeIn = window.document.getElementById("fadeIn");
+		    var fadeOut = window.document.getElementById("fadeOut");
+		    var pCtxts = 
+			data.getElementsByTagName("processing-context");
+		    var newSubview1 = pCtxts[0];
+		    var newSubview2 = pCtxts[1];
+		    
+		    fadeIn.style.display = "none";
+		    fadeIn.innerHTML = newSubview1.childNodes[0].data;
+		    dojo.fx.html.crossfadeSwitch(fadeOut, fadeIn, 500);
+		    subview2.innerHTML = newSubview2.childNodes[0].data;
+		    var controlSpan = window.document.getElementById("controlSpan");
+		    controlSpan.isAjaxified = null;
+		},
+		    mimetype: "text/xml"
+		    });
+	
+    };
+    
+    dojo.event.connect("around", element, eventType, handler, "aroundHandler");
 }
 
 function takeActionAndTraverseTree(element, action, eventType, eventHook) {
-    action(element, eventType, eventHook);
+    // If this element has a handler for the eventType
+    if (null != element[eventType] &&
+	null != element.getAttribute(eventType)) {
+	// take the action on this element.
+	action(element, eventType, eventHook);
+    }
     if (element.hasChildNodes()) {
 	for (var i = 0; i < element.childNodes.length; i++) {
 	    takeActionAndTraverseTree(element.childNodes[i], action, 
@@ -122,144 +218,6 @@ function takeActionAndTraverseTree(element, action, eventType, eventHook) {
 	}
     }
     return false;
-}
-
-
-
-
-function submitViaAJAX(event, handlerName) {
-    var props = new Object();
-    var pruned = pruneSubmitFromEventHandler(event, handlerName);
-    var paramStruct = extractFormParamsFromPrunedHandlerStatements(pruned, props);
-    props = paramStruct.params;
-    props['com.sun.faces.PCtxt'] = ":form:subview1,:form:subview2";
-    props['sjwuic_update'] = false;
-
-    var requestStruct = prepareRequest(props);
-
-    dojo.io.bind({
-        method: "POST",
-        url: window.location,
-        content: props, 
-        load: function(type, data, evt) {
-	    var subview1 = window.document.getElementById("form:subview1");
-	    var subview2 = window.document.getElementById("form:subview2");
-	    var fadeIn = window.document.getElementById("fadeIn");
-	    var fadeOut = window.document.getElementById("fadeOut");
-	    var pCtxts = 
-		data.getElementsByTagName("processing-context");
-	    var newSubview1 = pCtxts[0];
-	    var newSubview2 = pCtxts[1];
-
-	    fadeIn.style.display = "none";
-	    fadeIn.innerHTML = newSubview1.childNodes[0].data;
-	    dojo.fx.html.crossfadeSwitch(fadeOut, fadeIn, 500);
-	    subview2.innerHTML = newSubview2.childNodes[0].data;
-	    var controlSpan = window.document.getElementById("controlSpan");
-	    controlSpan.isAjaxified = null;
-            },
-        mimetype: "text/xml"
-        });
-
-
-
-    return false;
-}
-
-/**
- * @return an Array of statements guaranteed not to contain a form submit.
- */ 
-
-function pruneSubmitFromEventHandler(event, handlerName) {
-    var originalHandler;
-    var target = event.originalTarget;
-    var allHandlerStatements = null;
-    var prunedHandlerStatements = null;
-    var i = 0, j = 0;
-    var copyHandlerName = g_eventPrefix + handlerName;
-    
-    if (null != target) {
-	if (target.hasAttributes() &&
-	    null != (originalHandler = target.getAttribute(copyHandlerName))) {
-	    // remove the .submit() statement, if present;
-	    allHandlerStatements = originalHandler.split(";");
-	    if (0 < allHandlerStatements.length) {
-		prunedHandlerStatements = new Array();
-		for (i = 0; i < allHandlerStatements.length; i++) {
-		    // If the current statement does not contain the submit...
-		    if (-1 == allHandlerStatements[i].search(".*submit[ ]*\([ ]*\)")) {
-			// copy it to the prunedHandlerStatements.
-			prunedHandlerStatements[j++] = allHandlerStatements[i];
-		    }
-		}
-	    }
-	}
-	
-    }
-    return prunedHandlerStatements;
-}
-
-/**
- * @return an associative array.  key params is the request params 
- * as an associative array.  key
- * nonAssignmentStatements is an array of statements that are not mere
- * assignment statements.
- */
-
-function extractFormParamsFromPrunedHandlerStatements(prunedHandlerStatements, params){
-    var result = new Array();
-    var nonAssignmentStatements = null;
-    var expI = 0, i = 0, j = 0;
-    var pattern = null;
-    var curStatement = null;
-    var name = null, value = null;
-    // Investigate the statements to see if they are simple value assignments
-    // or not.
-    for (i = 0; i < prunedHandlerStatements.length; i++) {
-	// Hack: assume we're using the [''] syntax.  A more general
-	// solution would discover this dynamically.
-	if (-1 != (expI = prunedHandlerStatements[i].lastIndexOf("[\'"))) {
-	    curStatement = prunedHandlerStatements[i].substring(expI + 2);
-	    name = null;
-	    value = null;
-	    // Extract the parameter name.
-	    if (-1 != (expI = curStatement.indexOf("\']"))) {
-		name = curStatement.substring(0, expI);
-		// Extract the parameter value
-		if (-1 != (expI = 
-			   prunedHandlerStatements[i].lastIndexOf("\.value"))){
-		    if (-1 != (expI = 
-			       prunedHandlerStatements[i].indexOf("=", 
-								  expI))) {
-			value = prunedHandlerStatements[i].substring(expI + 1);
-			// strip off the leading and trailing ' if necessary
-			if (null != value &&
-			    "\'" == value.charAt(0)) {
-			    if ("\'" == value.charAt(value.length - 1)) {
-				value = value.substring(1, value.length - 1);
-			    }
-			}
-			    
-		    }
-		}
-		if (null != name && null != value) {
-		    if (null != params) {
-                         params[name] = value;
-		    }
-		}
-	    }
-	}
-	else {
-	    if (null == nonAssignmentStatements) {
-		nonAssignmentStatements = new Array();
-	    }
-	    nonAssignmentStatements[j++] = prunedHandlerStatements[i];
-	}
-    }
-    result.params = params;
-    result.nonAssignmentStatements = nonAssignmentStatements;
-    
-    return result;
 }
 
 function prepareRequest(extraParams) {

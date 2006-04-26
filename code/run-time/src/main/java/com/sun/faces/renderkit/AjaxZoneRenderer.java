@@ -55,6 +55,7 @@ public class AjaxZoneRenderer extends Renderer {
             writer.writeAttribute("id", id, null);
             writeStyle(context, writer, component);
             writeScriptIfNecessary(context, writer, component);
+            writeZoneAccruer(context, writer, component);
         }
     }
     
@@ -71,6 +72,29 @@ public class AjaxZoneRenderer extends Renderer {
         if (null != style) {
             writer.writeAttribute("style", style, "style");
         }
+    }
+    
+    private void writeZoneAccruer(FacesContext context, ResponseWriter writer, UIComponent comp) throws IOException {
+        writer.startElement("script", comp);
+        writer.writeAttribute("language", "javascript", "language");
+        writer.writeAttribute("type", "text/javascript", "language");
+        boolean isXhtml = false;
+        if (isXhtml = context.getExternalContext().getRequestMap().containsKey("com.sun.faces.ContentTypeIsXHTML")) {
+            writer.write("\n<![CDATA[\n");
+        }
+        else {
+            writer.write("\n<!--\n");
+        }
+        writer.write("\ng_zones.push(\"" + comp.getClientId(context) + "\");");
+        if (isXhtml) {
+            writer.write("\n]]>\n");
+        }
+        else {
+            writer.write("\n//-->\n");
+        }
+
+        
+        writer.endElement("script");
     }
     
     private void writeScriptIfNecessary(FacesContext context, ResponseWriter writer, UIComponent comp) throws IOException {

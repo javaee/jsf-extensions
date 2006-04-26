@@ -29,7 +29,7 @@
 
 dojo.require("dojo.fx.*");
 dojo.require("dojo.io.*");
-dojo.require("dojo.io.IframeIO");
+dojo.require("dojo.event.*");
 
 var g_jsfJspContexts = new Array();
 
@@ -86,12 +86,13 @@ function handleOnclick(event) {
     return false;
 }
 
-function ajaxifyChildren(target) {
+function ajaxifyChildren(target, eventType, eventHook) {
     if (null == target.isAjaxified && 
         target.hasChildNodes()) {
 	for (var i = 0; i < target.childNodes.length; i++) {
 	    takeActionAndTraverseTree(target.childNodes[i], 
-				      moveAsideOnMouseDown);
+				      moveAsideEventType, eventType, 
+				      eventHook);
 	}
 	target.onclick = handleOnclick;
     }
@@ -99,31 +100,31 @@ function ajaxifyChildren(target) {
     return false;
 }
 
+function moveAsideEventType(element, eventType, eventHook) {
+    var handler = null;
+    var dest = g_eventPrefix + eventType;
+    if (null != element[eventType] && 
+	null != (handler = element.getAttribute(eventType))) {
 
-function takeActionAndTraverseTree(element, action) {
-    action(element);
+	element[eventType] = null;
+	element.setAttribute(eventType, null);
+	element.jsfexonmousedown = handler;
+	element.setAttribute(dest, handler);
+    }
+}
+
+function takeActionAndTraverseTree(element, action, eventType, eventHook) {
+    action(element, eventType, eventHook);
     if (element.hasChildNodes()) {
 	for (var i = 0; i < element.childNodes.length; i++) {
-	    takeActionAndTraverseTree(element.childNodes[i], action);
+	    takeActionAndTraverseTree(element.childNodes[i], action, 
+				      eventType, eventHook);
 	}
     }
     return false;
 }
 
-function moveAsideOnMouseDown(element) {
-    var handler = null;
-    var src = "onmousedown";
-    var dest = g_eventPrefix + src;
-    if (null != element.onmousedown && 
-	null != (handler = element.getAttribute(src))) {
 
-	element.onmousedown = null;
-	element.setAttribute(src, null);
-	element.jsfexonmousedown = handler;
-	element.setAttribute(dest, handler);
-    }
-
-}
 
 
 function submitViaAJAX(event, handlerName) {

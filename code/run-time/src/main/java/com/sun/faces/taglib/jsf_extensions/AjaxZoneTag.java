@@ -36,6 +36,72 @@ public class AjaxZoneTag extends UIComponentELTag {
                 component.setValueExpression("style", style);
             }
         }
+        if (null != eventHook) {
+            if (eventHook.isLiteralText()) {
+                component.getAttributes().put("eventHook", eventHook.getValue(getFacesContext().getELContext()));
+            }
+            else {
+                component.setValueExpression("eventHook", eventHook);
+            }
+        }
+        if (null != eventType) {
+            if (eventType.isLiteralText()) {
+                component.getAttributes().put("eventType", eventType.getValue(getFacesContext().getELContext()));
+            }
+            else {
+                component.setValueExpression("eventType", eventType);
+            }
+        }
+        if (null != interactionType) {
+            if (interactionType.isLiteralText()) {
+                component.getAttributes().put("interactionType", interactionType.getValue(getFacesContext().getELContext()));
+            }
+            else {
+                component.setValueExpression("interactionType", interactionType);
+            }
+        }
+        
+        
+        
+    }
+
+    /**
+     * Holds value of property interactionType.
+     */
+    private ValueExpression interactionType;
+
+    /**
+     * Setter for property interactionType.
+     * @param interactionType New value of property interactionType.
+     */
+    public void setInteractionType(ValueExpression interactionType) {
+        this.interactionType = interactionType;
+    }
+
+    /**
+     * Holds value of property eventType.
+     */
+    private ValueExpression eventType;
+
+    /**
+     * Setter for property eventType.
+     * @param eventType New value of property eventType.
+     */
+    public void setEventType(ValueExpression eventType) {
+        this.eventType = eventType;
+    }
+
+    /**
+     * Holds value of property eventHook.
+     */
+    private ValueExpression eventHook;
+
+    /**
+     * Setter for property eventHook.
+     * @param eventHook New value of property eventHook.
+     */
+    public void setEventHook(ValueExpression eventHook) {
+        this.eventHook = eventHook;
     }
     
     

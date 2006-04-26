@@ -76,8 +76,8 @@ Rendered via Faces components:
 </div>
 </jsfExt:ajaxZone>
 
-<jsfExt:ajaxZone id="subview2">
-  <span id="controlSpan" onmouseover="ajaxifyChildren(this);">
+<jsfExt:ajaxZone id="subview2" interactionType="input" eventType="onmousedown" eventHook="extractParams">
+  <span id="controlSpan">
 
   <d:scroller id="scroller" navFacetOrientation="NORTH" for="table" 
           actionListener="#{ResultSetBean.processScrollEvent}">

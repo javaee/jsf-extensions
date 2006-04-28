@@ -10,8 +10,6 @@
   <link rel="stylesheet" type="text/css"
        href='<%= request.getContextPath() + "/result-set.css" %>'>
   <script type="text/javascript" 
-          src='<%= request.getContextPath() + "/dojo/dojo.js" %>'></script>
-  <script type="text/javascript" 
           src='<%= request.getContextPath() + "/devtime.js" %>'></script>
 </head>
 <body  bgcolor="white">

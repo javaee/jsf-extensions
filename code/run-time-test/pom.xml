@@ -39,26 +39,6 @@
        </plugin>
      </plugins>
    </pluginManagement>
-    <plugins>
-       <plugin>
-	 <artifactId>maven-antrun-plugin</artifactId>
-	 <executions>
-	   <execution>
-             <id>dojo</id>
-	     <phase>process-resources</phase>
-	     <configuration>
-	       <tasks>
-                 <echo message="unzipping dojo to webapp root" />
-                 <unzip src="lib/dojo.zip" dest="target/jsf-extensions" />
-	       </tasks>
-	     </configuration>
-	     <goals>
-	       <goal>run</goal>
-	     </goals>
-	   </execution>
-	 </executions>
-       </plugin>
-    </plugins>
   </build>
 
 

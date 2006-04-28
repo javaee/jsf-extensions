@@ -20,6 +20,7 @@ import org.apache.shale.remoting.XhtmlHelper;
 public class AjaxZoneRenderer extends Renderer {
     
     private static final String SCRIPT_ID = "/META-INF/com_sun_faces_ajax.js";
+    private static final String DOJO_SCRIPT_ID = "/META-INF/dojo/dojo.js";
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Renderer methods
@@ -57,6 +58,8 @@ public class AjaxZoneRenderer extends Renderer {
             writer.startElement("div", component);
             writer.writeAttribute("id", id, null);
             writeStyle(context, writer, component);
+            getXhtmlHelper().linkJavascript(context, component, writer, 
+                    Mechanism.CLASS_RESOURCE, DOJO_SCRIPT_ID);
             getXhtmlHelper().linkJavascript(context, component, writer, 
                     Mechanism.CLASS_RESOURCE, SCRIPT_ID);
             writeAjaxifyScript(context, writer, component);

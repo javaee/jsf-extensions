@@ -24,7 +24,6 @@
   </scm>
 
   <build>
-
     <sourceDirectory>src/main/java</sourceDirectory>
     <resources>
       <resource>
@@ -45,6 +44,48 @@
     </resource>
    </resources>
     <plugins>
+      <plugin>
+        <groupId>net.sourceforge.maven-taglib</groupId>
+        <artifactId>maven-taglib-plugin</artifactId>
+        <version>2.2.1</version>
+	 <executions>
+	   <execution>
+             <id>taglib</id>
+	     <phase>generate-resources</phase>
+             <configuration>
+               <srcDir>src/main/resources</srcDir>
+             </configuration>
+	     <goals>
+	       <goal>taglibdoc</goal>
+	     </goals>
+	   </execution>
+	 </executions>
+         <configuration>
+           <srcDir>src/main/resources</srcDir>
+         </configuration>
+
+       </plugin>
+       <plugin>
+         <groupId>org.apache.maven.plugins</groupId>
+         <artifactId>maven-javadoc-plugin</artifactId>
+	 <executions>
+	   <execution>
+             <id>javadoc</id>
+	     <phase>generate-resources</phase>
+             <configuration>
+               <minmemory>128m</minmemory>
+               <maxmemory>512</maxmemory>
+             </configuration>
+	     <goals>
+	       <goal>javadoc</goal>
+	     </goals>
+	   </execution>
+	 </executions>
+         <configuration>
+           <minmemory>128m</minmemory>
+           <maxmemory>512</maxmemory>
+         </configuration>
+       </plugin>
        <plugin>
 	 <artifactId>maven-antrun-plugin</artifactId>
 	 <executions>
@@ -66,6 +107,15 @@
     </plugins>
 
   </build>
+<!--
+  <pluginRepositories>
+    <pluginRepository>
+      <snapshots />
+      <id>mvnrepository</id>
+      <url>http://mvnrepository.com/artifact/</url>
+    </pluginRepository>
+  </pluginRepositories>
+-->
 
   <dependencies>
     <dependency>
@@ -74,5 +124,15 @@
       <version>1.0</version>
     </dependency>
   </dependencies>
+
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>net.sourceforge.maven-taglib</groupId>
+        <artifactId>maven-taglib-plugin</artifactId>
+        <version>2.2.1</version>
+      </plugin>
+    </plugins>
+  </reporting>
 
 </project>

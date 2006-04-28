@@ -77,6 +77,14 @@
     <tag-class>com.sun.faces.taglib.jsf_extensions.AjaxZoneTag</tag-class>
     <body-content>JSP</body-content>
     <attribute>
+        <description>
+          <![CDATA[
+
+          <p>JSF Component Id for this zone.</p>
+
+          ]]>
+
+        </description>
       <name>id</name>
     </attribute>
     <attribute>
@@ -112,12 +120,13 @@
           </p>
 
 <pre><code>
-&lt;jsfExt:ajaxZone interactionType="input" eventType="onmousedown" 
-          eventHook="replaceOnMouseDown"&gt;
-  &lt;d:scroller&gt;
-    &lt;!-- nested components  --&gt;
-  &lt;/d:scroller&gt;
-&lt;/jsfExt:ajaxZone&gt;
+&lt;jsfExt:ajaxZone interactionType="input" <br /> 
+&nbsp;&nbsp;&nbsp;eventType="onmousedown" <br /> 
+&nbsp;&nbsp;&nbsp;eventHook="replaceOnMouseDown"&gt;<br /> 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  &lt;d:scroller&gt;<br /> 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    &lt;!-- nested components  --&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  &lt;/d:scroller&gt;<br /> 
+&lt;/jsfExt:ajaxZone&gt;<br /> 
 </code></pre>
 
           <p>The details of the <code>replaceOnMouseDown</code> function
@@ -147,11 +156,11 @@
           </p>
 
 <pre><code>
-&lt;jsfExt:ajaxZone interactionType="input" eventType="onmousedown" 
-          eventHook="replaceOnMouseDown"&gt;
-  &lt;d:scroller&gt;
-    &lt;!-- nested components  --&gt;
-  &lt;/d:scroller&gt;
+&lt;jsfExt:ajaxZone interactionType="input" eventType="onmousedown" <br /> 
+&nbsp;&nbsp;&nbsp;eventHook="replaceOnMouseDown"&gt;<br /> 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  &lt;d:scroller&gt;<br /> 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    &lt;!-- nested components  --&gt;<br /> 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  &lt;/d:scroller&gt;<br /> 
 &lt;/jsfExt:ajaxZone&gt;
 </code></pre>
           ]]>
@@ -181,111 +190,104 @@ function handler(originalScript, outProps, invocation);
           <p><code>originalScript</code> is the value of the event as
           specified in the original rendered code.
           <code>invocation</code> is an associative array with two
-          properties.  <code>"args"</code> is an array of the arguments
+          properties: <code>"args"</code> is an array of the arguments
           passed to the target event handler from the browser.
-          <code>"outProps"</code> is a pre-allocated associative array
-          whose contents will be submitted with the ajax request to the
-          server in response to this zone receiving the JavaScript event
-          specified in the <code>eventType</code> attribute.
           <code>"proceed"</code> is a function you can call that will
           call the target event handler.  The return value from the
           <code>proceed</code> function can be acted on in the handler
-          as appropriate.  For example the following
-          <code>ajaxZone</code> tag will intercept the
-          <code>onmousedown</code></p>
+          as appropriate.  <code>"outProps"</code> is a pre-allocated
+          associative array whose contents will be submitted with the
+          ajax request to the server in response to this zone receiving
+          the JavaScript event specified in the <code>eventType</code>
+          attribute.  For example the following <code>ajaxZone</code>
+          tag will intercept the <code>onmousedown</code> event call the
+          function named "replaceOnMouseDown".</p>
 
 <pre><code>
-&lt;jsfExt:ajaxZone interactionType="input" eventType="onmousedown" 
-          eventHook="replaceOnMouseDown"&gt;
-  &lt;d:scroller&gt;
-    &lt;!-- nested components  --&gt;
-  &lt;/d:scroller&gt;
-&lt;/jsfExt:ajaxZone&gt;
-
-&lt;script type="text/JavaScript"&gt;
-&lt;!--
-// Take the original script, extract any name/value pairs
-// found within the script, place them into the outProps 
-// associative array.  DO NOT call the invocation argument
-function handler(originalScript, outProps, invocation) {
-
-  var allHandlerStatements = null;
-  var prunedHandlerStatements = null;
-  var expI = 0, i = 0, j = 0;
-  var pattern = null;
-  var curStatement = null;
-  var name = null, value = null;
-
-  // Remove any form submit statements
-  allHandlerStatements = originalScript.split(";");
-  if (0 >= allHandlerStatements.length) {
-    return;
-  }
-  prunedHandlerStatements = new Array();
-  for (i = 0; i < allHandlerStatements.length; i++) {
-    // If the current statement does not contain the submit...
-    if (-1 == allHandlerStatements[i].search(".*submit[ ]*\([ ]*\)")) {
-      // copy it to the prunedHandlerStatements.
-      prunedHandlerStatements[j++] = allHandlerStatements[i];
-    }
-  }
-
-  // Copy any name/value pair statements to the outProps associative array
-  if (null == prunedHandlerStatements) {
-    return;
-  }
-  for (i = 0; i < prunedHandlerStatements.length; i++) {
-    // Hack: assume we're using the [''] syntax.  A more general
-    // solution would discover this dynamically.
-    if (-1 != (expI = prunedHandlerStatements[i].lastIndexOf("[\'"))) {
-      curStatement = prunedHandlerStatements[i].substring(expI + 2);
-      name = null;
-      value = null;
-      // Extract the parameter name.
-      if (-1 != (expI = curStatement.indexOf("\']"))) {
-        name = curStatement.substring(0, expI);
-        // Extract the parameter value
-        if (-1 != (expI = 
-            prunedHandlerStatements[i].lastIndexOf("\.value"))){
-          if (-1 != (expI = 
-            prunedHandlerStatements[i].indexOf("=", expI))) {
-            value = prunedHandlerStatements[i].substring(expI + 1);
-            // strip off the leading and trailing ' if necessary
-            if (null != value && "\'" == value.charAt(0)) {
-              if ("\'" == value.charAt(value.length - 1)) {
-                  value = value.substring(1, value.length - 1);
-              }
-            }
-          }
-        }
-        if (null != name && null != value) {
-          outProps[name] = value;
-        }
-      }
-    }
-  }    
-}
---&gt;
-&lt;/script&gt;
+&lt;jsfExt:ajaxZone interactionType="input" eventType="onmousedown" <br /> 
+          eventHook="handler"&gt;<br /> 
+  &lt;d:scroller&gt;<br /> 
+    &lt;!-- nested components  --&gt;<br /> 
+  &lt;/d:scroller&gt;<br /> 
+&lt;/jsfExt:ajaxZone&gt;<br /> 
+<br /> 
+&lt;script type="text/JavaScript"&gt;<br /> 
+&lt;!--<br /> 
+// Take the original script, extract any name/value pairs<br /> 
+// found within the script, place them into the outProps <br /> 
+// associative array.  DO NOT call the invocation argument<br /> 
+function handler(originalScript, outProps, invocation) {<br /> 
+<br /> 
+&nbsp;&nbsp;var allHandlerStatements = null;<br /> 
+&nbsp;&nbsp;var prunedHandlerStatements = null;<br /> 
+&nbsp;&nbsp;var expI = 0, i = 0, j = 0;<br /> 
+&nbsp;&nbsp;var pattern = null;<br /> 
+&nbsp;&nbsp;var curStatement = null;<br /> 
+&nbsp;&nbsp;var name = null, value = null;<br /> 
+<br /> 
+&nbsp;&nbsp;// Remove any form submit statements<br /> 
+&nbsp;&nbsp;allHandlerStatements = originalScript.split(";");<br /> 
+&nbsp;&nbsp;if (0 >= allHandlerStatements.length) {<br /> 
+&nbsp;&nbsp;&nbsp;&nbsp;return;<br /> 
+&nbsp;&nbsp;}<br /> 
+&nbsp;&nbsp;prunedHandlerStatements = new Array();<br /> 
+&nbsp;&nbsp;for (i = 0; i < allHandlerStatements.length; i++) {<br /> 
+&nbsp;&nbsp;&nbsp;&nbsp;// If the current statement does not contain the submit...<br /> 
+&nbsp;&nbsp;&nbsp;&nbsp;if (-1 == allHandlerStatements[i].search(".*submit[ ]*\([ ]*\)")) {<br /> 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// copy it to the prunedHandlerStatements.<br /> 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;prunedHandlerStatements[j++] = allHandlerStatements[i];<br /> 
+&nbsp;&nbsp;&nbsp;&nbsp;}<br /> 
+&nbsp;&nbsp;}<br /> 
+<br /> 
+&nbsp;&nbsp;// Copy any name/value pair statements to the outProps associative array<br /> 
+&nbsp;&nbsp;if (null == prunedHandlerStatements) {<br /> 
+&nbsp;&nbsp;&nbsp;&nbsp;return;<br /> 
+&nbsp;&nbsp;}<br /> 
+&nbsp;&nbsp;for (i = 0; i < prunedHandlerStatements.length; i++) {<br /> 
+&nbsp;&nbsp;&nbsp;&nbsp;// Hack: assume we're using the [''] syntax.  A more general<br /> 
+&nbsp;&nbsp;&nbsp;&nbsp;// solution would discover this dynamically.<br /> 
+&nbsp;&nbsp;&nbsp;&nbsp;if (-1 != (expI = prunedHandlerStatements[i].lastIndexOf("[\'"))) {<br /> 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;curStatement = prunedHandlerStatements[i].substring(expI + 2);<br /> 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name = null;<br /> 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value = null;<br /> 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// Extract the parameter name.<br /> 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (-1 != (expI = curStatement.indexOf("\']"))) {<br /> 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name = curStatement.substring(0, expI);<br /> 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// Extract the parameter value<br /> 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (-1 != (expI = <br /> 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;prunedHandlerStatements[i].lastIndexOf("\.value"))){<br /> 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (-1 != (expI = <br /> 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;prunedHandlerStatements[i].indexOf("=", expI))) {<br /> 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value = prunedHandlerStatements[i].substring(expI + 1);<br /> 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// strip off the leading and trailing ' if necessary<br /> 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (null != value && "\'" == value.charAt(0)) {<br /> 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ("\'" == value.charAt(value.length - 1)) {<br /> 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value = value.substring(1, value.length - 1);<br /> 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br /> 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br /> 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br /> 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br /> 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (null != name && null != value) {<br /> 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;outProps[name] = value;<br /> 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br /> 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br /> 
+&nbsp;&nbsp;&nbsp;&nbsp;}<br /> 
+&nbsp;&nbsp;}    <br /> 
+}<br /> 
+--&gt;<br /> 
+&lt;/script&gt;<br /> 
 </code></pre>
 
-          <p>The details of the <code>replaceOnMouseDown</code> function
-          are described in the docs for the <code>eventHook</code>
-          attribute.</p>
+]]>
 
-          <p>If "output" is specified as the value, none of the child
-          elements are modified.</p>
-
-          ]]>
-
-        </description>
-        <name>eventHook</name>
-        <required>false</required>
-        <deferred-value>
+</description>
+<name>eventHook</name>
+<required>false</required>
+<deferred-value>
 	    <type>java.lang.String</type>
-        </deferred-value>
-    </attribute>
+</deferred-value>
+</attribute>
 
-  </tag>
+</tag>
 
 </taglib>

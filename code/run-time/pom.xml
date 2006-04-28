@@ -33,10 +33,19 @@
         <includes>
             <include>faces-config.xml</include>
             <include>jsf-extensions.tld</include>
+            <include>com_sun_faces_ajax.js</include>
         </includes>
      </resource>
    </resources>
 
   </build>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.struts.shale</groupId>
+      <artifactId>remoting</artifactId>
+      <version>1.0</version>
+    </dependency>
+  </dependencies>
 
 </project>

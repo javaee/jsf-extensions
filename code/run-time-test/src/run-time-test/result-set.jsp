@@ -25,9 +25,6 @@
 Rendered via Faces components:
 
 <jsfExt:ajaxZone id="subview1" style="position: relative;">
-<div id="fadeIn" style="position: absolute; display: none"></div>
-<div id="fadeOut">
-
   <h:dataTable columnClasses="list-column-center,list-column-center,
                                list-column-center, list-column-center"
                   headerClass="list-header"

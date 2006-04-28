@@ -5,18 +5,21 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
 import javax.el.ValueExpression;
+import javax.faces.component.NamingContainer;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
+import org.apache.shale.remoting.Mechanism;
+import org.apache.shale.remoting.XhtmlHelper;
 
 /**
  * This class renderers TextField components.
  */
 public class AjaxZoneRenderer extends Renderer {
-    // Request parameters.
-    private static final String IDS_PARAM = "sjwuic_ids";
+    
+    private static final String SCRIPT_ID = "/META-INF/com_sun_faces_ajax.js";
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Renderer methods
@@ -54,7 +57,9 @@ public class AjaxZoneRenderer extends Renderer {
             writer.startElement("div", component);
             writer.writeAttribute("id", id, null);
             writeStyle(context, writer, component);
-            writeScriptIfNecessary(context, writer, component);
+            getXhtmlHelper().linkJavascript(context, component, writer, 
+                    Mechanism.CLASS_RESOURCE, SCRIPT_ID);
+            writeAjaxifyScript(context, writer, component);
             writeZoneAccruer(context, writer, component);
         }
     }
@@ -85,7 +90,8 @@ public class AjaxZoneRenderer extends Renderer {
         else {
             writer.write("\n<!--\n");
         }
-        writer.write("\ng_zones.push(\"" + comp.getClientId(context) + "\");");
+        writer.write("\ng_zones.push(\"" + NamingContainer.SEPARATOR_CHAR +
+                comp.getClientId(context) + "\");");
         if (isXhtml) {
             writer.write("\n]]>\n");
         }
@@ -97,7 +103,7 @@ public class AjaxZoneRenderer extends Renderer {
         writer.endElement("script");
     }
     
-    private void writeScriptIfNecessary(FacesContext context, ResponseWriter writer, UIComponent comp) throws IOException {
+    private void writeAjaxifyScript(FacesContext context, ResponseWriter writer, UIComponent comp) throws IOException {
 
         String 
                 interactionType = null,
@@ -227,5 +233,14 @@ public class AjaxZoneRenderer extends Renderer {
         Map<String, Object> requestMap = 
                 context.getExternalContext().getRequestMap();
         return requestMap.containsKey(ProcessingContextViewRoot.PROCESSING_CONTEXTS_REQUEST_PARAM_NAME);
+    }
+    
+    private transient XhtmlHelper xHtmlHelper = null;
+    
+    private XhtmlHelper getXhtmlHelper() {
+        if (null == xHtmlHelper) {
+            xHtmlHelper = new XhtmlHelper();
+        }
+        return xHtmlHelper;
     }
 }

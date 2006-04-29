@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.sun.faces.assembly</groupId>
+  <artifactId>jsf-extensions</artifactId>
+  <packaging>pom</packaging>
+  <name>Build the distribution</name>
+  <version>0.1-SNAPSHOT</version>
+  <description>Build the distribution</description>
+  <url>https://jsf-extensions.dev.java.net/</url>
+
+  <scm>
+    <connection>scm:svn:http://jsf-extensions.dev.java.net/svn/jsf-extensions/trunk</connection>
+    <developerConnection>scm:svn:https://jsf-extensions.dev.java.net/svn/jsf-extensions/trunk</developerConnection>
+    <url>https://jsf-extensions.dev.java.net/source/browse/jsf-extensions/</url>
+  </scm>
+
+  <build>
+    <defaultGoal>package</defaultGoal>
+    <finalName>jsf-extensions</finalName>
+        <plugins>
+       <plugin>
+	 <artifactId>maven-antrun-plugin</artifactId>
+	 <executions>
+	   <execution>
+             <id>dist</id>
+	     <phase>package</phase>
+	     <configuration>
+	       <tasks>
+                 <echo message="Building distribution" />
+                 <mkdir dir="target/dist" />
+                 <copy todir="target/dist">
+                   <fileset dir="../run-time/target">
+                     <include name="*.jar" />
+                     <exclude name="*-sources.jar" />
+                   </fileset>
+                   <fileset dir="../test-time/target">
+                     <include name="*.jar" />
+                   </fileset>
+                   <fileset dir="../run-time-test/target">
+                     <include name="*.war" />
+                   </fileset>
+                   <fileset dir=".">
+                     <include name="*.txt" />
+                     <include name="COPYRIGHT" />
+                   </fileset>
+                 </copy>
+                 <tar destfile="target/jsf-extensions-${pom.version}.tar"
+                      basedir="target/dist" />
+                 <gzip src="target/jsf-extensions-${pom.version}.tar" 
+                        destfile="target/jsf-extensions-${pom.version}.tar.gz"/>
+	       </tasks>
+	     </configuration>
+	     <goals>
+	       <goal>run</goal>
+	     </goals>
+	   </execution>
+	 </executions>
+       </plugin>
+      </plugins>
+      </build>  
+</project>

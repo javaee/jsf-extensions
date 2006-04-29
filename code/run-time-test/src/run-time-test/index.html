@@ -10,24 +10,94 @@
     <p>The following pages illustrate the components in the run-time
     library.</p>
 
-	<ul>
+<table border="1">
 
-	  <li><p><a href="faces/flash.jsp">Ruby on Rails-style Flash</a>
-	  </p></li>
+<tr>
 
-	  <li><p><a href="faces/result-set.jsp">JSF Result Set AVATAR
-	  demo for Users - NOT READY FOR PRIME TIME</a> </p></li>
+<th>Component Content</th> 
 
-	  <li><p><a href="faces/result-set-non-avatar.jsp">Result Set without
-	  AVATAR.</a> </p></li>
+<th>View JSP Source</th> 
 
-	  <li><p><a href="faces/reset-server-side-state.jsp">JSF AVATAR demo for
-	  jmeter</a> </p></li>
+<th>View Java Source</th> 
 
-	  <li><p><a href="parameter-passing-using-el.html">Parameter Passing using the EL</a> </p></li>
+<th>Execute JSP</th></tr>
+
+<tr>
+
+<td>Demo of one possible implementation of Jacob Hookom's Avatar idea.
+</td>
+
+<td><a href="ShowSource.jsp?filename=/result-set.jsp"><img src="images/code.gif" width="24" height="24" border="0"></a>
+</td>
+
+<td>
+<a href="static/com/sun/faces/components/AjaxZone.java.jsf">com/sun/faces/components/AjaxZone.java</a><br />
+<a href="static/com/sun/faces/taglib/jsf_extensions/AjaxZoneTag.java.jsf">com/sun/faces/taglib/jsf_extensions/AjaxZoneTag.java</a><br />
+<a href="static/com/sun/faces/components/ProcessingContext.java.jsf">com/sun/faces/components/ProcessingContext.java</a><br />
+<a href="static/com/sun/faces/components/ProcessingContextViewRoot.java.jsf">com/sun/faces/components/ProcessingContextViewRoot.java</a><br />
+<a href="static/com/sun/faces/renderkit/AjaxZoneRenderer.java.jsf">com/sun/faces/renderkit/AjaxZoneRenderer.java</a><br />
+<a href="static/com/sun/faces/taglib/jsf_extensions/AjaxZoneTag.java.jsf">com/sun/faces/taglib/jsf_extensions/AjaxZoneTag.java</a><br />
+Result set scroller sources available at <a href="https://bpcatalog.dev.java.net/source/browse/bpcatalog/ee5/components/ui/src/java/com/sun/javaee/blueprints/components/ui/">the Blueprints Solutions Catalog website</a>.
+</td>
+
+<td><a href="faces/result-set.jsp"><img src="images/execute.gif" width="24" height="24" border="0"></a>
+</td>
+
+</tr>
+
+<tr>
+
+<td>The same result-set.jsp page, but without avatar.  Note the absence
+of the <code>ajaxZone</code> tags.
+</td>
+
+<td><a href="ShowSource.jsp?filename=/result-set-non-avatar.jsp"><img src="images/code.gif" width="24" height="24" border="0"></a>
+</td>
+
+<td>
+Result set scroller sources available at <a href="https://bpcatalog.dev.java.net/source/browse/bpcatalog/ee5/components/ui/src/java/com/sun/javaee/blueprints/components/ui/">the Blueprints Solutions Catalog website</a>.
+</td>
+
+<td><a href="faces/result-set-non-avatar.jsp"><img src="images/execute.gif" width="24" height="24" border="0"></a>
+</td>
+
+</tr>
+
+<tr>
+
+<td>Ruby on Rails-style Flash
+</td>
+
+<td><a href="ShowSource.jsp?filename=/flash.jsp"><img src="images/code.gif" width="24" height="24" border="0"></a>
+</td>
+
+<td>
+<a href="static/com/sun/faces/el/ELFlash.java.jsf">com/sun/faces/el/ELFlash.java</a><br />
+<a href="static/com/sun/faces/el/FlashELResolver.java.jsf">com/sun/faces/el/FlashELResolver.java</a><br />
+<a href="static/com/sun/faces/el/FlashPhaseListener.java.jsf">com/sun/faces/el/FlashPhaseListener.java</a><br />
+<a href="static/com/sun/faces/taglib/jsf_extensions/SetTag.java.jsf">com/sun/faces/taglib/jsf_extensions/SetTag.java</a><br />
+</td>
+
+<td><a href="faces/flash.jsp"><img src="images/execute.gif" width="24" height="24" border="0"></a>
+</td>
+
+</tr>
+
+<tr>
+
+<td><a href="parameter-passing-using-el.html">Parameter Passing using the EL</a></td>
+
+<td>&nbsp;
+</td>
+
+<td>&nbsp;
+</td>
+
+</tr>
 
 
-	</ul>
+</table>
+
 
    <p>Here is some nascent documentation on the jsf-extensions project.
    Remember, the javadocs and TLDdocs are available at <a
@@ -47,7 +117,7 @@
     <hr>
 <!-- Created: Thu Dec 15 13:39:44 EST 2005 -->
 <!-- hhmts start -->
-Last modified: Mon Jan 23 16:26:14 EST 2006
+Last modified: Sat Apr 29 12:47:18 EDT 2006
 <!-- hhmts end -->
   </body>
 </html>

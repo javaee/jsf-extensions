@@ -24,6 +24,7 @@
   </scm>
 
   <build>
+    <defaultGoal>install</defaultGoal>
     <sourceDirectory>src/main/java</sourceDirectory>
     <resources>
       <resource>
@@ -44,6 +45,18 @@
     </resource>
    </resources>
     <plugins>
+       <plugin>
+         <artifactId>maven-source-plugin</artifactId>
+	 <executions>
+	   <execution>
+             <id>source</id>
+	     <phase>generate-resources</phase>
+	     <goals>
+	       <goal>jar</goal>
+	     </goals>
+	   </execution>
+	 </executions>
+       </plugin>   
       <plugin>
         <groupId>net.sourceforge.maven-taglib</groupId>
         <artifactId>maven-taglib-plugin</artifactId>

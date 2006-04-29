@@ -27,56 +27,6 @@
  * Copyright 2005 Sun Microsystems Inc. All Rights Reserved
  */
 
-var g_zones = [];
-
-dojo.require("dojo.fx.*");
-dojo.require("dojo.event.*");
-dojo.require("dojo.string.*");
-
-dojo.fx.html.crossfadeSwitch = function(nodeOut, nodeIn, duration, callback, dontPlay){
-	nodeOut = dojo.byId(nodeOut);
-	nodeIn = dojo.byId(nodeIn);
- 
-	dojo.style.setOpacity(nodeIn, 0);
-	nodeIn.style.display = "block";
- 
-	dojo.fx.html.crossfade(nodeOut, nodeIn, duration, 0, 1, function(){
-		// note: This is a swap
-		var innerHTML = nodeOut.innerHTML;
-		nodeOut.innerHTML = nodeIn.innerHTML;
-		nodeOut.style.display = "block";
-		dojo.style.setOpacity(nodeOut, 1);
-		nodeIn.style.display = "none";
-		dojo.style.setOpacity(nodeIn, 0);
-		dojo.lang.setTimeout(null, function(){ nodeIn.innerHTML = innerHTML; }, 0); // This prevents flicker
-	});
-}
-// http://10is2.com/dojo/test.html
-dojo.fx.html.crossfade = function(nodeOut, nodeIn, duration, startOpac, endOpac, callback, dontPlay){
-	if(arguments.length < 4){
-		startOpac = 0;
-	}
-	if(arguments.length < 5){
-		endOpac = 1;
-	}
-	nodeOut = dojo.byId(nodeOut);
-	nodeIn = dojo.byId(nodeIn);
-	dojo.fx.html._makeFadeable(nodeOut);
-	dojo.fx.html._makeFadeable(nodeIn);
-	var anim = new dojo.animation.Animation(new dojo.math.curves.Line([startOpac], [endOpac]), duration, 0);
-      dojo.event.connect(anim, "onAnimate", function(e){
-		dojo.style.setOpacity(nodeIn, e.x);
-		dojo.style.setOpacity(nodeOut, endOpac - e.x);
-	});
-	if(callback) {
-		dojo.event.connect(anim, "onEnd", function(e){
-			callback(nodeOut, nodeIn, anim);
-		});
-	}
-	if(!dontPlay){ anim.play(true); }
-	return anim;
-}
-
 function extractParams(originalScript, outProps, invocation) {
 
   var allHandlerStatements = null;

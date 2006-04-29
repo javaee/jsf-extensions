@@ -39,6 +39,31 @@
        </plugin>
      </plugins>
    </pluginManagement>
+   <plugins>
+       <plugin>
+	 <artifactId>maven-antrun-plugin</artifactId>
+	 <executions>
+	   <execution>
+             <id>source</id>
+	     <phase>generate-resources</phase>
+	     <configuration>
+	       <tasks>
+                 <echo message="Copying sources jar to WEB-INF/lib" />
+                 <copy todir="target/jsf-extensions/WEB-INF/lib">
+                   <fileset dir="../run-time/target">
+                     <include name="*-sources.jar" />
+                   </fileset>
+                 </copy>
+	       </tasks>
+	     </configuration>
+	     <goals>
+	       <goal>run</goal>
+	     </goals>
+	   </execution>
+	 </executions>
+       </plugin>
+    </plugins>
+
   </build>
 
 
@@ -68,6 +93,11 @@
       <groupId>commons-logging</groupId>
       <artifactId>commons-logging</artifactId>
       <version>1.0.4</version>
+    </dependency>
+    <dependency>
+      <groupId>taglibs</groupId>
+      <artifactId>standard</artifactId>
+      <version>1.1.2</version>
     </dependency>
 
   </dependencies>

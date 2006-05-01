@@ -3,9 +3,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.sun.jsf-extensions</groupId>
-  <artifactId>jsf-extensions-run-time-test</artifactId>
+  <artifactId>cardemo</artifactId>
   <packaging>war</packaging>
-  <name>jsf-extensions-run-time-test</name>
+  <name>jsf-extensions-cardemo</name>
   <url>https://jsf-extensions.dev.java.net/</url>
   <description>
     Run time jsf-extensions
@@ -26,19 +26,7 @@
   <build>
     <defaultGoal>install</defaultGoal>
     <sourceDirectory>src/main/java</sourceDirectory>
-    <finalName>jsf-extensions</finalName>
-    <pluginManagement>
-     <plugins>
-       <plugin>
-         <groupId>org.apache.maven.plugins</groupId>
-         <artifactId>maven-war-plugin</artifactId>
-         <configuration>
-           <warSourceDirectory>src/run-time-test</warSourceDirectory>
-           <warName>jsf-extensions</warName>
-         </configuration>
-       </plugin>
-     </plugins>
-   </pluginManagement>
+    <finalName>jsf-cardemo</finalName>
    <plugins>
        <plugin>
 	 <artifactId>maven-antrun-plugin</artifactId>
@@ -48,10 +36,10 @@
 	     <phase>generate-resources</phase>
 	     <configuration>
 	       <tasks>
-                 <echo message="Copying sources jar to WEB-INF/lib" />
-                 <copy todir="target/jsf-extensions/WEB-INF/lib">
-                   <fileset dir="../run-time/target">
-                     <include name="*-sources.jar" />
+                 <echo message="Copying properties files to WEB-INF/classes" />
+                 <copy todir="target/jsf-cardemo/WEB-INF/classes">
+                   <fileset dir="src/main/java">
+                     <include name="**/*.properties" />
                    </fileset>
                  </copy>
 	       </tasks>
@@ -63,7 +51,6 @@
 	 </executions>
        </plugin>
     </plugins>
-
   </build>
 
 
@@ -95,15 +82,9 @@
       <version>1.0.4</version>
     </dependency>
     <dependency>
-      <groupId>taglibs</groupId>
-      <artifactId>standard</artifactId>
-      <version>1.1.2</version>
-    </dependency>
-    <dependency>
       <groupId>com.sun.javaee.blueprints</groupId>
       <artifactId>bp-ui-simple</artifactId>
       <version>5</version>
-      <scope>runtime</scope>
     </dependency>
 
   </dependencies>

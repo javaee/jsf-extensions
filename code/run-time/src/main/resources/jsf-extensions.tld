@@ -106,6 +106,57 @@
         <description>
           <![CDATA[
 
+          <p>This optional attribute identifies a function that tells the 
+          system which kinds of elements within this zone to instrument with 
+          AJAX behavior.  The function must conform to the following signature:
+          </p>
+          
+          
+<pre><code>
+function inspectElement(element);
+</code></pre>
+
+         <p>The function must return true to indicate that the element 
+         should be instrumented for AJAX behavior.  Example:</p>
+
+<pre><code>
+&lt;jsfExt:ajaxZone interactionType="input" <br /> 
+&nbsp;&nbsp;&nbsp;eventType="onmousedown" <br /> 
+&nbsp;&nbsp;&nbsp;inspectElementHook="inspectElement" <br /> 
+&nbsp;&nbsp;&nbsp;eventHook="replaceOnMouseDown"&gt;<br /> 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  &lt;d:scroller&gt;<br /> 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    &lt;!-- nested components  --&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  &lt;/d:scroller&gt;<br /> 
+&lt;/jsfExt:ajaxZone&gt;<br /> 
+
+function inspectElement(element) {
+  var result = false
+  if (null != element) {
+    var tagName = element.nodeName;
+    if (null != tagName) {
+      if (-1 != tagName.toLowerCase().substring("input")) {
+        result = true;
+      }
+    }
+  }
+  return result;
+}
+
+</code></pre>
+
+          ]]>
+
+        </description>
+        <name>inspectElementHook</name>
+        <required>false</required>
+        <deferred-value>
+	    <type>java.lang.String</type>
+        </deferred-value>
+    </attribute>
+    <attribute>
+        <description>
+          <![CDATA[
+
           <p>This optional attribute indicates what kind of components
           are contained within this zone.  Valid values are "input" and
           "output".  If not present the default is "output".  A value of
@@ -184,7 +235,7 @@
           </p>
 
 <pre><code>
-function handler(originalScript, outProps, invocation);
+function handler(element, originalScript, outProps, invocation);
 </code></pre>
 
           <p><code>originalScript</code> is the value of the event as
@@ -216,7 +267,7 @@ function handler(originalScript, outProps, invocation);
 // Take the original script, extract any name/value pairs<br /> 
 // found within the script, place them into the outProps <br /> 
 // associative array.  DO NOT call the invocation argument<br /> 
-function handler(originalScript, outProps, invocation) {<br /> 
+function handler(element, originalScript, outProps, invocation) {<br /> 
 <br /> 
 &nbsp;&nbsp;var allHandlerStatements = null;<br /> 
 &nbsp;&nbsp;var prunedHandlerStatements = null;<br /> 

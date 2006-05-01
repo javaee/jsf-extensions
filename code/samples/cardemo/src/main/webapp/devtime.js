@@ -93,3 +93,17 @@ function extractParams(element, originalScript, outProps, invocation) {
     }
   }    
 }
+
+function inspectElement(element) {
+  var result = false
+  if (null != element) {
+    var tagName = element.nodeName;
+    if (null != tagName) {
+      if (-1 != tagName.toLowerCase().indexOf("input")) {
+        result = true;
+      }
+    }
+  }
+  return result;
+}
+

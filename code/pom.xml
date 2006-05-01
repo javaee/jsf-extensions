@@ -6,7 +6,7 @@
   <artifactId>jsf-extensions-build</artifactId>
   <packaging>pom</packaging>
   <version>0.1-SNAPSHOT</version>
-  <name>Build Project</name>
+  <name>JavaServer(tm) Faces Extensions Top Level Build Project Object Model</name>
   <url>https://jsf-extensions.dev.java.net/</url>
 
   <scm>
@@ -20,6 +20,7 @@
     <module>run-time</module>
     <module>test-time</module>
     <module>run-time-test</module>
+    <module>samples/cardemo</module>
   </modules>
 
   <build>

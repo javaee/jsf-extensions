@@ -112,6 +112,7 @@ public class AjaxZoneRenderer extends Renderer {
                 interactionType = null,
                 eventHook = null,
                 eventType = null,
+                inspectElementHook = null,
                 ajaxifyChildren = null;
 
 
@@ -140,9 +141,12 @@ public class AjaxZoneRenderer extends Renderer {
         }
         
         ajaxifyChildren = "ajaxifyChildren(this, \'" + eventType + "\', \'" + eventHook + "\')";
-        
         writer.writeAttribute("onmouseover", ajaxifyChildren, "onmouseover");
         
+        inspectElementHook = getAttr(context, comp, "inspectElementHook");
+        if (null != inspectElementHook) {
+            writer.writeAttribute("inspectElementHook", inspectElementHook, "inspectElementHook");
+        }
     }
     
     private String getAttr(FacesContext context, UIComponent comp, String name) {

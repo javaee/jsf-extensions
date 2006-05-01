@@ -37,7 +37,7 @@ function ajaxifyChildren(target, eventType, eventHook) {
     if (null == target.isAjaxified && 
         target.hasChildNodes()) {
 	for (var i = 0; i < target.childNodes.length; i++) {
-	    takeActionAndTraverseTree(target.childNodes[i], 
+	    takeActionAndTraverseTree(target, target.childNodes[i], 
 				      moveAsideEventType, eventType, 
 				      eventHook);
 	}
@@ -57,11 +57,14 @@ function moveAsideEventType(element, eventType, eventHook) {
 	var props = new Object();
 	var pctxts = "";
 	var zones = dj_global.g_zones;
+        var originalScript = this["originalScript"];
+        if (null != originalScript) {
+          originalScript = originalScript.toString();
+        }
 
 	// Here is where we invoke the user script to populate the "props"
 	// as appropriate to this particular zone.
-	dj_global[this["eventHook"]](this["originalScript"].toString(), 
-				  props, invocation);
+	dj_global[this["eventHook"]](this["element"], originalScript, props, invocation);
 
 	for (var i = 0; i < zones.length; i++) {
 	    pctxts = pctxts + zones[i];
@@ -104,16 +107,29 @@ function moveAsideEventType(element, eventType, eventHook) {
     dojo.event.connect("around", element, eventType, handler, "aroundHandler");
 }
 
-function takeActionAndTraverseTree(element, action, eventType, eventHook) {
-    // If this element has a handler for the eventType
-    if (null != element[eventType] &&
-	null != element.getAttribute(eventType)) {
-	// take the action on this element.
-	action(element, eventType, eventHook);
+function takeActionAndTraverseTree(target, element, action, eventType, eventHook) {
+    var takeAction = false;
+    var inspectElement = target.getAttribute("inspectElementHook");
+
+    // If the user defined an "inspectElement" function, call it.
+    if (null != (inspectElement = dj_global[inspectElement])) {
+      takeAction = inspectElement(element);
+    }
+    // If the function returned false or null, or was not defined...
+    if (null == takeAction || !takeAction) {
+      // if this element has a handler for the eventType
+      if (null != element[eventType] &&
+  	  null != element.getAttribute(eventType)) {
+        takeAction = true;
+      }
+    }
+    if (takeAction) {
+      // take the action on this element.
+      action(element, eventType, eventHook);
     }
     if (element.hasChildNodes()) {
 	for (var i = 0; i < element.childNodes.length; i++) {
-	    takeActionAndTraverseTree(element.childNodes[i], action, 
+	    takeActionAndTraverseTree(target, element.childNodes[i], action, 
 				      eventType, eventHook);
 	}
     }

@@ -46,7 +46,7 @@
 
 <html>
 <head>
-  <title>JSTL: Source code for <c:out value="${filename}"/></title>
+  <title>Source code for <c:out value="${filename}"/></title>
 </head>
 <body bgcolor="#FFFFFF">
 <h3>Source code for:&nbsp; <c:out value="${filename}"/></h3>

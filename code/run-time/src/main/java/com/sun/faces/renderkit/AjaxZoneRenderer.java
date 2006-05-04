@@ -88,11 +88,11 @@ public class AjaxZoneRenderer extends Renderer {
             writer.startElement("div", component);
             writer.writeAttribute("id", id, null);
             writeStyle(context, writer, component);
+            writeAjaxifyScript(context, writer, component);
             getXhtmlHelper().linkJavascript(context, component, writer, 
                     Mechanism.CLASS_RESOURCE, DOJO_SCRIPT_ID);
             getXhtmlHelper().linkJavascript(context, component, writer, 
                     Mechanism.CLASS_RESOURCE, SCRIPT_ID);
-            writeAjaxifyScript(context, writer, component);
             writeZoneAccruer(context, writer, component);
         }
     }

@@ -30,8 +30,10 @@ Copyright 2005 Sun Microsystems Inc. All Rights Reserved
 <script type="text/javascript" 
         src='<%= request.getContextPath() + "/devtime.js" %>'></script>
 
-<jsfExt:ajaxZone id="zone2" interactionType="input" inspectElementHook="inspectElement"
-                eventType="onclick" eventHook="extractParams">
+<jsfExt:ajaxZone id="zone2" interactionType="input" 
+                inspectElementHook="inspectElement"
+                eventType="onclick" eventHook="extractParams"
+                action="#{carstore.currentModel.updatePricing}">
 <h:panelGrid>
 
     <h:outputText value="#{bundle.OptionsPackages}"/>

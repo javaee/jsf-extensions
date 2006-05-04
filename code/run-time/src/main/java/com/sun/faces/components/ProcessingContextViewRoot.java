@@ -30,10 +30,15 @@
 package com.sun.faces.components;
 
 import java.io.IOException;
+import java.io.Serializable;
+import java.io.Writer;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import javax.faces.FactoryFinder;
 import javax.faces.component.ContextCallback;
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
@@ -41,25 +46,109 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
+import javax.faces.event.PhaseEvent;
+import javax.faces.event.PhaseId;
+import javax.faces.event.PhaseListener;
+import javax.faces.render.RenderKit;
+import javax.faces.render.RenderKitFactory;
 import javax.servlet.http.HttpServletResponse;
 
 /**
  *
  * @author edburns
  */
-public class ProcessingContextViewRoot extends UIViewRoot {
+public class ProcessingContextViewRoot extends UIViewRoot implements Serializable {
     
     /** Creates a new instance of ProcessingContextViewRoot */
     public ProcessingContextViewRoot() {
+        init();
     }
+    
+    private void init() {
+        doAjaxRenderPhaseListener = new PhaseListener() {
+            public PhaseId getPhaseId() {
+                return PhaseId.INVOKE_APPLICATION;
+            }
+            
+            public void beforePhase(PhaseEvent e) {
+                
+            }
+
+            public void afterPhase(PhaseEvent e) {
+                FacesContext context = e.getFacesContext();
+                ProcessingContextViewRoot pcRoot = 
+                        (ProcessingContextViewRoot) context.getViewRoot();
+                // If this is an AJAX request
+                if (!pcRoot.getDelegateRoots().isEmpty()) {
+                    try {
+                        
+                        // set up the ResponseWriter
+                        ResponseWriter responseWriter = context.getResponseWriter();
+                        if (null == responseWriter) {
+                            RenderKitFactory renderFactory = (RenderKitFactory)
+                            FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+                            RenderKit renderKit =
+                                    renderFactory.getRenderKit(context, 
+                                    pcRoot.getRenderKitId());
+                            Writer out = null;
+                            Object response = context.getExternalContext().getResponse();
+                            Method getWriter = 
+                                    response.getClass().getMethod("getWriter", 
+                                      (Class []) null);
+                            if (null != getWriter) {
+                                out = (Writer) getWriter.invoke(response);
+                            }
+                            if (null != out) {
+                                responseWriter = 
+                                        renderKit.createResponseWriter(out, 
+                                          "text/xml",
+                                          context.getExternalContext().getRequestCharacterEncoding());
+                            }
+                            if (null != responseWriter) {
+                                context.setResponseWriter(responseWriter);
+                            }
+                        }
+                        
+                        pcRoot.encodeAll(context);
+                        pcRoot.clearDelegateRoots();
+                    }
+                    catch (NoSuchMethodException nsme) {
+                        nsme.printStackTrace();
+                    }
+                    catch (IllegalAccessException iae) {
+                        iae.printStackTrace();
+                    }
+                    catch (InvocationTargetException ite) {
+                        ite.printStackTrace();
+                    }
+                    catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                    finally {
+                        context.responseComplete();
+                    }
+                }
+            }
+
+        };
+        this.addPhaseListener(doAjaxRenderPhaseListener);
+    }
+    
+    private transient PhaseListener doAjaxRenderPhaseListener = null;
+    
+    
+    public void restoreState(FacesContext context, Object state) {
+        this.removePhaseListener(doAjaxRenderPhaseListener);
+        super.restoreState(context, state);
+    }
+
     
     public String getRendererType() {
         return (COMPONENT_FAMILY);
         
     }
     
-    private transient DelegateRootIterator delegateRootIter = null;
-    private transient boolean invokeOnComponent = false;
+    private transient boolean calledDuringInvokeOnComponent = false;
 
     /**
      * Holds value of property processingContexts.
@@ -110,16 +199,27 @@ public class ProcessingContextViewRoot extends UIViewRoot {
 
     public static final String PROCESSING_CONTEXTS_REQUEST_PARAM_NAME = "com.sun.faces.PCtxt";
     
+    private transient List<UIComponent> delegateRoots = null;
+    
+    private void clearDelegateRoots() {
+        getDelegateRoots().clear();
+    }
+    
     private List<UIComponent> getDelegateRoots() {
+        
+        if (null != delegateRoots) {
+            return delegateRoots;
+        }
+        
         // Otherwise, we need to generate the list of delegateRoots.
         final UIComponent [] cur = new UIComponent[1];
         cur[0] = null;
         String pcClientId = null;
 
-        List<UIComponent> delegateRoots = new ArrayList<UIComponent>();
+        delegateRoots = new ArrayList<UIComponent>();
         List<ProcessingContext> pcs = getProcessingContexts();
         if (null == pcs) {
-            return null;
+            return delegateRoots;
         }
         Iterator<ProcessingContext> pcIter = pcs.iterator();
         // Build up a list of UIComponents, one for each processing context.
@@ -136,13 +236,13 @@ public class ProcessingContextViewRoot extends UIViewRoot {
                 }
                 
             };
-            this.invokeOnComponent = true;
+            this.calledDuringInvokeOnComponent = true;
             try {
                 this.invokeOnComponent(FacesContext.getCurrentInstance(), 
                         pcClientId, cb);
             }
             finally {
-                invokeOnComponent = false;
+                calledDuringInvokeOnComponent = false;
             }
             if (null != cur[0]) {
                 delegateRoots.add(cur[0]);
@@ -152,28 +252,20 @@ public class ProcessingContextViewRoot extends UIViewRoot {
     }
     
     public Iterator<UIComponent> getFacetsAndChildren() {
-        // If we have no processing contexts, we can have no delegateRoots.
-        if (null == getProcessingContexts() || invokeOnComponent) {
-            // Therefore, just return the real ViewRoot's facetsAndChildren.
-            return super.getFacetsAndChildren();
-        }
-
-        if (null == delegateRootIter) {
-            delegateRootIter = new DelegateRootIterator();
-            List<UIComponent> roots = getDelegateRoots();
-            delegateRootIter.setRoots(roots);
+        List<UIComponent> roots = getDelegateRoots();
+        Iterator<UIComponent> result = null;
+        if (roots.isEmpty() || calledDuringInvokeOnComponent) {
+            result = super.getFacetsAndChildren();
         }
         else {
-            delegateRootIter.reset();
+            result = roots.iterator();
         }
-        assert(null != delegateRootIter);
-        
-        return delegateRootIter;
+        return result;
     }
     
     public void encodeAll(FacesContext context) throws IOException {
         List<UIComponent> roots = getDelegateRoots();
-        if (null == roots) {
+        if (roots.isEmpty()) {
             super.encodeAll(context);
         }
         else {
@@ -185,6 +277,7 @@ public class ProcessingContextViewRoot extends UIViewRoot {
                 servletResponse.setHeader("Cache-Control", "no-cache");
             }
             ResponseWriter responseWriter = context.getResponseWriter();
+            responseWriter.startDocument();
             responseWriter.startElement("processing-context-responses", this);
             Map<String, Object> requestMap = 
                     context.getExternalContext().getRequestMap();
@@ -199,68 +292,10 @@ public class ProcessingContextViewRoot extends UIViewRoot {
                 requestMap.remove(PROCESSING_CONTEXTS_REQUEST_PARAM_NAME);
             }
             responseWriter.endElement("processing-context-responses");
+            responseWriter.endDocument();
         }
     }
     
 
-    
- class DelegateRootIterator extends Object implements Iterator<UIComponent> {
-
-     private Iterator<UIComponent> curIter = null;
-     
-     private List<UIComponent> roots = null;
-     private Iterator<UIComponent> rootsIter = null;
-     
-     /**
-      * For each component in the list of UIComponents, call its
-      * getFacetsAndChildren() method.
-      */
-     
-     public void setRoots(List<UIComponent> roots) {
-         this.roots = roots;
-         this.rootsIter = roots.iterator();
-     }
-     
-     public void reset() {
-         curIter = null;
-         assert(null != roots);
-         rootsIter = roots.iterator();
-     }
-     
-     public void remove() {
-         throw new UnsupportedOperationException();
-     }
-     public UIComponent next() {
-         UIComponent result = null;
-         if (hasNext()) {
-             assert(null != curIter);
-             result = curIter.next();
-         }
-         return result;
-     }
-     public boolean hasNext() {
-         boolean result = false;
-         // If we need to proceed to the next root, obtain
-         // it and get its iterator.
-         if (null == curIter) {
-             // If we have more roots:
-             if (rootsIter.hasNext()) {
-                 // Get the next iterator.
-                 curIter = rootsIter.next().getFacetsAndChildren();
-             }
-         }
-         // If we successfully obtained the current iterator...
-         if (null != curIter) {
-             // but there are no more elements in it...
-             if (!(result = curIter.hasNext())) {
-                 curIter = null;
-                 // recurse on the next iterator
-                 result = hasNext();
-             }
-         }
-         return result;
-         
-     }
-  }
     
 }

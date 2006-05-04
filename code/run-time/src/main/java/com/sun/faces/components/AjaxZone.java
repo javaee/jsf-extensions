@@ -1,9 +1,11 @@
 package com.sun.faces.components;
 
+import javax.faces.component.UICommand;
+
 /**
  * 
  */
-public class AjaxZone extends javax.faces.component.UIComponentBase {
+public class AjaxZone extends UICommand {
     public AjaxZone() {
         super();
         setRendererType("com.sun.faces.AjaxZone");
@@ -15,4 +17,5 @@ public class AjaxZone extends javax.faces.component.UIComponentBase {
     public String getFamily() { 
         return "com.sun.faces.AjaxZone"; 
     }
+    
 }

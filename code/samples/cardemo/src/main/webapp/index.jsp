@@ -40,6 +40,6 @@ by the container.
 
 -->
 
-<jsp:forward page="chooseLocale.faces"/>
+<jsp:forward page="faces/chooseLocale.jsp"/>
 </body>
 </html>

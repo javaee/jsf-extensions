@@ -106,6 +106,45 @@
         <description>
           <![CDATA[
 
+          <p>This optional attribute is a <code>MethodExpression</code> to
+          invoke when the request processing lifecycle in which this zone
+          is being processed encounters its invokeApplication phase.</p>
+
+          ]]>
+
+        </description>
+        <name>action</name>
+        <required>false</required>
+        <deferred-method>
+          <method-signature>
+            java.lang.Object action()
+          </method-signature>
+        </deferred-method>
+    </attribute>
+    <attribute>
+        <description>
+            <![CDATA[Flag indicating that, if this component is activated by the user,
+            notifications should be delivered to interested listeners and actions
+            immediately (that is, during Apply Request Values phase) rather than
+            waiting until Invoke Application phase.]]>
+        </description>
+        <name>
+            immediate
+        </name>
+        <required>
+            false
+        </required>
+        <deferred-value>
+            <type>
+                boolean
+            </type>
+        </deferred-value>
+    </attribute>
+    
+    <attribute>
+        <description>
+          <![CDATA[
+
           <p>This optional attribute identifies a function that tells the 
           system which kinds of elements within this zone to instrument with 
           AJAX behavior.  The function must conform to the following signature:
@@ -235,15 +274,19 @@ function inspectElement(element) {
           </p>
 
 <pre><code>
-function handler(element, originalScript, outProps, invocation);
+function handler(ajaxZone, element, originalScript, outProps, invocation);
 </code></pre>
 
-          <p><code>originalScript</code> is the value of the event as
+          <p><code>ajaxZone<code> is the ajaxZone element that is
+          the parent of the element that is receiving the event.  
+          <element> is the element receiving the event.
+          <code>originalScript</code> is the value of the event as
           specified in the original rendered code.
           <code>invocation</code> is an associative array with two
-          properties: <code>"args"</code> is an array of the arguments
+          properties: <code>invocation.args</code> is an array of the arguments
           passed to the target event handler from the browser.
-          <code>"proceed"</code> is a function you can call that will
+          note that <code>invocation.args[0] is the JavaScript event.
+          <code>invocation.proceed</code> is a function you can call that will
           call the target event handler.  The return value from the
           <code>proceed</code> function can be acted on in the handler
           as appropriate.  <code>"outProps"</code> is a pre-allocated

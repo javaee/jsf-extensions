@@ -1,5 +1,7 @@
 package com.sun.faces.taglib.jsf_extensions;
 
+import com.sun.faces.components.AjaxZone;
+import javax.el.MethodExpression;
 import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
 import javax.faces.webapp.UIComponentELTag;
@@ -25,8 +27,10 @@ public class AjaxZoneTag extends UIComponentELTag {
         style = ve;
     }
 
-    protected void setProperties(UIComponent component) {
-        super.setProperties(component);
+    protected void setProperties(UIComponent comp) {
+        super.setProperties(comp);
+        
+        AjaxZone component = (AjaxZone) comp;
         
         if (null != style) {
             if (style.isLiteralText()) {
@@ -66,6 +70,16 @@ public class AjaxZoneTag extends UIComponentELTag {
             }
             else {
                 component.setValueExpression("inspectElementHook", inspectElementHook);
+            }
+        }
+        if (action != null) {
+            component.setActionExpression(action);
+        }
+        if (immediate != null) {
+            if (!immediate.isLiteralText()) {
+                component.setValueExpression("immediate", immediate);
+            } else {
+                component.setImmediate(java.lang.Boolean.valueOf(immediate.getExpressionString()).booleanValue());
             }
         }
         
@@ -123,6 +137,32 @@ public class AjaxZoneTag extends UIComponentELTag {
      */
     public void setInspectElementHook(ValueExpression inspectElementHook) {
         this.inspectElementHook = inspectElementHook;
+    }
+
+    /**
+     * Holds value of property action.
+     */
+    private MethodExpression action;
+
+    /**
+     * Setter for property action.
+     * @param action New value of property action.
+     */
+    public void setAction(MethodExpression action) {
+        this.action = action;
+    }
+
+    /**
+     * Holds value of property immediate.
+     */
+    private ValueExpression immediate;
+
+    /**
+     * Setter for property immediate.
+     * @param immediate New value of property immediate.
+     */
+    public void setImmediate(ValueExpression immediate) {
+        this.immediate = immediate;
     }
     
     

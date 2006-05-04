@@ -27,7 +27,8 @@
  * Copyright 2005 Sun Microsystems Inc. All Rights Reserved
  */
 
-function extractParams(element, originalScript, outProps, invocation) {
+function extractParams(ajaxZone, element, originalScript, outProps, 
+		       invocation) {
 
   var allHandlerStatements = null;
   var prunedHandlerStatements = null;

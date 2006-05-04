@@ -46,12 +46,13 @@ function ajaxifyChildren(target, eventType, eventHook) {
     return false;
 }
 
-function moveAsideEventType(element, eventType, eventHook) {
+function moveAsideEventType(ajaxZone, element, eventType, eventHook) {
     handler = new Object();
     handler["eventHook"] = eventHook;
     handler["eventType"] = eventType;
     handler["element"] = element;
     handler["originalScript"] = element[eventType];
+    handler["ajaxZone"] = ajaxZone;
     handler["aroundHandler"] = function (invocation) {
 	// invocation.args[0] is the event.
 	var props = new Object();
@@ -64,7 +65,8 @@ function moveAsideEventType(element, eventType, eventHook) {
 
 	// Here is where we invoke the user script to populate the "props"
 	// as appropriate to this particular zone.
-	dj_global[this["eventHook"]](this["element"], originalScript, props, invocation);
+	dj_global[this["eventHook"]](ajaxZone, this["element"], 
+				     originalScript, props, invocation);
 
 	for (var i = 0; i < zones.length; i++) {
 	    pctxts = pctxts + zones[i];
@@ -76,7 +78,7 @@ function moveAsideEventType(element, eventType, eventHook) {
 	    props['com.sun.faces.PCtxt'] = pctxts;
 	}
 	
-	var requestStruct = prepareRequest(props);
+	var requestStruct = prepareRequest(ajaxZone, props);
 	
 	dojo.io.bind({
 	    method: "POST",
@@ -124,8 +126,8 @@ function takeActionAndTraverseTree(target, element, action, eventType, eventHook
       }
     }
     if (takeAction) {
-      // take the action on this element.
-      action(element, eventType, eventHook);
+	// take the action on this element.
+	action(target, element, eventType, eventHook);
     }
     if (element.hasChildNodes()) {
 	for (var i = 0; i < element.childNodes.length; i++) {
@@ -136,7 +138,7 @@ function takeActionAndTraverseTree(target, element, action, eventType, eventHook
     return false;
 }
 
-function prepareRequest(extraParams) {
+function prepareRequest(ajaxZone, extraParams) {
     var stateFieldName = "javax.faces.ViewState";
     var stateElements = window.document.getElementsByName(stateFieldName);
     // In the case of a page with multiple h:form tags, there will be
@@ -157,4 +159,51 @@ function prepareRequest(extraParams) {
     // build up the post data
     extraParams[stateFieldName] = encodedState;
     extraParams[formName] = formName;
+    if (null != ajaxZone.id) {
+	extraParams[ajaxZone.id] = ajaxZone.id;
+    }
+}
+
+/**
+ * If the "nodeName" property of argument "element" contains the string
+ * "input" (case-insensitive), extract the name (or id) and value of
+ * that element and the corresponding value and store it in the "props"
+ * associative array.  Otherwise, recurse over the children of
+ * "element".
+ */
+
+function collectParamsFromInputChildren(element, props) {
+    collectParamsFromChildrenOfType(element, "input", props);
+    return;
+}
+
+/**
+ * If the "nodeName" property of argument "element" contains the string
+ * argument "nodeName" (case-insensitive), extract the name (or id) and
+ * value of that element and the corresponding value and store it in the
+ * "props" associative array.  Otherwise, recurse over the children of
+ * "element".
+ */
+function collectParamsFromChildrenOfType(element, nodeName, props) {
+    var elementNodeName = element.nodeName;
+    var name = null;
+    var i = 0;
+    var result = null;
+    if (null != elementNodeName) {
+	if (-1 != elementNodeName.toLowerCase().indexOf(nodeName)) {
+	    if (null == (name = element.name)) {
+		name = element.id;
+	    }
+	    if (null != name) {
+		props[name] = element.value;
+	    }
+	}
+    }
+    if (element.hasChildNodes()) {
+	for (i = 0; i < element.childNodes.length; i++) {
+	    collectParamsFromChildrenOfType(element.childNodes[i], 
+					    nodeName, props);
+	}
+    }
+    return;
 }

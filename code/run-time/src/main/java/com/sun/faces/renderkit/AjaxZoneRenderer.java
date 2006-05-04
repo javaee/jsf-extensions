@@ -10,6 +10,7 @@ import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
+import javax.faces.event.ActionEvent;
 import javax.faces.render.Renderer;
 import org.apache.shale.remoting.Mechanism;
 import org.apache.shale.remoting.XhtmlHelper;
@@ -25,6 +26,35 @@ public class AjaxZoneRenderer extends Renderer {
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Renderer methods
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    public void decode(FacesContext context, UIComponent component) {
+        if (context == null || component == null) {
+            throw new NullPointerException();
+        }
+
+        // Was our command the one that caused this submission?
+        // we don' have to worry about getting the value from request parameter
+        // because we just need to know if this command caused the submission. We
+        // can get the command name by calling currentValue. This way we can 
+        // get around the IE bug.
+        String clientId = component.getClientId(context);
+        Map<String,String> requestParameterMap = context.getExternalContext()
+            .getRequestParameterMap();
+        String value = requestParameterMap.get(clientId);
+        if (value == null) {
+            if (requestParameterMap.get(clientId + ".x") == null &&
+                requestParameterMap.get(clientId + ".y") == null) {
+                return;
+            }
+        }
+
+        String type = (String) component.getAttributes().get("type");
+        if ((type != null) && (type.toLowerCase().equals("reset"))) {
+            return;
+        }
+        ActionEvent actionEvent = new ActionEvent(component);
+        component.queueEvent(actionEvent);
+    }
 
     /**
      * Render the beginning of the specified UIComponent to the output stream or

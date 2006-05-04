@@ -34,6 +34,7 @@ import javax.faces.model.SelectItem;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.ResourceBundle;
+import javax.faces.component.UIViewRoot;
 
 public class CustomerBean {
 
@@ -59,18 +60,24 @@ public class CustomerBean {
 
     public Collection getTitleOptions() {
         titleOptions = new ArrayList<SelectItem>(3);
-        ResourceBundle rb = ResourceBundle.getBundle(
-              "carstore.bundles.Resources",
-              (FacesContext.getCurrentInstance().getViewRoot().getLocale()));
-        String titleStr = (String) rb.getObject("mrLabel");
-        titleOptions.add(new SelectItem(titleStr, titleStr,
-                                        titleStr));
-        titleStr = (String) rb.getObject("mrsLabel");
-        titleOptions.add(new SelectItem(titleStr, titleStr,
-                                        titleStr));
-        titleStr = (String) rb.getObject("msLabel");
-        titleOptions.add(new SelectItem(titleStr, titleStr,
-                                        titleStr));
+        UIViewRoot root = FacesContext.getCurrentInstance().getViewRoot();
+        ResourceBundle rb = null;
+
+        if (null != root) {
+            rb = ResourceBundle.getBundle("carstore.bundles.Resources",
+                    root.getLocale());
+        }
+        if (null != rb) {
+            String titleStr = (String) rb.getObject("mrLabel");
+            titleOptions.add(new SelectItem(titleStr, titleStr,
+                    titleStr));
+            titleStr = (String) rb.getObject("mrsLabel");
+            titleOptions.add(new SelectItem(titleStr, titleStr,
+                    titleStr));
+            titleStr = (String) rb.getObject("msLabel");
+            titleOptions.add(new SelectItem(titleStr, titleStr,
+                    titleStr));
+        }
 
         return titleOptions;
     }

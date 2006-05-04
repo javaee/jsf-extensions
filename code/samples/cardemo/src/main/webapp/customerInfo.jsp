@@ -42,7 +42,7 @@ Copyright 2005 Sun Microsystems Inc. All Rights Reserved
 <f:loadBundle basename="carstore.bundles.Resources" var="bundle"/>
 
 <f:view>
-<h:form>
+<h:form prependId="false">
 
 <h:panelGrid id="mainPanel" columns="1" footerClass="subtitle"
              headerClass="subtitlebig" styleClass="medium"

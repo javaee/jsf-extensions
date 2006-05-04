@@ -39,6 +39,9 @@
                    <fileset dir="../run-time-test/target">
                      <include name="*.war" />
                    </fileset>
+                   <fileset dir="../samples/cardemo/target">
+                     <include name="*.war" />
+                   </fileset>
                    <fileset dir=".">
                      <include name="*.txt" />
                      <include name="COPYRIGHT" />

@@ -3,12 +3,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.sun.jsf-extensions</groupId>
-  <artifactId>cardemo</artifactId>
+  <artifactId>jsf-cardemo</artifactId>
   <packaging>war</packaging>
   <name>jsf-extensions-cardemo</name>
   <url>https://jsf-extensions.dev.java.net/</url>
   <description>
-    Run time jsf-extensions
+    The classic cardemo application with an ajaxfied carDetail.jsp page.
   </description>
 
   <parent>
@@ -26,7 +26,7 @@
   <build>
     <defaultGoal>install</defaultGoal>
     <sourceDirectory>src/main/java</sourceDirectory>
-    <finalName>jsf-cardemo</finalName>
+    <finalName>jsf-ajax-cardemo</finalName>
    <plugins>
        <plugin>
 	 <artifactId>maven-antrun-plugin</artifactId>
@@ -37,7 +37,7 @@
 	     <configuration>
 	       <tasks>
                  <echo message="Copying properties files to WEB-INF/classes" />
-                 <copy todir="target/jsf-cardemo/WEB-INF/classes">
+                 <copy todir="target/${project.build.finalName}/WEB-INF/classes">
                    <fileset dir="src/main/java">
                      <include name="**/*.properties" />
                    </fileset>
@@ -50,6 +50,22 @@
 	   </execution>
 	 </executions>
        </plugin>
+       <plugin>
+         <artifactId>maven-javadoc-plugin</artifactId>
+         <executions>
+	   <execution>
+             <id>javadoc</id>
+	     <phase>generate-resources</phase>
+	     <configuration>
+               <destDir>target/${project.build.finalName}/javadocs</destDir>
+               <bottom />
+	     </configuration>
+	     <goals>
+	       <goal>javadoc</goal>
+	     </goals>
+	   </execution>
+         </executions>
+      </plugin>
     </plugins>
   </build>
 

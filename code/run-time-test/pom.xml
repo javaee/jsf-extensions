@@ -27,18 +27,6 @@
     <defaultGoal>install</defaultGoal>
     <sourceDirectory>src/main/java</sourceDirectory>
     <finalName>jsf-extensions</finalName>
-    <pluginManagement>
-     <plugins>
-       <plugin>
-         <groupId>org.apache.maven.plugins</groupId>
-         <artifactId>maven-war-plugin</artifactId>
-         <configuration>
-           <warSourceDirectory>src/run-time-test</warSourceDirectory>
-           <warName>jsf-extensions</warName>
-         </configuration>
-       </plugin>
-     </plugins>
-   </pluginManagement>
    <plugins>
        <plugin>
 	 <artifactId>maven-antrun-plugin</artifactId>
@@ -49,7 +37,7 @@
 	     <configuration>
 	       <tasks>
                  <echo message="Copying sources jar to WEB-INF/lib" />
-                 <copy todir="target/jsf-extensions/WEB-INF/lib">
+                 <copy todir="target/${project.build.finalName}/WEB-INF/lib">
                    <fileset dir="../run-time/target">
                      <include name="*-sources.jar" />
                    </fileset>

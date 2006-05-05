@@ -27,7 +27,7 @@ Copyright 2005 Sun Microsystems Inc. All Rights Reserved
 <%@ taglib prefix="h" uri="http://java.sun.com/jsf/html" %>
 
 
-    <h:outputLink value="javadocs">
+    <a href='<%= request.getContextPath() + "/javadocs" %>'>
         Documentation for this demo
-    </h:outputLink>
+    </a>
 

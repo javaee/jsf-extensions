@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<title>DynaFaces Description</title>
+<title>JSF-Extensions Dynamic Updating Description</title>
 <link href="style/screen.css" rel="stylesheet" type="text/css" />
 </head>
 
@@ -22,19 +22,20 @@
 <div class="wrapper">
 
 <div id="content">
-<h3>Using DynaFaces in an Existing JSF Application</h3>
+<h3>Using JSF-Extensions Dynamic Updating in an Existing JSF Application</h3>
 
-<p>This demonstration shows how DynaFaces can be used to ajaxify a part
-of an existing JSF application with minimal modification to that
-application, and do so in a maintainable and sensible manner.</p>
+<p>This demonstration shows how JSF-Extensions Dynamic Updating can be
+used to ajaxify a part of an existing JSF application with minimal
+modification to that application, and do so in a maintainable and
+sensible manner.</p>
 
 <div style="height: 20px; ">&nbsp;</div>
 
 <h3>Background</h3>
 
-<p>DynaFaces contains ideas from the the Avatar concept for leveraging
-AJAX techniques from a JSF application.  The Avatar idea was originated
-by JSF Expert Group Member <a target="_"
+<p>JSF-Extensions Dynamic Updating contains ideas from the the Avatar
+concept for leveraging AJAX techniques from a JSF application.  The
+Avatar idea was originated by JSF Expert Group Member <a target="_"
 href="http://weblogs.java.net/blog/jhook"> Jacob Hookom</a> <a
 target="_"
 href="http://weblogs.java.net/blog/jhook/archive/2005/09/jsf_avatar_vs_m_1.html">
@@ -75,20 +76,20 @@ lead back to itself as the user configures options.  In the existing
 cardemo app, the user must press the "recalculate" button to cause their
 page to refresh and the pricing options to be updated.  </p>
 
-<h3>Using DynaFaces</h3>
+<h3>Using JSF-Extensions Dynamic Updating</h3>
 
-<p>With DynaFaces,
+<p>With JSF-Extensions Dynamic Updating,
 two Ajax Zones are defined, as shown below.</p>
 
 <img src="images/carDetail.jpg" />
 
-<p>DynaFaces builds on the Avatar idea by providing a JSF component and
-custom tag that lets you mark Ajax Zones in an existiting JSF page and
-define how they will communicate with the JSF lifecycle on the server.
-Zone 1 is an "output only" zone.  It does not cause any AJAX requests to
-be initiated, but it does receive updated output from the AJAX request.
-Zone 2 is an "input" zone, indicating that it contains components that
-implement the <a target="_"
+<p>JSF-Extensions Dynamic Updating builds on the Avatar idea by
+providing a JSF component and custom tag that lets you mark Ajax Zones
+in an existiting JSF page and define how they will communicate with the
+JSF lifecycle on the server.  Zone 1 is an "output only" zone.  It does
+not cause any AJAX requests to be initiated, but it does receive updated
+output from the AJAX request.  Zone 2 is an "input" zone, indicating
+that it contains components that implement the <a target="_"
 href="http://java.sun.com/javaee/javaserverfaces/1.2/docs/api/javax/faces/component/package-summary.html#package_description">EditableValueHolder
 or ActionSource</a> interfaces of the JSF component model.  The above
 declaration of Zone 2 is represented like this in JSP:
@@ -106,9 +107,9 @@ declaration of Zone 2 is represented like this in JSP:
 input components.</p>
 
 <p><code>inspectElementHook</code> names a developer supplied JavaScript
-function that will be called by the DynaFaces system to inspect a DOM
-element within the zone and determine if that element should be
-ajaxified.</p>
+function that will be called by the JSF-Extensions Dynamic Updating
+system to inspect a DOM element within the zone and determine if that
+element should be ajaxified.</p>
 
 <p><code>eventType</code> lists the JavaScript event that should cause
 this AjaxZone to "fire", causing an AJAX request to be sent to the

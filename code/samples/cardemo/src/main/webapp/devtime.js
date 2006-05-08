@@ -45,15 +45,6 @@ function extractParams(ajaxZone, element, originalScript, outProps,
     else {
 	invocation.proceed();
     }
-    /*******
-    if (null != element) {
-	if (null == (name = element.name)) {
-	    name = element.id;
-	}
-    }
-
-    element = refreshElement(name);
-    **********/
     
     // Start at the top of the zone, collect all the params, except for
     // command components.

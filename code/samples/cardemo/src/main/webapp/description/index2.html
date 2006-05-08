@@ -11,8 +11,9 @@
 <div id="nav">
 
 	<ul class="menubar">
-		<li><a href="faces/chooseLocale.jsp">Run Demo</a></li>
-		<li><a href="javadocs/">Javadocs</a></li>
+		<li><a href="../faces/chooseLocale.jsp">Run Demo</a></li>
+		<li><a href="../javadocs/">Javadocs</a></li>
+		<li><a href="index.html">Page 1</a></li>
 	</ul>
 </div>
 
@@ -42,8 +43,10 @@ bottomMatter.jsp
 </tr>
 
 <tr>
-<td><font color="red">carDetail.jsp</font></td>
-<td>Add <code>&lt;jsfExt:ajaxZone&gt;</code> around car pricing information.
+<td><font color="red">carDetail.jsp</font></td> <td>Add
+<code>&lt;jsfExt:ajaxZone&gt;</code> around car pricing information.
+Also remove "recalculate" button since recalculation is done
+dynamically.
 </td>
 </tr>
 <tr>
@@ -65,16 +68,19 @@ bottomMatter.jsp
 
 </tr>
 <tr>
-<td><font color="blue">devtime.js</font></td>
+<td><font color="blue">devtime_js.html</font></td>
 
 <td>JavaScript functions required for the ajaxZone in the
-<code>optionsPanel.jsp</code> page.  Click <a href="devtime.js">here to
+<code>optionsPanel.jsp</code> page.  Click <a href="devtime_js.html">here to
 view the file</a>.
 </td>
 
 </tr>
 <tr>
-<td>finish.jsp</td>
+<td>finish.jsp</td> 
+<td>&nbsp;
+</td>
+
 </tr>
 <tr>
 <td><font color="red">index.jsp</font></td> <td>Change to use prefix
@@ -95,151 +101,85 @@ panel that is to be subject to dynamic updating via DynaFaces.
 </tr>
 <tr>
 <td>storeFront.jsp</td>
+<td>&nbsp;
+</td>
 </tr>
 <tr>
 <td>stylesheet.css</td>
+<td>&nbsp;
+</td>
 </tr>
 <tr>
 <td>WEB-INF/carstore.tld</td>
+<td>&nbsp;
+</td>
 </tr>
 <tr>
-<td><font color="red">WEB-INF/faces-config.xml</font></td>
+<td><font color="red">WEB-INF/faces-config.xml</font></td> <td>Add
+<code>&lt;resource-bundle&gt;</code> element, new in JSF 1.2.  This
+element allows AJAX request to benefit from the Faces Localization
+scheme formerly only available to users of the
+<code>&lt;f:loadBundle&gt;</code> tag.  Without this feature, data sent
+via AJAX would not always be localizable.
+</td>
 </tr>
 <tr>
-<td><font color="red">WEB-INF/web.xml</font></td>
+<td><font color="red">WEB-INF/web.xml</font></td> <td>Change to server
+side state saving (not required).  Change to use prefix mapping for
+<code>FacesServlet</code>.  This is required due to a limitation of the
+current Shale Remoting implementation.
+</td>
 </tr>
 <tr>
 <td>carstore/CarBean.java</td>
+<td>&nbsp;
+</td>
 </tr>
 <tr>
 <td>carstore/CarCustomizer.java</td>
+<td>&nbsp;
+</td>
 </tr>
 <tr>
 <td>carstore/CarStore.java</td>
+<td>&nbsp;
+</td>
 </tr>
 <tr>
 <td>carstore/CreditCardConverter.java</td>
+<td>&nbsp;
+</td>
 </tr>
 <tr>
 <td>carstore/CustomerBean.java</td>
+<td>&nbsp;
+</td>
 </tr>
 <tr>
 <td>carstore/FirstNameChanged.java</td>
+<td>&nbsp;
+</td>
 </tr>
 <tr>
 <td>carstore/FormatValidator.java</td>
+<td>&nbsp;
+</td>
 </tr>
 <tr>
 <td>carstore/FormatValidatorTag.java</td>
+<td>&nbsp;
+</td>
 </tr>
 <tr>
 <td>carstore/MessageFactory.java</td>
+<td>&nbsp;
+</td>
 </tr>
 </table>
 
-<p></p>
+<p>In the interest of complete disclosure, the complete diffs can be
+found <a href="diffs.html">here</a>.</p>
 
-<div style="height: 20px; ">&nbsp;</div>
-
-<h3>Background</h3>
-
-<p>DynaFaces contains ideas from the the Avatar concept for leveraging
-AJAX techniques from a JSF application.  The Avatar idea was originated
-by JSF Expert Group Member <a target="_"
-href="http://weblogs.java.net/blog/jhook"> Jacob Hookom</a> <a
-target="_"
-href="http://weblogs.java.net/blog/jhook/archive/2005/09/jsf_avatar_vs_m_1.html">
-in his blog in September of 2005</a> and refined by JSF co-spec Lead <a
-target="_" href="http://purl.oclc.org/NET/edburns/">Ed Burns</a> <a
-target="_"
-href="http://weblogs.java.net/blog/jhook/archive/2005/09/jsf_avatar_vs_m_1.html#10919">in
-a comment on that blog</a>.  The Avatar idea is essentially modifying
-the JSF request processing lifecycle in such a way that the lifecycle is
-run only on a set of subtrees of the entire JSF View, instead of the
-whole view, as shown by <font color="red">Zone 1</font> and <font
-color="red">Zone 2</font> in the diagram of the carDetail page below.
-</p>
-
-<img src="images/carDetailView.jpg" />
-
-<div style="height: 20px; ">&nbsp;</div>
-
-<h3>Cardemo Application Structure</h3>
-
-<p>The page flow of the existing cardemo application is shown in the
-below whiteboard image.</p>
-
-<img src="images/flow.jpg" />
-
-<p>The user enters the application through the chooseLocale page, then
-hits the storeFront, where they are presented with a list of cars to
-choose from.  Chosing one takes them to the carDetail page.  Here they
-can confgigure their options until they choose to buy the car.  Then
-they get the confirmation page where they can either purchase the car,
-or return to configure more options.  Finally, they are presented with a
-customer info page where they enter their shipping information and then
-they submit their order.</p>
-
-<p>As you can see, this is the basic flow image from the standard
-carstore with one extra arc added to show that the carDetail page can
-lead back to itself as the user configures options.  In the existing
-cardemo app, the user must press the "recalculate" button to cause their
-page to refresh and the pricing options to be updated.  </p>
-
-<h3>Using DynaFaces</h3>
-
-<p>With DynaFaces,
-two Ajax Zones are defined, as shown below.</p>
-
-<img src="images/carDetail.jpg" />
-
-<p>DynaFaces builds on the Avatar idea by providing a JSF component and
-custom tag that lets you mark Ajax Zones in an existiting JSF page and
-define how they will communicate with the JSF lifecycle on the server.
-Zone 1 is an "output only" zone.  It does not cause any AJAX requests to
-be initiated, but it does receive updated output from the AJAX request.
-Zone 2 is an "input" zone, indicating that it contains components that
-implement the <a target="_"
-href="http://java.sun.com/javaee/javaserverfaces/1.2/docs/api/javax/faces/component/package-summary.html#package_description">EditableValueHolder
-or ActionSource</a> interfaces of the JSF component model.  The above
-declaration of Zone 2 is represented like this in JSP:
-</p>
-
-<pre><code>
-&lt;jsfExt:ajaxZone id="zone2" interactionType="input" 
-                inspectElementHook="inspectElement"
-                eventType="onclick" eventHook="extractParams"
-                action="#{carstore.currentModel.updatePricing}"&gt;
-
-</code></pre>
-
-<p><code>interactionType</code> element states that this zone contains
-input components.</p>
-
-<p><code>inspectElementHook</code> names a developer supplied JavaScript
-function that will be called by the DynaFaces system to inspect a DOM
-element within the zone and determine if that element should be
-ajaxified.</p>
-
-<p><code>eventType</code> lists the JavaScript event that should cause
-this AjaxZone to "fire", causing an AJAX request to be sent to the
-server.</p>
-
-<p><code>eventHook</code> names a developer supplied JavaScript function
-that is called when the JavaScript event given in the
-<code>eventType</code> parameter is fired.  The function is passed a
-number of parameters and is responsible for extracting the current state
-of the zone so that it may be sent to the server in the AJAX
-request.</p>
-
-<p><code>action</code> is a standard JSF action MethodExpression that
-will be invoked on the server side when the AJAX Zone fires, in this
-case in response to any onclick on any of the elements in the zone for
-which the script specified by the <code>inspectElementHook</code>
-attribute returned true. </p>
-
-
-</div>
 
 </div>
 </div>

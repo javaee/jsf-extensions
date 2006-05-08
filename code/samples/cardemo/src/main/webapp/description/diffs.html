@@ -1,0 +1,161 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Diffs between pre-AJAX Cardemo and AJAX Cardemo</title>
+  </head>
+
+  <body>
+    <h1>Diffs between pre-AJAX Cardemo and AJAX Cardemo</h1>
+
+<code><pre>
+--- ./bottomMatter.jsp	2006-05-05 14:54:22.000000000 -0400
++++ /Users/edburns/Projects/J2EE/workareas/jsf-trunk/jsf-demo/carstore/web/bottomMatter.jsp	2006-03-24 13:48:43.000000000 -0500
+@@ -27,7 +27,7 @@
+ &lt;%@ taglib prefix="h" uri="http://java.sun.com/jsf/html" %&gt;
+ 
+ 
+-    &lt;a href='&lt;%= request.getContextPath() + "/javadocs" %&gt;'&gt;
++    &lt;h:outputLink value="javadocs"&gt;
+         Documentation for this demo
+-    &lt;/a&gt;
++    &lt;/h:outputLink&gt;
+ 
+--- ./carDetail.jsp	2006-05-08 11:14:45.000000000 -0400
++++ /Users/edburns/Projects/J2EE/workareas/jsf-trunk/jsf-demo/carstore/web/carDetail.jsp	2006-03-09 14:18:57.000000000 -0500
+@@ -36,7 +36,6 @@
+ 
+ &lt;%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %&gt;
+ &lt;%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %&gt;
+-&lt;%@ taglib prefix="jsfExt" uri="http://java.sun.com/jsf/extensions" %&gt;
+ 
+ &lt;f:loadBundle basename="carstore.bundles.Resources" var="bundle"/&gt;
+ 
+@@ -64,8 +63,6 @@
+             &lt;h:outputText
+                   binding="#{carstore.currentModel.components.description}"/&gt;
+ 
+-&lt;jsfExt:ajaxZone id="zone1"&gt;
+-
+             &lt;h:panelGrid columns="2"&gt;
+ 
+                 &lt;h:outputText styleClass="subtitle"
+@@ -81,8 +78,6 @@
+ 
+             &lt;/h:panelGrid&gt;
+ 
+-&lt;/jsfExt:ajaxZone&gt;
+-
+             &lt;h:commandButton action="#{carstore.buyCurrentCar}"
+                              value="#{bundle.buy}"/&gt;
+ 
+@@ -90,6 +85,9 @@
+ 
+         &lt;jsp:include page="optionsPanel.jsp"/&gt;
+ 
++        &lt;h:commandButton value="#{bundle.recalculate}"
++                         action="#{carstore.currentModel.updatePricing}"/&gt;
++
+         &lt;h:commandButton action="#{carstore.buyCurrentCar}"
+                          value="#{bundle.buy}"/&gt;
+ 
+--- ./chooseLocale.jsp	2006-05-01 14:48:22.000000000 -0400
++++ /Users/edburns/Projects/J2EE/workareas/jsf-trunk/jsf-demo/carstore/web/chooseLocale.jsp	2006-03-09 14:18:57.000000000 -0500
+@@ -32,7 +32,7 @@
+ 
+ &lt;%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %&gt;
+ &lt;%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %&gt;
+-&lt;%@ taglib uri="http://java.sun.com/blueprints/ui" prefix="d" %&gt;
++&lt;%@ taglib uri="http://java.sun.com/blueprints/ee5/components/ui" prefix="d" %&gt;
+ 
+ &lt;f:loadBundle basename="carstore.bundles.Resources" var="bundle"/&gt;
+ 
+--- ./customerInfo.jsp	2006-05-04 16:40:45.000000000 -0400
++++ /Users/edburns/Projects/J2EE/workareas/jsf-trunk/jsf-demo/carstore/web/customerInfo.jsp	2006-03-09 14:18:57.000000000 -0500
+@@ -42,7 +42,7 @@
+ &lt;f:loadBundle basename="carstore.bundles.Resources" var="bundle"/&gt;
+ 
+ &lt;f:view&gt;
+-&lt;h:form prependId="false"&gt;
++&lt;h:form&gt;
+ 
+ &lt;h:panelGrid id="mainPanel" columns="1" footerClass="subtitle"
+              headerClass="subtitlebig" styleClass="medium"
+diff: /Users/edburns/Projects/J2EE/workareas/jsf-trunk/jsf-demo/carstore/web/devtime.js: No such file or directory
+--- ./index.jsp	2006-05-02 07:42:20.000000000 -0400
++++ /Users/edburns/Projects/J2EE/workareas/jsf-trunk/jsf-demo/carstore/web/index.jsp	2006-03-09 14:18:57.000000000 -0500
+@@ -40,6 +40,6 @@
+ 
+ --&gt;
+ 
+-&lt;jsp:forward page="faces/chooseLocale.jsp"/&gt;
++&lt;jsp:forward page="chooseLocale.faces"/&gt;
+ &lt;/body&gt;
+ &lt;/html&gt;
+--- ./optionsPanel.jsp	2006-05-04 16:16:00.000000000 -0400
++++ /Users/edburns/Projects/J2EE/workareas/jsf-trunk/jsf-demo/carstore/web/optionsPanel.jsp	2006-03-24 13:48:43.000000000 -0500
+@@ -25,15 +25,8 @@
+ &lt;%@ page contentType="text/html" language="java" %&gt;
+ &lt;%@ taglib prefix="f" uri="http://java.sun.com/jsf/core" %&gt;
+ &lt;%@ taglib prefix="h" uri="http://java.sun.com/jsf/html" %&gt;
+-&lt;%@ taglib prefix="jsfExt" uri="http://java.sun.com/jsf/extensions" %&gt;
+ 
+-&lt;script type="text/javascript" 
+-        src='&lt;%= request.getContextPath() + "/devtime.js" %&gt;'&gt;&lt;/script&gt;
+ 
+-&lt;jsfExt:ajaxZone id="zone2" interactionType="input" 
+-                inspectElementHook="inspectElement"
+-                eventType="onclick" eventHook="extractParams"
+-                action="#{carstore.currentModel.updatePricing}"&gt;
+ &lt;h:panelGrid&gt;
+ 
+     &lt;h:outputText value="#{bundle.OptionsPackages}"/&gt;
+@@ -152,4 +145,4 @@
+ 
+ &lt;/h:panelGrid&gt;
+ 
+-&lt;/jsfExt:ajaxZone&gt;
++
+--- ./WEB-INF/faces-config.xml	2006-05-04 15:20:24.000000000 -0400
++++ /Users/edburns/Projects/J2EE/workareas/jsf-trunk/jsf-demo/carstore/web/WEB-INF/faces-config.xml	2006-03-09 14:18:57.000000000 -0500
+@@ -40,10 +40,6 @@
+             &lt;supported-locale&gt;fr&lt;/supported-locale&gt;
+             &lt;supported-locale&gt;es&lt;/supported-locale&gt;
+         &lt;/locale-config&gt;
+-        &lt;resource-bundle&gt;
+-          &lt;base-name&gt;carstore.bundles.Resources&lt;/base-name&gt;
+-          &lt;var&gt;bundle&lt;/var&gt;
+-        &lt;/resource-bundle&gt;
+     &lt;/application&gt;
+ 
+     &lt;!-- Validator --&gt;
+--- ./WEB-INF/web.xml	2006-05-02 07:46:48.000000000 -0400
++++ /Users/edburns/Projects/J2EE/workareas/jsf-trunk/jsf-demo/carstore/web/WEB-INF/web.xml	2006-03-09 14:18:57.000000000 -0500
+@@ -35,7 +35,7 @@
+ 
+     &lt;context-param&gt;
+         &lt;param-name&gt;javax.faces.STATE_SAVING_METHOD&lt;/param-name&gt;
+-        &lt;param-value&gt;server&lt;/param-value&gt;
++        &lt;param-value&gt;client&lt;/param-value&gt;
+     &lt;/context-param&gt;
+ 
+     &lt;context-param&gt;
+@@ -85,7 +85,7 @@
+     --&gt;
+     &lt;servlet-mapping&gt;
+         &lt;servlet-name&gt;Faces Servlet&lt;/servlet-name&gt;
+-        &lt;url-pattern&gt;/faces/*&lt;/url-pattern&gt;
++        &lt;url-pattern&gt;*.faces&lt;/url-pattern&gt;
+     &lt;/servlet-mapping&gt;
+ 
+     &lt;security-constraint&gt;
+</code></pre>
+
+    <hr>
+    <address><a href="mailto:ed.burns@sun.com">Edward Burns</a></address>
+<!-- Created: Mon May  8 11:31:08 EDT 2006 -->
+<!-- hhmts start -->
+Last modified: Mon May  8 11:32:10 EDT 2006
+<!-- hhmts end -->
+  </body>
+</html>
+

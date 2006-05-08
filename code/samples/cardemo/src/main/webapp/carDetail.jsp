@@ -90,9 +90,6 @@ Copyright 2005 Sun Microsystems Inc. All Rights Reserved
 
         <jsp:include page="optionsPanel.jsp"/>
 
-        <h:commandButton value="#{bundle.recalculate}"
-                         action="#{carstore.currentModel.updatePricing}"/>
-
         <h:commandButton action="#{carstore.buyCurrentCar}"
                          value="#{bundle.buy}"/>
 

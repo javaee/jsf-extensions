@@ -2,6 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsf/html"  prefix="h" %>
 <%@ taglib prefix="jsfExt" uri="http://java.sun.com/jsf/extensions" %>
 <%@ taglib uri="http://java.sun.com/blueprints/ui" prefix="d" %>
+<%@ taglib prefix="a" uri="http://java.sun.com/jmaki-jsf" %>
 
 <f:view>
 <html>
@@ -22,7 +23,8 @@
 
 Rendered via Faces components:
 
-<jsfExt:ajaxZone id="subview1" style="position: relative;">
+<jsfExt:ajaxZone id="subview1" style="position: relative;" 
+                 postInstallHook="postInstallHook">
   <h:dataTable columnClasses="list-column-center,list-column-center,
                                list-column-center, list-column-center"
                   headerClass="list-header"
@@ -46,7 +48,7 @@ Rendered via Faces components:
       <f:facet           name="header">
         <h:outputText  value="Customer Name"/>
       </f:facet>
-      <h:outputText        id="name" value="#{customer.name}"/>
+      <a:ajax type="scriptaculous" name="inplace" value="#{customer.name}"/>
     </h:column>
 
     <h:column>

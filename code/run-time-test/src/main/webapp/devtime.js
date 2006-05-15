@@ -94,3 +94,19 @@ function extractParams(ajaxZone, element, originalScript, outProps,
     }
   }    
 }
+
+function userInplaceCallback(form, value, parent) {
+    var result = null;
+    var name = parent.name;
+    if (null == name) {
+	name = parent.id;
+    }
+    result = name + "=" + value;
+    return result;
+}
+
+function postInstallHook(ajaxZone, innerHTML) {
+    jmaki.clearWidgets();
+    innerHTML.evalScripts();
+    window.onload();
+}

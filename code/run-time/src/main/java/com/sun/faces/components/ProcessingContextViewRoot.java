@@ -149,6 +149,14 @@ public class ProcessingContextViewRoot extends UIViewRoot implements Serializabl
     }
     
     private transient boolean calledDuringInvokeOnComponent = false;
+    
+    public void setCalledDuringInvokeOnComponent(boolean newState) {
+        calledDuringInvokeOnComponent = newState;
+    }
+    
+    public boolean isCalledDuringInvokeOnComponent() {
+        return calledDuringInvokeOnComponent;
+    }
 
     /**
      * Holds value of property processingContexts.
@@ -201,11 +209,11 @@ public class ProcessingContextViewRoot extends UIViewRoot implements Serializabl
     
     private transient List<UIComponent> delegateRoots = null;
     
-    private void clearDelegateRoots() {
+    public void clearDelegateRoots() {
         getDelegateRoots().clear();
     }
     
-    private List<UIComponent> getDelegateRoots() {
+    public List<UIComponent> getDelegateRoots() {
         
         if (null != delegateRoots) {
             return delegateRoots;
@@ -236,13 +244,13 @@ public class ProcessingContextViewRoot extends UIViewRoot implements Serializabl
                 }
                 
             };
-            this.calledDuringInvokeOnComponent = true;
+            setCalledDuringInvokeOnComponent(true);
             try {
                 this.invokeOnComponent(FacesContext.getCurrentInstance(), 
                         pcClientId, cb);
             }
             finally {
-                calledDuringInvokeOnComponent = false;
+                setCalledDuringInvokeOnComponent(false);
             }
             if (null != cur[0]) {
                 delegateRoots.add(cur[0]);
@@ -254,7 +262,7 @@ public class ProcessingContextViewRoot extends UIViewRoot implements Serializabl
     public Iterator<UIComponent> getFacetsAndChildren() {
         List<UIComponent> roots = getDelegateRoots();
         Iterator<UIComponent> result = null;
-        if (roots.isEmpty() || calledDuringInvokeOnComponent) {
+        if (roots.isEmpty() || isCalledDuringInvokeOnComponent()) {
             result = super.getFacetsAndChildren();
         }
         else {

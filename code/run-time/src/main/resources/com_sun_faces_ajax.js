@@ -52,7 +52,6 @@ function moveAsideEventType(ajaxZone, element, eventType, eventHook) {
     handler["eventType"] = eventType;
     handler["element"] = element;
     handler["originalScript"] = element[eventType];
-    handler["ajaxZone"] = ajaxZone;
     handler["aroundHandler"] = function (invocation) {
 	// invocation.args[0] is the event.
 	var props = new Object();
@@ -96,8 +95,21 @@ function moveAsideEventType(ajaxZone, element, eventType, eventHook) {
 		    // get the processing contexts
 		    var pCtxts = 
 			data.getElementsByTagName("processing-context");
+		    var postInstallHook = null;
 		    for (i = 0; i < zones.length; i++) {
 			subviews[i].innerHTML = pCtxts[i].childNodes[0].data;
+			postInstallHook = 
+			    pCtxts[i].getAttribute("postInstallHook");
+			// If the processing context had a postInstallHook...
+			if (typeof postInstallHook != 'undefined') {
+			    postInstallHook = dj_global[postInstallHook];
+			    // which identifies a globally scoped function...
+			    if (typeof postInstallHook == 'function') {
+				// call the function.
+				postInstallHook(subviews[i], 
+						subviews[i].innerHTML);
+			    }
+			}
 			subviews[i].isAjaxified = null;
 		    }
 		},

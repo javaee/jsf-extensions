@@ -382,6 +382,32 @@ function handler(element, originalScript, outProps, invocation) {<br />
 </deferred-value>
 </attribute>
 
+      <attribute>
+        <description>
+          <![CDATA[
+
+          <p>This optional attribute names a function to be called after
+          the new content from the server for this zone has been
+          installed into the view.  The function must conform to
+          the following signature:</p>
+
+<pre><code>
+function postInstallHook(ajaxZone, innerHTML);
+</code></pre>
+
+
+]]>
+
+</description>
+<name>postInstallHook</name>
+<required>false</required>
+<deferred-value>
+	    <type>java.lang.String</type>
+</deferred-value>
+</attribute>
+
+
+
 </tag>
 
 </taglib>

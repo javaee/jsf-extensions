@@ -72,6 +72,14 @@ public class AjaxZoneTag extends UIComponentELTag {
                 component.setValueExpression("inspectElementHook", inspectElementHook);
             }
         }
+        if (null != postInstallHook) {
+            if (postInstallHook.isLiteralText()) {
+                component.getAttributes().put("postInstallHook", postInstallHook.getValue(getFacesContext().getELContext()));
+            }
+            else {
+                component.setValueExpression("postInstallHook", postInstallHook);
+            }
+        }
         if (action != null) {
             component.setActionExpression(action);
         }
@@ -163,6 +171,19 @@ public class AjaxZoneTag extends UIComponentELTag {
      */
     public void setImmediate(ValueExpression immediate) {
         this.immediate = immediate;
+    }
+
+    /**
+     * Holds value of property postInstallHook.
+     */
+    private ValueExpression postInstallHook;
+
+    /**
+     * Setter for property postInstallHook.
+     * @param postInstallHook New value of property postInstallHook.
+     */
+    public void setPostInstallHook(ValueExpression postInstallHook) {
+        this.postInstallHook = postInstallHook;
     }
     
     

@@ -107,7 +107,7 @@ public class UIAvatar extends UIViewRoot {
     public void encodeAll(FacesContext faces) throws IOException {
 
         // determine event callback
-        EventCallback c = Events.getEventCallback(faces);
+        EventCallback c = EventCallback.getInstance(faces);
         if (c != null && !c.isImmediate()) {
             if (log.isLoggable(Level.FINE)) {
                 log.fine(c.toString());
@@ -118,7 +118,7 @@ public class UIAvatar extends UIViewRoot {
         // see if there were any extras queued
         boolean partial = this.encodeQueued(faces);
 
-        if (!partial && c == null && !AsyncResponse.exists()) {
+        if (!partial && c == null && !PartialContext.getInstance().isPartial()) {
             super.encodeAll(faces);
         } else {
             if (log.isLoggable(Level.FINE)) {
@@ -141,8 +141,7 @@ public class UIAvatar extends UIViewRoot {
             ExternalContext ctx = faces.getExternalContext();
             Object resp = ctx.getResponse();
             
-            AsyncResponse async = AsyncResponse.getInstance();
-            if (async == null) return false;
+            // TODO PRE_CHECK
 
             UIViewRoot root = faces.getViewRoot();
             boolean success = false;
@@ -159,7 +158,7 @@ public class UIAvatar extends UIViewRoot {
                     if (!success) {
                         log.warning(id + " not found");
                     }
-                    async.getEncoded().put(id, fw.toString());
+                    //async.getEncoded().put(id, fw.toString());
                 }
                 
                 // write state
@@ -169,7 +168,7 @@ public class UIAvatar extends UIViewRoot {
                 Object stateObj = sm.saveSerializedView(faces);
                 sm.writeState(faces,
                         (StateManager.SerializedView) stateObj);
-                async.setViewState(sc.getState());
+                //async.setViewState(sc.getState());
                 
             } catch (FacesException e) {
                 if (e.getCause() instanceof IOException) {

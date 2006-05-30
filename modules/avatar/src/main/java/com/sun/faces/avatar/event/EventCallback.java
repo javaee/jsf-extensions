@@ -28,7 +28,7 @@ public class EventCallback implements ContextCallback {
 
     private Object result;
 
-    public static EventCallback getInstace(FacesContext faces) {
+    public static EventCallback getInstance(FacesContext faces) {
         Map<String, String> p = faces.getExternalContext()
                 .getRequestHeaderMap();
 

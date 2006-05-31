@@ -30,6 +30,10 @@
       <el-resolver>com.sun.faces.el.FlashELResolver</el-resolver>
     </application>
 
+    <factory>
+      <lifecycle-factory>com.sun.faces.lifecycle.ExtensionsLifecycleFactoryImpl</lifecycle-factory>
+    </factory>
+
     <component>
 
         <component-type>javax.faces.ViewRoot</component-type>

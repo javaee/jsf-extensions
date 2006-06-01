@@ -15,8 +15,8 @@
   </description>
 
   <tlib-version>0.03</tlib-version>
-  <short-name>jsfExt</short-name>
-  <uri>http://java.sun.com/jsf/extensions</uri>
+  <short-name>flash</short-name>
+  <uri>http://java.sun.com/jsf/extensions/flash</uri>
  <tag>
     <description>
         <![CDATA[

@@ -29,7 +29,7 @@
  */
 
 
-package com.sun.faces.taglib.jsf_extensions;
+package com.sun.faces.extensions.flash;
 
 import javax.el.ELContext;
 import javax.servlet.jsp.JspException;

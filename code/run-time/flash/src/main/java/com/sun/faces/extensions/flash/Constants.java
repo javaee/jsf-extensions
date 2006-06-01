@@ -29,7 +29,7 @@
  */
 
 
-package com.sun.faces;
+package com.sun.faces.extensions.flash;
 
 /**
  *
@@ -40,7 +40,7 @@ public class Constants {
     private Constants() {
     }
 
-    public static final String PREFIX = "com.sun.faces.";
+    public static final String PREFIX = "com.sun.faces.extensions.flash";
 
     public static final String FLASH_ATTRIBUTE_NAME = PREFIX + "FLASH";
 

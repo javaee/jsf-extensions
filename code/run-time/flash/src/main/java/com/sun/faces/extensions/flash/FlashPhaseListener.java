@@ -29,9 +29,8 @@
  */
 
 
-package com.sun.faces.el;
+package com.sun.faces.extensions.flash;
 
-import com.sun.faces.Constants;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;

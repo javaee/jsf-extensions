@@ -29,9 +29,8 @@
  */
 
 
-package com.sun.faces.el;
+package com.sun.faces.extensions.flash;
 
-import com.sun.faces.Constants;
 import java.util.HashMap;
 import java.util.Map;
 import javax.faces.context.FacesContext;

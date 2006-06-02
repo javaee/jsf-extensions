@@ -31,9 +31,9 @@
         <targetPath>META-INF</targetPath>
         <directory>src/main/resources</directory>
         <includes>
-            <include>faces-config.xml</include>
-            <include>jsf-ext-avatar.tld</include>
-            <include>com_sun_faces_ajax.js</include>
+            <include>*.xml</include>
+            <include>*.js</include>
+            <include>*.tld</include>
         </includes>
      </resource>
      <resource>

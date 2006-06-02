@@ -20,7 +20,7 @@
   
   <tag>
     <name>ajaxZone</name>
-    <tag-class>com.sun.faces.taglib.jsf_extensions.AjaxZoneTag</tag-class>
+    <tag-class>com.sun.faces.extensions.avatar.taglib.AjaxZoneTag</tag-class>
     <body-content>JSP</body-content>
     <attribute>
         <description>

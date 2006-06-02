@@ -49,8 +49,19 @@ import org.apache.shale.remoting.XhtmlHelper;
  */
 public class AjaxZoneRenderer extends Renderer {
     
-    private static final String SCRIPT_ID = "/META-INF/com_sun_faces_ajax.js";
-    private static final String DOJO_SCRIPT_ID = "/META-INF/dojo/dojo.js";
+
+    // PENDING(craigmcc): I've filed SHALE-183 on this.  I'd like to get out of 
+    // the business of maintaining all this JavaScript myself and let Shale 
+    // take care of it.
+    
+    private static final String scriptIds[] = {
+        "/META-INF/dojo/dojo.js",
+        "/META-INF/prototype.js",
+        "/META-INF/effects.js",
+        "/META-INF/dragdrop.js",
+        "/META-INF/controls.js",
+        "/META-INF/com_sun_faces_ajax.js"
+    };    
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Renderer methods
@@ -123,10 +134,10 @@ public class AjaxZoneRenderer extends Renderer {
             writer.writeAttribute("id", id, null);
             writeStyle(context, writer, component);
             writeAjaxifyScript(context, writer, component);
-            getXhtmlHelper().linkJavascript(context, component, writer, 
-                    Mechanism.CLASS_RESOURCE, DOJO_SCRIPT_ID);
-            getXhtmlHelper().linkJavascript(context, component, writer, 
-                    Mechanism.CLASS_RESOURCE, SCRIPT_ID);
+            for (int i = 0; i < scriptIds.length; i++) {
+                getXhtmlHelper().linkJavascript(context, component, writer,
+                        Mechanism.CLASS_RESOURCE, scriptIds[i]);
+            }
             writeZoneAccruer(context, writer, component);
         }
     }

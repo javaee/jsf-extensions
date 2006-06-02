@@ -27,7 +27,7 @@
     version="1.2">
 
     <factory>
-      <lifecycle-factory>com.sun.faces.lifecycle.ExtensionsLifecycleFactoryImpl</lifecycle-factory>
+      <lifecycle-factory>com.sun.faces.extensions.avatar.lifecycle.ExtensionsLifecycleFactoryImpl</lifecycle-factory>
     </factory>
 
     <component>
@@ -55,22 +55,16 @@
       </description>
       <component-family>javax.faces.ViewRoot</component-family>
       <renderer-type>javax.faces.ViewRoot</renderer-type>
-      <renderer-class>com.sun.faces.renderkit.ProcessingContextViewRootRenderer</renderer-class>
+      <renderer-class>com.sun.faces.extensions.avatar.renderkit.ProcessingContextViewRootRenderer</renderer-class>
       
     </renderer>
 
     <renderer>
         <component-family>com.sun.faces.AjaxZone</component-family>
         <renderer-type>com.sun.faces.AjaxZone</renderer-type>
-        <renderer-class>com.sun.faces.renderkit.AjaxZoneRenderer</renderer-class>
+        <renderer-class>com.sun.faces.extensions.avatar.renderkit.AjaxZoneRenderer</renderer-class>
     </renderer>
     
   </render-kit>
-
-
-  <lifecycle>
-    <phase-listener>com.sun.faces.util.ResourcePhaseListener</phase-listener>
-  </lifecycle>
-
 
 </faces-config>

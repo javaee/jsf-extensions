@@ -27,7 +27,7 @@
  * Copyright 2005 Sun Microsystems Inc. All Rights Reserved
  */
 
-package com.sun.faces.renderkit;
+package com.sun.faces.extensions.avatar.renderkit;
 
 import com.sun.faces.extensions.avatar.components.ProcessingContext;
 import com.sun.faces.extensions.avatar.components.ProcessingContextViewRoot;

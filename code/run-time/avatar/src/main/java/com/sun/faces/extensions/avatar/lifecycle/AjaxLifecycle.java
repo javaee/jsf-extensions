@@ -7,7 +7,7 @@
  * and open the template in the editor.
  */
 
-package com.sun.faces.lifecycle;
+package com.sun.faces.extensions.avatar.lifecycle;
 
 import com.sun.faces.extensions.avatar.components.ProcessingContext;
 import com.sun.faces.extensions.avatar.components.ProcessingContextViewRoot;
@@ -31,6 +31,8 @@ import javax.faces.event.PhaseListener;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
+
+import com.sun.faces.lifecycle.RestoreViewPhase;
 
 /**
  *

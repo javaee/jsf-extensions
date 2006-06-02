@@ -1,4 +1,4 @@
-package com.sun.faces.taglib.jsf_extensions;
+package com.sun.faces.extensions.avatar.taglib;
 
 import com.sun.faces.extensions.avatar.components.AjaxZone;
 import javax.el.MethodExpression;

@@ -7,7 +7,7 @@
  * and open the template in the editor.
  */
 
-package com.sun.faces.lifecycle;
+package com.sun.faces.extensions.avatar.lifecycle;
 
 import java.util.Iterator;
 import javax.faces.lifecycle.Lifecycle;

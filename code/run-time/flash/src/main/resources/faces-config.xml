@@ -30,8 +30,6 @@
       <el-resolver>com.sun.faces.extensions.flash.FlashELResolver</el-resolver>
     </application>
 
-    <factory>
-
     <lifecycle>
       <phase-listener>com.sun.faces.extensions.flash.FlashPhaseListener</phase-listener>
     </lifecycle>

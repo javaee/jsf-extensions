@@ -38,7 +38,7 @@
 	       <tasks>
                  <echo message="Copying sources jar to WEB-INF/lib" />
                  <copy todir="target/${project.build.finalName}/WEB-INF/lib">
-                   <fileset dir="../run-time/target">
+                   <fileset dir="../run-time">
                      <include name="*-sources.jar" />
                    </fileset>
                  </copy>
@@ -69,7 +69,12 @@
     </dependency>
     <dependency>
       <groupId>com.sun.jsf-extensions</groupId>
-      <artifactId>jsf-extensions-run-time</artifactId>
+      <artifactId>jsf-extensions-flash</artifactId>
+      <version>0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.jsf-extensions</groupId>
+      <artifactId>jsf-extensions-avatar</artifactId>
       <version>0.1-SNAPSHOT</version>
     </dependency>
     <dependency>

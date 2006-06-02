@@ -1,6 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsf/core"  prefix="f" %>
 <%@ taglib uri="http://java.sun.com/jsf/html"  prefix="h" %>
-<%@ taglib prefix="jsfExt" uri="http://java.sun.com/jsf/extensions" %>
+<%@ taglib prefix="jsfExt" uri="http://java.sun.com/jsf/extensions/avatar" %>
 <%@ taglib uri="http://java.sun.com/blueprints/ui" prefix="d" %>
 <%@ taglib prefix="a" uri="http://java.sun.com/jmaki-jsf" %>
 

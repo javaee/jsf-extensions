@@ -32,7 +32,7 @@
         <directory>src/main/resources</directory>
         <includes>
             <include>faces-config.xml</include>
-            <include>jsf-extensions.tld</include>
+            <include>jsf-ext-flash.tld</include>
         </includes>
      </resource>
    </resources>

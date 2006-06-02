@@ -29,7 +29,7 @@
     <title>RoR Flash Test Page 1</title>
     <%@ taglib uri="http://java.sun.com/jsf/core"  prefix="f" %>
     <%@ taglib uri="http://java.sun.com/jsf/html"  prefix="h" %>
-    <%@ taglib prefix="jsfExt" uri="http://java.sun.com/jsf/extensions" %>
+    <%@ taglib prefix="jsfExt" uri="http://java.sun.com/jsf/extensions/flash" %>
   </head>
 
   <body>
@@ -91,7 +91,7 @@
     <address><a href="mailto:ed.burns@sun.com">Edward Burns</a></address>
 <!-- Created: Sun Dec  4 14:11:55 EST 2005 -->
 <!-- hhmts start -->
-Last modified: Wed Dec 14 13:52:49 EST 2005
+Last modified: Thu Jun  1 13:47:08 PDT 2006
 <!-- hhmts end -->
   </body>
 </html>

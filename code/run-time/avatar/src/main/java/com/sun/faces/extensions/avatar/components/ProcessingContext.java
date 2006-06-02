@@ -27,7 +27,7 @@
  * Copyright 2005 Sun Microsystems Inc. All Rights Reserved
  */
 
-package com.sun.faces.components;
+package com.sun.faces.extensions.avatar.components;
 
 /**
  *

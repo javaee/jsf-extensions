@@ -29,7 +29,7 @@
 
 package com.sun.faces.renderkit;
 
-import com.sun.faces.components.ProcessingContextViewRoot;
+import com.sun.faces.extensions.avatar.components.ProcessingContextViewRoot;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;

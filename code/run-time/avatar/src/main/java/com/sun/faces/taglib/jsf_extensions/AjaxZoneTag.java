@@ -1,6 +1,6 @@
 package com.sun.faces.taglib.jsf_extensions;
 
-import com.sun.faces.components.AjaxZone;
+import com.sun.faces.extensions.avatar.components.AjaxZone;
 import javax.el.MethodExpression;
 import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;

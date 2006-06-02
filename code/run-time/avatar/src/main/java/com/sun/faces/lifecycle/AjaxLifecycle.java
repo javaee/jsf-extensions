@@ -9,8 +9,8 @@
 
 package com.sun.faces.lifecycle;
 
-import com.sun.faces.components.ProcessingContext;
-import com.sun.faces.components.ProcessingContextViewRoot;
+import com.sun.faces.extensions.avatar.components.ProcessingContext;
+import com.sun.faces.extensions.avatar.components.ProcessingContextViewRoot;
 import java.io.IOException;
 import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;

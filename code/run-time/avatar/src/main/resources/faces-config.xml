@@ -33,7 +33,7 @@
     <component>
 
         <component-type>javax.faces.ViewRoot</component-type>
-        <component-class>com.sun.faces.components.ProcessingContextViewRoot</component-class>
+        <component-class>com.sun.faces.extensions.avatar.components.ProcessingContextViewRoot</component-class>
 
         <component-extension>
             <component-family>javax.faces.ViewRoot</component-family>
@@ -44,7 +44,7 @@
     <!-- Component elements -->
     <component>
         <component-type>com.sun.faces.AjaxZone</component-type>
-        <component-class>com.sun.faces.components.AjaxZone</component-class>
+        <component-class>com.sun.faces.extensions.avatar.components.AjaxZone</component-class>
     </component>
 
   <render-kit>

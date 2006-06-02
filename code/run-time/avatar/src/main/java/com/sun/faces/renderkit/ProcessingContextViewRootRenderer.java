@@ -29,8 +29,8 @@
 
 package com.sun.faces.renderkit;
 
-import com.sun.faces.components.ProcessingContext;
-import com.sun.faces.components.ProcessingContextViewRoot;
+import com.sun.faces.extensions.avatar.components.ProcessingContext;
+import com.sun.faces.extensions.avatar.components.ProcessingContextViewRoot;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.component.UIComponent;

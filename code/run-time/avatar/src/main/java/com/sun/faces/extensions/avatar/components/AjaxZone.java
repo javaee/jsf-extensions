@@ -1,4 +1,4 @@
-package com.sun.faces.components;
+package com.sun.faces.extensions.avatar.components;
 
 import javax.faces.component.UICommand;
 

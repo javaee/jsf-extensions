@@ -31,10 +31,6 @@ function Jmaki() {
     this.addWidget = function(widget) {
         widgets.push(widget);
     }
-
-    this.clearWidgets = function() {
-	widgets = [];
-    }
     
     this.bootstrapWidgets = function() { 
         for (var l=0; l < widgets.length; l++) {
@@ -96,7 +92,7 @@ function Jmaki() {
     // to do keep tabs for multiple declarations
     this.loadScript = function(target) {
         var req = getXHR();
-        req.open("GET", target, false);
+        req.open("GET", this.webRoot + target, false);
         try {
             req.send(null);
         } catch (e){
@@ -105,6 +101,19 @@ function Jmaki() {
         if (req.status == 200) {
              return window.eval(req.responseText);
         }
+    }
+    
+    // add a style
+    this.loadStyle = function(target) {
+        var styleElement = document.createElement("link");
+        styleElement.type = "text/css";
+        styleElement.rel="stylesheet"
+        styleElement.href = this.webRoot + target;
+        if (document.getElementsByTagName('head').length == 0) {
+            var headN = document.createElement("head");
+            document.documentElement.insertBefore(headN, document.documentElement.firstChild);
+        }
+        document.getElementsByTagName('head')[0].appendChild(styleElement);
     }
     
     this.loadWidget = function(widget) {
@@ -126,6 +135,10 @@ function Jmaki() {
                 }
             }
         }
+    }
+    
+    this.clearWidgets = function() {
+        widgets = [];
     }
     
     function Map() {
@@ -173,4 +186,3 @@ window.onload = function() {
         oldLoad();
     }
 }
-

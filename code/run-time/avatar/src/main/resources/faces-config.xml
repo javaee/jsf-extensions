@@ -30,17 +30,6 @@
       <lifecycle-factory>com.sun.faces.extensions.avatar.lifecycle.ExtensionsLifecycleFactoryImpl</lifecycle-factory>
     </factory>
 
-    <component>
-
-        <component-type>javax.faces.ViewRoot</component-type>
-        <component-class>com.sun.faces.extensions.avatar.components.ProcessingContextViewRoot</component-class>
-
-        <component-extension>
-            <component-family>javax.faces.ViewRoot</component-family>
-        </component-extension>
-
-    </component>
-    
     <!-- Component elements -->
     <component>
         <component-type>com.sun.faces.AjaxZone</component-type>
@@ -48,16 +37,6 @@
     </component>
 
   <render-kit>
-
-    <renderer>
-      <description>
-        override the viewroot
-      </description>
-      <component-family>javax.faces.ViewRoot</component-family>
-      <renderer-type>javax.faces.ViewRoot</renderer-type>
-      <renderer-class>com.sun.faces.extensions.avatar.renderkit.ProcessingContextViewRootRenderer</renderer-class>
-      
-    </renderer>
 
     <renderer>
         <component-family>com.sun.faces.AjaxZone</component-family>

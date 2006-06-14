@@ -97,9 +97,9 @@ function extractParams(ajaxZone, element, originalScript, outProps,
 
 function userInplaceCallback(form, value, parent) {
     var result = null;
-    var name = parent.name;
+    var name = parent.id;
     if (null == name) {
-	name = parent.id;
+	name = parent.name;
     }
     result = name + "=" + value;
     return result;

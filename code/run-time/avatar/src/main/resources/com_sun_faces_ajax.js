@@ -28,6 +28,18 @@
  */
 
 var g_zones = [];
+var gFacesPrefix = "com.sun.faces.";
+var gSubtrees = gFacesPrefix + "Subtrees";
+var gAsync = gFacesPrefix + "Async";
+var gFacesLifecycle = gFacesPrefix + "lifecycle.";
+var gRunthru = gFacesLifecycle + "RunThru";
+var gRestoreView = gFacesLifecycle + "RESTORE_VIEW";
+var gApplyRequestValues = gFacesLifecycle + "APPLY_REQUEST_VALUES";
+var gProcessValidations = gFacesLifecycle + "PROCESS_VALIDATIONS";
+var gUpdateModelValues = gFacesLifecycle + "UPDATE_MODEL_VALUES";
+var gInvokeApplication = gFacesLifecycle + "INVOKE_APPLICATION";
+var gRenderResponse = gFacesLifecycle + "RENDER_RESPONSE";
+var gViewState = "javax.faces.ViewState";
 
 dojo.require("dojo.io.*");
 dojo.require("dojo.event.*");
@@ -74,7 +86,7 @@ function moveAsideEventType(ajaxZone, element, eventType, eventHook) {
 	    }
 	}
 	if (0 < pctxts.length) {
-	    props['com.sun.faces.PCtxt'] = pctxts;
+	    props[gSubtrees] = pctxts;
 	}
 	
 	var requestStruct = prepareRequest(ajaxZone, props);
@@ -313,44 +325,80 @@ var Faces = {
 Faces.ViewState = Class.create();
 Faces.ViewState.Ignore = ['button','submit','reset','image'];
 Faces.ViewState.prototype = {
-	initialize: function(form) {
-		var e = Form.getElements($(form));
-		var t,p;
-		for (var i = 0; i < e.length; i++) {
-			if (Faces.ViewState.Ignore.indexOf(e[i].type) == -1) {
-				t = e[i].tagName.toLowerCase();
-				p = Form.Element.Serializers[t](e[i]);
-				if (p && p[0].length != 0) {
-					if (p[1].constructor != Array) p[1] = [p[1]];
-					if (this[p[0]]) { this[p[0]] = this[p[0]].concat(p[1]); }
-					else this[p[0]] = p[1];
-				}
-			}
-		};
-	},
-	toQueryString: function() {
-		var q = new Array();
-		var i,j,p,v;
-		for (property in this) {
-			if (this[property]) {
-				if (typeof this[property] == 'function') continue;
-				p = encodeURIComponent(property);
-				if (this[property].constructor == Array) {
-					for (j = 0; j < this[property].length; j++) {
-						v = this[property][j];
-						if (v) {
-							v = encodeURIComponent(v);
-							q.push(p+'='+v);
-						}
-					}
-				} else {
-					v = encodeURIComponent(this[property]);
-					q.push(p+'='+v);
-				}
-			}
+    setOptions: function(options) {
+	this.options= {};
+	Object.extend(this.options, options || {});
+    },
+    initialize: function(form, options) {
+	this.setOptions(options);
+	
+	var e = Form.getElements($(form));
+	var t,p;
+	for (var i = 0; i < e.length; i++) {
+	    if (Faces.ViewState.Ignore.indexOf(e[i].type) == -1) {
+		t = e[i].tagName.toLowerCase();
+		p = Form.Element.Serializers[t](e[i]);
+		if (p && p[0].length != 0) {
+		    if (p[1].constructor != Array) p[1] = [p[1]];
+		    if (this[p[0]]) { this[p[0]] = this[p[0]].concat(p[1]); }
+		    else this[p[0]] = p[1];
 		}
-		return q.join('&');
+	    }
+	};
+    },
+    toQueryString: function() {
+	var q = new Array();
+	var i,j,p,v;
+	
+	if (this.options.inputs) {
+	    if (this[gViewState]) {
+		p = encodeURIComponent(gViewState);
+		v = encodeURIComponent(this[gViewState]);
+		q.push(p+'='+v);
+	    }
+	    var inputs = this.options.inputs.split(",");
+	    if (inputs) {
+		for (i = 0; i < inputs.length; i++) {
+		    if (this[inputs[i]]) {
+			p = encodeURIComponent(inputs[i]);
+			if (this[inputs[i]].constructor == Array) {
+			    for (j = 0; j < this[inputs[i]].length; j++){
+				v = this[inputs[i]][j];
+				if (v) {
+				    v = encodeURIComponent(v);
+				    q.push(p+'='+v);
+				}
+			    }
+			} else {
+			    v = encodeURIComponent(this[inputs[i]]);
+			    q.push(p+'='+v);
+			}
+		    }
+		}
+	    }
 	}
+	else {
+	    for (property in this) {
+		if (this[property]) {
+		    if (typeof this[property] == 'function') continue;
+		    p = encodeURIComponent(property);
+		    if (this[property].constructor == Array) {
+			for (j = 0; j < this[property].length; j++) {
+			    v = this[property][j];
+			    if (v) {
+				v = encodeURIComponent(v);
+				q.push(p+'='+v);
+			    }
+			}
+		    } else {
+			v = encodeURIComponent(this[property]);
+			q.push(p+'='+v);
+		    }
+		}
+	    }
+	}
+	return q.join('&');
+    }
 };
 
 /* Handles Sending Events to the Server
@@ -369,7 +417,14 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
 	this.url = this.form.action;
 	
 	// create viewState
-	var viewState = new Faces.ViewState(this.form);
+	var viewState = null;
+	if (this.options.inputs) {
+	    viewState = new Faces.ViewState(this.form,
+				 { inputs: this.options.inputs });
+	}
+	else {
+	    viewState = new Faces.ViewState(this.form);
+	}
 	
 	// add passed parameters
 	Object.extend(viewState, this.options.parameters || {});
@@ -384,7 +439,7 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
 	this.options.requestHeaders = this.options.requestHeaders || [];
 	
 	// guarantee our header
-	this.options.requestHeaders.push('javax.faces.Async');
+	this.options.requestHeaders.push(gAsync);
 	this.options.requestHeaders.push('true');
 	
 	// add event
@@ -394,19 +449,24 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
 		if (this.options.immediate) {
 			sourceId += ",immediate";
 		}
-		this.options.requestHeaders.push('javax.faces.Event');
+		this.options.requestHeaders.push('com.sun.faces.Event');
 		this.options.requestHeaders.push(sourceId);
+	}
+
+	if (this.options.subtrees) {
+		this.options.requestHeaders.push(gSubtrees);
+		this.options.requestHeaders.push(Faces.toArray(this.options.subtrees,',').join(','));
 	}
 	
 	// add update
 	if (this.options.update) {
-		this.options.requestHeaders.push('javax.faces.Update');
+		this.options.requestHeaders.push('com.sun.faces.Update');
 		this.options.requestHeaders.push(Faces.toArray(this.options.update,',').join(','));
 	}
 	
 	// add encode
 	if (this.options.encode) {
-		this.options.requestHeaders.push('javax.faces.Encode');
+		this.options.requestHeaders.push('com.sun.faces.Encode');
 		this.options.requestHeaders.push(Faces.toArray(this.options.encode,',').join(','));
 	}
 	
@@ -432,30 +492,25 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
     this.request(this.url);
   },
   encodeView: function() {
-	  //alert(this.transport.getAllResponseHeaders());
-	  var async = this.header('javax.faces.Async');
-	  var state = this.header('javax.faces.ViewState');
-	  if (async) {
-		  var xml = this.transport.responseXML;
-		  state = state || xml.getElementsByTagName('async-resp')[0].getAttribute('state');
-		  var encode = xml.getElementsByTagName('encode');
-		  var id, content, markup, str;
-		  for (var i = 0; i < encode.length; i++) {
-			  id = encode[i].getAttribute('id');
-			  content = encode[i].firstChild;
-			  markup = content.text || content.data;
-			  str = markup.stripScripts();
-			  Element.replace(id, str);
-			  markup.evalScripts();
-		  }
-	  }
-	  
-	  if (state) {
-		  var hf = $('javax.faces.ViewState');
-		  if (hf) {
-			  hf.value = state;
-		  }
-	  }
+     var xml = this.transport.responseXML;
+     var state = state || xml.getElementsByTagName('async-response')[0].getAttribute('state');
+     var encode = xml.getElementsByTagName('encode');
+     var id, content, markup, str;
+     for (var i = 0; i < encode.length; i++) {
+	 id = encode[i].getAttribute('id');
+	 content = encode[i].firstChild;
+	 markup = content.text || content.data;
+	 str = markup.stripScripts();
+	 Element.replace(id, str);
+	 markup.evalScripts();
+     }
+     
+     if (state) {
+	 var hf = $(gViewState);
+	 if (hf) {
+	     hf.value = state;
+	 }
+     }
   },
   evalResponse: function() {
 	  if (this.responseIsSuccess()) {

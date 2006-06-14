@@ -69,6 +69,11 @@
     </dependency>
     <dependency>
       <groupId>com.sun.jsf-extensions</groupId>
+      <artifactId>jsf-extensions-common</artifactId>
+      <version>0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.jsf-extensions</groupId>
       <artifactId>jsf-extensions-flash</artifactId>
       <version>0.1-SNAPSHOT</version>
     </dependency>
@@ -99,8 +104,8 @@
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>jmaki</artifactId>
+      <groupId>com.sun.jmaki</groupId>
+      <artifactId>ajax-wrapper-comp</artifactId>
       <version>0.1-SNAPSHOT</version>
       <scope>runtime</scope>
     </dependency>

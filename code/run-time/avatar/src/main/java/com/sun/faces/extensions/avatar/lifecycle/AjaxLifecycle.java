@@ -10,7 +10,6 @@
 package com.sun.faces.extensions.avatar.lifecycle;
 
 import com.sun.faces.extensions.avatar.components.ProcessingContext;
-import com.sun.faces.extensions.avatar.components.ProcessingContextViewRoot;
 import java.io.IOException;
 import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
@@ -23,6 +22,8 @@ import javax.faces.FactoryFinder;
 import javax.faces.component.ContextCallback;
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.event.PhaseEvent;
@@ -33,6 +34,8 @@ import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 
 import com.sun.faces.lifecycle.RestoreViewPhase;
+import java.util.Map;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  *
@@ -50,71 +53,71 @@ public class AjaxLifecycle extends Lifecycle {
         restoreView = new RestoreViewPhase();
     }
     
-    private void setupResponseWriter(FacesContext context) {
-        // set up the ResponseWriter
-        ResponseWriter responseWriter = context.getResponseWriter();
-        if (null == responseWriter) {
-            RenderKitFactory renderFactory = (RenderKitFactory)
-            FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-            RenderKit renderKit =
-                    renderFactory.getRenderKit(context,
-                    context.getViewRoot().getRenderKitId());
-            Writer out = null;
-            Object response = context.getExternalContext().getResponse();
-            try {
-                Method getWriter =
-                        response.getClass().getMethod("getWriter",
-                        (Class []) null);
-                if (null != getWriter) {
-                    out = (Writer) getWriter.invoke(response);
-                }
-            } catch (IllegalArgumentException ex) {
-                ex.printStackTrace();
-            } catch (SecurityException ex) {
-                ex.printStackTrace();
-            } catch (InvocationTargetException ex) {
-                ex.printStackTrace();
-            } catch (IllegalAccessException ex) {
-                ex.printStackTrace();
-            } catch (NoSuchMethodException ex) {
-                ex.printStackTrace();
-            }
-            if (null != out) {
-                responseWriter =
-                        renderKit.createResponseWriter(out,
-                        "text/xml",
-                        context.getExternalContext().getRequestCharacterEncoding());
-            }
-            if (null != responseWriter) {
-                context.setResponseWriter(responseWriter);
-            }
-
-        }
-    }
-
     public void render(FacesContext context) throws FacesException {
-        PhaseEvent event = new PhaseEvent(context, PhaseId.RENDER_RESPONSE, this);
-        ProcessingContextViewRoot pcRoot =
-                (ProcessingContextViewRoot) context.getViewRoot();
-        List<UIComponent> roots = pcRoot.getDelegateRoots();
+        Map<String,String> headerMap = context.getExternalContext().getRequestHeaderMap();
 
-        runLifecycleOnProcessingContexts(event, pcRoot, roots);
+        if (!headerMap.containsKey(ASYNC_HEADER)) {
+            parent.render(context);
+            return;
+        }
+        
+        PhaseEvent event = new PhaseEvent(context, PhaseId.RENDER_RESPONSE, this);
+        AsyncResponse async = AsyncResponse.getInstance();
+        ResponseWriter writer = null;
+        UIViewRoot root = context.getViewRoot();
+        try {
+            writer = async.getResponseWriter();
+            ExternalContext extContext = context.getExternalContext();
+            if (extContext.getResponse() instanceof HttpServletResponse) {
+                HttpServletResponse servletResponse = (HttpServletResponse)
+                    extContext.getResponse();
+                servletResponse.setContentType("text/xml");
+                servletResponse.setHeader("Cache-Control", "no-cache");
+            }
+            
+            writer.startElement("async-response", root);
+            writer.writeAttribute("state", async.getViewState(), "state");
+        }
+        catch (IOException ioe) {
+            
+        }
+
+        runLifecycleOnProcessingContexts(event);
+        
+        try {
+            writer.endElement("async-response");
+        }
+        catch (IOException ioe) {
+            
+        }
+        
+        
+        AsyncResponse.clearInstance();
     }
 
     public void execute(FacesContext context) throws FacesException {
+        Map<String,String> headerMap = context.getExternalContext().getRequestHeaderMap();
+
+        if (!headerMap.containsKey(ASYNC_HEADER)) {
+            parent.execute(context);
+            return;
+        }
+        
         restoreView.execute(context);
-        setupResponseWriter(context);
+        
+        // Look for the runthru header.  
+        
+        // If found, only populate the phaseEvents list with phases up to that
+        // phase.  
+        
         phaseEvents = new ArrayList<PhaseEvent>(5);
         phaseEvents.add(new PhaseEvent(context, PhaseId.APPLY_REQUEST_VALUES, this));
         phaseEvents.add(new PhaseEvent(context, PhaseId.PROCESS_VALIDATIONS, this));
         phaseEvents.add(new PhaseEvent(context, PhaseId.UPDATE_MODEL_VALUES, this));
         phaseEvents.add(new PhaseEvent(context, PhaseId.INVOKE_APPLICATION, this));
-        ProcessingContextViewRoot pcRoot =
-                (ProcessingContextViewRoot) context.getViewRoot();
-        List<UIComponent> roots = pcRoot.getDelegateRoots();
 
         for (PhaseEvent cur : phaseEvents) {
-            runLifecycleOnProcessingContexts(cur, pcRoot, roots);
+            runLifecycleOnProcessingContexts(cur);
         }
         
     }
@@ -130,8 +133,7 @@ public class AjaxLifecycle extends Lifecycle {
         return result;
     }
     
-    private void runLifecycleOnProcessingContexts(PhaseEvent e, ProcessingContextViewRoot pcRoot,
-            List<UIComponent> roots) {
+    private void runLifecycleOnProcessingContexts(PhaseEvent e) {
         final PhaseId curPhase = e.getPhaseId();
         // Manually invoke the lifecycle method for this phase on the ProcessingContext
         ContextCallback cb = new ContextCallback() {
@@ -146,35 +148,40 @@ public class AjaxLifecycle extends Lifecycle {
                     comp.processUpdates(facesContext);
                 }
                 else if (curPhase == PhaseId.INVOKE_APPLICATION) {
-                    // Take no action on invokeApplication
+                    facesContext.getViewRoot().processApplication(facesContext);
                 }
                 else if (curPhase == PhaseId.RENDER_RESPONSE) {
                     try {
+                        ResponseWriter writer = AsyncResponse.getInstance().getResponseWriter();
+                        writer.startElement("encode", comp);
+                        writer.writeAttribute("id", 
+                                comp.getClientId(facesContext), "id");
+                        writer.write("<![CDATA[");
                         comp.encodeAll(facesContext);
+                        writer.write("]]>");
+                        writer.endElement("encode");
                     } catch (IOException ex) {
                         ex.printStackTrace();
                     }
                 }
             }
         };
-        List<ProcessingContext> pcs = pcRoot.getProcessingContexts();
-        Iterator<ProcessingContext> pcIter = pcs.iterator();
-        String pcClientId = null;
-        // Build up a list of UIComponents, one for each processing context.
-        while (pcIter.hasNext()) {
-            pcClientId = pcIter.next().getClientId();
-            assert(pcClientId.startsWith("" + NamingContainer.SEPARATOR_CHAR));
-            pcClientId = pcClientId.substring(1);
-            pcRoot.setCalledDuringInvokeOnComponent(true);
-            try {
-                pcRoot.invokeOnComponent(FacesContext.getCurrentInstance(),
-                        pcClientId, cb);
-            }
-            finally {
-                pcRoot.setCalledDuringInvokeOnComponent(false);
-            }
+        FacesContext context = e.getFacesContext();
+        UIViewRoot root = context.getViewRoot();
+        AsyncResponse async = AsyncResponse.getInstance();
+        List<ProcessingContext> subtrees = async.getProcessingContexts();
+        for (ProcessingContext cur : subtrees) {
+            root.invokeOnComponent(context, cur.getClientId(), cb);
         }
     }
     
+    public static final String FACES_PREFIX = "com.sun.faces.";
+    public static final String LIFECYCLE_PREFIX = "com.sun.faces.lifecycle.";
+    public static final String SUBTREES_HEADER= FACES_PREFIX + "subtrees";
+    public static final String ASYNC_HEADER= FACES_PREFIX + "async";
+    public static final String RUNTHRU_HEADER = FACES_PREFIX + "runthru";
+    
+    
+
     
 }

@@ -17,6 +17,7 @@
 
   <modules>
     <module>maven</module>
+    <module>run-time/common</module>
     <module>run-time/flash</module>
     <module>run-time/avatar</module>
     <module>test-time</module>

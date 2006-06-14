@@ -73,9 +73,7 @@ Rendered via Faces components:
 </div>
 </jsfExt:ajaxZone>
 
-<jsfExt:ajaxZone id="subview2" interactionType="input" eventType="onmousedown" eventHook="extractParams">
-  <span id="controlSpan">
-
+<jsfExt:ajaxZone id="subview2">
   <d:scroller id="scroller" navFacetOrientation="NORTH" for="table" 
           actionListener="#{ResultSetBean.processScrollEvent}">
       <f:facet name="header">
@@ -111,12 +109,14 @@ Rendered via Faces components:
         </h:panelGroup>
       </f:facet>
   </d:scroller>
-
-
-  </span>
-</jsfExt:ajaxZone>
-
-
+  <script type='text/javascript'>
+    document.forms[0].submit = function() {}; 
+    var a = $('form:subview2').getElementsByTagName('a'); 
+    $A(a).each(function(e) { 
+      new Faces.Command(e, 'mousedown', { subtrees: 'form:table,form:subview2' }); 
+    }); 
+  </script>
+  </jsfExt:ajaxZone>
 </h:form>
 
 </body>

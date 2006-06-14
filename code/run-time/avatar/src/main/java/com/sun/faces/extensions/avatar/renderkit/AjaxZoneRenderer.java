@@ -1,5 +1,5 @@
 /*
- * $Id: ProcessingContextViewRoot.java,v 1.4 2005/12/21 22:38:09 edburns Exp $
+ * $Id: AjaxZoneRenderer.java,v 1.4 2005/12/21 22:38:09 edburns Exp $
  */
 
 /*
@@ -29,7 +29,7 @@
 
 package com.sun.faces.extensions.avatar.renderkit;
 
-import com.sun.faces.extensions.avatar.components.ProcessingContextViewRoot;
+import com.sun.faces.extensions.avatar.lifecycle.AjaxLifecycle;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
@@ -118,21 +118,10 @@ public class AjaxZoneRenderer extends Renderer {
 
         ResponseWriter writer = context.getResponseWriter();
         String id = component.getClientId(FacesContext.getCurrentInstance());
-        if (isAjaxRequest(context, component)) {
-            writer.startElement("processing-context", component);
-            writer.writeAttribute("id",component.getClientId(context),
-                    "clientId");
-            String postIntallHook = getAttr(context, component,"postInstallHook");
-            if (null != postIntallHook) {
-                writer.writeAttribute("postInstallHook", postIntallHook,
-                        "postInstallHook");
-            }
-            writer.write("<![CDATA[");
-        } else {
-            writer.write("\n");
-            writer.startElement("div", component);
-            writer.writeAttribute("id", id, null);
-            writeStyle(context, writer, component);
+        writer.startElement("div", component);
+        writer.writeAttribute("id", id, null);
+        writeStyle(context, writer, component);
+        if (!isAjaxRequest(context, component)) {
             writeAjaxifyScript(context, writer, component);
             for (int i = 0; i < scriptIds.length; i++) {
                 getXhtmlHelper().linkJavascript(context, component, writer,
@@ -289,12 +278,7 @@ public class AjaxZoneRenderer extends Renderer {
         }
 
         ResponseWriter writer = context.getResponseWriter();
-        if (isAjaxRequest(context, component)) {
-            writer.write("]]>");
-            writer.endElement("processing-context");
-        } else {
-            writer.endElement("div"); //NOI18N
-        }
+        writer.endElement("div"); //NOI18N
     }
 
     /**
@@ -312,9 +296,9 @@ public class AjaxZoneRenderer extends Renderer {
 
     // Helper method to test if this is an Ajax request
     private boolean isAjaxRequest(FacesContext context, UIComponent component) {
-        Map<String, Object> requestMap = 
-                context.getExternalContext().getRequestMap();
-        return requestMap.containsKey(ProcessingContextViewRoot.PROCESSING_CONTEXTS_REQUEST_PARAM_NAME);
+        Map<String, String> requestMap = 
+                context.getExternalContext().getRequestHeaderMap();
+        return requestMap.containsKey(AjaxLifecycle.ASYNC_HEADER);
     }
     
     private transient XhtmlHelper xHtmlHelper = null;

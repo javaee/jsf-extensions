@@ -138,6 +138,12 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
+      <groupId>com.sun.jsf-extensions</groupId>
+      <artifactId>jsf-extensions-common</artifactId>
+      <version>0.1-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>org.apache.struts.shale</groupId>
       <artifactId>remoting</artifactId>
       <version>1.0.3-SNAPSHOT</version>

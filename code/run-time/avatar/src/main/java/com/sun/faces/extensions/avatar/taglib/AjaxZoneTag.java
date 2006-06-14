@@ -1,10 +1,14 @@
 package com.sun.faces.extensions.avatar.taglib;
 
 import com.sun.faces.extensions.avatar.components.AjaxZone;
+import java.util.List;
+import java.util.Map;
 import javax.el.MethodExpression;
 import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIOutput;
 import javax.faces.webapp.UIComponentELTag;
+import javax.servlet.jsp.JspException;
 
 public class AjaxZoneTag extends UIComponentELTag {
     /** 
@@ -26,7 +30,39 @@ public class AjaxZoneTag extends UIComponentELTag {
     public void setStyle(ValueExpression ve) {
         style = ve;
     }
+    
+    public int doStartTag() throws JspException {
+        int rc = super.doStartTag();
+        markTransientChildrenAsNonTransient();
+        return rc;
+    }
 
+    public int doAfterBody() throws JspException {
+        int rc = super.doAfterBody();
+        markTransientChildrenAsNonTransient();
+        return rc;
+    }
+    
+    private void markTransientChildrenAsNonTransient() {
+        UIComponent component = getComponentInstance();
+        Map<String, Object> attrs = component.getAttributes();
+        String didPersistTransients = "com.sun.faces.AjaxZone.DidPersistTransients";
+        if (component.getAttributes().containsKey(didPersistTransients)) {
+            return;
+        }
+        
+        List<UIComponent> children = component.getChildren();
+        for (UIComponent cur : children) {
+            if (cur.isTransient()) {
+                if (cur instanceof UIOutput) {
+                    attrs.put(didPersistTransients, didPersistTransients);
+                    cur.setTransient(false);
+                }
+            }
+        }
+    }
+
+    
     protected void setProperties(UIComponent comp) {
         super.setProperties(comp);
         

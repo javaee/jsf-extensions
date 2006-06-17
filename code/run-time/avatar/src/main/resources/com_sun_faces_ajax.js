@@ -40,6 +40,7 @@ var gUpdateModelValues = gFacesLifecycle + "UPDATE_MODEL_VALUES";
 var gInvokeApplication = gFacesLifecycle + "INVOKE_APPLICATION";
 var gRenderResponse = gFacesLifecycle + "RENDER_RESPONSE";
 var gViewState = "javax.faces.ViewState";
+var gGlobalScope = this;
 
 dojo.require("dojo.io.*");
 dojo.require("dojo.event.*");
@@ -526,8 +527,14 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
 	 content = encode[i].firstChild;
 	 markup = content.text || content.data;
 	 str = markup.stripScripts();
-	 Element.replace(id, str);
-	 markup.evalScripts();
+	 if (typeof gGlobalScope.postInstallHook != 'undefined') {
+	     Element.replace(id, str);
+	     gGlobalScope.postInstallHook($(id), markup);
+	 }
+	 else {
+	     Element.replace(id, str);
+	     markup.evalScripts();
+	 }
      }
      
      var state = state || xml.getElementsByTagName('state')[0].firstChild;

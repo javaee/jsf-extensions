@@ -106,7 +106,9 @@ function userInplaceCallback(form, value, parent) {
 }
 
 function postInstallHook(ajaxZone, innerHTML) {
-    jmaki.clearWidgets();
-    innerHTML.evalScripts();
-    window.onload();
+    if (-1 != ajaxZone.id.indexOf("form:table")) {
+	jmaki.clearWidgets();
+	innerHTML.evalScripts();
+	window.onload();
+    }
 }

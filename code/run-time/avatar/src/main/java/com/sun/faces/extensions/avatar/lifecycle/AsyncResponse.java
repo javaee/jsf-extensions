@@ -2,6 +2,7 @@ package com.sun.faces.extensions.avatar.lifecycle;
 
 import com.sun.faces.extensions.avatar.components.ProcessingContext;
 import com.sun.faces.extensions.common.util.FastWriter;
+import com.sun.org.apache.commons.beanutils.locale.LocaleBeanUtils;
 import java.io.IOException;
 import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.faces.FacesException;
@@ -26,6 +28,7 @@ import javax.faces.context.ResponseWriterWrapper;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.FactoryFinder;
+import javax.faces.render.ResponseStateManager;
 
 
 public class AsyncResponse {
@@ -76,7 +79,7 @@ public class AsyncResponse {
                 FastWriter fw = new FastWriter(256);
                 
                 // write state
-                StateCapture sc = new StateCapture(oldWriter.cloneWithWriter(fw));
+                StateCapture sc = new StateCapture(oldWriter.cloneWithWriter(fw), fw);
                 faces.setResponseWriter(sc);
                 StateManager sm = faces.getApplication().getStateManager();
                 Object stateObj = sm.saveSerializedView(faces);
@@ -212,9 +215,11 @@ public class AsyncResponse {
         
         protected final ResponseWriter orig;
         private Object state;
+        private FastWriter fw;
         
-        public StateCapture(ResponseWriter orig) {
+        public StateCapture(ResponseWriter orig, FastWriter fw) {
             this.orig = orig;
+            this.fw = fw;
         }
 
         protected ResponseWriter getWrapped() {
@@ -228,6 +233,22 @@ public class AsyncResponse {
         }
         
         public String getState() {
+            String buf = null;
+            int i,j;
+            if (null == this.state && null != (buf = fw.toString())) {
+                buf = buf.toLowerCase(Locale.US);
+                if (-1 != (i = buf.indexOf(ResponseStateManager.VIEW_STATE_PARAM.toLowerCase()))) {
+                    if (-1 != (i = buf.lastIndexOf("<", i))) {
+                        if (-1 != (i = buf.indexOf("value", i))) {
+                            if (-1 != (i = buf.indexOf("\"",i))) {
+                                if (-1 != (j = buf.indexOf("\"", ++i))) {
+                                    state = buf.substring(i, j);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
             return this.state != null ? this.state.toString() : "";
         }
         

@@ -1,0 +1,108 @@
+/*
+ * The contents of this file are subject to the terms
+ * of the Common Development and Distribution License
+ * (the License). You may not use this file except in
+ * compliance with the License.
+ * 
+ * You can obtain a copy of the License at
+ * https://javaserverfaces.dev.java.net/CDDL.html or
+ * legal/CDDLv1.0.txt. 
+ * See the License for the specific language governing
+ * permission and limitations under the License.
+ * 
+ * When distributing Covered Code, include this CDDL
+ * Header Notice in each file and include the License file
+ * at legal/CDDLv1.0.txt.    
+ * If applicable, add the following below the CDDL Header,
+ * with the fields enclosed by brackets [] replaced by
+ * your own identifying information:
+ * "Portions Copyrighted [year] [name of copyright owner]"
+ * 
+ * [Name of File] [ver.__] [Date]
+ * 
+ * Copyright 2005 Sun Microsystems Inc. All Rights Reserved
+ */
+
+package com.sun.faces.extensions.common.util;
+
+import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.component.ValueHolder;
+import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
+import javax.faces.convert.ConverterException;
+
+/**
+ *
+ * @author edburns
+ */
+public class Util {
+    
+    private Util() {
+    }
+    
+    public static String getFormattedValue(FacesContext context, UIComponent component,
+                                       Object currentValue)
+        throws ConverterException {
+
+        String result = null;
+        // formatting is supported only for components that support
+        // converting value attributes.
+        if (!(component instanceof ValueHolder)) {
+            if (currentValue != null) {
+                result = currentValue.toString();
+            }
+            return result;
+        }
+
+        Converter converter = null;
+
+        // If there is a converter attribute, use it to to ask application
+        // instance for a converter with this identifer.
+        converter = ((ValueHolder) component).getConverter();
+
+
+        // if value is null and no converter attribute is specified, then
+        // return a zero length String.
+        if (converter == null && currentValue == null) {
+            return "";
+        }
+
+        if (converter == null) {
+            // Do not look for "by-type" converters for Strings
+            if (currentValue instanceof String) {
+                return (String) currentValue;
+            }
+
+            // if converter attribute set, try to acquire a converter
+            // using its class type.
+
+            Class converterType = currentValue.getClass();
+            converter = Util.getConverterForClass(converterType, context);
+
+            // if there is no default converter available for this identifier,
+            // assume the model type to be String.
+            if (converter == null) {
+                result = currentValue.toString();
+                return result;
+            }
+        }
+
+        return converter.getAsString(context, component, currentValue);
+    }    
+    
+    
+    public static Converter getConverterForClass(Class converterClass,
+                                                 FacesContext context) {
+        if (converterClass == null) {
+            return null;
+        }
+        try {            
+            Application application = context.getApplication();
+            return (application.createConverter(converterClass));
+        } catch (Exception e) {
+            return (null);
+        }
+    }
+    
+}

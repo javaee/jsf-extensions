@@ -247,8 +247,23 @@ Object.extend(Element, {
     if (!d) alert(dest + " not found");
 	var parent = d.parentNode;
 	var temp = document.createElement('div');
+	temp.id = d.id;
 	temp.innerHTML = src;
+
+	 var a = $('form:subview2').getElementsByTagName('a'); 
+	 $A(a).each(function(e) { 
+			var text = e.firstChild.nodeValue;
+			var foo = text;
+		    });
+
 	parent.replaceChild(temp.firstChild,d);
+
+	 a = $('form:subview2').getElementsByTagName('a'); 
+	 $A(a).each(function(e) { 
+			var text = e.firstChild.nodeValue;
+			var foo = text;
+		    });
+
   },
   serialize: function(e) {
 	  var str = (e.xml) ? this.serializeIE(e) : this.serializeMozilla(e);
@@ -331,7 +346,7 @@ Faces.ViewState.prototype = {
     },
     initialize: function(form, options) {
 	this.setOptions(options);
-	
+
 	var e = Form.getElements($(form));
 	var t,p;
 	for (var i = 0; i < e.length; i++) {
@@ -349,7 +364,12 @@ Faces.ViewState.prototype = {
     toQueryString: function() {
 	var q = new Array();
 	var i,j,p,v;
-	
+
+	var acc = "";
+	for (var prop in this) {
+	    acc = acc + " " + prop;
+	}
+
 	if (this.options.inputs) {
 	    if (this[gViewState]) {
 		p = encodeURIComponent(gViewState);
@@ -418,6 +438,7 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
 	
 	// create viewState
 	var viewState = null;
+
 	if (this.options.inputs) {
 	    viewState = new Faces.ViewState(this.form,
 				 { inputs: this.options.inputs });
@@ -465,18 +486,23 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
 	}
 	
 	// add encode
-	if (this.options.encode) {
-		this.options.requestHeaders.push('com.sun.faces.Encode');
-		this.options.requestHeaders.push(Faces.toArray(this.options.encode,',').join(','));
+	if (this.options.render) {
+		this.options.requestHeaders.push('com.sun.faces.Render');
+		this.options.requestHeaders.push(Faces.toArray(this.options.render,',').join(','));
 	}
 	
 	// build url
 	//this.url += (this.url.match(/\?/) ? '&' : '?') + viewState.toQueryString();
+
+	var acc = "";
+	for (var prop in this) {
+	    acc = acc + " " + prop;
+	}
 	this.options.postBody = viewState.toQueryString();
 
     var onComplete = this.options.onComplete;
     this.options.onComplete = (function(transport, object) {
-      this.encodeView();
+      this.renderView();
 	  if (onComplete) {
       	onComplete(transport, object);
 	  } else {
@@ -491,10 +517,9 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
 	// send request
     this.request(this.url);
   },
-  encodeView: function() {
+  renderView: function() {
      var xml = this.transport.responseXML;
-     var state = state || xml.getElementsByTagName('async-response')[0].getAttribute('state');
-     var encode = xml.getElementsByTagName('encode');
+     var encode = xml.getElementsByTagName('render');
      var id, content, markup, str;
      for (var i = 0; i < encode.length; i++) {
 	 id = encode[i].getAttribute('id');
@@ -505,10 +530,11 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
 	 markup.evalScripts();
      }
      
+     var state = state || xml.getElementsByTagName('state')[0].firstChild;
      if (state) {
 	 var hf = $(gViewState);
 	 if (hf) {
-	     hf.value = state;
+	     hf.value = state.text || state.data;
 	 }
      }
   },
@@ -535,11 +561,20 @@ Faces.Command.prototype = {
 	initialize: function(action, event, options) {
 		var event = (event) || 'click';
 		var options = options;
-		Event.observe(action,event,function(e) {
+		var facesObserver = function(e) {
 			new Faces.Event(action,options);
 			Event.stop(e);
 			return false;
-		},true);
+		};
+		// If the element had no existing facesObserver
+		if (typeof action.facesObserver == 'undefined') {
+		    // store one here so we can remove the observer later.
+		    action.facesObserver = facesObserver;
+		}
+		else {
+		    Event.stopObserving(action,event,action.facesObserver,true);
+		}
+		Event.observe(action,event,facesObserver,true);
 	}
 };
 

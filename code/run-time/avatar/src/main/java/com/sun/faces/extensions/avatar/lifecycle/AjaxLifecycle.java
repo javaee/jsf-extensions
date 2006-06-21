@@ -9,7 +9,6 @@
 
 package com.sun.faces.extensions.avatar.lifecycle;
 
-import com.sun.faces.extensions.avatar.components.ProcessingContext;
 import com.sun.faces.extensions.common.util.Util;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -117,11 +116,26 @@ public class AjaxLifecycle extends Lifecycle {
         }
     }
     
+    private List<String> getSubtreesForEvent(PhaseEvent e) {
+        AsyncResponse async = AsyncResponse.getInstance();
+        
+        List<String> result = null, 
+                renderSubtrees = async.getRenderSubtrees(),
+                executeSubtrees = async.getExecuteSubtrees();
+        if (executeSubtrees.isEmpty()) {
+            result = renderSubtrees;
+        }
+        else {
+            result = e.getPhaseId() == PhaseId.RENDER_RESPONSE ? renderSubtrees :
+                executeSubtrees;
+        }
+        return result;
+    }
+    
     private PhaseId runLifecycleOnProcessingContexts(PhaseEvent e) {
         FacesContext context = e.getFacesContext();
         UIViewRoot root = context.getViewRoot();
-        AsyncResponse async = AsyncResponse.getInstance();
-        List<ProcessingContext> subtrees = async.getProcessingContexts();
+        List<String> subtrees = getSubtreesForEvent(e);
         final PhaseId curPhase = e.getPhaseId();
         final PhaseId lastPhaseRequested = getRunThruPhaseId(context,
                 PhaseId.RENDER_RESPONSE);
@@ -187,8 +201,8 @@ public class AjaxLifecycle extends Lifecycle {
                 }
             }
         };
-        for (ProcessingContext cur : subtrees) {
-            root.invokeOnComponent(context, cur.getClientId(), cb);
+        for (String cur : subtrees) {
+            root.invokeOnComponent(context, cur, cb);
         }
 
         if (lastPhaseRequested == curPhase) {
@@ -205,7 +219,7 @@ public class AjaxLifecycle extends Lifecycle {
                 lastPhaseRequested = getRunThruPhaseId(context, PhaseId.RENDER_RESPONSE),
                 lastPhaseRun = PhaseId.INVOKE_APPLICATION;
 
-        if (!headerMap.containsKey(ASYNC_HEADER)) {
+        if (!headerMap.containsKey(PARTIAL_HEADER)) {
             parent.execute(context);
             return;
         }
@@ -247,7 +261,7 @@ public class AjaxLifecycle extends Lifecycle {
     public void render(FacesContext context) throws FacesException {
         Map<String,String> headerMap = context.getExternalContext().getRequestHeaderMap();
         PhaseId lastPhaseRequested = null;
-        if (!headerMap.containsKey(ASYNC_HEADER)) {
+        if (!headerMap.containsKey(PARTIAL_HEADER)) {
             parent.render(context);
             return;
         }
@@ -282,8 +296,9 @@ public class AjaxLifecycle extends Lifecycle {
  
     public static final String FACES_PREFIX = "com.sun.faces.";
     public static final String LIFECYCLE_PREFIX = "com.sun.faces.lifecycle.";
-    public static final String SUBTREES_HEADER= FACES_PREFIX + "subtrees";
-    public static final String ASYNC_HEADER= FACES_PREFIX + "async";
+    public static final String PARTIAL_HEADER= FACES_PREFIX + "partial";
+    public static final String EXECUTE_HEADER = LIFECYCLE_PREFIX + "execute";
+    public static final String RENDER_HEADER= LIFECYCLE_PREFIX + "render";
     public static final String RUNTHRU_HEADER = LIFECYCLE_PREFIX + "runthru";
     
     

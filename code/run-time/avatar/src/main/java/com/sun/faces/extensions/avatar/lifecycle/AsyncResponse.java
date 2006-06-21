@@ -1,6 +1,5 @@
 package com.sun.faces.extensions.avatar.lifecycle;
 
-import com.sun.faces.extensions.avatar.components.ProcessingContext;
 import com.sun.faces.extensions.common.util.FastWriter;
 import com.sun.org.apache.commons.beanutils.locale.LocaleBeanUtils;
 import java.io.IOException;
@@ -62,7 +61,7 @@ public class AsyncResponse {
     public static void clearInstance() {
         AsyncResponse instance = getInstance(false);
         if (null != instance) {
-            instance.clearProcessingContexts();
+            instance.clearSubtrees();
         }
         Instance.remove();
     }
@@ -115,56 +114,72 @@ public class AsyncResponse {
         }
         return rw;
     }
-
-    /**
-     * Holds value of property processingContexts.
-     */
-    private transient List<ProcessingContext> processingContexts;
     
-    public void clearProcessingContexts() {
-        if (null != processingContexts) {
-            processingContexts.clear();
-        }
-        processingContexts = null;
-    }
-
-    public List<ProcessingContext> getProcessingContexts() {
+    private List<String> populateListFromHeader(String headerName) {
         String param = null;
         String [] pcs = null;
         Map requestMap = FacesContext.getCurrentInstance().
                 getExternalContext().getRequestHeaderMap();
-        
-        if (null != processingContexts) {
-            return processingContexts;
-        }
-
+        List<String> result = null;
         // If there is no subtrees request header
-        if (!requestMap.containsKey(AjaxLifecycle.SUBTREES_HEADER)) {
-            return null;
+        result = new ArrayList<String>();
+
+        if (!requestMap.containsKey(headerName)) {
+            return result;
         }
-        
-        processingContexts = new ArrayList<ProcessingContext>();
-        
         // If we have a processingContext Request Parameter
         param = 
-            requestMap.get(AjaxLifecycle.SUBTREES_HEADER).toString();
+            requestMap.get(headerName).toString();
         if (null != (pcs = param.split(",[ \t]*"))) {
             for (String cur : pcs) {
                 cur = cur.trim();
-                processingContexts.add(new ProcessingContext(cur.trim()));
+                result.add(cur);
             }
         }
-        // Catch a mal-formed param value here
-        if (0 == processingContexts.size()) {
-            processingContexts = null;
-        }
-        
-        return this.processingContexts;
+
+        return result;
     }
 
-    public void setProcessingContexts(List<ProcessingContext> processingContexts) {
+    private transient List<String> executeSubtrees;
+    private transient List<String> renderSubtrees;
+    
+    public void clearSubtrees() {
+        if (null != executeSubtrees) {
+            executeSubtrees.clear();
+        }
+        executeSubtrees = null;
+        if (null != renderSubtrees) {
+            renderSubtrees.clear();
+        }
+        renderSubtrees = null;
+    }
 
-        this.processingContexts = processingContexts;
+    public List<String> getExecuteSubtrees() {
+        
+        if (null != executeSubtrees) {
+            return executeSubtrees;
+        }
+        executeSubtrees = populateListFromHeader(AjaxLifecycle.EXECUTE_HEADER);
+        return this.executeSubtrees;
+    }
+
+    public void setExecuteSubtrees(List<String> executeSubtrees) {
+
+        this.executeSubtrees = executeSubtrees;
+    }    
+
+    public List<String> getRenderSubtrees() {
+        
+        if (null != renderSubtrees) {
+            return renderSubtrees;
+        }
+        renderSubtrees = populateListFromHeader(AjaxLifecycle.RENDER_HEADER);
+        return this.renderSubtrees;
+    }
+
+    public void setRenderSubtrees(List<String> renderSubtrees) {
+
+        this.renderSubtrees = renderSubtrees;
     }    
 
     private static ResponseWriter setupResponseWriter(FacesContext context) {

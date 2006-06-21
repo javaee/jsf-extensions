@@ -298,7 +298,7 @@ public class AjaxZoneRenderer extends Renderer {
     private boolean isAjaxRequest(FacesContext context, UIComponent component) {
         Map<String, String> requestMap = 
                 context.getExternalContext().getRequestHeaderMap();
-        return requestMap.containsKey(AjaxLifecycle.ASYNC_HEADER);
+        return requestMap.containsKey(AjaxLifecycle.PARTIAL_HEADER);
     }
     
     private transient XhtmlHelper xHtmlHelper = null;

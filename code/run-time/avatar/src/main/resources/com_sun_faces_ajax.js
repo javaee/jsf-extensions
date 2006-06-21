@@ -29,16 +29,11 @@
 
 var g_zones = [];
 var gFacesPrefix = "com.sun.faces.";
-var gSubtrees = gFacesPrefix + "Subtrees";
-var gAsync = gFacesPrefix + "Async";
 var gFacesLifecycle = gFacesPrefix + "lifecycle.";
+var gPartial = gFacesPrefix + "Partial";
+var gExecute = gFacesLifecycle + "Execute";
+var gRender = gFacesLifecycle + "Render";
 var gRunthru = gFacesLifecycle + "RunThru";
-var gRestoreView = gFacesLifecycle + "RESTORE_VIEW";
-var gApplyRequestValues = gFacesLifecycle + "APPLY_REQUEST_VALUES";
-var gProcessValidations = gFacesLifecycle + "PROCESS_VALIDATIONS";
-var gUpdateModelValues = gFacesLifecycle + "UPDATE_MODEL_VALUES";
-var gInvokeApplication = gFacesLifecycle + "INVOKE_APPLICATION";
-var gRenderResponse = gFacesLifecycle + "RENDER_RESPONSE";
 var gViewState = "javax.faces.ViewState";
 var gGlobalScope = this;
 
@@ -87,7 +82,7 @@ function moveAsideEventType(ajaxZone, element, eventType, eventHook) {
 	    }
 	}
 	if (0 < pctxts.length) {
-	    props[gSubtrees] = pctxts;
+	    props[gExecute] = pctxts;
 	}
 	
 	var requestStruct = prepareRequest(ajaxZone, props);
@@ -461,7 +456,7 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
 	this.options.requestHeaders = this.options.requestHeaders || [];
 	
 	// guarantee our header
-	this.options.requestHeaders.push(gAsync);
+	this.options.requestHeaders.push(gPartial);
 	this.options.requestHeaders.push('true');
 	
 	// add event
@@ -475,21 +470,20 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
 		this.options.requestHeaders.push(sourceId);
 	}
 
-	if (this.options.subtrees) {
-		this.options.requestHeaders.push(gSubtrees);
-		this.options.requestHeaders.push(Faces.toArray(this.options.subtrees,',').join(','));
+	if (this.options.execute) {
+		this.options.requestHeaders.push(gExecute);
+		this.options.requestHeaders.push(Faces.toArray(this.options.execute,',').join(','));
+	}
+	
+	if (this.options.render) {
+		this.options.requestHeaders.push(gRender);
+		this.options.requestHeaders.push(Faces.toArray(this.options.render,',').join(','));
 	}
 	
 	// add update
 	if (this.options.update) {
 		this.options.requestHeaders.push('com.sun.faces.Update');
 		this.options.requestHeaders.push(Faces.toArray(this.options.update,',').join(','));
-	}
-	
-	// add encode
-	if (this.options.render) {
-		this.options.requestHeaders.push('com.sun.faces.Render');
-		this.options.requestHeaders.push(Faces.toArray(this.options.render,',').join(','));
 	}
 	
 	// build url

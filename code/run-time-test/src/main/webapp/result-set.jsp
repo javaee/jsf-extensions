@@ -113,7 +113,7 @@ Rendered via Faces components:
     document.forms[0].submit = function() {}; 
     var a = $('form:subview2').getElementsByTagName('a'); 
     $A(a).each(function(e) { 
-      new Faces.Command(e, 'mousedown', { subtrees: 'form:table,form:subview2' }); 
+      new Faces.Command(e, 'mousedown', { render: 'form:table,form:subview2' }); 
     }); 
   </script>
   </jsfExt:ajaxZone>

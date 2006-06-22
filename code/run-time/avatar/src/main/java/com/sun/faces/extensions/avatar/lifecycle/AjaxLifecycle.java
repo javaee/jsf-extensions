@@ -48,72 +48,37 @@ public class AjaxLifecycle extends Lifecycle {
         restoreView = new RestoreViewPhase();
     }
     
-    private PhaseId getRunThruPhaseId(FacesContext context, PhaseId lastPhase) {
-        Map<String,String> headerMap = context.getExternalContext().getRequestHeaderMap();
-        String runThru = null;
-        PhaseId runThruPhaseId = null;
-
-        // If found, only populate the phaseEvents list with phases up to that
-        // phase.  
-        runThru = headerMap.get(RUNTHRU_HEADER);
-        if (null != runThru) {
-            runThruPhaseId = null;
-            // Issue 182
-            for (Object idObj : PhaseId.VALUES) {
-                runThruPhaseId = (PhaseId) idObj;
-                if (-1 != runThruPhaseId.toString().indexOf(runThru)) {
-                    break;
-                }
-                runThruPhaseId = null;
-            }
-        }
-        runThruPhaseId = (null != runThruPhaseId) ? runThruPhaseId :
-            lastPhase;
-        
-        return runThruPhaseId;
-    }
-    
-    private List<PhaseEvent> getPhaseEventsFromRequest(FacesContext context,
-            PhaseId lastPhase) {
-        Map<String,String> headerMap = context.getExternalContext().getRequestHeaderMap();
-        PhaseId lastPhaseId = getRunThruPhaseId(context, lastPhase);
-        List<PhaseEvent> phaseEvents = new ArrayList<PhaseEvent>(lastPhaseId.getOrdinal());
-            
-        for (int i = PhaseId.APPLY_REQUEST_VALUES.getOrdinal(); 
-             i <= lastPhaseId.getOrdinal(); i++) {
-            phaseEvents.add(new PhaseEvent(context, 
-                    (PhaseId) PhaseId.VALUES.get(i), this));
-        }
-        return phaseEvents;
-    }
-    
-    private boolean writeMessages(FacesContext context, UIComponent comp, ResponseWriter writer) throws IOException {
+    private boolean writeMessages(FacesContext context, UIComponent comp, 
+            ConverterException converterException,
+            ResponseWriter writer) throws IOException {
         Iterator<FacesMessage> messages;
-        boolean hasMessages = false;
+        boolean 
+                wroteStart = false,
+                hasMessages = false;
         messages = context.getMessages(comp.getClientId(context));
         while (messages.hasNext()) {
             hasMessages = true;
+            if (!wroteStart) {
+                writer.startElement("messages", comp);
+                wroteStart = true;
+            }
             writer.startElement("message", comp);
             // PENDING(edburns): this is a rendering decision.
             // We should do something with the MessageRenderer.
             writer.write(messages.next().getSummary() + " ");
             writer.endElement("message");
         }
-        return hasMessages;
-    }
-    
-    private void writeEndOfResponse(FacesContext context) {
-        UIViewRoot root = context.getViewRoot();
-        AsyncResponse async = AsyncResponse.getInstance();
-        try {
-            ResponseWriter writer = async.getResponseWriter();
-            writer.startElement("state", root);
-            writer.write("<![CDATA[" + async.getViewState() + "]]>");
-            writer.endElement("state");
-            writer.endElement("async-response");
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        if (null != converterException) {
+            if (!wroteStart) {
+                writer.startElement("messages", comp);
+                wroteStart = true;
+            }
+            writer.write(converterException.getFacesMessage().getSummary());
         }
+        if (wroteStart) {
+            writer.endElement("messages");
+        }
+        return hasMessages;
     }
     
     private List<String> getSubtreesForEvent(PhaseEvent e) {
@@ -137,12 +102,11 @@ public class AjaxLifecycle extends Lifecycle {
         UIViewRoot root = context.getViewRoot();
         List<String> subtrees = getSubtreesForEvent(e);
         final PhaseId curPhase = e.getPhaseId();
-        final PhaseId lastPhaseRequested = getRunThruPhaseId(context,
-                PhaseId.RENDER_RESPONSE);
                     
         // Manually invoke the lifecycle method for this phase on the ProcessingContext
         ContextCallback cb = new ContextCallback() {
             public void invokeContextCallback(FacesContext facesContext, UIComponent comp) {
+                ConverterException converterException = null;
                 try {
                     ResponseWriter writer = AsyncResponse.getInstance().getResponseWriter();
 
@@ -154,33 +118,6 @@ public class AjaxLifecycle extends Lifecycle {
                     }
                     else if (curPhase == PhaseId.UPDATE_MODEL_VALUES) {
                         comp.processUpdates(facesContext);
-                        // If we're only running through update.
-                        if (lastPhaseRequested == PhaseId.UPDATE_MODEL_VALUES) {
-                            // Then we need to render the result of the update
-                            ValueHolder valueHolder = null;
-                            String value = null;
-                            writer.startElement("update", comp);
-                            writer.writeAttribute("id", 
-                                    comp.getClientId(facesContext), "id");
-                            if (!writeMessages(facesContext, comp, writer)){
-                                if (comp instanceof ValueHolder) {
-                                    valueHolder = (ValueHolder) comp;
-                                    try {
-                                        // Get the converted value
-                                        value = Util.getFormattedValue(facesContext,
-                                                comp, valueHolder.getValue());
-                                        writer.write("<![CDATA[");
-                                        writer.write(value);
-                                        writer.write("]]>");
-                                    }
-                                    catch (ConverterException ce) {
-                                        writer.startElement("message", comp);
-                                        writer.write(ce.getFacesMessage().getSummary());
-                                    }
-                                }
-                            }
-                            writer.endElement("update");
-                        }
                     }
                     else if (curPhase == PhaseId.INVOKE_APPLICATION) {
                         facesContext.getViewRoot().processApplication(facesContext);
@@ -189,9 +126,18 @@ public class AjaxLifecycle extends Lifecycle {
                         writer.startElement("render", comp);
                         writer.writeAttribute("id", 
                                 comp.getClientId(facesContext), "id");
-                        writer.write("<![CDATA[");
-                        comp.encodeAll(facesContext);
-                        writer.write("]]>");
+                        try {
+                            writer.startElement("markup", comp);
+                            writer.write("<![CDATA[");
+                            comp.encodeAll(facesContext);
+                            writer.write("]]>");
+                            writer.endElement("markup");
+                        }
+                        catch (ConverterException ce) {
+                            converterException = ce;
+                        }
+                        writeMessages(facesContext, comp,
+                                converterException, writer);
                         writer.endElement("render");
                     } 
                     
@@ -205,29 +151,55 @@ public class AjaxLifecycle extends Lifecycle {
             root.invokeOnComponent(context, cur, cb);
         }
 
-        if (lastPhaseRequested == curPhase) {
-            writeEndOfResponse(context);
-        }
-        
         return curPhase;
     }
     
     public void execute(FacesContext context) throws FacesException {
         Map<String,String> headerMap = context.getExternalContext().getRequestHeaderMap();
-        List<PhaseEvent> phaseEvents = null;
-        PhaseId 
-                lastPhaseRequested = getRunThruPhaseId(context, PhaseId.RENDER_RESPONSE),
-                lastPhaseRun = PhaseId.INVOKE_APPLICATION;
 
         if (!headerMap.containsKey(PARTIAL_HEADER)) {
             parent.execute(context);
             return;
         }
+        List<PhaseEvent> phaseEvents = null;
+        AsyncResponse async = AsyncResponse.getInstance();
         
         restoreView.execute(context);
+
+        phaseEvents = new ArrayList<PhaseEvent>(4);
+        for (int i = PhaseId.APPLY_REQUEST_VALUES.getOrdinal(); 
+             i <= PhaseId.INVOKE_APPLICATION.getOrdinal(); i++) {
+            phaseEvents.add(new PhaseEvent(context, 
+                    (PhaseId) PhaseId.VALUES.get(i), this));
+        }
+
+        try {
+            for (PhaseEvent cur : phaseEvents) {
+                runLifecycleOnProcessingContexts(cur);
+            }
+        }
+        finally {
+            if (PhaseId.INVOKE_APPLICATION == async.getLastPhaseId(context)) {
+                AsyncResponse.clearInstance();
+            }
+        }
+    }
+    
+    public void render(FacesContext context) throws FacesException {
+        Map<String,String> headerMap = context.getExternalContext().getRequestHeaderMap();
+
+        if (!headerMap.containsKey(PARTIAL_HEADER)) {
+            parent.render(context);
+            return;
+        }
         AsyncResponse async = AsyncResponse.getInstance();
+
+        if (PhaseId.INVOKE_APPLICATION == async.getLastPhaseId(context)) {
+            return;
+        }
+        
+        UIViewRoot root = context.getViewRoot();
         ResponseWriter writer = null;
-        UIViewRoot root = context.getViewRoot(); 
         
         try {
             writer = async.getResponseWriter();
@@ -239,45 +211,23 @@ public class AjaxLifecycle extends Lifecycle {
                 servletResponse.setHeader("Cache-Control", "no-cache");
             }
             
-            writer.startElement("async-response", root);
+            writer.startElement("partial-response", root);
 
-            phaseEvents = getPhaseEventsFromRequest(context, 
-                    PhaseId.INVOKE_APPLICATION);
-        
-            for (PhaseEvent cur : phaseEvents) {
-                lastPhaseRun = runLifecycleOnProcessingContexts(cur);
-            }
-        }
-        catch (IOException ioe) {
+            writer.startElement("components", root);
+            runLifecycleOnProcessingContexts(new PhaseEvent(context, PhaseId.RENDER_RESPONSE, this));
+            writer.endElement("components");
             
+            writer.startElement("state", root);
+            writer.write("<![CDATA[" + async.getViewState() + "]]>");
+            writer.endElement("state");
+
+            writer.endElement("partial-response");
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
         finally {
-            if (lastPhaseRequested == lastPhaseRun) {
-                AsyncResponse.clearInstance();
-            }
+            AsyncResponse.clearInstance();
         }
-    }
-    
-    public void render(FacesContext context) throws FacesException {
-        Map<String,String> headerMap = context.getExternalContext().getRequestHeaderMap();
-        PhaseId lastPhaseRequested = null;
-        if (!headerMap.containsKey(PARTIAL_HEADER)) {
-            parent.render(context);
-            return;
-        }
-        
-        lastPhaseRequested = getRunThruPhaseId(context, PhaseId.RENDER_RESPONSE);
-        // If the request did not direct us to include RENDER_RESPONSE
-        if (PhaseId.RENDER_RESPONSE != lastPhaseRequested) {
-            // take no action.
-            return;
-        }
-        AsyncResponse async = AsyncResponse.getInstance();
-        ResponseWriter writer = null;
-
-        runLifecycleOnProcessingContexts(new PhaseEvent(context, PhaseId.RENDER_RESPONSE, this));
-        
-        AsyncResponse.clearInstance();
         
     }
     
@@ -294,14 +244,9 @@ public class AjaxLifecycle extends Lifecycle {
     }
     
  
-    public static final String FACES_PREFIX = "com.sun.faces.";
-    public static final String LIFECYCLE_PREFIX = "com.sun.faces.lifecycle.";
+    public static final String FACES_PREFIX = "com.sun.faces.avatar.";
     public static final String PARTIAL_HEADER= FACES_PREFIX + "partial";
-    public static final String EXECUTE_HEADER = LIFECYCLE_PREFIX + "execute";
-    public static final String RENDER_HEADER= LIFECYCLE_PREFIX + "render";
-    public static final String RUNTHRU_HEADER = LIFECYCLE_PREFIX + "runthru";
-    
-    
-
+    public static final String EXECUTE_HEADER = FACES_PREFIX + "execute";
+    public static final String RENDER_HEADER= FACES_PREFIX + "render";
     
 }

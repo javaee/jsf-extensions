@@ -1,25 +1,18 @@
 package com.sun.faces.extensions.avatar.lifecycle;
 
 import com.sun.faces.extensions.common.util.FastWriter;
-import com.sun.org.apache.commons.beanutils.locale.LocaleBeanUtils;
 import java.io.IOException;
 import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 import javax.faces.FacesException;
 import javax.faces.application.StateManager;
-import javax.faces.application.ViewHandler;
-import javax.faces.component.ContextCallback;
-import javax.faces.component.NamingContainer;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.context.ResponseWriterWrapper;
@@ -27,6 +20,7 @@ import javax.faces.context.ResponseWriterWrapper;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.FactoryFinder;
+import javax.faces.event.PhaseId;
 import javax.faces.render.ResponseStateManager;
 
 
@@ -180,7 +174,17 @@ public class AsyncResponse {
     public void setRenderSubtrees(List<String> renderSubtrees) {
 
         this.renderSubtrees = renderSubtrees;
-    }    
+    }
+    
+    public PhaseId getLastPhaseId(FacesContext context) {
+        PhaseId result = PhaseId.INVOKE_APPLICATION;
+        Map<String,String> headerMap = context.getExternalContext().getRequestHeaderMap();
+        if (headerMap.containsKey(AjaxLifecycle.RENDER_HEADER)) {
+            result = PhaseId.RENDER_RESPONSE;
+        }
+        
+        return result;
+    }
 
     private static ResponseWriter setupResponseWriter(FacesContext context) {
         // set up the ResponseWriter

@@ -10,11 +10,9 @@ new Ajax.InPlaceEditor(widget.uuid, widget.service,
 	      this.ajaxOptions.requestHeaders = 
 		  this.ajaxOptions.requestHeaders || [];
 	      this.ajaxOptions.requestHeaders.push(gPartial);
-	      this.ajaxOptions.requestHeaders.push("true");
+	      this.ajaxOptions.requestHeaders.push("values");
 	      this.ajaxOptions.requestHeaders.push(gRender);
 	      this.ajaxOptions.requestHeaders.push(this.widget.uuid);
-	      this.ajaxOptions.requestHeaders.push(gRunthru);
-	      this.ajaxOptions.requestHeaders.push("UPDATE_MODEL_VALUES");
 	      
 	      var stateElements = window.document.getElementsByName(gViewState);
 	      var stateValue = encodeURIComponent(stateElements[0].value);
@@ -33,13 +31,14 @@ new Ajax.InPlaceEditor(widget.uuid, widget.service,
 	    }
 
 	    var xml = transport.responseXML;
-	    var state = state || xml.getElementsByTagName('async-response')[0].getAttribute('state');
-	    var update = xml.getElementsByTagName('update');
-	    var str;
-	    str = update[0].firstChild;
+	    var components = xml.getElementsByTagName('components')[0];
+	    var render = components.getElementsByTagName('render');
+	    var str = render[0].firstChild.firstChild;
 	    str = str.text || str.data;
 	    element.removeChild(element.firstChild);
 	    element.innerHTML = str;
+
+	    var state = state || xml.getElementsByTagName('state')[0].firstChild;
 	    if (state) {
 		var hf = $(gViewState);
 		if (hf) {

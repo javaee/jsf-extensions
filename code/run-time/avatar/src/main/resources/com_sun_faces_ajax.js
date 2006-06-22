@@ -28,12 +28,10 @@
  */
 
 var g_zones = [];
-var gFacesPrefix = "com.sun.faces.";
-var gFacesLifecycle = gFacesPrefix + "lifecycle.";
+var gFacesPrefix = "com.sun.faces.avatar.";
 var gPartial = gFacesPrefix + "Partial";
-var gExecute = gFacesLifecycle + "Execute";
-var gRender = gFacesLifecycle + "Render";
-var gRunthru = gFacesLifecycle + "RunThru";
+var gExecute = gFacesPrefix + "Execute";
+var gRender = gFacesPrefix + "Render";
 var gViewState = "javax.faces.ViewState";
 var gGlobalScope = this;
 
@@ -514,11 +512,12 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
   },
   renderView: function() {
      var xml = this.transport.responseXML;
-     var encode = xml.getElementsByTagName('render');
+     var components = xml.getElementsByTagName('components')[0];
+     var render = components.getElementsByTagName('render');
      var id, content, markup, str;
-     for (var i = 0; i < encode.length; i++) {
-	 id = encode[i].getAttribute('id');
-	 content = encode[i].firstChild;
+     for (var i = 0; i < render.length; i++) {
+	 id = render[i].getAttribute('id');
+	 content = render[i].firstChild.firstChild;
 	 markup = content.text || content.data;
 	 str = markup.stripScripts();
 	 if (typeof gGlobalScope.postInstallHook != 'undefined') {

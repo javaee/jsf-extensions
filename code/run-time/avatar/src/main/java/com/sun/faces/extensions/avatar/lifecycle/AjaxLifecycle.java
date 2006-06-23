@@ -9,7 +9,7 @@
 
 package com.sun.faces.extensions.avatar.lifecycle;
 
-import com.sun.faces.extensions.common.util.Util;
+import com.sun.faces.extensions.avatar.event.EventCallback;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -29,7 +29,6 @@ import javax.faces.lifecycle.Lifecycle;
 import com.sun.faces.lifecycle.RestoreViewPhase;
 import java.util.Map;
 import javax.faces.application.FacesMessage;
-import javax.faces.component.ValueHolder;
 import javax.faces.convert.ConverterException;
 import javax.servlet.http.HttpServletResponse;
 
@@ -97,7 +96,7 @@ public class AjaxLifecycle extends Lifecycle {
         return result;
     }
     
-    private PhaseId runLifecycleOnProcessingContexts(PhaseEvent e) {
+    private PhaseId runLifecycleOnProcessingContexts(final PhaseEvent e) {
         FacesContext context = e.getFacesContext();
         UIViewRoot root = context.getViewRoot();
         List<String> subtrees = getSubtreesForEvent(e);
@@ -163,6 +162,8 @@ public class AjaxLifecycle extends Lifecycle {
         }
         List<PhaseEvent> phaseEvents = null;
         AsyncResponse async = AsyncResponse.getInstance();
+        EventCallback cb = null;
+
         
         restoreView.execute(context);
 
@@ -176,6 +177,9 @@ public class AjaxLifecycle extends Lifecycle {
         try {
             for (PhaseEvent cur : phaseEvents) {
                 runLifecycleOnProcessingContexts(cur);
+                if (null != (cb = AsyncResponse.getEventCallbackForPhase(cur))) {
+                    cb.invoke(context);
+                }
             }
         }
         finally {
@@ -200,6 +204,7 @@ public class AjaxLifecycle extends Lifecycle {
         
         UIViewRoot root = context.getViewRoot();
         ResponseWriter writer = null;
+        EventCallback cb = null;
         
         try {
             writer = async.getResponseWriter();
@@ -214,7 +219,13 @@ public class AjaxLifecycle extends Lifecycle {
             writer.startElement("partial-response", root);
 
             writer.startElement("components", root);
-            runLifecycleOnProcessingContexts(new PhaseEvent(context, PhaseId.RENDER_RESPONSE, this));
+            PhaseEvent event = new PhaseEvent(context, PhaseId.RENDER_RESPONSE, this);
+            runLifecycleOnProcessingContexts(event);
+            
+            if (null != (cb = AsyncResponse.getEventCallbackForPhase(event))) {
+                cb.invoke(context);
+            }
+
             writer.endElement("components");
             
             writer.startElement("state", root);
@@ -248,5 +259,6 @@ public class AjaxLifecycle extends Lifecycle {
     public static final String PARTIAL_HEADER= FACES_PREFIX + "partial";
     public static final String EXECUTE_HEADER = FACES_PREFIX + "execute";
     public static final String RENDER_HEADER= FACES_PREFIX + "render";
+    public static final String EVENT_HEADER= FACES_PREFIX + "event";
     
 }

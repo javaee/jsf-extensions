@@ -62,6 +62,11 @@
       <version>0.1-SNAPSHOT</version>
     </dependency>
     <dependency>
+      <groupId>com.sun.jsf-extensions</groupId>
+      <artifactId>jsf-extensions-common</artifactId>
+      <version>0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
       <groupId>portlet-api</groupId>
       <artifactId>portlet-api</artifactId>
       <version>1.0</version>

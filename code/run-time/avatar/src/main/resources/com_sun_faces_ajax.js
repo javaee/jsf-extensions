@@ -32,6 +32,7 @@ var gFacesPrefix = "com.sun.faces.avatar.";
 var gPartial = gFacesPrefix + "Partial";
 var gExecute = gFacesPrefix + "Execute";
 var gRender = gFacesPrefix + "Render";
+var gEvent = gFacesPrefix + "Event";
 var gViewState = "javax.faces.ViewState";
 var gGlobalScope = this;
 
@@ -464,7 +465,7 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
 		if (this.options.immediate) {
 			sourceId += ",immediate";
 		}
-		this.options.requestHeaders.push('com.sun.faces.Event');
+		this.options.requestHeaders.push(gEvent);
 		this.options.requestHeaders.push(sourceId);
 	}
 

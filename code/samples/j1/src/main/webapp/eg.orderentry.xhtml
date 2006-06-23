@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:e="http://www.enverio.com/jsf"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:d="http://java.sun.com/jsf/facelets/demo"
+	  xmlns:bp="http://java.sun.com/blueprints/ui"
+	  xmlns:t="http://myfaces.apache.org/tomahawk">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>Facelets JavaOne Demo</title>
+</head>
+
+<body>
+
+<ui:composition template="_template.xhtml">
+<ui:define name="body">
+
+<div class="top">
+	<a href="#" onclick="if (Element.visible('dtlWrapper')) { new Effect.SlideUp('dtlWrapper'); $('dtl_btn').src = 'style/j1/basket_add.png'; } else { new Effect.SlideDown('dtlWrapper'); $('dtl_btn').src = 'style/j1/basket_delete.png'; } return false;"><img id="dtl_btn" src="style/j1/basket_add.png" /></a>
+	Order Total: <h:outputText id="orderTotal" value="#{order.total}" binding="#{orderEntry.total}"><f:convertNumber type="currency"/></h:outputText>
+</div>
+<div id="dtlWrapper" style="display: none; border: 1px solid #CCC; border-top: 0;">
+
+<h:dataTable id="details" binding="#{orderEntry.header}" value="#{order.lines}" var="ln" style="width: 100%">
+	<h:column>
+		<h:commandButton action="#{orderEntry.deleteLine}" class="delete" image="style/j1/delete.png"
+						 onclick="new Faces.Event(this, { encode: 'details, orderTotal' }); return false;"/>
+	</h:column>
+	<h:column>#{ln.quantity}</h:column>
+	<h:column>#{ln.uom}</h:column>
+	<h:column>#{ln.product.description}</h:column>
+	<h:column>#{ln.product.manufacturer}</h:column>
+	<h:column><h:outputText value="#{ln.total}"><f:convertNumber type="currency"/></h:outputText></h:column>
+</h:dataTable>
+
+</div>
+
+
+
+<t:div id="catalog" style="text-align: center; margin: 25px 0;">
+
+<h:dataTable id="datagrid" binding="#{orderEntry.data}" value="#{company.catalog.products}" var="prd" style="width: 100%;" rows="10">
+	<h:column>
+		<f:facet name="header">Id</f:facet>
+		#{prd.id}
+	</h:column>
+	<h:column>
+		<f:facet name="header">Description</f:facet>
+		#{prd.description}
+	</h:column>
+	<h:column>
+		<f:facet name="header">Mfr</f:facet>
+		#{prd.manufacturer}
+	</h:column>
+	<h:column>
+		<f:facet name="header">UOM</f:facet>
+		<h:selectOneMenu id="uom" binding="#{orderEntry.uom}">
+			<f:selectItems value="#{e:selectUom(prd.uoms)}"/>
+		</h:selectOneMenu>
+	</h:column>
+	<h:column>
+		<f:facet name="header">Qty</f:facet>
+		<h:inputText id="qty" binding="#{orderEntry.quantity}" size="2" converter="javax.faces.Number"/>
+	</h:column>
+	<h:column>
+		<h:commandButton class="orange" value="Add Item" action="#{orderEntry.addProduct}" onclick="new Faces.Event(this); return false;"/>
+	</h:column>
+</h:dataTable>
+
+
+<div id="datascroller" style="margin-top: 10px;">
+	<bp:scroller for="datagrid" actionListener="#{orderEntry.scrollDataGrid}" navFacetOrientation="EAST">
+		  <f:facet name="next"><img src="style/j1/control_end.gif"/></f:facet>
+		  <f:facet name="previous"><img src="style/j1/control_start.gif"/></f:facet>
+	</bp:scroller>
+	<script type="text/javascript">
+	document.forms[0].submit = function() {};
+	var a = $('datascroller').getElementsByTagName('a');
+	$A(a).each(function(e) { new Faces.Command(e, 'mousedown', { encode: 'catalog' }); });
+	</script>
+</div>
+</t:div>
+
+</ui:define>
+</ui:composition>
+
+</body>
+</html>

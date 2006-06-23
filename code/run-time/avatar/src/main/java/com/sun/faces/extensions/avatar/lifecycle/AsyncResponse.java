@@ -20,6 +20,7 @@ import javax.faces.context.ResponseWriterWrapper;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.FactoryFinder;
+import javax.faces.component.UIComponent;
 import javax.faces.event.PhaseId;
 import javax.faces.render.ResponseStateManager;
 
@@ -28,10 +29,9 @@ public class AsyncResponse {
     
     private final static ThreadLocal<AsyncResponse> Instance = new ThreadLocal<AsyncResponse>();
     
-    private final Map<String,String> encoded = new HashMap<String, String>();
     private String viewState;
 
-    public AsyncResponse() {
+    private AsyncResponse() {
         super();
     }
     
@@ -184,6 +184,13 @@ public class AsyncResponse {
         }
         
         return result;
+    }
+    
+    public static void addToRenderList(UIComponent component) {
+        AsyncResponse async = AsyncResponse.getInstance();
+        FacesContext context = FacesContext.getCurrentInstance();
+        List<String> list = async.getRenderSubtrees();
+        list.add(component.getClientId(context));
     }
 
     private static ResponseWriter setupResponseWriter(FacesContext context) {

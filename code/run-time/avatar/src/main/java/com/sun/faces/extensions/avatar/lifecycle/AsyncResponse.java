@@ -1,5 +1,6 @@
 package com.sun.faces.extensions.avatar.lifecycle;
 
+import com.sun.faces.extensions.avatar.application.DeferredStateManager;
 import com.sun.faces.extensions.avatar.event.EventCallback;
 import com.sun.faces.extensions.common.util.FastWriter;
 import java.io.IOException;
@@ -10,9 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
-import javax.faces.FacesException;
-import javax.faces.application.StateManager;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.context.ResponseWriterWrapper;
@@ -21,7 +19,7 @@ import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.FactoryFinder;
 import javax.faces.component.UIComponent;
-import javax.faces.event.PhaseEvent;
+import javax.faces.context.ResponseStream;
 import javax.faces.event.PhaseId;
 import javax.faces.render.ResponseStateManager;
 
@@ -65,46 +63,36 @@ public class AsyncResponse {
         this.viewState = output;
     }
     
-    public String getViewState() {
+    public String getViewState(FacesContext context) {
         if (null == this.viewState) {
-            FacesContext faces = FacesContext.getCurrentInstance();
-            ResponseWriter oldWriter = faces.getResponseWriter();
-            try {
-                FastWriter fw = new FastWriter(256);
-                
-                // write state
-                StateCapture sc = new StateCapture(oldWriter.cloneWithWriter(fw), fw);
-                faces.setResponseWriter(sc);
-                StateManager sm = faces.getApplication().getStateManager();
-                Object stateObj = sm.saveSerializedView(faces);
-                sm.writeState(faces,
-                        (StateManager.SerializedView) stateObj);
-                this.viewState = sc.getState();
-                
-            } 
-            catch (IOException ioe) {
-                
-            }
-            catch (FacesException e) {
-                if (e.getCause() instanceof IOException) {
-                    
-                } else {
-                    throw e;
+            Object stateManagerObj = null;
+            if (null != (stateManagerObj = context.getApplication().getStateManager()) &&
+                stateManagerObj instanceof DeferredStateManager) {
+                DeferredStateManager dsm = (DeferredStateManager) stateManagerObj;
+                ResponseWriter rw = null;
+                try {
+                    rw = this.getResponseWriter();
+                    FastWriter fw = new FastWriter(256);
+                    StateCapture sc = new StateCapture(rw.cloneWithWriter(fw), fw);
+                    context.setResponseWriter(sc);
+                    Object stateObj = dsm.getWrapped().saveView(context);
+                    dsm.getWrapped().writeState(context, stateObj);
+                    this.viewState = sc.getState();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
                 }
-            } finally {
-                faces.setResponseWriter(oldWriter);
+                finally {
+                    context.setResponseWriter(rw);
+                }                
             }
-            
-        }
-        
-        
+        }        
         return this.viewState;
     }
     
     public static ResponseWriter getResponseWriter() throws IOException {
         FacesContext context = FacesContext.getCurrentInstance();
         ResponseWriter rw = context.getResponseWriter();
-        if (rw == null) {
+        if (rw == null || rw instanceof NoOpResponseWriter) {
             rw = setupResponseWriter(context);
         }
         return rw;
@@ -154,7 +142,7 @@ public class AsyncResponse {
         if (null != executeSubtrees) {
             return executeSubtrees;
         }
-        executeSubtrees = populateListFromHeader(AjaxLifecycle.EXECUTE_HEADER);
+        executeSubtrees = populateListFromHeader(EXECUTE_HEADER);
         return this.executeSubtrees;
     }
 
@@ -168,7 +156,7 @@ public class AsyncResponse {
         if (null != renderSubtrees) {
             return renderSubtrees;
         }
-        renderSubtrees = populateListFromHeader(AjaxLifecycle.RENDER_HEADER);
+        renderSubtrees = populateListFromHeader(RENDER_HEADER);
         return this.renderSubtrees;
     }
 
@@ -180,7 +168,7 @@ public class AsyncResponse {
     public PhaseId getLastPhaseId(FacesContext context) {
         PhaseId result = PhaseId.RENDER_RESPONSE;
         Map<String,String> headerMap = context.getExternalContext().getRequestHeaderMap();
-        if (headerMap.containsKey(AjaxLifecycle.EXECUTE_HEADER)) {
+        if (headerMap.containsKey(EXECUTE_HEADER)) {
             result = PhaseId.INVOKE_APPLICATION;
         }
         
@@ -194,13 +182,13 @@ public class AsyncResponse {
         list.add(component.getClientId(context));
     }
     
-    public static EventCallback getEventCallbackForPhase(PhaseEvent e) {
-        Map<String, String> p = e.getFacesContext().getExternalContext()
-        .getRequestHeaderMap();
+    public static EventCallback getEventCallbackForPhase(PhaseId curPhase) {
+        Map<String, String> p = 
+                FacesContext.getCurrentInstance().getExternalContext()
+                .getRequestHeaderMap();
         EventCallback result = null;
-        PhaseId curPhase = e.getPhaseId();
 
-        String de = p.get(AjaxLifecycle.EVENT_HEADER);
+        String de = p.get(EVENT_HEADER);
         if (de != null) {
             String[] ep = de.split(",");
             String clientId = ep[0];
@@ -221,7 +209,7 @@ public class AsyncResponse {
     private static ResponseWriter setupResponseWriter(FacesContext context) {
         // set up the ResponseWriter
         ResponseWriter responseWriter = context.getResponseWriter();
-        if (null == responseWriter) {
+        if (null == responseWriter || responseWriter instanceof NoOpResponseWriter) {
             RenderKitFactory renderFactory = (RenderKitFactory)
             FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
             RenderKit renderKit =
@@ -261,6 +249,70 @@ public class AsyncResponse {
         return responseWriter;
     }
     
+    /**
+     * <p>Return <code>true</code> if and only if the request headers include
+     * an entry for {@link #PARTIAL_HEADER}.
+     */
+    
+    public static boolean isAjaxRequest() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        Map<String, String> p = context.getExternalContext().getRequestHeaderMap();
+        boolean result = false;
+        result = p.containsKey(PARTIAL_HEADER);
+        return result;
+    }
+    
+    /**
+     * <p>Return <code>true</code> if and only if the request headers 
+     * <b>do not</b> include
+     * an entry for {@link #SUPPRESS_XML_HEADER}.
+     */
+
+    public static boolean isRenderXML() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        Map<String, String> p = context.getExternalContext().getRequestHeaderMap();
+        boolean result = false;
+        result = p.containsKey(SUPPRESS_XML_HEADER);
+        return !result;
+    }
+    
+    private ResponseWriter origWriter = null;
+    private ResponseStream origStream = null;
+    
+    /**
+     * <p>Called from {@link AjaxLifecycle#render}, this method replaces
+     * the <code>ResponseWriter</code> and <code>ResponseStream</code> with 
+     * no-op instances.</p>
+     */
+    
+    void installNoOpResponseClasses(FacesContext context) {
+        origWriter = context.getResponseWriter();
+        context.setResponseWriter(new NoOpResponseWriter());
+        origStream = context.getResponseStream();
+        context.setResponseStream(new NoOpResponseStream());
+    }
+    
+    /**
+     * <p>Called from {@link AjaxLifecycle#render}, this method replaces
+     * the <code>ResponseWriter</code> and <code>ResponseStream</code> with 
+     * their original instances.</p>
+     */
+    
+    void removeNoOpResponseClasses(FacesContext context) {
+        if (null != origWriter) {
+            context.setResponseWriter(origWriter);
+        }
+        if (null != origStream) {
+            context.setResponseStream(origStream);
+        }
+    }
+    
+    public static final String FACES_PREFIX = "com.sun.faces.avatar.";
+    public static final String PARTIAL_HEADER= FACES_PREFIX + "partial";
+    public static final String SUPPRESS_XML_HEADER= FACES_PREFIX + "suppressxml";
+    public static final String EXECUTE_HEADER = FACES_PREFIX + "execute";
+    public static final String RENDER_HEADER= FACES_PREFIX + "render";
+    public static final String EVENT_HEADER= FACES_PREFIX + "event";
     
     private static class StateCapture extends ResponseWriterWrapper {
         
@@ -305,5 +357,89 @@ public class AsyncResponse {
         
     }
     
+   private static class NoOpResponseWriter extends ResponseWriter {
+        
+        /**
+         * <p>We take the parent just so we can use <code>ResponseWriterWrapper</code>.</p>
+         */ 
+        private NoOpResponseWriter() {
+        }
+                
+        public void write(String str) throws IOException {
+        }
 
+        public void endElement(String string) throws IOException {
+        }
+
+        public void writeComment(Object object) throws IOException {
+        }
+
+        public void write(int c) throws IOException {
+        }
+
+        public void write(char[] cbuf) throws IOException {
+        }
+
+        public void startElement(String string, UIComponent uIComponent) throws IOException {
+        }
+
+        public void writeText(Object text, UIComponent component, String property) throws IOException {
+        }
+
+        public void writeText(Object object, String string) throws IOException {
+        }
+
+        public void writeText(char[] c, int i, int i0) throws IOException {
+        }
+
+        public void write(char[] cbuf, int off, int len) throws IOException {
+        }
+
+        public void write(String str, int off, int len) throws IOException {
+        }
+
+        public void writeURIAttribute(String string, Object object, String string0) throws IOException {
+        }
+
+        public void writeAttribute(String string, Object object, String string0) throws IOException {
+        }
+
+        public void close() throws IOException {
+        }
+
+        public void endDocument() throws IOException {
+        }
+
+        public void startDocument() throws IOException {
+        }
+
+        public ResponseWriter cloneWithWriter(Writer writer) {
+            return new NoOpResponseWriter();
+        }
+
+        public String getContentType() {
+            return "";
+        }
+
+        public String getCharacterEncoding() {
+            return "";
+        }
+
+        public void flush() throws IOException {
+        }
+
+    }
+    
+    private static class NoOpResponseStream extends ResponseStream {
+        public void write(byte[] b) throws IOException {
+        }
+
+        public void write(int b) throws IOException {
+        }
+
+        public void write(byte[] b, int off, int len) throws IOException {
+        }
+    }
+    
+    
 }

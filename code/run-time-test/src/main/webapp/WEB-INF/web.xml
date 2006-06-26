@@ -51,7 +51,7 @@ $Id: web.xml,v 1.2 2005/12/23 19:17:05 edburns Exp $ -->
     <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
     <init-param>
       <param-name>javax.faces.LIFECYCLE_ID</param-name>
-      <param-value>com.sun.faces.lifecycle.AJAX</param-value>
+      <param-value>com.sun.faces.lifecycle.PARTIAL</param-value>
     </init-param>
     <load-on-startup>1</load-on-startup>
   </servlet>

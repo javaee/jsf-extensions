@@ -24,8 +24,8 @@ public class ExtensionsLifecycleFactoryImpl extends LifecycleFactory {
     /** Creates a new instance of ExtensionsLifecycleFactoryImpl */
     public ExtensionsLifecycleFactoryImpl(LifecycleFactory parent) {
         this.parent = parent;
-        this.parent.addLifecycle("com.sun.faces.lifecycle.AJAX",
-                new AjaxLifecycle(this.parent.getLifecycle("DEFAULT")));
+        this.parent.addLifecycle("com.sun.faces.lifecycle.PARTIAL",
+                new PartialTraversalLifecycle(this.parent.getLifecycle("DEFAULT")));
     }
 
     public Lifecycle getLifecycle(String string) {

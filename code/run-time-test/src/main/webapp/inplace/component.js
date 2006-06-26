@@ -13,6 +13,8 @@ new Ajax.InPlaceEditor(widget.uuid, widget.service,
 	      this.ajaxOptions.requestHeaders.push("values");
 	      this.ajaxOptions.requestHeaders.push(gRender);
 	      this.ajaxOptions.requestHeaders.push(this.widget.uuid);
+	      this.ajaxOptions.requestHeaders.push(gExecute);
+	      this.ajaxOptions.requestHeaders.push(this.widget.uuid);
 	      
 	      var stateElements = window.document.getElementsByName(gViewState);
 	      var stateValue = encodeURIComponent(stateElements[0].value);

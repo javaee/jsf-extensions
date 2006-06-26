@@ -26,11 +26,22 @@
     xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
     version="1.2">
 
+    <application>
+      <state-manager>com.sun.faces.extensions.avatar.application.DeferredStateManager</state-manager>
+    </application>
+
     <factory>
       <lifecycle-factory>com.sun.faces.extensions.avatar.lifecycle.ExtensionsLifecycleFactoryImpl</lifecycle-factory>
     </factory>
 
-    <!-- Component elements -->
+    <component>
+        <component-type>javax.faces.ViewRoot</component-type>
+        <component-class>com.sun.faces.extensions.avatar.components.PartialTraversalViewRoot</component-class>
+        <component-extension>
+            <component-family>javax.faces.ViewRoot</component-family>
+        </component-extension>
+    </component>
+
     <component>
         <component-type>com.sun.faces.AjaxZone</component-type>
         <component-class>com.sun.faces.extensions.avatar.components.AjaxZone</component-class>

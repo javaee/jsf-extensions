@@ -97,6 +97,7 @@
          <configuration>
            <minmemory>128m</minmemory>
            <maxmemory>512</maxmemory>
+           <overview>${project.build.sourceDirectory}/overview.html</overview>
          </configuration>
        </plugin>
        <plugin>

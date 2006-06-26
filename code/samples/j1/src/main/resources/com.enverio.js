@@ -9,6 +9,7 @@ Object.extend(Object.extend(Enverio.Autocompleter.prototype, Autocompleter.Base.
 		      this.options.onComplete    = this.onComplete.bind(this);
 		      this.options.defaultParams = this.options.parameters;
 		      this.options.event = 'suggest';
+		      this.options.suppressXML = true;
   },
 
   getUpdatedChoices: function() {
@@ -16,7 +17,7 @@ Object.extend(Object.extend(Enverio.Autocompleter.prototype, Autocompleter.Base.
       encodeURIComponent(this.getToken());
 
     this.options.parameters = this.options.callback ?
-      this.options.callback(this.element, entry) : entry;
+	this.options.callback(this.element, entry) : entry;
 
     new Faces.Event(this.element, this.options);
   },

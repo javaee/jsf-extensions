@@ -33,6 +33,7 @@ var gPartial = gFacesPrefix + "Partial";
 var gExecute = gFacesPrefix + "Execute";
 var gRender = gFacesPrefix + "Render";
 var gEvent = gFacesPrefix + "Event";
+var gSuppressXML = gFacesPrefix + "SuppressXML";
 var gViewState = "javax.faces.ViewState";
 var gGlobalScope = this;
 
@@ -478,6 +479,11 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
 		this.options.requestHeaders.push(gRender);
 		this.options.requestHeaders.push(Faces.toArray(this.options.render,',').join(','));
 	}
+
+	if (this.options.suppressXML) {
+	    this.options.requestHeaders.push(gSuppressXML);
+	    this.options.requestHeaders.push("true");
+	}
 	
 	// add update
 	if (this.options.update) {
@@ -513,6 +519,9 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
   },
   renderView: function() {
      var xml = this.transport.responseXML;
+     if (null == xml || typeof xml == 'undefined') {
+	 return;
+     }    
      var components = xml.getElementsByTagName('components')[0];
      var render = components.getElementsByTagName('render');
      var id, content, markup, str;

@@ -29,7 +29,7 @@
 
 package com.sun.faces.extensions.avatar.renderkit;
 
-import com.sun.faces.extensions.avatar.lifecycle.AjaxLifecycle;
+import com.sun.faces.extensions.avatar.lifecycle.AsyncResponse;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
@@ -298,7 +298,7 @@ public class AjaxZoneRenderer extends Renderer {
     private boolean isAjaxRequest(FacesContext context, UIComponent component) {
         Map<String, String> requestMap = 
                 context.getExternalContext().getRequestHeaderMap();
-        return requestMap.containsKey(AjaxLifecycle.PARTIAL_HEADER);
+        return requestMap.containsKey(AsyncResponse.PARTIAL_HEADER);
     }
     
     private transient XhtmlHelper xHtmlHelper = null;

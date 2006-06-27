@@ -85,6 +85,7 @@ public class PartialTraversalLifecycle extends Lifecycle {
         UIViewRoot root = context.getViewRoot();
         ResponseWriter writer = null;
         boolean writeXML = AsyncResponse.isRenderXML();
+        String state = null;
 
         try {
             async.installNoOpResponseClasses(context);
@@ -95,10 +96,14 @@ public class PartialTraversalLifecycle extends Lifecycle {
                 writer = async.getResponseWriter();
 
                 writer.startElement("state", root);
-                writer.write("<![CDATA[" + async.getViewState(context) + "]]>");
+            }
+            state = async.getViewState(context);
+            if (writeXML) {
+                writer.write("<![CDATA[" + state + "]]>");
                 writer.endElement("state");
                 writer.endElement("partial-response");
             }
+
         }
         catch (IOException ioe) {
             // PENDING edburns

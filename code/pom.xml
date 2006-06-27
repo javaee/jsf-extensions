@@ -15,20 +15,37 @@
     <url>https://jsf-extensions.dev.java.net/source/browse/jsf-extensions/</url>
   </scm>
 
-  <modules>
-    <module>maven</module>
-    <module>run-time/common</module>
-    <module>run-time/flash</module>
-    <module>run-time/avatar</module>
-    <module>test-time</module>
-    <module>run-time-test</module>
-    <!-- <module>samples/cardemo</module> -->
-    <module>samples/j1</module>
-  </modules>
-
   <build>
     <defaultGoal>install</defaultGoal>
   </build>
+
+  <profiles>
+    <profile>
+      <id>default</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <modules>
+	<module>maven</module>
+	<module>run-time/common</module>
+	<module>run-time/flash</module>
+	<module>run-time/avatar</module>
+	<module>test-time</module>
+	<module>run-time-test</module>
+	<!-- <module>samples/cardemo</module> -->
+	<module>samples/j1</module>
+      </modules>
+    </profile>
+    <profile>
+      <id>jsf-j1</id>
+      <modules>
+	<module>maven</module>
+	<module>run-time/avatar</module>
+	<module>samples/j1</module>
+      </modules>
+    </profile>
+
+  </profiles>
 
 </project>
 

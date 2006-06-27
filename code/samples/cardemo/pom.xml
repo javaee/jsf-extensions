@@ -51,20 +51,14 @@
 	 </executions>
        </plugin>
        <plugin>
+         <groupId>org.apache.maven.plugins</groupId>
          <artifactId>maven-javadoc-plugin</artifactId>
-         <executions>
-	   <execution>
-             <id>javadoc</id>
-	     <phase>generate-resources</phase>
-	     <configuration>
-               <destDir>target/${project.build.finalName}/javadocs</destDir>
-               <bottom />
-	     </configuration>
-	     <goals>
-	       <goal>javadoc</goal>
-	     </goals>
-	   </execution>
-         </executions>
+         <configuration>
+           <minmemory>128m</minmemory>
+           <maxmemory>512</maxmemory>
+           <destDir>target/${project.build.finalName}/javadocs</destDir>
+           <bottom />
+         </configuration>
       </plugin>
     </plugins>
   </build>

@@ -126,18 +126,18 @@ public class PartialTraversalViewRoot extends UIViewRoot implements Serializable
     }
     
     public void processDecodes(FacesContext context) {
-        if (!AsyncResponse.isAjaxRequest() ||
-            !invokeContextCallbackOnSubtrees(context, 
-                new PhaseAwareContextCallback(PhaseId.APPLY_REQUEST_VALUES))) {
+        EventCallback cb = null;
+        if (!AsyncResponse.isAjaxRequest()) {
             super.processDecodes(context);
             return;
-        }     
-        EventCallback cb = null;
-        if (null != (cb = 
-            AsyncResponse.getEventCallbackForPhase(PhaseId.APPLY_REQUEST_VALUES))) {
+        }
+        invokeContextCallbackOnSubtrees(context,
+                new PhaseAwareContextCallback(PhaseId.APPLY_REQUEST_VALUES));
+        if (null != (cb =
+                AsyncResponse.getEventCallbackForPhase(PhaseId.APPLY_REQUEST_VALUES))) {
             cb.invoke(context);
         }
-        
+
     }
 
     public void processValidators(FacesContext context) {

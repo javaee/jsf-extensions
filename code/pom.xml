@@ -44,6 +44,15 @@
 	<module>samples/j1</module>
       </modules>
     </profile>
+    <profile>
+      <id>samples</id>
+      <modules>
+	<module>maven</module>
+	<module>run-time/avatar</module>
+	<module>samples/j1</module>
+	<module>run-time-test</module>
+      </modules>
+    </profile>
 
   </profiles>
 

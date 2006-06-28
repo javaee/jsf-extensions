@@ -203,8 +203,22 @@ public class PartialTraversalViewRoot extends UIViewRoot implements Serializable
     private boolean invokeContextCallbackOnSubtrees(FacesContext context, 
             PhaseAwareContextCallback cb) {
         AsyncResponse async = AsyncResponse.getInstance();
-        List<String> subtrees = cb.getPhaseId() == PhaseId.RENDER_RESPONSE ? 
-            async.getRenderSubtrees() : async.getExecuteSubtrees();
+        List<String> subtrees = null;
+        
+        // If this callback is intended for RENDER_RESPONSE, use
+        // async.getRenderSubtrees().  Otherwise, use async.getExecuteSubtrees().
+        // If async.getExecuteSubtrees() is empty, use async.getRenderSubtrees().
+        
+        if (cb.getPhaseId() == PhaseId.RENDER_RESPONSE) {
+            subtrees = async.getRenderSubtrees();
+        }
+        else {
+            subtrees = async.getExecuteSubtrees();
+            if (subtrees.isEmpty()) {
+                subtrees = async.getRenderSubtrees();
+            }
+        }
+        
         boolean result = false;
         
         for (String cur : subtrees) {

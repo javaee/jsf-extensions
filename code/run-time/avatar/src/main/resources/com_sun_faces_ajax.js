@@ -246,19 +246,7 @@ Object.extend(Element, {
 	temp.id = d.id;
 	temp.innerHTML = src;
 
-	 var a = $('form:subview2').getElementsByTagName('a'); 
-	 $A(a).each(function(e) { 
-			var text = e.firstChild.nodeValue;
-			var foo = text;
-		    });
-
 	parent.replaceChild(temp.firstChild,d);
-
-	 a = $('form:subview2').getElementsByTagName('a'); 
-	 $A(a).each(function(e) { 
-			var text = e.firstChild.nodeValue;
-			var foo = text;
-		    });
 
   },
   serialize: function(e) {

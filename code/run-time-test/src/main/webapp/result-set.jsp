@@ -21,10 +21,10 @@
 
 <h:form id="form">  
 
+  <jsfExt:scripts />
+
 Rendered via Faces components:
 
-<jsfExt:ajaxZone id="subview1" style="position: relative;" 
-                 postInstallHook="postInstallHook">
   <h:dataTable columnClasses="list-column-center,list-column-center,
                                list-column-center, list-column-center"
                   headerClass="list-header"
@@ -69,11 +69,7 @@ Rendered via Faces components:
 
   </h:dataTable>
 
-</div>
-</div>
-</jsfExt:ajaxZone>
-
-<jsfExt:ajaxZone id="subview2">
+<h:panelGroup id="subview2">
   <d:scroller id="scroller" navFacetOrientation="NORTH" for="table" 
           actionListener="#{ResultSetBean.processScrollEvent}">
       <f:facet name="header">
@@ -116,7 +112,7 @@ Rendered via Faces components:
       new Faces.Command(e, 'mousedown', { render: 'form:table,form:subview2' }); 
     }); 
   </script>
-  </jsfExt:ajaxZone>
+  </h:panelGroup>
 </h:form>
 
 </body>

@@ -17,6 +17,23 @@
   <tlib-version>0.03</tlib-version>
   <short-name>avatar</short-name>
   <uri>http://java.sun.com/jsf/extensions/avatar</uri>
+
+  <tag>
+    <name>scripts</name>
+    <tag-class>com.sun.faces.extensions.avatar.taglib.ScriptsTag</tag-class>
+    <body-content>JSP</body-content>
+    <attribute>
+        <description>
+          <![CDATA[
+
+          <p>JSF Component Id</p>
+
+          ]]>
+
+        </description>
+      <name>id</name>
+    </attribute>
+  </tag>
   
   <tag>
     <name>ajaxZone</name>

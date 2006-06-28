@@ -127,15 +127,19 @@ public class PartialTraversalViewRoot extends UIViewRoot implements Serializable
     
     public void processDecodes(FacesContext context) {
         EventCallback cb = null;
+        boolean invokedCallback = false;
         if (!AsyncResponse.isAjaxRequest()) {
             super.processDecodes(context);
             return;
         }
-        invokeContextCallbackOnSubtrees(context,
+        invokedCallback = invokeContextCallbackOnSubtrees(context,
                 new PhaseAwareContextCallback(PhaseId.APPLY_REQUEST_VALUES));
         if (null != (cb =
                 AsyncResponse.getEventCallbackForPhase(PhaseId.APPLY_REQUEST_VALUES))) {
             cb.invoke(context);
+        }
+        if (!invokedCallback) {
+            super.processDecodes(context);
         }
 
     }

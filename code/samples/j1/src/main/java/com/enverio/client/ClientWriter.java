@@ -1,5 +1,6 @@
 package com.enverio.client;
 
+import com.sun.faces.extensions.avatar.lifecycle.AsyncResponse;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.HashSet;
@@ -23,7 +24,11 @@ public class ClientWriter extends ResponseWriterWrapper {
     public static ClientWriter getInstance(boolean create) {
         ClientWriter cw = Instance.get();
         if (cw == null && create) {
-            cw = new ClientWriter(FacesContext.getCurrentInstance().getResponseWriter());
+            try {
+                cw = new ClientWriter(AsyncResponse.getInstance().getResponseWriter());
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
             
             Instance.set(cw);
         }
@@ -85,7 +90,8 @@ public class ClientWriter extends ResponseWriterWrapper {
     }
     
     public ClientWriter startScript() throws IOException {
-        this.startScript(null);
+        FacesContext context = FacesContext.getCurrentInstance();
+        this.startScript(context.getViewRoot());
         return this;
     }
     

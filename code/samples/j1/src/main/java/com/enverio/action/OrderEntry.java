@@ -104,12 +104,14 @@ public class OrderEntry implements Serializable {
             AsyncResponse.addToRenderList(this.header);
             
             // optional JS effects
+            /*******
             ClientWriter cw = ClientWriter.getInstance();
-            cw.startScript();
+            cw.startScript(this.total);
             cw.select(this.total, Effect.pulsate());
             cw.select(this.uom, Effect.highlight());
             cw.select(this.quantity, Effect.highlight(), Field.clear());
             cw.endScript();
+             ********/
     }
     
     

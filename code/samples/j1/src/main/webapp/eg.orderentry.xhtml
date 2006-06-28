@@ -26,7 +26,7 @@
 <h:dataTable id="details" binding="#{orderEntry.header}" value="#{order.lines}" var="ln" style="width: 100%">
 	<h:column>
 		<h:commandButton action="#{orderEntry.deleteLine}" class="delete" image="style/j1/delete.png"
-						 onclick="new Faces.Event(this, { encode: 'details, orderTotal' }); return false;"/>
+						 onclick="new Faces.Event(this, { render: 'details, orderTotal' }); return false;"/>
 	</h:column>
 	<h:column>#{ln.quantity}</h:column>
 	<h:column>#{ln.uom}</h:column>
@@ -71,6 +71,7 @@
 
 
 <div id="datascroller" style="margin-top: 10px;">
+<h:panelGroup id="scroller">
 	<bp:scroller for="datagrid" actionListener="#{orderEntry.scrollDataGrid}" navFacetOrientation="EAST">
 		  <f:facet name="next"><img src="style/j1/control_end.gif"/></f:facet>
 		  <f:facet name="previous"><img src="style/j1/control_start.gif"/></f:facet>
@@ -78,8 +79,9 @@
 	<script type="text/javascript">
 	document.forms[0].submit = function() {};
 	var a = $('datascroller').getElementsByTagName('a');
-	$A(a).each(function(e) { new Faces.Command(e, 'mousedown', { encode: 'catalog' }); });
+	$A(a).each(function(e) { new Faces.Command(e, 'mousedown', { render: 'datagrid,scroller' }); });
 	</script>
+</h:panelGroup>
 </div>
 </t:div>
 

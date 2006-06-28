@@ -34,107 +34,107 @@
 	</department>
 	<catalog>
 		<product id="59339" description="40cc Syringe" manufacturer="Flownder Medical">
-			<uom units="BX" price="" quantity="4"/>
-			<uom units="CS" price="" quantity="9"/>
+			<uom units="BX" price="20.08" quantity="4"/>
+			<uom units="CS" price="30.00" quantity="9"/>
 		</product>
 		<product id="45439" description="Latex Surgical Gloves" manufacturer="3M">
-			<uom units="BX" price="" quantity="4"/>
-			<uom units="CS" price="" quantity="2"/>
+			<uom units="BX" price="10.40" quantity="4"/>
+			<uom units="CS" price="5.10" quantity="2"/>
 		</product>
 		<product id="46787" description="Bed Restraint" manufacturer="Mobile Health">
-			<uom units="DZ" price="" quantity="2"/>
-			<uom units="EA" price="" quantity="3"/>
+			<uom units="DZ" price="48.00" quantity="12"/>
+			<uom units="EA" price="4.00" quantity="3"/>
 		</product>
 		<product id="54333" description="Small Cane Tip" manufacturer="Frame Med">
-			<uom units="EA" price="" quantity="1"/>
-			<uom units="PK" price="" quantity="4"/>
+			<uom units="EA" price="2.00" quantity="1"/>
+			<uom units="PK" price="8.00" quantity="4"/>
 		</product>
 		<product id="78799" description="Large Cane Tip" manufacturer="Houler-Rike">
-			<uom units="EA" price="" quantity="5"/>
-			<uom units="PK" price="" quantity="2"/>
+			<uom units="EA" price="3.00" quantity="5"/>
+			<uom units="PK" price="9.00" quantity="2"/>
 		</product>
 		<product id="54787" description="Ice Grip Cane Tip" manufacturer="Houler-Rike">
-			<uom units="EA" price="" quantity="6"/>
-			<uom units="PK" price="" quantity="2"/>
+			<uom units="EA" price="1.00" quantity="6"/>
+			<uom units="PK" price="10.00" quantity="2"/>
 		</product>
 		<product id="54223" description="36&quot; Wood Cane" manufacturer="Destro">
-			<uom units="EA" price="" quantity="8"/>
-			<uom units="PK" price="" quantity="0"/>
+			<uom units="EA" price="30.00" quantity="8"/>
+			<uom units="PK" price="90.00" quantity="0"/>
 		</product>
 		<product id="54988" description="24&quot; Aluminum Cane" manufacturer="Harold">
-			<uom units="EA" price="" quantity="8"/>
-			<uom units="PK" price="" quantity="3"/>
+			<uom units="EA" price="25.00" quantity="8"/>
+			<uom units="PK" price="75.00" quantity="3"/>
 		</product>
 		<product id="59847" description="80cc Syringe" manufacturer="Helm">
-			<uom units="BX" price="" quantity="1"/>
-			<uom units="CS" price="" quantity="4"/>
+			<uom units="BX" price="3.00" quantity="1"/>
+			<uom units="CS" price="30.00" quantity="4"/>
 		</product>
 		<product id="54678" description="Folding Cane" manufacturer="Johnson">
-			<uom units="EA" price="" quantity="8"/>
-			<uom units="PK" price="" quantity="4"/>
+			<uom units="EA" price="30.00" quantity="8"/>
+			<uom units="PK" price="90.00" quantity="4"/>
 		</product>
 		<product id="43322" description="Designer Folding Cane" manufacturer="Martin Medical">
-			<uom units="EA" price="" quantity="2"/>
-			<uom units="PK" price="" quantity="7"/>
+			<uom units="EA" price="35.00" quantity="2"/>
+			<uom units="PK" price="105.00" quantity="7"/>
 		</product>
 		<product id="40998" description="Dual Grip Cane" manufacturer="Warner-Bruce">
-			<uom units="EA" price="" quantity="1"/>
-			<uom units="PK" price="" quantity="3"/>
+			<uom units="EA" price="44.00" quantity="1"/>
+			<uom units="PK" price="132.00" quantity="3"/>
 		</product>
 		<product id="78765" description="Venous Catheter Needle" manufacturer="New Holm">
-			<uom units="BX" price="" quantity="4"/>
-			<uom units="CS" price="" quantity="8"/>
+			<uom units="BX" price="10.00" quantity="4"/>
+			<uom units="CS" price="80.00" quantity="8"/>
 		</product>
 		<product id="86753" description="Insulin Syringe" manufacturer="New Holm">
-			<uom units="BX" price="" quantity="3"/>
-			<uom units="CS" price="" quantity="2"/>
+			<uom units="BX" price="12.00" quantity="3"/>
+			<uom units="CS" price="120.00" quantity="2"/>
 		</product>
 		<product id="53578" description="Tuberculin Syringe" manufacturer="Johnson">
-			<uom units="BX" price="" quantity="4"/>
-			<uom units="CS" price="" quantity="1"/>
+			<uom units="BX" price="11.00" quantity="4"/>
+			<uom units="CS" price="110.00" quantity="1"/>
 		</product>
 		<product id="31432" description="Allergy Syringe" manufacturer="Johnson">
-			<uom units="BX" price="" quantity="9"/>
-			<uom units="CS" price="" quantity="8"/>
+			<uom units="BX" price="8.00" quantity="9"/>
+			<uom units="CS" price="80.00" quantity="8"/>
 		</product>
 		<product id="45423" description="Biopsy Syringe" manufacturer="Helm">
-			<uom units="BX" price="" quantity="5"/>
-			<uom units="CS" price="" quantity="4"/>
+			<uom units="BX" price="13.00" quantity="5"/>
+			<uom units="CS" price="130.00" quantity="4"/>
 		</product>
 		<product id="78877" description="Pillow" manufacturer="Frame Med">
-			<uom units="EA" price="" quantity="4"/>
-			<uom units="PK" price="" quantity="2"/>
+			<uom units="EA" price="5.00" quantity="4"/>
+			<uom units="PK" price="10.00" quantity="2"/>
 		</product>
 		<product id="75335" description="Wheelchair" manufacturer="McKinley">
-			<uom units="EA" price="" quantity="9"/>
+			<uom units="EA" price="400.00" quantity="9"/>
 		</product>
 		<product id="64523" description="First Aid Kit" manufacturer="Stone">
-			<uom units="EA" price="" quantity="4"/>
-			<uom units="CS" price="" quantity="2"/>
+			<uom units="EA" price="50.00" quantity="4"/>
+			<uom units="CS" price="250.00" quantity="2"/>
 		</product>
 		<product id="38776" description="Catheter Clamp" manufacturer="Stone">
-			<uom units="EA" price="" quantity="5"/>
-			<uom units="BX" price="" quantity="2"/>
+			<uom units="EA" price="4.00" quantity="5"/>
+			<uom units="BX" price="16.00" quantity="2"/>
 		</product>
 		<product id="53653" description="Fisher Clamp" manufacturer="Stone">
-			<uom units="EA" price="" quantity="1"/>
-			<uom units="BX" price="" quantity="3"/>
+			<uom units="EA" price="4.00" quantity="1"/>
+			<uom units="BX" price="16.00" quantity="3"/>
 		</product>
 		<product id="23134" description="Chest Clamp" manufacturer="Celko">
-			<uom units="EA" price="" quantity="1"/>
-			<uom units="BX" price="" quantity="3"/>
+			<uom units="EA" price="4.00" quantity="1"/>
+			<uom units="BX" price="16.00" quantity="3"/>
 		</product>
 		<product id="98789" description="Drape Clamp" manufacturer="Celko">
-			<uom units="EA" price="" quantity="6"/>
-			<uom units="BX" price="" quantity="8"/>
+			<uom units="EA" price="4.00" quantity="6"/>
+			<uom units="BX" price="16.00" quantity="8"/>
 		</product>
 		<product id="45242" description="Bulldog Clamp" manufacturer="Celko">
-			<uom units="EA" price="" quantity="4"/>
-			<uom units="BX" price="" quantity="3"/>
+			<uom units="EA" price="4.00" quantity="4"/>
+			<uom units="BX" price="16.00" quantity="3"/>
 		</product>
 		<product id="97987" description="Bronchus Clamp" manufacturer="Celko">
-			<uom units="EA" price="" quantity="1"/>
-			<uom units="BX" price="" quantity="3"/>
+			<uom units="EA" price="4.00" quantity="1"/>
+			<uom units="BX" price="16.00" quantity="3"/>
 		</product>
 	</catalog>
 </company>

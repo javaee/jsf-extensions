@@ -79,15 +79,6 @@
 
        </plugin>
        <plugin>
-         <groupId>org.apache.maven.plugins</groupId>
-         <artifactId>maven-javadoc-plugin</artifactId>
-         <configuration>
-           <minmemory>128m</minmemory>
-           <maxmemory>512</maxmemory>
-           <overview>${project.build.sourceDirectory}/overview.html</overview>
-         </configuration>
-       </plugin>
-       <plugin>
 	 <artifactId>maven-antrun-plugin</artifactId>
 	 <executions>
 	   <execution>
@@ -133,17 +124,38 @@
     </dependency>
     <dependency>
       <groupId>org.apache.struts.shale</groupId>
-      <artifactId>remoting</artifactId>
+      <artifactId>shale-remoting</artifactId>
       <version>1.0.3-SNAPSHOT</version>
+      <exclusions>
+        <exclusion>
+          <groupId>myfaces</groupId>
+          <artifactId>myfaces-api</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
   </dependencies>
 
   <reporting>
     <plugins>
+      <excludeDefaults>true</excludeDefaults>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <reportSets><reportSet><reports/></reportSet></reportSets>
+      </plugin>
       <plugin>
         <groupId>net.sourceforge.maven-taglib</groupId>
         <artifactId>maven-taglib-plugin</artifactId>
-        <version>2.2.1</version>
+      </plugin>
+      <plugin>
+         <groupId>org.apache.maven.plugins</groupId>
+         <artifactId>maven-javadoc-plugin</artifactId>
+         <configuration>
+           <minmemory>128m</minmemory>
+           <maxmemory>512</maxmemory>
+           <overview>${project.build.sourceDirectory}/overview.html</overview>
+           <aggregate>true</aggregate>
+         </configuration>
       </plugin>
     </plugins>
   </reporting>

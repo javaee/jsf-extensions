@@ -31,6 +31,18 @@
 
 -->
 
+  <reporting>
+    <plugins>
+      <excludeDefaults>true</excludeDefaults>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <reportSets><reportSet><reports/></reportSet></reportSets>
+      </plugin>
+    </plugins>
+  </reporting>
+
+
   <modules>
     <module>master-pom</module>
   </modules>

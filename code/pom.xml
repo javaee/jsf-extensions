@@ -12,6 +12,13 @@
     including an implementation of the Avatar AJAX architecture.
 
   </description>
+
+  <parent>
+    <groupId>com.sun.faces.maven</groupId>
+    <artifactId>jsf-extensions-master</artifactId>
+    <version>0.1-SNAPSHOT</version>
+  </parent>
+
   <name>JavaServer(tm) Faces Extensions</name>
   <url>https://jsf-extensions.dev.java.net/</url>
 
@@ -23,7 +30,46 @@
 
   <build>
     <defaultGoal>install</defaultGoal>
+    <plugins>
+       <plugin>
+	 <artifactId>maven-antrun-plugin</artifactId>
+	 <executions>
+	   <execution>
+             <id>dojo</id>
+	     <phase>generate-resources</phase>
+	     <configuration>
+	       <tasks>
+                 <property name="cp" refid="maven.compile.classpath" />
+                 <echo message="${cp}" />
+                 <ant antfile="src/site/javadoc-build.xml" inheritAll="true"
+                      inheritRefs="true" />
+	       </tasks>
+	     </configuration>
+	     <goals>
+	       <goal>run</goal>
+	     </goals>
+	   </execution>
+	 </executions>
+       </plugin>
+    </plugins>
   </build>
+
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>dependencies</report>
+              <report>license</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+    </plugins>
+  </reporting>
 
   <profiles>
     <profile>

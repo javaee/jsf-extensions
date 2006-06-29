@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!--
+ The contents of this file are subject to the terms
+ of the Common Development and Distribution License
+ (the License). You may not use this file except in
+ compliance with the License.
+ 
+ You can obtain a copy of the License at
+ https://javaserverfaces.dev.java.net/CDDL.html or
+ legal/CDDLv1.0.txt. 
+ See the License for the specific language governing
+ permission and limitations under the License.
+ 
+ When distributing Covered Code, include this CDDL
+ Header Notice in each file and include the License file
+ at legal/CDDLv1.0.txt.    
+ If applicable, add the following below the CDDL Header,
+ with the fields enclosed by brackets [] replaced by
+ your own identifying information:
+ "Portions Copyrighted [year] [name of copyright owner]"
+ 
+ [Name of File] [ver.__] [Date]
+ 
+ Copyright 2005 Sun Microsystems Inc. All Rights Reserved
+-->
+
+
+<project name="jsf-extensions-site-javadoc" default="main">
+
+  <description>
+
+    DO NOT RUN THIS ANT BUILD FILE DIRECTLY.  It is invoked from the top
+    level pom.
+
+    After several hours of fighting maven 2 regarding getting javadoc the
+    way I want it for the site, I have decided to revert to ant for the
+    javadoc.  This is the same conclusion reached by others, as reported
+    in this blog entry:
+    http://netzooid.com/blog/2006/02/28/maven-2-reflections/
+  </description>
+
+  <property name="site.target" value="${basedir}/target/site" />
+  <property name="ajax.src.dir" 
+            value="${basedir}/run-time/avatar/src/main/java" />
+  <property name="common.src.dir" 
+            value="${basedir}/run-time/common/src/main/java" />
+  <property name="flash.src.dir" 
+            value="${basedir}/run-time/flash/src/main/java" />
+  <property name="test.src.dir" 
+            value="${basedir}/test-time/src/main/java" />
+
+  <property name="ajax.dest.dir" value="${site.target}/ajax/apidocs" />
+
+
+  <target name="ajax">
+
+    <mkdir dir="${ajax.dest.dir}" />
+
+    <javadoc packagenames="com.sun.faces.extensions.ajax"
+                 destdir="${ajax.dest.dir}"
+                 Overview="${ajax.src.dir}/overview.html"
+                 private="${javadoc.private}"
+                 protected="${javadoc.protected}"
+                 windowtitle="${Name} (${spec.version})"
+                 source="1.5"
+                 doctitle="${Name} (${spec.version})"
+                 bottom="Copyright &#169; 2002-2006 Sun Microsystems, Inc. All Rights Reserved.">
+            <fileset dir="${ajax.src.dir}">
+                <include name="**/*.java"/>
+            </fileset>
+            <fileset dir="${common.src.dir}">
+                <include name="**/*.java"/>
+            </fileset>
+            <classpath refid="maven.compile.classpath" />
+    </javadoc>
+ 
+  </target>
+
+  <target name="main" depends="ajax">
+  </target>
+
+</project>

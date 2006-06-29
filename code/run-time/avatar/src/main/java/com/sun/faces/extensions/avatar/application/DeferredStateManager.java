@@ -20,7 +20,7 @@ import javax.faces.context.FacesContext;
  * <p>Decorate the existing <code>StateManager</code> and disable
  * writing state in the case of an AJAX request, as indicated by a
  * <code>true</code> return from {@link
- * com.sun.faces.extensions.avatar.lifecycle.AsyncResponse#isAJAXRequest}.
+ * com.sun.faces.extensions.avatar.lifecycle.AsyncResponse#isAjaxRequest}.
  * In this case, state is initiated manually by the {@link
  * com.sun.faces.extensions.avatar.lifecycle.PartialTraversalLifecycle#render}
  * method.</p>
@@ -40,8 +40,8 @@ public class DeferredStateManager extends StateManagerWrapper {
     public StateManager getWrapped() { return parent; }
 
     /**
-     * <p>If {@link *
-     * com.sun.faces.extensions.avatar.lifecycle.AsyncResponse#isAJAXRequest}
+     * <p>If {@link
+     * com.sun.faces.extensions.avatar.lifecycle.AsyncResponse#isAjaxRequest}
      * returns <code>true</code>, take no action, otherwise call the
      * method on the wrapped object.</p>
      */
@@ -53,8 +53,8 @@ public class DeferredStateManager extends StateManagerWrapper {
     }
 
     /**
-     * <p>If {@link *
-     * com.sun.faces.extensions.avatar.lifecycle.AsyncResponse#isAJAXRequest}
+     * <p>If {@link
+     * com.sun.faces.extensions.avatar.lifecycle.AsyncResponse#isAjaxRequest}
      * returns <code>true</code>, take no action, otherwise call the
      * method on the wrapped object.</p>
      */
@@ -68,8 +68,8 @@ public class DeferredStateManager extends StateManagerWrapper {
     }
 
     /**
-     * <p>If {@link *
-     * com.sun.faces.extensions.avatar.lifecycle.AsyncResponse#isAJAXRequest}
+     * <p>If {@link 
+     * com.sun.faces.extensions.avatar.lifecycle.AsyncResponse#isAjaxRequest}
      * returns <code>true</code>, take no action, otherwise call the
      * method on the wrapped object.</p>
      */
@@ -85,8 +85,8 @@ public class DeferredStateManager extends StateManagerWrapper {
     }
 
     /**
-     * <p>If {@link *
-     * com.sun.faces.extensions.avatar.lifecycle.AsyncResponse#isAJAXRequest}
+     * <p>If {@link 
+     * com.sun.faces.extensions.avatar.lifecycle.AsyncResponse#isAjaxRequest}
      * returns <code>true</code>, take no action, otherwise call the
      * method on the wrapped object.</p>
      */

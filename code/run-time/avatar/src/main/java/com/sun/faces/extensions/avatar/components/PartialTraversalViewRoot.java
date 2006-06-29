@@ -55,7 +55,7 @@ import javax.servlet.http.HttpServletResponse;
  * behavior to the superclass.</p>
  *
  * <p>On postback, the {@link #processDecodes}, {@link
- * processValidators}, and {@link processUpdates} methods have special
+ * #processValidators}, and {@link #processUpdates} methods have special
  * behaviour.  If {@link
  * com.sun.faces.extensions.avatar.lifecycle.AsyncResponse#isAjaxRequest}
  * returns <code>false</code>, the superclass implementation of the
@@ -114,7 +114,7 @@ import javax.servlet.http.HttpServletResponse;
   * encapsulation details and write nothing to the response.</p>
   *
   * <p>See {@link
-  * com.sun.faces.avatar.lifecycle.AjaxLifecycle} for
+  * com.sun.faces.extensions.avatar.lifecycle.PartialTraversalLifecycle} for
   * additional information about how this class helps
   * <code>PartialTraversalViewRoot</code> get its job done.</p>
   *

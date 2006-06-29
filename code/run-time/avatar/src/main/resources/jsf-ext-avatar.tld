@@ -19,6 +19,14 @@
   <uri>http://java.sun.com/jsf/extensions/avatar</uri>
 
   <tag>
+    <description>
+       <![CDATA[<p>Convenience component for rendering all the scripts
+       necessary for using the jsf-extensions ajax feature.  Place this
+       inside &lt;f:view&gt; yet before any usages of the AJAX
+       JavaScript objects.  Subsequent occurrences of this tag in the
+       page will produce no output.</p>]]>
+    </description>
+            
     <name>scripts</name>
     <tag-class>com.sun.faces.extensions.avatar.taglib.ScriptsTag</tag-class>
     <body-content>JSP</body-content>

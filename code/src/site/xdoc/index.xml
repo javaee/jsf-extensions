@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<document>
+
+  <properties>
+    <title>JavaServer Faces Technology Extensions</title>
+  </properties>
+
+  <body>
+
+    <section name="JSF Extensions">
+    <a name="background"/>
+
+      <a name="background-background"/>
+
+        <p>This project hosts development of software that extends the
+        capability of the JavaServer Faces specification, including
+        revolutionary, world class, support for using AJAX and JSF.
+        Software within this project is intended to run on any JSF
+        compliant implementation, but in some cases the capabilities are
+        enhanced when run with <a
+        href="http://javaserverfaces.dev.java.net/">Sun's
+        implementation</a>.</p>
+
+         <p>Similar to the <a
+         href="http://struts.apache.org/struts-shale/">Struts Shale</a>
+         project, JSF Extensions is delived as separate software parts,
+         you can choose to use any combination of them, apart or
+         together.  The software is groupd into three areas based on
+         when in the software development lifecycle they should be
+         used.</p>
+         
+        <subsection name="Run Time">
+
+        <ul>
+
+        <li><p>JSF and AJAX together: it just works.  JSF-Extensions
+        run-time brings the power of AJAX to existing and future JSF
+        developed applications.  Included in this software is an
+        implementation of the Avatar concept demonstrated by Jacob
+        Hookom Ed Burns, and Adam Winer in their <a
+        href="http://weblogs.java.net/blog/edburns/archive/2006/05/javaone_video_a_1.html">JavaOne
+        2006 talk</a>.  JSF-Extensions avatar is also the best way to
+        use <a href="http://ajax.dev.java.net/">jMaki</a>.</p></li>
+
+        <li><p>Bring the "flash" concept from Ruby on Rails to your JSF
+        applications!</p></li>
+
+        </ul>
+
+        </subsection>
+        
+        <subsection name="Test Time">
+
+        <p>Sun's JSF implementation uses Cactus, JUnit, and HTMLUnit for
+        its automated testing.  We have extracted the testing framework
+        from Sun's JSF implementation codebase and now offer it in this
+        project.  This is a general purpose testing framework for JSF
+        applications.  Sun's JSF implementation now depends on
+        jsf-extensions for its testing framework.</p>
+
+        </subsection>
+
+        <subsection name="Design Time">
+
+        <p>Sun's JSF implementation uses code generation to
+        automatically create the JSP Tag Handlers and TLD files for the
+        core jsf components.  We plan to extract this (or similar) code
+        and offer it as part of this project.</p>
+
+        </subsection>
+
+    </section>
+
+  </body>
+
+</document>

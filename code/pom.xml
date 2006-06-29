@@ -2,11 +2,17 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.sun.faces</groupId>
-  <artifactId>jsf-extensions-build</artifactId>
+  <groupId>com.sun.faces.extensions</groupId>
+  <artifactId>jsf-extensions</artifactId>
   <packaging>pom</packaging>
   <version>0.1-SNAPSHOT</version>
-  <name>JavaServer(tm) Faces Extensions Top Level Build Project Object Model</name>
+  <description>
+
+    JCP Standard compliant extensions to JavaServer Faces Technology,
+    including an implementation of the Avatar AJAX architecture.
+
+  </description>
+  <name>JavaServer(tm) Faces Extensions</name>
   <url>https://jsf-extensions.dev.java.net/</url>
 
   <scm>
@@ -53,8 +59,12 @@
 	<module>run-time-test</module>
       </modules>
     </profile>
+    <profile>
+      <id>site</id>
+      <modules>
+      </modules>
+    </profile>
 
   </profiles>
-
 </project>
 

@@ -1,0 +1,146 @@
+<?xml version="1.0"?>
+<document>
+
+  <properties>
+    <title>JSF Extensions AJAX Reference</title>
+  </properties>
+
+  <body>
+
+    <section name="JSP/Facelets tags">
+
+      <subsection name="Scripts Component">
+
+      <p>Convenience component for rendering all the scripts
+       necessary for using the jsf-extensions ajax feature.  Place this
+       inside &lt;f:view&gt; yet before any usages of the AJAX
+       JavaScript objects.  Subsequent occurrences of this tag in the
+       page will produce no output.</p>
+
+       <h4>Usage</h4>
+
+<source><code>
+&lt;%@ taglib prefix="jsfExt" uri="http://java.sun.com/jsf/extensions/avatar" %&gt;
+&lt;f:view&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;jsfExt:scripts /&gt;
+  &lt;/head&gt;
+  &lt;body&gt; &lt;!-- body omitted --&gt; &lt;/body&gt;
+&lt;/html&gt;
+</code></source>
+
+      </subsection>
+
+    </section>
+    
+    <section name="JavaScript Objects">
+    <a name="JavaScript Objects"/>
+
+      <subsection name="Faces.Event">
+
+        <p>This class extends the <a
+        href="http://www.sergiopereira.com/articles/prototype.js.html#Ajax.Request">Ajax.Request</a>
+        class from the <a
+        href="http://www.sitepoint.com/article/painless-javascript-prototype">Prototype
+        JavaScript Library</a> and adds a bit of functionality specific
+        to JSF.</p>
+
+        <h4>Usage</h4>
+
+<source><code>
+&lt;ANY_HTML_OR_JSF_ELEMENT 
+on|EVENT|="new Faces.Event(this, { |OPTIONS| }); return false;" /&gt;
+</code></source>
+
+       <p>Where <code>ANY_HTML_OR_JSF_ELEMENT</code> is any jsf
+       component or HTML element from which you emit the event,
+       <code>|EVENT|</code> is any javascript event supported by that
+       element, such as <code>onmousedown</code>, <code>onclick</code>,
+       <code>onblur</code>, etc, and <code>{ |OPTIONS| }</code> is an
+       optional argument that is a JavaScript <a
+       href="http://www.quirksmode.org/js/associative.html">associative
+       array</a> supporting the following options.</p>
+
+       <dl>
+
+        <dt><p>execute</p></dt>
+
+        <dd><p>Comma separated string containing a list of client ids
+        against which the <code>execute</code> portion of the request
+        processing lifecycle must be run.  If not specified, the value
+        of the <code>render</code> parameter is used.  If that is not
+        specified, the entire view is traversed during the
+        <code>execute</code> portion of the request proecssing
+        lifecycle.</p></dd>
+
+<dt><p>render</p>
+</dt>
+
+<dd><p>Comma separated string containing a list of client ids against
+which the <code>render</code> portion of the request processing
+lifececly must be run.  If not specified, the entire view is
+rendered.</p>
+</dd>
+
+<dt><p>inputs</p>
+</dt>
+
+<dd><p>Comma separated string containing a list of client ids of input
+elements whose values should be submitted to the server.  If not
+specified, all the values of all input elements in the current form are
+submitted.</p>
+</dd>
+
+<dt><p>event</p>
+</dt>
+
+<dd><p>|CLIENT_ID|,|EVENT_NAME|,[immediate]</p>
+
+<p>If specified, must be the only option, and must conform to the above
+syntax, where <code>|CLIENT_ID|</code> is the client id of the component
+to be the source of the event, <code>|EVENT_NAME|</code> is a JavaBeans
+property name of an event method on the component identified by the
+<code>|CLIENT_ID|</code> parameter, and the optional
+<code>immediate</code> value indicates that the event should run during
+apply request values, rather than invoke application.</p>
+
+</dd>
+
+
+<dt><p>suppressXML</p>
+</dt>
+
+<dd>If specified, the server will not wrap the response in XML.  This
+prevents the JavaScript library from receiving the response and
+including it in the DOM, but can be useful when you already have a
+JavaScript component on the client side that is expecting a particular
+kind of data.  For example, you can imagine having a JSF component that
+uses JSON to send data back and forth, rather than XML.
+</dd>
+
+       </dl>      
+
+      </subsection>
+
+      <subsection name="Faces.Command">
+
+       <p>This class extends <code>Faces.Event</code> and uses the
+       Prototype <a
+       href="http://www.sergiopereira.com/articles/prototype.js.html#Reference">Event.observe</a>
+       feature to cause a <code>Faces.Event</code> to be emitted from a
+       specific element in the DOM.</p>
+
+       <h4>Usage</h4>
+
+<source>PENDING(jhook) please provide an easy to follow example of this.
+</source>
+
+      </subsection>
+
+
+    </section>
+
+  </body>
+
+</document>

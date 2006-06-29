@@ -473,19 +473,6 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
 	    this.options.requestHeaders.push("true");
 	}
 	
-	// add update
-	if (this.options.update) {
-		this.options.requestHeaders.push('com.sun.faces.Update');
-		this.options.requestHeaders.push(Faces.toArray(this.options.update,',').join(','));
-	}
-	
-	// build url
-	//this.url += (this.url.match(/\?/) ? '&' : '?') + viewState.toQueryString();
-
-	var acc = "";
-	for (var prop in this) {
-	    acc = acc + " " + prop;
-	}
 	this.options.postBody = viewState.toQueryString();
 
     var onComplete = this.options.onComplete;

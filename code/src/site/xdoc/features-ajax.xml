@@ -1,0 +1,131 @@
+<?xml version="1.0"?>
+<document>
+
+  <properties>
+    <title>JSF Extensions AJAX</title>
+  </properties>
+
+  <body>
+    
+    <section name="AJAX">
+    <a name="AJAX"/>
+
+      <p>In late September 2005, JSF Expert Group member <a
+      href="http://weblogs.java.net/blog/jhook/">Jacob Hookom</a> wrote
+      a blog about an idea he had regarding <a
+      href="http://weblogs.java.net/blog/jhook/archive/2005/09/jsf_avatar_vs_m_1.html">how
+      to allow AJAX to exploit the existing capabilities of JSF</a>.  He
+      called the idea "avatar" to describe a server side entity that
+      represents the client.  JSF co-spec-lead Ed Burns helped refine
+      the idea, and several demonstrations were presented at JavaOne
+      2006. </p>
+
+      <p>Essentially, the idea with avatar is to expose the JSF Request
+      Processing lifecycle to components delivered to the browser via
+      JSF, but enable them to easily use AJAX to interact with the view
+      once the page is displayed in the browser.  This is accomplished
+      by exposing a simple JavaScript library to the user and JSF
+      component author, along with a server side extension to the JSF
+      lifecycle, as shown in the following diagram.</p>
+
+      <img src="images/ajax-whats-included.png" />
+
+      <subsection name="Use Cases">
+
+      <p>To understand the available features of JSF Extensions Avatar,
+      let's take a look at several use cases for AJAX enabling a JSF
+      application.</p>
+
+      <h4>AJAXifying an existing JSF Component</h4>
+
+      <p>This is enabled by giving the page author a small set of
+      JavaScript objects they can use in the <code>on*</code> javascript
+      attributes.  For example:</p>
+
+<source><code>
+&lt;h:commandButton value="Add Item" action="#{orderEntry.addProduct}" 
+   onclick="new Faces.Event(this); return false;"/&gt;
+</code></source>
+
+       <p>Will cause an AJAX request to be sent to the server.  Any
+       values in the current form will be submitted, the entire request
+       processing lifecycle will be run, and the application logic will
+       decide which parts of the view need to be refreshed.  The server
+       will send down only those parts, where the JavaScript library
+       will dynamically replace the content appropriately.</p>
+
+       <p>In addition to <code>Faces.Event</code>, the JavaScript
+       library includes a subclass, <code>Faces.Command</code>, that
+       turns any markup element in the page, including JSF components,
+       into an AJAX capable widget.  For example:</p>
+
+<source><code>
+&lt;h:panelGroup id="subview2"&gt;
+  &lt;d:scroller id="scroller" navFacetOrientation="NORTH" for="table" 
+          actionListener="#{ResultSetBean.processScrollEvent}"&gt;
+      &lt;f:facet name="next"&gt;
+        &lt;h:panelGroup&gt;
+          &lt;h:outputText value="Next"/&gt;
+          &lt;h:graphicImage url="/images/arrow-right.gif" /&gt;
+        &lt;/h:panelGroup&gt;
+      &lt;/f:facet&gt;
+
+      &lt;f:facet name="previous"&gt;
+        &lt;h:panelGroup&gt;
+          &lt;h:outputText value="Previous"/&gt;
+          &lt;h:graphicImage url="/images/arrow-left.gif" /&gt;
+        &lt;/h:panelGroup&gt;
+      &lt;/f:facet&gt;
+
+      &lt;f:facet name="current"&gt;
+        &lt;h:panelGroup&gt;
+          &lt;h:graphicImage url="/images/duke.gif" /&gt;
+        &lt;/h:panelGroup&gt;
+      &lt;/f:facet&gt;
+  &lt;/d:scroller&gt;
+  &lt;script type='text/javascript'&gt;
+    document.forms[0].submit = function() {}; 
+    var a = $('form:subview2').getElementsByTagName('a'); 
+    $A(a).each(function(e) { 
+      new Faces.Command(e, 'mousedown', { render: 'form:table,form:subview2' }); 
+    }); 
+  &lt;/script&gt;
+  &lt;/h:panelGroup&gt;
+</code></source>
+
+    <p>The previous example AJAXifies the Scroller component from the <a
+    href="https://bpcatalog.dev.java.net/files/documents/1432/34000/bp-ui-simple-5.jar">Sun
+    Blueprints Simple UI Components</a> by installing a
+    <code>Faces.Command</code> on the mousedown of each hyperlink within
+    the scroller component.  The arguments to the
+    <code>Faces.Command</code> are:</p>
+
+	<ol>
+
+	  <li><p>The anchor element itself.
+	  </p></li>
+
+	  <li><p>The JavaScript event on which to fire the command.
+	  </p></li>
+
+	  <li><p>The last argument is a JavaScript associative array
+	  that supports a number of options.  In this example, we are
+	  informing the server to re-render the subtrees with client ids
+	  <code>form:table</code> and <code>form:subview2</code>.
+	  </p></li>
+
+	</ol>
+
+        <p>Complete documentation on the supported options for
+        <code>Faces.Command</code> and <code>Faces.Event</code> can be
+        found in <a href="reference-ajax.html">reference
+        document</a>.</p>
+
+    
+      </subsection>
+
+    </section>
+
+  </body>
+
+</document>

@@ -20,35 +20,66 @@
 </head>
 <body bgcolor="white">
 
-<p>This is a set of non-UI components that build on top of JSF to
-provide additional runtime features.  To use these components, simply
-place the <b>jsf-components.jar</b> in your <code>WEB-INF/lib</code>
-directory or place it in the shared lib directory of your container.
-These components use the self configuration mechanisms provided by the
-JSF specification to automatically install the components into the JSF
-runtime.</p>
+<p>JSF Extensions to bring first class support for AJAX to JSF.  This is
+achieved by declaring an override for the
+<code>javax.faces.ViewRoot</code> <code>component-type</code>.  The
+implementation for this class extends <code>UIViewRoot</code> and allows
+for lifecycle processing over one or more subtrees of the view,
+depending on client requirements.  Custom JSF <code>Lifecycle</code> and
+<code>StateManager</code> implementations are provided to support the
+<code>UIViewRoot</code> subclass in its processing.  These decorate
+their respectieve default implementations and add a small amount of
+functionality to support AJAX.  </p>
 
-<p>The following components are available in the current release.</p>
+<p>The principal classes for supporting AJAX include:</p>
 
-	<ul>
+<dl>
 
-	  <li><p>Ruby on Rails-like Flash concept, exposed via the EL.</p> 
+<dt><p>{@link com.sun.faces.extensions.avatar.components.PartialTraversalViewRoot}</p>
+</dt>
 
-          <p>Please see <code><a
-          href="com/sun/faces/el/FlashELResolver.html">FlashELResolver</a>.</code></p>
+<dd><p>Extend <code>UIViewRoot</code> and allow for partial view processing.</p>
+</dd>
 
-          </li>
+<dt><p>{@link com.sun.faces.extensions.avatar.lifecycle.PartialTraversalLifecycle}</p>
+</dt>
 
-	  <li><p><code>PhaseListener</code> for loading non-Java class
-	  resources out of a JAR and into a browser, such as images,
-	  JavaScript files, and style-sheets.</p>
+<dd><p>Decorate the default lifecycle and take special case action when
+an AJAX request is detected.  Otherwise, the default lifecycle is
+used.</p>
+</dd>
 
-          <p>Please see <code><a
-          href="com/sun/faces/util/ResourcePhaseListener.html">ResourcePhaseListener</a>.</code></p>
+<dt><p>{@link com.sun.faces.extensions.avatar.lifecycle.AsyncResponse}</p>
+</dt>
 
-          </li>
+<dd><p>ThreadLocal accessible class for interacting with the AJAX
+response as it is being created.</p>
+</dd>
 
-	</ul>
+<dt>{@link com.sun.faces.extensions.avatar.application.DeferredStateManager}
+</dt>
+
+<dd><p>Decorate the default <code>StateManager</code> to take no action
+during an AJAX request.  This is necessary because the state saving is
+initiated in the <code>PartialTraversalLifecycle</code>.</p>
+</dd>
+
+<dt><p>{@link com.sun.faces.extensions.avatar.event.EventCallback}</p>
+</dt>
+
+<dd><p><code>javax.faces.components.ContextCallback</code> implementation
+that allows the client to send events to the JSF view.</p>
+</dd>
+
+<dt><p>{@link com.sun.faces.extensions.avatar.components.ScriptsComponent}</p>
+</dt>
+
+<dd><p>Renders necessary script elements in the browser.  Exposed via
+custom tag.</p>
+</dd>
+
+</dl>
+
 
 </body>
 </html>

@@ -1,6 +1,5 @@
 package com.sun.faces.extensions.avatar.taglib;
 
-import com.sun.faces.extensions.avatar.components.AjaxZone;
 import java.util.List;
 import java.util.Map;
 import javax.el.MethodExpression;

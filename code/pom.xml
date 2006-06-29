@@ -5,7 +5,6 @@
   <groupId>com.sun.faces.extensions</groupId>
   <artifactId>jsf-extensions</artifactId>
   <packaging>pom</packaging>
-  <version>0.1-SNAPSHOT</version>
   <description>
 
     JCP Standard compliant extensions to JavaServer Faces Technology,
@@ -41,8 +40,12 @@
 	       <tasks>
                  <property name="cp" refid="maven.compile.classpath" />
                  <echo message="${cp}" />
+                 <echo message="${pom.version}" />
                  <ant antfile="src/site/javadoc-build.xml" inheritAll="true"
-                      inheritRefs="true" />
+                      inheritRefs="true">
+                   <property name="pom.version" value="${pom.version}" />
+                   <property name="pom.artifactId" value="${pom.artifactId}" />
+                 </ant>
 	       </tasks>
 	     </configuration>
 	     <goals>
@@ -53,7 +56,14 @@
        </plugin>
     </plugins>
   </build>
-
+  <dependencies>
+    <dependency>
+      <groupId>net.sourceforge.maven-taglib</groupId>
+      <artifactId>maven-taglib-plugin</artifactId>
+      <version>2.2.1</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
   <reporting>
     <plugins>
       <plugin>

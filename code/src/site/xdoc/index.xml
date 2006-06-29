@@ -27,7 +27,7 @@
          you can choose to use any combination of them, apart or
          together.  The software is groupd into three areas based on
          when in the software development lifecycle they should be
-         used.</p>
+         used: run time, test time, and design time.</p>
          
         <subsection name="Run Time">
 
@@ -40,7 +40,38 @@
         Hookom Ed Burns, and Adam Winer in their <a
         href="http://weblogs.java.net/blog/edburns/archive/2006/05/javaone_video_a_1.html">JavaOne
         2006 talk</a>.  JSF-Extensions avatar is also the best way to
-        use <a href="http://ajax.dev.java.net/">jMaki</a>.</p></li>
+        use <a href="http://ajax.dev.java.net/">jMaki</a>.</p>
+
+        <h4>Live Demo Apps</h4>
+
+        <p>We are happy to bring you two live demo apps.</p>
+
+        <dl>
+
+          <dt><p><a name="_" href="http://sunapp1.whardy.com:8090/jsf-extensions/faces/result-set.jsp">jMaki, JSF, Standard Components, and AJAX</a></p></dt>
+
+<dd><p>Demo showing the jMaki Scriptaculous In Place Editor component,
+Blueprints Scroller Component and several standard JSF components all
+bringing AJAXY goodness to your world.  This example demonstrates the
+simplicity of using the jsf-extensions AJAX system, just look at <a
+href="http://sunapp1.whardy.com:8090/jsf-extensions/ShowSource.jsp?filename=/result-set.jsp">the
+JSP Source</a>.</p>
+</dd>
+
+          <dt><p><a name="_" href="http://sunapp1.whardy.com:8090/jsf-j1/home.jsf">Jacob Hookom's JavaOne 2006 Demo</a></p></dt>
+
+          <dd><p>Here is Jacob's famous JavaOne demo, ported to use the
+          jsf-extensions mechanism.  This example shows how easy it is
+          to do auto-complete, dynamic order entry, and many other fun
+          things, all with existing JSF components.  In other words,
+          with jsf-extensions, you can do ajax with JSF <i>using the
+          components you already have and know</i>.</p>
+</dd>
+
+        </dl>
+
+
+        </li>
 
         <li><p>Bring the "flash" concept from Ruby on Rails to your JSF
         applications!</p></li>

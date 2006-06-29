@@ -41,8 +41,12 @@
   </description>
 
   <property name="site.target" value="${basedir}/target/site" />
+  <property name="ajax.module.dir" 
+            value="${basedir}/run-time/avatar" />
   <property name="ajax.src.dir" 
-            value="${basedir}/run-time/avatar/src/main/java" />
+            value="${ajax.module.dir}/src/main/java" />
+  <property name="ajax.resources.dir" 
+            value="${ajax.module.dir}/src/main/resources" />
   <property name="common.src.dir" 
             value="${basedir}/run-time/common/src/main/java" />
   <property name="flash.src.dir" 
@@ -50,30 +54,42 @@
   <property name="test.src.dir" 
             value="${basedir}/test-time/src/main/java" />
 
-  <property name="ajax.dest.dir" value="${site.target}/ajax/apidocs" />
+  <property name="ajax.dest.dir" value="${site.target}/ajax" />
+  <property name="ajax.javadoc.dest.dir" value="${ajax.dest.dir}/apidocs" />
+  <property name="ajax.tlddoc.dest.dir" value="${ajax.dest.dir}/tlddocs" />
 
 
   <target name="ajax">
 
-    <mkdir dir="${ajax.dest.dir}" />
+    <mkdir dir="${ajax.javadoc.dest.dir}" />
+    <mkdir dir="${ajax.tlddoc.dest.dir}" />
 
     <javadoc packagenames="com.sun.faces.extensions.ajax"
-                 destdir="${ajax.dest.dir}"
+                 destdir="${ajax.javadoc.dest.dir}"
                  Overview="${ajax.src.dir}/overview.html"
                  private="${javadoc.private}"
                  protected="${javadoc.protected}"
-                 windowtitle="${Name} (${spec.version})"
+                 windowtitle="${pom.artifactId} (${pom.version})"
                  source="1.5"
-                 doctitle="${Name} (${spec.version})"
+                 doctitle="${pom.artifactId} (${pom.version})"
                  bottom="Copyright &#169; 2002-2006 Sun Microsystems, Inc. All Rights Reserved.">
             <fileset dir="${ajax.src.dir}">
                 <include name="**/*.java"/>
+                <exclude name="**/AjaxZone*.java" />
+                <exclude name="**/FastWriter*.java" />
             </fileset>
             <fileset dir="${common.src.dir}">
                 <include name="**/*.java"/>
             </fileset>
             <classpath refid="maven.compile.classpath" />
     </javadoc>
+
+    <java fork="true" classname="com.sun.tlddoc.TLDDoc" 
+                      classpathref="maven.compile.classpath">
+        <arg line="-d ${ajax.tlddoc.dest.dir}"/>
+        <arg value="${ajax.resources.dir}/jsf-ext-avatar.tld"/>
+    </java>
+
  
   </target>
 

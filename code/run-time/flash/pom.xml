@@ -70,15 +70,6 @@
          </configuration>
 
        </plugin>
-       <plugin>
-         <groupId>org.apache.maven.plugins</groupId>
-         <artifactId>maven-javadoc-plugin</artifactId>
-         <configuration>
-           <minmemory>128m</minmemory>
-           <maxmemory>512</maxmemory>
-           <aggregate>true</aggregate>
-         </configuration>
-       </plugin>
     </plugins>
 
   </build>
@@ -91,20 +82,6 @@
         <artifactId>maven-project-info-reports-plugin</artifactId>
         <reportSets><reportSet><reports/></reportSet></reportSets>
       </plugin>
-      <plugin>
-        <groupId>net.sourceforge.maven-taglib</groupId>
-        <artifactId>maven-taglib-plugin</artifactId>
-        <version>2.2.1</version>
-      </plugin>
-       <plugin>
-         <groupId>org.apache.maven.plugins</groupId>
-         <artifactId>maven-javadoc-plugin</artifactId>
-         <configuration>
-           <minmemory>128m</minmemory>
-           <maxmemory>512</maxmemory>
-           <aggregate>true</aggregate>
-         </configuration>
-       </plugin>
     </plugins>
   </reporting>
 

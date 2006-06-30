@@ -29,9 +29,14 @@
                  <echo message="Building distribution" />
                  <mkdir dir="target/dist" />
                  <copy todir="target/dist">
-                   <fileset dir="../run-time/target">
+                   <fileset dir="../run-time/avatar/target">
                      <include name="*.jar" />
-                     <exclude name="*-sources.jar" />
+                   </fileset>
+                   <fileset dir="../run-time/flash/target">
+                     <include name="*.jar" />
+                   </fileset>
+                   <fileset dir="../run-time/common/target">
+                     <include name="*.jar" />
                    </fileset>
                    <fileset dir="../test-time/target">
                      <include name="*.jar" />
@@ -39,7 +44,7 @@
                    <fileset dir="../run-time-test/target">
                      <include name="*.war" />
                    </fileset>
-                   <fileset dir="../samples/cardemo/target">
+                   <fileset dir="../samples/j1/target">
                      <include name="*.war" />
                    </fileset>
                    <fileset dir=".">

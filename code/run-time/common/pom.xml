@@ -26,6 +26,20 @@
   <build>
     <defaultGoal>install</defaultGoal>
     <sourceDirectory>src/main/java</sourceDirectory>
+    <plugins>
+       <plugin>
+         <artifactId>maven-source-plugin</artifactId>
+	 <executions>
+	   <execution>
+             <id>source</id>
+	     <phase>generate-resources</phase>
+	     <goals>
+	       <goal>jar</goal>
+	     </goals>
+	   </execution>
+	 </executions>
+       </plugin>   
+    </plugins>
   </build>
   <reporting>
     <plugins>
@@ -34,15 +48,6 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-project-info-reports-plugin</artifactId>
         <reportSets><reportSet><reports/></reportSet></reportSets>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <configuration>
-	      <minmemory>128m</minmemory>
-	      <maxmemory>512</maxmemory>
-              <aggregate>true</aggregate>
-        </configuration>
       </plugin>
     </plugins>
   </reporting>

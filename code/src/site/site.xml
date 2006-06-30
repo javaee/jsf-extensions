@@ -20,16 +20,17 @@
       </links>
 
     <menu name="JSF Extensions">
-        <item name="home" href="/mvn/index.html" />
+        <item name="home" href="/index.html" />
         <item name="FAQ" href="http://wiki.java.net/bin/view/Projects/JsfExtensionsFaq" />
-<!--
         <item name="Download"           href="http://jsf-extensions.dev.java.net/servlets/ProjectDocumentList"/>
+<!--
         <item name="Combined API Docs"           collapse="false">
           <item name="JavaDoc" href="http://jsf-extensions.dev.java.net/docs/apidocs/index.html"/>
           <item name="TagLibraryDoc" href="http://jsf-extensions.dev.java.net/docs/tlddoc/index.html"/>
         </item>
 -->
         <item name="Issue Tracking"     href="http://jsf-extensions.dev.java.net/servlets/ProjectIssues"/>
+        <item name="Version Control - SCM"     href="http://jsf-extensions.dev.java.net/source/browse/jsf-extensions/"/>
         <item name="Building"           href="http://wiki.java.net/bin/view/Projects/JsfExtensionsFaq#How_do_I_Build_It_"/>
         <item name="Wiki"               href="http://wiki.java.net/bin/view/Projects/Jsf-extensions"/>
         <item name="Announcements"      href="http://jsf-extensions.dev.java.net/servlets/ProjectNewsList"/>
@@ -37,17 +38,17 @@
     </menu>
 
     <menu name="Runtime Features">
-        <item name="Ajax" href="/mvn/features-ajax.html" collapse="false">
-          <item name="Overview"    href="/mvn/features-ajax.html"/>
-          <item name="Reference"   href="/mvn/reference-ajax.html"/>
-          <item name="JavaDoc"     href="/mvn/ajax/apidocs/index.html"/>
-          <item name="TagLibraryDoc"   href="/mvn/ajax/tlddocs/index.html"/>
+        <item name="Ajax" href="/features-ajax.html" collapse="false">
+          <item name="Overview"    href="/features-ajax.html"/>
+          <item name="Reference"   href="/reference-ajax.html"/>
+          <item name="JavaDoc"     href="/ajax/apidocs/index.html"/>
+          <item name="TagLibraryDoc"   href="/ajax/tlddocs/index.html"/>
         </item>
-        <item name="Flash"     href="/mvn/features-flash.html"/>
+        <item name="Flash"     href="/features-flash.html"/>
     </menu>
 
     <menu name="Test Time Features">
-        <item name="Test"    href="/mvn/features-test.html"/>
+        <item name="Test"    href="/features-test.html"/>
     </menu>
 
     ${reports}

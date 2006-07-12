@@ -248,7 +248,7 @@ function inspectElement(element) {
 function handler(ajaxZone, element, originalScript, outProps, invocation);
 </code></pre>
 
-          <p><code>ajaxZone<code> is the ajaxZone element that is
+          <p><code>ajaxZone</code> is the ajaxZone element that is
           the parent of the element that is receiving the event.  
           <element> is the element receiving the event.
           <code>originalScript</code> is the value of the event as

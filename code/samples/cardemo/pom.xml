@@ -73,13 +73,15 @@
     </dependency>
     <dependency>
       <groupId>com.sun.jsf-extensions</groupId>
-      <artifactId>jsf-extensions-test-time</artifactId>
+      <artifactId>jsf-extensions-avatar</artifactId>
       <version>0.1-SNAPSHOT</version>
+      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>com.sun.jsf-extensions</groupId>
-      <artifactId>jsf-extensions-run-time</artifactId>
+      <artifactId>jsf-extensions-common</artifactId>
       <version>0.1-SNAPSHOT</version>
+      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>portlet-api</groupId>
@@ -95,6 +97,37 @@
       <groupId>com.sun.javaee.blueprints</groupId>
       <artifactId>bp-ui-simple</artifactId>
       <version>5</version>
+    </dependency>
+    <dependency>
+      <groupId>net.sf.facestrace</groupId>
+      <artifactId>facestrace</artifactId>
+      <version>0.8.1-SNAPSHOT</version>
+      <scope>runtime</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>myfaces</groupId>
+          <artifactId>myfaces-api</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>myfaces</groupId>
+          <artifactId>myfaces-impl</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>log4j</groupId>
+          <artifactId>log4j</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.struts.shale</groupId>
+      <artifactId>shale-remoting</artifactId>
+      <version>1.0.3-SNAPSHOT</version>
+      <exclusions>
+        <exclusion>
+          <groupId>myfaces</groupId>
+          <artifactId>myfaces-api</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
   </dependencies>

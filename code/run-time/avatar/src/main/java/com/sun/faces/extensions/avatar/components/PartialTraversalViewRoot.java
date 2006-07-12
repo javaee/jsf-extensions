@@ -168,14 +168,20 @@ public class PartialTraversalViewRoot extends UIViewRoot implements Serializable
             return;
         }
         UIViewRoot root = context.getViewRoot();
-        ResponseWriter writer = null;
+        ResponseWriter orig = null, writer = null;
         AsyncResponse async = AsyncResponse.getInstance();
         boolean writeXML = AsyncResponse.isRenderXML();
         EventCallback cb = null;
         
         try {
+            // Remove the no-op response so our content can be written.
+            async.removeNoOpResponse(context);
+            // Get (and maybe create) the AjaxResponseWriter
+            writer = async.getResponseWriter();
+            orig = context.getResponseWriter();
+            // Install the AjaxResponseWriter
+            context.setResponseWriter(writer);
             if (writeXML) {
-                writer = async.getResponseWriter();
                 ExternalContext extContext = context.getExternalContext();
                 if (extContext.getResponse() instanceof HttpServletResponse) {
                     HttpServletResponse servletResponse = (HttpServletResponse)
@@ -201,6 +207,14 @@ public class PartialTraversalViewRoot extends UIViewRoot implements Serializable
         }
         catch (IOException ioe) {
             
+        }
+        finally {
+            // re-install the no-op classes so any post f:view content is not written
+            async.installNoOpResponse(context);
+            // move aside the AjaxResponseWriter
+            if (null != orig) {
+                context.setResponseWriter(orig);
+            }
         }
     }
     
@@ -246,7 +260,6 @@ public class PartialTraversalViewRoot extends UIViewRoot implements Serializable
         
         public void invokeContextCallback(FacesContext facesContext, UIComponent comp) {
             try {
-                ResponseWriter writer = AsyncResponse.getInstance().getResponseWriter();
                 ConverterException converterException = null;
                 boolean writeXML = AsyncResponse.isRenderXML();
                 
@@ -260,6 +273,8 @@ public class PartialTraversalViewRoot extends UIViewRoot implements Serializable
                     comp.processUpdates(facesContext);
                 }
                 else if (curPhase == PhaseId.RENDER_RESPONSE) {
+                    ResponseWriter writer = AsyncResponse.getInstance().getResponseWriter();
+
                     if (writeXML) {
                         writer.startElement("render", comp);
                         writer.writeAttribute("id",

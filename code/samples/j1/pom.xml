@@ -100,6 +100,10 @@
           <groupId>myfaces</groupId>
           <artifactId>myfaces-api</artifactId>
         </exclusion>
+        <exclusion>
+          <groupId>myfaces</groupId>
+          <artifactId>myfaces-impl</artifactId>
+        </exclusion>
       </exclusions>
     </dependency>
 

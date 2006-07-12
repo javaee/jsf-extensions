@@ -121,14 +121,6 @@ public class AjaxZoneRenderer extends Renderer {
         writer.startElement("div", component);
         writer.writeAttribute("id", id, null);
         writeStyle(context, writer, component);
-        if (!isAjaxRequest(context, component)) {
-            writeAjaxifyScript(context, writer, component);
-            for (int i = 0; i < scriptIds.length; i++) {
-                getXhtmlHelper().linkJavascript(context, component, writer,
-                        Mechanism.CLASS_RESOURCE, scriptIds[i]);
-            }
-            writeZoneAccruer(context, writer, component);
-        }
     }
     
     private void writeStyle(FacesContext context, ResponseWriter writer, UIComponent comp) throws IOException {
@@ -146,71 +138,90 @@ public class AjaxZoneRenderer extends Renderer {
         }
     }
     
-    private void writeZoneAccruer(FacesContext context, ResponseWriter writer, UIComponent comp) throws IOException {
-        writer.startElement("script", comp);
-        writer.writeAttribute("language", "javascript", "language");
-        writer.writeAttribute("type", "text/javascript", "language");
-        boolean isXhtml = false;
-        if (isXhtml = context.getExternalContext().getRequestMap().containsKey("com.sun.faces.ContentTypeIsXHTML")) {
-            writer.write("\n<![CDATA[\n");
-        }
-        else {
-            writer.write("\n<!--\n");
-        }
-        writer.write("\ng_zones.push(\"" + NamingContainer.SEPARATOR_CHAR +
-                comp.getClientId(context) + "\");");
-        if (isXhtml) {
-            writer.write("\n]]>\n");
-        }
-        else {
-            writer.write("\n//-->\n");
-        }
-
-        
-        writer.endElement("script");
-    }
+    /**
+     * <p>Take different action depending on the value of isAjaxResuest and 
+     * interactionType component attribute.</p>
+     *
+     * <p>If isAjaxRequest, and interactionType is null or "output", take no
+     * action.</p>
+     *
+     * <p>If !isAjaxRequest, and interactionType is null or "output", write only
+     * the zone accruer.</p>
+     *
+     * <p>If !isAjaxRequest, and interactionType is non-null and "input", write 
+     * the zone accrual and ajaxifyChildren script.</p>
+     *
+     * <p>If isAjaxRequest, and interactionType is "input", write only the 
+     * ajaxifyChildren script.</P>
+     *
+     * <p>
+     */
     
-    private void writeAjaxifyScript(FacesContext context, ResponseWriter writer, UIComponent comp) throws IOException {
+    private void writeAjaxifyScript(FacesContext context, ResponseWriter writer, UIComponent comp,
+            boolean isAjaxRequest) throws IOException {
 
         String 
-                interactionType = null,
+                clientId = null,
+                interactionType = getAttr(context, comp, "interactionType"),
                 eventHook = null,
                 eventType = null,
-                inspectElementHook = null,
-                ajaxifyChildren = null;
-
-
-        if (null == (interactionType = getAttr(context, comp, "interactionType"))) {
+	        inspectElementHook = null;
+	StringBuffer ajaxifyChildren = null;
+	boolean isXhtml = false,
+                typeIsOutput = (null == interactionType || interactionType.equals("output")),
+                writeZoneAccruer = ((!isAjaxRequest && typeIsOutput) || 
+                  (!isAjaxRequest && !typeIsOutput)),
+                writeAjaxifyChildren = ((!isAjaxRequest && !typeIsOutput) ||
+                  (isAjaxRequest && !typeIsOutput));
+        
+        if (isAjaxRequest && typeIsOutput) {
             return;
         }
-        
-        // If the interactionType is "output", take no ajaxification action.
-        if (interactionType.equals("output")) {
-            return;
-        }
-        
-        if (!interactionType.equals("input")) {
-            // PENDING(edburns): I18N
-            throw new IOException("Valid values for optional attribute \"interactionType\" are \"input\" or \"output\".");
-        }
-        
-        assert(interactionType.equals("input"));
-        
-        eventHook = getAttr(context, comp, "eventHook");
-        eventType = getAttr(context, comp, "eventType");
-        
-        if (null == eventHook || null == eventType) {
-            // PENDING: I18N
-            throw new IOException("If \"interactionType\" is specified, both \"eventHook\" and \"eventType\" must be specified");
-        }
-        
-        ajaxifyChildren = "ajaxifyChildren(this, \'" + eventType + "\', \'" + eventHook + "\')";
-        writer.writeAttribute("onmouseover", ajaxifyChildren, "onmouseover");
-        
-        inspectElementHook = getAttr(context, comp, "inspectElementHook");
-        if (null != inspectElementHook) {
-            writer.writeAttribute("inspectElementHook", inspectElementHook, "inspectElementHook");
-        }
+	    
+        try {
+	    writer.startElement("script", comp);
+	    writer.writeAttribute("language", "javascript", "language");
+	    writer.writeAttribute("type", "text/javascript", "language");
+	    if (isXhtml = context.getExternalContext().getRequestMap().containsKey("com.sun.faces.ContentTypeIsXHTML")) {
+		writer.write("\n<![CDATA[\n");
+	    }
+	    else {
+		writer.write("\n<!--\n");
+	    }
+            clientId = comp.getClientId(context);
+            if (writeZoneAccruer) {
+                writer.write("\ng_zones.push(\"" + clientId + "\");");
+            }
+            
+            if (writeAjaxifyChildren) {
+                eventHook = getAttr(context, comp, "eventHook");
+                eventType = getAttr(context, comp, "eventType");
+                inspectElementHook = getAttr(context, comp, "inspectElementHook");
+
+                if (null == eventHook || null == eventType) {
+                    // PENDING: I18N
+                    throw new IOException("If \"interactionType\" is specified, both \"eventHook\" and \"eventType\" must be specified");
+                }
+
+                ajaxifyChildren = new StringBuffer();
+                ajaxifyChildren.append("\najaxifyChildren($(\'" + clientId + "\'), \'" + eventType + "\', \'" + eventHook + "\'");
+                if (null != inspectElementHook) {
+                    ajaxifyChildren.append(", \'" + inspectElementHook + "\'");
+                }
+                ajaxifyChildren.append(");");
+                writer.write(ajaxifyChildren.toString());
+            }
+	}
+	finally {
+	    if (isXhtml) {
+		writer.write("\n]]>\n");
+	    }
+	    else {
+		writer.write("\n//-->\n");
+	    }
+	    writer.endElement("script");
+	}
+
     }
     
     private String getAttr(FacesContext context, UIComponent comp, String name) {
@@ -278,6 +289,14 @@ public class AjaxZoneRenderer extends Renderer {
         }
 
         ResponseWriter writer = context.getResponseWriter();
+        boolean isAjaxRequest = false;
+        if (!(isAjaxRequest = AsyncResponse.isAjaxRequest())) {
+            for (int i = 0; i < scriptIds.length; i++) {
+                getXhtmlHelper().linkJavascript(context, component, writer,
+                        Mechanism.CLASS_RESOURCE, scriptIds[i]);
+            }
+        }
+        writeAjaxifyScript(context, writer, component, isAjaxRequest);
         writer.endElement("div"); //NOI18N
     }
 
@@ -294,13 +313,6 @@ public class AjaxZoneRenderer extends Renderer {
     // Private methods
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    // Helper method to test if this is an Ajax request
-    private boolean isAjaxRequest(FacesContext context, UIComponent component) {
-        Map<String, String> requestMap = 
-                context.getExternalContext().getRequestHeaderMap();
-        return requestMap.containsKey(AsyncResponse.PARTIAL_HEADER);
-    }
-    
     private transient XhtmlHelper xHtmlHelper = null;
     
     private XhtmlHelper getXhtmlHelper() {

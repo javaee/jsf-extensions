@@ -1,5 +1,6 @@
 package com.sun.faces.extensions.avatar.components;
 
+import java.io.Serializable;
 import javax.faces.component.UICommand;
 
 import javax.el.ELContext;
@@ -9,7 +10,7 @@ import javax.el.MethodInfo;
 /**
  * 
  */
-public class AjaxZone extends UICommand {
+public class AjaxZone extends UICommand implements Serializable {
     public AjaxZone() {
         super();
         setRendererType("com.sun.faces.AjaxZone");

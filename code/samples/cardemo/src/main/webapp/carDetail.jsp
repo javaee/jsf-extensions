@@ -36,7 +36,7 @@ Copyright 2005 Sun Microsystems Inc. All Rights Reserved
 
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
-<%@ taglib prefix="jsfExt" uri="http://java.sun.com/jsf/extensions" %>
+<%@ taglib prefix="jsfExt" uri="http://java.sun.com/jsf/extensions/avatar" %>
 
 <f:loadBundle basename="carstore.bundles.Resources" var="bundle"/>
 

@@ -27,8 +27,7 @@
  * Copyright 2005 Sun Microsystems Inc. All Rights Reserved
  */
 
-function extractParams(ajaxZone, element, originalScript, outProps, 
-		       invocation) {
+function extractParams(ajaxZone, element, outArray) {
     var name = null;
     var value = null;
     var elementNodeName = element.nodeName.toLowerCase();
@@ -37,26 +36,21 @@ function extractParams(ajaxZone, element, originalScript, outProps,
     if (null != elementType) {
 	elementType = elementType.toLowerCase();
     }
-
-    if (isCommand(elementNodeName, elementType)) {
-	invocation.args[0].preventDefault();
-	invocation.args[0].stopPropagation();
-    }
-    else {
-	invocation.proceed();
-    }
-    
+    props = new Object();
     // Start at the top of the zone, collect all the params, except for
     // command components.
-    collectParams(ajaxZone, outProps);
-
+    collectParams(ajaxZone, props);
     // Get the name and value of this selected component.  If this is a
     // command component, this step is necessary otherwise no value will
     // be submitted for the button.
     name = getParamNameFromElement(element, elementNodeName, elementType);
     value = getParamValueFromElement(element, elementNodeName, elementType);
-    
-    outProps[name] = value;
+    props[name] = value;
+    for (prop in props) {
+	outArray.push(prop+'='+props[prop]);
+    }
+
+
 }
 
 function refreshElement(name) {
@@ -83,7 +77,7 @@ function refreshElement(name) {
  * collect the params from it.
  */
 
-function collectParams(element, props) {
+function collectParams(element, outProps) {
     var name = null;
     var value = null;
     var elementNodeName = element.nodeName.toLowerCase();
@@ -99,12 +93,12 @@ function collectParams(element, props) {
 	name = getParamNameFromElement(element, elementNodeName, elementType);
 	value = getParamValueFromElement(element, elementNodeName, 
 					 elementType);
-	props[name] = value;
+	outProps[name]=value;
     }
     
     if (element.hasChildNodes()) {
 	for (i = 0; i < element.childNodes.length; i++) {
-	    collectParams(element.childNodes[i], props);
+	    collectParams(element.childNodes[i], outProps);
 	}
     }
     return;
@@ -132,11 +126,10 @@ function inspectElement(element) {
 
 
 /**
- * return false if the element is <input type="submit">, <input
- * type="button">, or <button>.  
+ * return false if the element is <input type="radio">,
+ * <input type="submit">, <input type="button">, <option> or <button>.  
  *
- * otherwise, if the element is any other kind of <input> element, or an
- * <option> element, return true.
+ * otherwise, if the element is any other kind of <input> element return true.
  */
 
 function isCollectParams(element) {
@@ -148,12 +141,28 @@ function isCollectParams(element) {
 	elementType = elementType.toLowerCase();
     }
 
-    if (!isCommand(elementNodeName, elementType) &&
-	-1 != elementNodeName.indexOf("input")) {
-	doCollect = true;
-    }
-    else if (-1 != elementNodeName.indexOf("option")) {
-	doCollect = true
+    if (!isCommand(elementNodeName, elementType)) {
+	// What sort of element is it?
+	if (-1 != elementNodeName.indexOf("input")) {
+	    // It is an input element, but is it a radio?
+	    if (-1 != elementType.indexOf("radio")) {
+		// Yes.  Only return true if it is selected.
+		if (element.checked) {
+		    doCollect = true;
+		}
+
+	    }
+	    else {
+		// Other kinds of input elements are submitted
+		doCollect = true;
+	    }
+	}
+	else if (-1 != elementNodeName.indexOf("option")) {
+	    // It is an option element, but is it selected?
+	    if (element.selected) {
+		doCollect = true;
+	    }
+	}
     }
 
     return doCollect;

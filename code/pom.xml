@@ -94,7 +94,7 @@
 	<module>run-time/avatar</module>
 	<module>test-time</module>
 	<module>run-time-test</module>
-	<!-- <module>samples/cardemo</module> -->
+	<module>samples/cardemo</module>
 	<module>samples/j1</module>
       </modules>
     </profile>
@@ -111,6 +111,7 @@
 	<module>maven</module>
 	<module>run-time/avatar</module>
 	<module>samples/j1</module>
+	<module>samples/cardemo</module>
 	<module>run-time-test</module>
       </modules>
     </profile>

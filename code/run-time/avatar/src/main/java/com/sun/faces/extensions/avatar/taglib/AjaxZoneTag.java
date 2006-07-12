@@ -31,38 +31,6 @@ public class AjaxZoneTag extends UIComponentELTag {
         style = ve;
     }
     
-    public int doStartTag() throws JspException {
-        int rc = super.doStartTag();
-        markTransientChildrenAsNonTransient();
-        return rc;
-    }
-
-    public int doAfterBody() throws JspException {
-        int rc = super.doAfterBody();
-        markTransientChildrenAsNonTransient();
-        return rc;
-    }
-    
-    private void markTransientChildrenAsNonTransient() {
-        UIComponent component = getComponentInstance();
-        Map<String, Object> attrs = component.getAttributes();
-        String didPersistTransients = "com.sun.faces.AjaxZone.DidPersistTransients";
-        if (component.getAttributes().containsKey(didPersistTransients)) {
-            return;
-        }
-        
-        List<UIComponent> children = component.getChildren();
-        for (UIComponent cur : children) {
-            if (cur.isTransient()) {
-                if (cur instanceof UIOutput) {
-                    attrs.put(didPersistTransients, didPersistTransients);
-                    cur.setTransient(false);
-                }
-            }
-        }
-    }
-
-    
     protected void setProperties(UIComponent comp) {
         super.setProperties(comp);
         

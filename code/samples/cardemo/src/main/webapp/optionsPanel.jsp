@@ -25,14 +25,14 @@ Copyright 2005 Sun Microsystems Inc. All Rights Reserved
 <%@ page contentType="text/html" language="java" %>
 <%@ taglib prefix="f" uri="http://java.sun.com/jsf/core" %>
 <%@ taglib prefix="h" uri="http://java.sun.com/jsf/html" %>
-<%@ taglib prefix="jsfExt" uri="http://java.sun.com/jsf/extensions" %>
+<%@ taglib prefix="jsfExt" uri="http://java.sun.com/jsf/extensions/avatar" %>
 
 <script type="text/javascript" 
         src='<%= request.getContextPath() + "/devtime.js" %>'></script>
 
 <jsfExt:ajaxZone id="zone2" interactionType="input" 
                 inspectElementHook="inspectElement"
-                eventType="onclick" eventHook="extractParams"
+                eventType="click" eventHook="extractParams"
                 action="#{carstore.currentModel.updatePricing}">
 <h:panelGrid>
 

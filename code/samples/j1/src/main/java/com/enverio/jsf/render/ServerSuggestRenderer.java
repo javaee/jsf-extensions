@@ -40,7 +40,6 @@ public class ServerSuggestRenderer extends SuggestRenderer {
         rw.writeAttribute("id", id + "_auto_complete", null);
         rw.endElement("div");
         
-        ClientWriter sw = ClientWriter.getInstance();
         XhtmlHelper xh = getXhtmlHelper();
         xh.linkJavascript(faces, c, rw,
                         Mechanism.CLASS_RESOURCE, "/META-INF/com.enverio.js");
@@ -53,7 +52,7 @@ public class ServerSuggestRenderer extends SuggestRenderer {
         sb.append("','");
         sb.append(id);
         sb.append("_auto_complete');");
-        sw.write(sb.toString());
+        rw.write(sb.toString());
         rw.endElement("script");
     }
 

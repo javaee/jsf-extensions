@@ -4,6 +4,7 @@ import com.sun.faces.extensions.avatar.application.DeferredStateManager;
 import com.sun.faces.extensions.avatar.event.EventCallback;
 import com.sun.faces.extensions.common.util.FastWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.context.ResponseWriterWrapper;
@@ -22,7 +24,10 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.ResponseStream;
 import javax.faces.event.PhaseId;
 import javax.faces.render.ResponseStateManager;
-
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponseWrapper;
 
 public class AsyncResponse {
     
@@ -55,6 +60,8 @@ public class AsyncResponse {
         AsyncResponse instance = getInstance(false);
         if (null != instance) {
             instance.clearSubtrees();
+            instance.ajaxResponseWriter = null;
+            instance.removeNoOpResponse(FacesContext.getCurrentInstance());
         }
         Instance.remove();
     }
@@ -89,13 +96,14 @@ public class AsyncResponse {
         return this.viewState;
     }
     
-    public static ResponseWriter getResponseWriter() throws IOException {
-        FacesContext context = FacesContext.getCurrentInstance();
-        ResponseWriter rw = context.getResponseWriter();
-        if (rw == null || rw instanceof NoOpResponseWriter) {
-            rw = setupResponseWriter(context);
+    private ResponseWriter ajaxResponseWriter = null;
+    
+    public ResponseWriter getResponseWriter() throws IOException {
+        if (null == ajaxResponseWriter) {
+            ajaxResponseWriter = 
+                    AsyncResponse.getInstance().createAjaxResponseWriter(FacesContext.getCurrentInstance());
         }
-        return rw;
+        return ajaxResponseWriter;
     }
     
     private List<String> populateListFromHeader(String headerName) {
@@ -205,46 +213,41 @@ public class AsyncResponse {
         return result;
 
     }
-
-    private static ResponseWriter setupResponseWriter(FacesContext context) {
+    
+    private ResponseWriter createAjaxResponseWriter(FacesContext context) {
         // set up the ResponseWriter
-        ResponseWriter responseWriter = context.getResponseWriter();
-        if (null == responseWriter || responseWriter instanceof NoOpResponseWriter) {
-            RenderKitFactory renderFactory = (RenderKitFactory)
-            FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-            RenderKit renderKit =
-                    renderFactory.getRenderKit(context,
-                    context.getViewRoot().getRenderKitId());
-            Writer out = null;
-            Object response = context.getExternalContext().getResponse();
-            try {
-                Method getWriter =
-                        response.getClass().getMethod("getWriter",
-                        (Class []) null);
-                if (null != getWriter) {
-                    out = (Writer) getWriter.invoke(response);
-                }
-            } catch (IllegalArgumentException ex) {
-                ex.printStackTrace();
-            } catch (SecurityException ex) {
-                ex.printStackTrace();
-            } catch (InvocationTargetException ex) {
-                ex.printStackTrace();
-            } catch (IllegalAccessException ex) {
-                ex.printStackTrace();
-            } catch (NoSuchMethodException ex) {
-                ex.printStackTrace();
+        ResponseWriter responseWriter = null;
+        RenderKitFactory renderFactory = (RenderKitFactory)
+        FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+        RenderKit renderKit =
+                renderFactory.getRenderKit(context,
+                context.getViewRoot().getRenderKitId());
+        Writer out = null;
+        Object response = (null != origResponse) ? origResponse :
+            context.getExternalContext().getResponse();
+        try {
+            Method getWriter =
+                    response.getClass().getMethod("getWriter",
+                    (Class []) null);
+            if (null != getWriter) {
+                out = (Writer) getWriter.invoke(response);
             }
-            if (null != out) {
-                responseWriter =
-                        renderKit.createResponseWriter(out,
-                        "text/xml",
-                        context.getExternalContext().getRequestCharacterEncoding());
-            }
-            if (null != responseWriter) {
-                context.setResponseWriter(responseWriter);
-            }
-
+        } catch (IllegalArgumentException ex) {
+            ex.printStackTrace();
+        } catch (SecurityException ex) {
+            ex.printStackTrace();
+        } catch (InvocationTargetException ex) {
+            ex.printStackTrace();
+        } catch (IllegalAccessException ex) {
+            ex.printStackTrace();
+        } catch (NoSuchMethodException ex) {
+            ex.printStackTrace();
+        }
+        if (null != out) {
+            responseWriter =
+                    renderKit.createResponseWriter(out,
+                    "text/xml",
+                    context.getExternalContext().getRequestCharacterEncoding());
         }
         return responseWriter;
     }
@@ -276,8 +279,7 @@ public class AsyncResponse {
         return !result;
     }
     
-    private ResponseWriter origWriter = null;
-    private ResponseStream origStream = null;
+    private Object origResponse = null;
     
     /**
      * <p>Called from {@link AjaxLifecycle#render}, this method replaces
@@ -285,11 +287,9 @@ public class AsyncResponse {
      * no-op instances.</p>
      */
     
-    void installNoOpResponseClasses(FacesContext context) {
-        origWriter = context.getResponseWriter();
-        context.setResponseWriter(new NoOpResponseWriter());
-        origStream = context.getResponseStream();
-        context.setResponseStream(new NoOpResponseStream());
+    public void installNoOpResponse(FacesContext context) {
+        origResponse = context.getExternalContext().getResponse();
+        context.getExternalContext().setResponse(getNoOpResponse(origResponse));
     }
     
     /**
@@ -298,13 +298,37 @@ public class AsyncResponse {
      * their original instances.</p>
      */
     
-    void removeNoOpResponseClasses(FacesContext context) {
-        if (null != origWriter) {
-            context.setResponseWriter(origWriter);
+    public void removeNoOpResponse(FacesContext context) {
+        if (null != origResponse) {
+            context.getExternalContext().setResponse(origResponse);
+            origResponse = null;
         }
-        if (null != origStream) {
-            context.setResponseStream(origStream);
+    }
+    
+    private Object getNoOpResponse(Object orig) {
+        Object result = null;
+        if (orig instanceof HttpServletResponse) {
+            result = new NoOpResponseWrapper((HttpServletResponse)orig);
         }
+        else {
+            try {
+                Method getPortletOutputStream =
+                        orig.getClass().getMethod("getPortletOutputStream",
+                        (Class []) null);
+                if (null == getPortletOutputStream) {
+                    throw new FacesException("Response is not a portlet or servlet");
+                }
+            } catch (NoSuchMethodException ex) {
+                throw new FacesException("Response is not a portlet or servlet",ex);
+            } catch (IllegalArgumentException ex) {
+                throw new FacesException("Response is not a portlet or servlet", ex);
+            } catch (SecurityException ex) {
+                throw new FacesException("Response is not a portlet or servlet", ex);
+            } 
+            // PENDING(edburns): support portlet
+            throw new UnsupportedOperationException();
+        }
+        return result;
     }
     
     public static final String FACES_PREFIX = "com.sun.faces.avatar.";
@@ -314,7 +338,7 @@ public class AsyncResponse {
     public static final String RENDER_HEADER= FACES_PREFIX + "render";
     public static final String EVENT_HEADER= FACES_PREFIX + "event";
     
-    private static class StateCapture extends ResponseWriterWrapper {
+     private static class StateCapture extends ResponseWriterWrapper {
         
         protected final ResponseWriter orig;
         private Object state;
@@ -356,89 +380,50 @@ public class AsyncResponse {
         }
         
     }
-    
-   private static class NoOpResponseWriter extends ResponseWriter {
+
+    private static class NoOpResponseWrapper extends HttpServletResponseWrapper {
+        public NoOpResponseWrapper(HttpServletResponse orig) {
+            super(orig);
+        }
+
+        public int getBufferSize() {
+            return 0;
+        }
+
+        public void flushBuffer() throws IOException {
+        }
         
-        /**
-         * <p>We take the parent just so we can use <code>ResponseWriterWrapper</code>.</p>
-         */ 
-        private NoOpResponseWriter() {
+        private ServletOutputStream noOpServletOutputStream = null;
+
+        public ServletOutputStream getOutputStream() throws IOException {
+            if (null == noOpServletOutputStream) {
+                noOpServletOutputStream = new ServletOutputStream() {
+                    public void write(int c) throws IOException {
+                    }
+                };
+            }
+            return noOpServletOutputStream;
         }
-                
-        public void write(String str) throws IOException {
+        
+        private PrintWriter noOpPrintWriter = null;
+
+        public PrintWriter getWriter() throws IOException {
+            if (null == noOpPrintWriter) {
+                noOpPrintWriter = new PrintWriter(new Writer() {
+                    public void write(char[] cbuf, int off, int len) {}
+                    public void flush() {}
+                    public void close() {}
+                });
+            }
+            return noOpPrintWriter;
         }
 
-        public void endElement(String string) throws IOException {
+        public void reset() {
         }
 
-        public void writeComment(Object object) throws IOException {
+        public void resetBuffer() {
         }
-
-        public void write(int c) throws IOException {
-        }
-
-        public void write(char[] cbuf) throws IOException {
-        }
-
-        public void startElement(String string, UIComponent uIComponent) throws IOException {
-        }
-
-        public void writeText(Object text, UIComponent component, String property) throws IOException {
-        }
-
-        public void writeText(Object object, String string) throws IOException {
-        }
-
-        public void writeText(char[] c, int i, int i0) throws IOException {
-        }
-
-        public void write(char[] cbuf, int off, int len) throws IOException {
-        }
-
-        public void write(String str, int off, int len) throws IOException {
-        }
-
-        public void writeURIAttribute(String string, Object object, String string0) throws IOException {
-        }
-
-        public void writeAttribute(String string, Object object, String string0) throws IOException {
-        }
-
-        public void close() throws IOException {
-        }
-
-        public void endDocument() throws IOException {
-        }
-
-        public void startDocument() throws IOException {
-        }
-
-        public ResponseWriter cloneWithWriter(Writer writer) {
-            return new NoOpResponseWriter();
-        }
-
-        public String getContentType() {
-            return "";
-        }
-
-        public String getCharacterEncoding() {
-            return "";
-        }
-
-        public void flush() throws IOException {
-        }
-
-    }
-    
-    private static class NoOpResponseStream extends ResponseStream {
-        public void write(byte[] b) throws IOException {
-        }
-
-        public void write(int b) throws IOException {
-        }
-
-        public void write(byte[] b, int off, int len) throws IOException {
-        }
+        
     }
     
     

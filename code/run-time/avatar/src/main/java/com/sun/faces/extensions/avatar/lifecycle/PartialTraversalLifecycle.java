@@ -75,8 +75,6 @@ public class PartialTraversalLifecycle extends Lifecycle {
     }
     
     public void render(FacesContext context) throws FacesException {
-        Map<String,String> headerMap = context.getExternalContext().getRequestHeaderMap();
-
         if (!AsyncResponse.isAjaxRequest()) {
             parent.render(context);
             return;
@@ -88,13 +86,14 @@ public class PartialTraversalLifecycle extends Lifecycle {
         String state = null;
 
         try {
-            async.installNoOpResponseClasses(context);
+            async.installNoOpResponse(context);
 
             parent.render(context);
             
+            // gain access once more to the AxaxResponseWriter.  At this point,
+            // the writer does not need to be installed on the FacesContext.
+            writer = async.getResponseWriter();
             if (writeXML) {
-                writer = async.getResponseWriter();
-
                 writer.startElement("state", root);
             }
             state = async.getViewState(context);
@@ -109,7 +108,7 @@ public class PartialTraversalLifecycle extends Lifecycle {
             // PENDING edburns
         }
         finally {
-            async.removeNoOpResponseClasses(context);
+            async.removeNoOpResponse(context);
             AsyncResponse.clearInstance();
         }
         

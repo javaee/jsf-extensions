@@ -41,13 +41,13 @@ dojo.require("dojo.io.*");
 dojo.require("dojo.event.*");
 dojo.require("dojo.string.*");
 
-function ajaxifyChildren(target, eventType, eventHook) {
+function ajaxifyChildren(target, eventType, eventHook, inspectElementHook) {
     if (null == target.isAjaxified && 
         target.hasChildNodes()) {
 	for (var i = 0; i < target.childNodes.length; i++) {
 	    takeActionAndTraverseTree(target, target.childNodes[i], 
 				      moveAsideEventType, eventType, 
-				      eventHook);
+				      eventHook, inspectElementHook);
 	}
     }
     target.isAjaxified = true;
@@ -55,87 +55,25 @@ function ajaxifyChildren(target, eventType, eventHook) {
 }
 
 function moveAsideEventType(ajaxZone, element, eventType, eventHook) {
-    handler = new Object();
-    handler["eventHook"] = eventHook;
-    handler["eventType"] = eventType;
-    handler["element"] = element;
-    handler["originalScript"] = element[eventType];
-    handler["aroundHandler"] = function (invocation) {
-	// invocation.args[0] is the event.
-	var props = new Object();
-	var pctxts = "";
-	var zones = dj_global.g_zones;
-        var originalScript = this["originalScript"];
-        if (null != originalScript) {
-          originalScript = originalScript.toString();
-        }
-
-	// Here is where we invoke the user script to populate the "props"
-	// as appropriate to this particular zone.
-	dj_global[this["eventHook"]](ajaxZone, this["element"], 
-				     originalScript, props, invocation);
-
-	for (var i = 0; i < zones.length; i++) {
-	    pctxts = pctxts + zones[i];
-	    if (!(zones.length - 1 == i)) {
-		pctxts = pctxts + ",";
-	    }
-	}
-	if (0 < pctxts.length) {
-	    props[gExecute] = pctxts;
-	}
-	
-	var requestStruct = prepareRequest(ajaxZone, props);
-	
-	dojo.io.bind({
-	    method: "POST",
-		    url: window.location,
-		    content: props, 
-		    load: function(type, data, evt) {
-		    var zones = dj_global.g_zones;
-		    var subviews = new Array();
-		    var i = 0;
-		    // get the DOM elements for the subviews
-		    for (i = 0; i < zones.length; i++) {
-			subviews[i] = 
-			    window.document.getElementById(zones[i].substring(1));
-		    }
-		    // get the processing contexts
-		    var pCtxts = 
-			data.getElementsByTagName("processing-context");
-		    var postInstallHook = null;
-		    for (i = 0; i < zones.length; i++) {
-			subviews[i].innerHTML = pCtxts[i].childNodes[0].data;
-			postInstallHook = 
-			    pCtxts[i].getAttribute("postInstallHook");
-			// If the processing context had a postInstallHook...
-			if (typeof postInstallHook != 'undefined') {
-			    postInstallHook = dj_global[postInstallHook];
-			    // which identifies a globally scoped function...
-			    if (typeof postInstallHook == 'function') {
-				// call the function.
-				postInstallHook(subviews[i], 
-						subviews[i].innerHTML);
-			    }
-			}
-			subviews[i].isAjaxified = null;
-		    }
-		},
-		    mimetype: "text/xml"
-		    });
-	
-    };
-    
-    dojo.event.connect("around", element, eventType, handler, "aroundHandler");
+    if ('on' == eventType.substring(0,2)) {
+	eventType = eventType.substring(2);
+    }
+    var c = new Faces.Command(element, eventType, { render: g_zones.join(','),
+                                                    ajaxZone: ajaxZone,
+						    eventHook: eventHook });
 }
 
-function takeActionAndTraverseTree(target, element, action, eventType, eventHook, postInstallHook) {
+function takeActionAndTraverseTree(target, element, action, eventType, eventHook, inspectElementHook) {
     var takeAction = false;
-    var inspectElement = target.getAttribute("inspectElementHook");
 
     // If the user defined an "inspectElement" function, call it.
-    if (null != (inspectElement = dj_global[inspectElement])) {
-      takeAction = inspectElement(element);
+    if (!(typeof inspectElementHook == 'function')) {
+	if (typeof gGlobalScope[inspectElementHook] == 'function') {
+	    inspectElementHook = gGlobalScope[inspectElementHook];
+	}
+    }
+    if (null != inspectElementHook) {
+	takeAction = inspectElementHook(element);
     }
     // If the function returned false or null, or was not defined...
     if (null == takeAction || !takeAction) {
@@ -152,7 +90,7 @@ function takeActionAndTraverseTree(target, element, action, eventType, eventHook
     if (element.hasChildNodes()) {
 	for (var i = 0; i < element.childNodes.length; i++) {
 	    takeActionAndTraverseTree(target, element.childNodes[i], action, 
-				      eventType, eventHook);
+				      eventType, eventHook, inspectElementHook);
 	}
     }
     return false;
@@ -243,10 +181,13 @@ Object.extend(Element, {
     if (!d) alert(dest + " not found");
 	var parent = d.parentNode;
 	var temp = document.createElement('div');
+	var result = null;
 	temp.id = d.id;
 	temp.innerHTML = src;
 
+	result = temp.firstChild;
 	parent.replaceChild(temp.firstChild,d);
+	return result;
 
   },
   serialize: function(e) {
@@ -322,6 +263,8 @@ var Faces = {
 /* ViewState Hash over a given Form
  ***********************************************************/
 Faces.ViewState = Class.create();
+Faces.ViewState.CommandType = ['button','submit','reset'];
+// concat?
 Faces.ViewState.Ignore = ['button','submit','reset','image'];
 Faces.ViewState.prototype = {
     setOptions: function(options) {
@@ -331,8 +274,28 @@ Faces.ViewState.prototype = {
     initialize: function(form, options) {
 	this.setOptions(options);
 
+	// Skip the traversal if the user elected to have more control over
+	// the post data.
+	var eventHookType = typeof this.options.eventHook;
+	var inputsType = typeof this.options.inputs;
+	if (('void' != eventHookType && 'undefined' != eventHookType) ||
+	    ('void' != inputsType && 'undefined' != eventHookType)) {
+	    // Just get the state data.
+	    var viewState = $(gViewState);
+	    t = viewState.tagName.toLowerCase();
+	    p = Form.Element.Serializers[t](viewState);
+	    if (p && p[0].length != 0) {
+		if (p[1].constructor != Array) p[1] = [p[1]];
+		if (this[p[0]]) { this[p[0]] = this[p[0]].concat(p[1]); }
+		else this[p[0]] = p[1];
+	    }
+	    
+	    return;
+	}
 	var e = Form.getElements($(form));
 	var t,p;
+	// Traverse the elements of the form and slam all of them into this 
+	// element's property set.
 	for (var i = 0; i < e.length; i++) {
 	    if (Faces.ViewState.Ignore.indexOf(e[i].type) == -1) {
 		t = e[i].tagName.toLowerCase();
@@ -344,15 +307,21 @@ Faces.ViewState.prototype = {
 		}
 	    }
 	};
+	// For good measure,
+	var source = this.options.source;
+	// add source
+	var action = $(source);
+	if (action && action.form) {
+	    this[action.name] = action.value || 'x';
+	}
+	else {
+	    this[source] = source;
+	}
+	
     },
     toQueryString: function() {
 	var q = new Array();
 	var i,j,p,v;
-
-	var acc = "";
-	for (var prop in this) {
-	    acc = acc + " " + prop;
-	}
 
 	if (this.options.inputs) {
 	    if (this[gViewState]) {
@@ -401,6 +370,18 @@ Faces.ViewState.prototype = {
 		}
 	    }
 	}
+	if (this.options.parameters) {
+	    q.push(this.options.parameters);
+	}
+	if (typeof this.options.eventHook == 'function') {
+	    this.options.eventHook(this.options.ajaxZone, this.options.source,
+				   q);
+	}
+	else if (typeof gGlobalScope[this.options.eventHook] == 'function') {
+	    gGlobalScope[this.options.eventHook](this.options.ajaxZone, 
+						 this.options.source, q);
+	}
+	    
 	return q.join('&');
     }
 };
@@ -425,20 +406,20 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
 
 	if (this.options.inputs) {
 	    viewState = new Faces.ViewState(this.form,
-				 { inputs: this.options.inputs });
+				 { inputs: this.options.inputs,
+				   source: source,
+				   ajaxZone: this.options.ajaxZone,
+				   eventHook: this.options.eventHook });
 	}
 	else {
-	    viewState = new Faces.ViewState(this.form);
+	    viewState = new Faces.ViewState(this.form,
+					    { source: source,
+					      ajaxZone: this.options.ajaxZone,
+					      eventHook: this.options.eventHook });
 	}
 	
 	// add passed parameters
-	Object.extend(viewState, this.options.parameters || {});
-	this.options.parameters = null;
-	
-	// add source
-	var action = $(source);
-	if (action && action.form) viewState[action.name] = action.value || 'x';
-	else viewState[source] = source;
+	viewState.options.parameters = this.options.parameters;
 	
 	// initialize headers
 	this.options.requestHeaders = this.options.requestHeaders || [];
@@ -478,11 +459,11 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
     var onComplete = this.options.onComplete;
     this.options.onComplete = (function(transport, object) {
       this.renderView();
-	  if (onComplete) {
-      	onComplete(transport, object);
-	  } else {
-		 this.evalResponse();
-	  }
+      if (onComplete) {
+	  onComplete(transport, object);
+      } else if (this.doEvalResponse) {
+	  this.evalResponse();
+      }
     }).bind(this);
 
 	if (this.options.onException == null) {
@@ -505,6 +486,7 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
 	 content = render[i].firstChild.firstChild;
 	 markup = content.text || content.data;
 	 str = markup.stripScripts();
+	 this.doEvalResponse = false;
 	 if (typeof gGlobalScope.postInstallHook != 'undefined') {
 	     Element.replace(id, str);
 	     gGlobalScope.postInstallHook($(id), markup);
@@ -525,13 +507,13 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
   },
   evalResponse: function() {
 	  if (this.responseIsSuccess()) {
-		  var text = this.transport.responseText;
-		  //alert(text);
-		  if (text) {
-			  try {
-			      text.evalScripts();
-			  } catch (e) {}
-		  }
+	      var text = this.transport.responseText;
+	      //alert(text);
+	      if (text) {
+		  try {
+		      text.evalScripts();
+		  } catch (e) {}
+	      }
 	  }
   },
   onException: function(o,e) {
@@ -548,7 +530,10 @@ Faces.Command.prototype = {
 		var options = options;
 		var facesObserver = function(e) {
 			new Faces.Event(action,options);
-			Event.stop(e);
+			// if this element can cause a form submit...
+			if (Faces.ViewState.CommandType.indexOf(action.type) != -1){
+			    Event.stop(e);
+			}
 			return false;
 		};
 		// If the element had no existing facesObserver

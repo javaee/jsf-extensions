@@ -55,12 +55,12 @@ public class AjaxZoneRenderer extends Renderer {
     // take care of it.
     
     private static final String scriptIds[] = {
-        "/META-INF/dojo/dojo.js",
         "/META-INF/prototype.js",
         "/META-INF/effects.js",
         "/META-INF/dragdrop.js",
         "/META-INF/controls.js",
-        "/META-INF/com_sun_faces_ajax.js"
+        "/META-INF/com_sun_faces_ajax.js",
+        "/META-INF/com_sun_faces_ajax_zone.js"
     };    
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -36,13 +36,6 @@
             <include>*.tld</include>
         </includes>
      </resource>
-     <resource>
-       <targetPath>META-INF</targetPath>
-       <directory>target/dependencies/dojo</directory>
-       <includes>
-           <include>**/*.*</include>
-       </includes>
-    </resource>
    </resources>
     <plugins>
        <plugin>
@@ -57,24 +50,6 @@
 	   </execution>
 	 </executions>
        </plugin>   
-       <plugin>
-	 <artifactId>maven-antrun-plugin</artifactId>
-	 <executions>
-	   <execution>
-             <id>dojo</id>
-	     <phase>generate-resources</phase>
-	     <configuration>
-	       <tasks>
-                 <echo message="unzipping dojo to webapp root" />
-                 <unzip src="lib/dojo.zip" dest="target/dependencies/dojo" />
-	       </tasks>
-	     </configuration>
-	     <goals>
-	       <goal>run</goal>
-	     </goals>
-	   </execution>
-	 </executions>
-       </plugin>
     </plugins>
 
   </build>

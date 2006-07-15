@@ -188,6 +188,12 @@ public class PartialTraversalViewRoot extends UIViewRoot implements Serializable
                     extContext.getResponse();
                     servletResponse.setContentType("text/xml");
                     servletResponse.setHeader("Cache-Control", "no-cache");
+                    String xjson = 
+                            extContext.getRequestHeaderMap().get(AsyncResponse.XJSON_HEADER);
+                    if (null != xjson) {
+                        servletResponse.setHeader(AsyncResponse.XJSON_HEADER, 
+                                xjson);
+                    }
                 }
                 
                 writer.startElement("partial-response", root);

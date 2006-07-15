@@ -29,12 +29,13 @@
 
 package com.sun.faces.extensions.avatar.renderkit;
 
+import com.sun.faces.extensions.avatar.components.AjaxZone;
 import com.sun.faces.extensions.avatar.lifecycle.AsyncResponse;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
+import javax.el.MethodExpression;
 import javax.el.ValueExpression;
-import javax.faces.component.NamingContainer;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -157,7 +158,7 @@ public class AjaxZoneRenderer extends Renderer {
      * <p>
      */
     
-    private void writeAjaxifyScript(FacesContext context, ResponseWriter writer, UIComponent comp,
+    private void writeAjaxifyScript(FacesContext context, ResponseWriter writer, AjaxZone comp,
             boolean isAjaxRequest) throws IOException {
 
         String 
@@ -165,8 +166,10 @@ public class AjaxZoneRenderer extends Renderer {
                 interactionType = getAttr(context, comp, "interactionType"),
                 eventHook = null,
                 eventType = null,
-	        inspectElementHook = null;
+	        inspectElementHook = null,
+                replaceElementHook = null;
 	StringBuffer ajaxifyChildren = null;
+        MethodExpression action = null;
 	boolean isXhtml = false,
                 typeIsOutput = (null == interactionType || interactionType.equals("output")),
                 writeZoneAccruer = ((!isAjaxRequest && typeIsOutput) || 
@@ -197,6 +200,7 @@ public class AjaxZoneRenderer extends Renderer {
                 eventHook = getAttr(context, comp, "eventHook");
                 eventType = getAttr(context, comp, "eventType");
                 inspectElementHook = getAttr(context, comp, "inspectElementHook");
+                replaceElementHook = getAttr(context, comp, "replaceElementHook");
 
                 if (null == eventHook || null == eventType) {
                     // PENDING: I18N
@@ -204,11 +208,19 @@ public class AjaxZoneRenderer extends Renderer {
                 }
 
                 ajaxifyChildren = new StringBuffer();
-                ajaxifyChildren.append("\najaxifyChildren($(\'" + clientId + "\'), \'" + eventType + "\', \'" + eventHook + "\'");
+                ajaxifyChildren.append("\najaxifyChildren($(\'" + clientId + "\'), ");
+                ajaxifyChildren.append("{ eventType: \'" + eventType + 
+                        "\', eventHook: \'" + eventHook + "\'");
                 if (null != inspectElementHook) {
-                    ajaxifyChildren.append(", \'" + inspectElementHook + "\'");
+                    ajaxifyChildren.append(", inspectElementHook: \'" + inspectElementHook + "\'");
                 }
-                ajaxifyChildren.append(");");
+                if (null != replaceElementHook) {
+                    ajaxifyChildren.append(", replaceElementHook: \'" + replaceElementHook + "\'");
+                }
+                if (null != (action = comp.getActionExpression())) {
+                    ajaxifyChildren.append(", action: \'" + action.getExpressionString() + "\'");
+                }
+                ajaxifyChildren.append(" } );");
                 writer.write(ajaxifyChildren.toString());
             }
 	}
@@ -296,7 +308,7 @@ public class AjaxZoneRenderer extends Renderer {
                         Mechanism.CLASS_RESOURCE, scriptIds[i]);
             }
         }
-        writeAjaxifyScript(context, writer, component, isAjaxRequest);
+        writeAjaxifyScript(context, writer, (AjaxZone) component, isAjaxRequest);
         writer.endElement("div"); //NOI18N
     }
 

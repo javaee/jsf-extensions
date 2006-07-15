@@ -75,7 +75,6 @@
                  bottom="Copyright &#169; 2002-2006 Sun Microsystems, Inc. All Rights Reserved.">
             <fileset dir="${ajax.src.dir}">
                 <include name="**/*.java"/>
-                <exclude name="**/AjaxZone*.java" />
                 <exclude name="**/FastWriter*.java" />
             </fileset>
             <fileset dir="${common.src.dir}">

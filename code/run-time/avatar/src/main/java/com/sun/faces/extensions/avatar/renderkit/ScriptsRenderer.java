@@ -49,7 +49,6 @@ public class ScriptsRenderer extends Renderer {
     // take care of it.
     
     private static final String scriptIds[] = {
-        "/META-INF/dojo/dojo.js",
         "/META-INF/prototype.js",
         "/META-INF/effects.js",
         "/META-INF/dragdrop.js",

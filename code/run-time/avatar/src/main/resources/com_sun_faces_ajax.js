@@ -36,6 +36,88 @@ var gSuppressXML = gFacesPrefix + "SuppressXML";
 var gViewState = "javax.faces.ViewState";
 var gGlobalScope = this;
 
+var gSpecialChars = {
+            '\b': '\\b',
+            '\t': '\\t',
+            '\n': '\\n',
+            '\f': '\\f',
+            '\r': '\\r',
+            '"' : '\\"',
+            '\\': '\\\\'
+};
+
+var gJSON = {
+    array: function (x) {
+	var a = ['['], b, f, i, l = x.length, v;
+	for (i = 0; i < l; i += 1) {
+	    v = x[i];
+	    f = gJSON[typeof v];
+	    if (f) {
+		v = f(v);
+		if (typeof v == 'string') {
+		    if (b) {
+			a[a.length] = ',';
+		    }
+		    a[a.length] = v;
+		    b = true;
+		}
+	    }
+	}
+	a[a.length] = ']';
+	return a.join('');
+    },
+    'boolean': function (x) {
+	return String(x);
+    },
+    'null': function (x) {
+	return "null";
+    },
+    number: function (x) {
+	return isFinite(x) ? String(x) : 'null';
+    },
+    object: function (x) {
+	if (x) {
+	    if (x instanceof Array) {
+		return gJSON.array(x);
+	    }
+	    var a = ['{'], b, f, i, v;
+	    for (i in x) {
+		v = x[i];
+		f = gJSON[typeof v];
+		if (f) {
+		    v = f(v);
+		    if (typeof v == 'string') {
+			if (b) {
+			    a[a.length] = ',';
+			}
+			a.push(gJSON.string(i), ':', v);
+			b = true;
+                            }
+                        }
+	    }
+	    a[a.length] = '}';
+	    return a.join('');
+	}
+	return 'null';
+    },
+    string: function (x) {
+	if (/[\"\\\x00-\x1f]/.test(x)) {
+	    x = x.replace(/([\x00-\x1f\\\"])/g, function(a, b) {
+			      var c = gSpecialChars[b];
+			      if (c) {
+				  return c;
+			      }
+			      c = b.charCodeAt();
+			      return '\\u00' +
+				  Math.floor(c / 16).toString(16) +
+				  (c % 16).toString(16);
+			  });
+	}
+	return '"' + x + '"';
+    }
+};
+
+
 
 /* Object Extensions
  ***********************************************************/
@@ -251,6 +333,13 @@ Faces.ViewState.prototype = {
 	    gGlobalScope[this.options.eventHook](this.options.ajaxZone, 
 						 this.options.source, q);
 	}
+
+	if (this.options.action) {
+	    p = (this.options.ajaxZone) ? this.options.ajaxZone.id :
+	      this.options.source.id;
+	    q.push(encodeURIComponent(p)+'='+
+		   encodeURIComponent(this.options.action));
+	}
 	    
 	return q.join('&');
     }
@@ -273,20 +362,19 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
 	
 	// create viewState
 	var viewState = null;
+	var stateOptions = new Object();
 
-	if (this.options.inputs) {
-	    viewState = new Faces.ViewState(this.form,
-				 { inputs: this.options.inputs,
-				   source: source,
-				   ajaxZone: this.options.ajaxZone,
-				   eventHook: this.options.eventHook });
-	}
-	else {
-	    viewState = new Faces.ViewState(this.form,
-					    { source: source,
-					      ajaxZone: this.options.ajaxZone,
-					      eventHook: this.options.eventHook });
-	}
+	// copy over the options that should get passed through
+	Object.extend(stateOptions, this.options);
+	stateOptions.source = source;
+	// remove the ones that should not
+	stateOptions.render = null;
+	stateOptions.execute = null;
+	stateOptions.asynchronous = null;
+	stateOptions.contentType = null;
+	stateOptions.method = null;
+
+	viewState = new Faces.ViewState(this.form, stateOptions);
 	
 	// add passed parameters
 	viewState.options.parameters = this.options.parameters;
@@ -323,14 +411,24 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
 	    this.options.requestHeaders.push(gSuppressXML);
 	    this.options.requestHeaders.push("true");
 	}
+	if (this.options.postInstallHook || this.options.replaceElementHook ||
+	    this.options.closure) {
+	    var xjson = new Object();
+	    xjson.postInstallHook = this.options.postInstallHook;
+	    xjson.replaceElementHook = this.options.replaceElementHook;
+	    Object.extend(xjson, this.options.closure);
+	    xjson = gJSON.object(xjson);
+	    this.options.requestHeaders.push("X-JSON");
+	    this.options.requestHeaders.push(xjson);
+	}
 	
 	this.options.postBody = viewState.toQueryString();
 
     var onComplete = this.options.onComplete;
-    this.options.onComplete = (function(transport, object) {
-      this.renderView();
+    this.options.onComplete = (function(transport, options) {
+      this.renderView(options);
       if (onComplete) {
-	  onComplete(transport, object);
+	  onComplete(transport, options);
       } else if (this.doEvalResponse) {
 	  this.evalResponse();
       }
@@ -343,7 +441,7 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
 	// send request
     this.request(this.url);
   },
-  renderView: function() {
+  renderView: function(options) {
      var xml = this.transport.responseXML;
      if (null == xml || typeof xml == 'undefined') {
 	 return;
@@ -357,11 +455,56 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
 	 markup = content.text || content.data;
 	 str = markup.stripScripts();
 	 this.doEvalResponse = false;
-	 if (typeof gGlobalScope.postInstallHook != 'undefined') {
-	     Element.replace(id, str);
-	     gGlobalScope.postInstallHook($(id), markup);
+	 // If there were some options passed to this function...
+	 if (null != options && typeof options != 'undefined') {
+	     // handle them.
+	     var optionType = null;
+	     // If the user specified a replaceElementHook...
+	     if (null != options.replaceElementHook &&
+		 (optionType = typeof options.replaceElementHook) != 
+		 'undefined') {
+		 // and its type is already a function...
+		 if (optionType == 'function') {
+		     // invoke it.
+		     options.replaceElementHook(id, markup);
+		 }
+		 // Otherwise, if there is a globally scoped function
+		 // named as the value of the replaceElementHook...
+		 else if (typeof gGlobalScope[options.replaceElementHook] ==
+			  'function') {
+		     // invoke it.
+		     gGlobalScope[options.replaceElementHook](id, markup);
+		 }
+	     }
+	     else {
+		 // Otherwise, just do our element replacement.
+		 Element.replace(id, str);
+	     }
+
+	     // If the user specified a postInstallHook...
+	     if (null != options.postInstallHook &&
+		 (optionType == typeof options.postInstallHook) !=
+		 'undefined') {
+		 // and its type is already a function...
+		 if (optionType == 'function') {
+		     // invoke it.
+		     options.postInstallHook($(id), markup);
+		 }
+		 // Otherwise, if there is a globally scoped function
+		 // named as the value of the postInstallHook...
+		 else if (typeof gGlobalScope[options.postInstallHook] ==
+			  'function') {
+		     // invoke it.
+		     gGlobalScope[options.postInstallHook]($(id), markup);
+		 }
+	     }
+	     else {
+		 // Otherwise, just evaluate the scripts.
+		 markup.evalScripts();
+	     }
 	 }
 	 else {
+	     // If not, just do the default action
 	     Element.replace(id, str);
 	     markup.evalScripts();
 	 }

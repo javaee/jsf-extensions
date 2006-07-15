@@ -44,6 +44,13 @@
   </tag>
   
   <tag>
+    <description>
+       <![CDATA[<p>This is essentially a smart div tag that enables the
+       easy ajaxification of a portion of the page.  When using this
+       tag, any elements within the zone are updated via AJAX.  If using
+       multiple zones on a single page, all of them are updated for each
+       AJAX request.</p>]]>
+    </description>
     <name>ajaxZone</name>
     <tag-class>com.sun.faces.extensions.avatar.taglib.AjaxZoneTag</tag-class>
     <body-content>JSP</body-content>
@@ -139,18 +146,22 @@ function inspectElement(element);
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  &lt;/d:scroller&gt;<br /> 
 &lt;/jsfExt:ajaxZone&gt;<br /> 
 
-function inspectElement(element) {
-  var result = false
-  if (null != element) {
-    var tagName = element.nodeName;
-    if (null != tagName) {
-      if (-1 != tagName.toLowerCase().substring("input")) {
-        result = true;
-      }
-    }
-  }
-  return result;
-}
+&lt;script type="text/JavaScript"&gt;<br /> 
+&lt;!--<br /> 
+function inspectElement(element) {<br />
+&nbsp;&nbsp;var result = false;<br />
+&nbsp;&nbsp;if (null != element) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;var tagName = element.nodeName;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if (null != tagName) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (-1 != tagName.toLowerCase().substring("input")) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;result = true;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}<br />
+&nbsp;&nbsp;}<br />
+&nbsp;&nbsp;return result;<br />
+}<br />
+--&gt;<br /> 
+&lt;/script&gt;<br /> 
 
 </code></pre>
 
@@ -256,7 +267,7 @@ function handler(ajaxZone, element, originalScript, outProps, invocation);
           <code>invocation</code> is an associative array with two
           properties: <code>invocation.args</code> is an array of the arguments
           passed to the target event handler from the browser.
-          note that <code>invocation.args[0] is the JavaScript event.
+          note that <code>invocation.args[0]</code> is the JavaScript event.
           <code>invocation.proceed</code> is a function you can call that will
           call the target event handler.  The return value from the
           <code>proceed</code> function can be acted on in the handler
@@ -376,6 +387,37 @@ function postInstallHook(ajaxZone, innerHTML);
 	    <type>java.lang.String</type>
 </deferred-value>
 </attribute>
+
+    <attribute>
+        <description>
+          <![CDATA[
+
+          <p>This optional attribute is or names a JavaScript function
+          that will be called when the system needs to replace a chunk
+          of markup in the view based on the return from the server.
+          The function must conform to the following signature.
+          </p>
+
+<pre><code>
+function replaceElement(id, content);
+</code></pre>
+
+          <p>The function is expected to take the content of the
+          <code>content</code> argument and replace the DOM element
+          referenced by the <code>id</code> argument.  The function is
+          expected to invoke any scripts that may be present in
+          <code>content</code>.</p>
+
+          ]]>
+
+        </description>
+        <name>replaceElementHook</name>
+        <required>false</required>
+        <deferred-value>
+	    <type>java.lang.String</type>
+        </deferred-value>
+    </attribute>
+
 
 
 

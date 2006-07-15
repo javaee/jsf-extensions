@@ -337,6 +337,7 @@ public class AsyncResponse {
     public static final String EXECUTE_HEADER = FACES_PREFIX + "execute";
     public static final String RENDER_HEADER= FACES_PREFIX + "render";
     public static final String EVENT_HEADER= FACES_PREFIX + "event";
+    public static final String XJSON_HEADER= "X-JSON";
     
      private static class StateCapture extends ResponseWriterWrapper {
         

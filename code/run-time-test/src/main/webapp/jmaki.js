@@ -10,7 +10,61 @@ function Jmaki() {
     var libraries = [];
     var widgets = [];
     this.attributes = new Map();
-           
+	
+	var topics = new Map();
+
+	/**
+	*  Subscribe to a new topic
+	*/
+	this.subscribe = function(name, listener) {
+		var topic = topics.get(name);
+		// create the topic if it has not been created yet
+		if (!topic) {
+			topic = [];
+			topics.put(name, topic);
+		}
+		// make sure that a listener is only added once
+		for (var i in topic) {
+			if (i == listener) {
+				return;
+			}
+		}
+		topic.push(listener);
+	}
+	
+  	/**
+	*  Unscribe a listener to a topic
+	*/
+	this.unsubscribe = function(name, listener) {
+		var topic = topics.get(name);
+		// create the topic if it has not been created yet
+		if (topic) {
+			for (var i = 0; i < topic.length; i++) {
+				if (topic[i] == listener) {
+					topic.splice(i,1);
+					break;
+				}
+			}
+		}
+	}  
+	
+   /**
+	*  Publish an event to a topic
+	*/
+	this.publish = function(name, args) {
+		if (typeof name == 'undefined' || typeof args == 'undefined') return;
+		var topic = topics.get(name);
+		// create the topic if it does not exist
+		if (!topic) {
+			topic = [];
+			topics.put(name, topic);
+		}
+		// notify the listeners
+		for (var index in topic) {
+			topic[index](args);
+		}
+	}
+				         
     this.addLibrary = function(lib) {
         var added = false;
         for (var l=0; l < libraries.length; l++) {
@@ -142,42 +196,26 @@ function Jmaki() {
     }
     
     function Map() {
-        var size = 0;
-        var keys = [];
-        var values = [];
+		var map = {};
         
         this.put = function(key,value) {
-            if (this.get(key) == null) {
-                keys[size] = key; values[size] = value;
-                size++;
-            } else {
-                for (i=0; i < size; i++) {
-                    if (keys[i] == key) {
-                        values[i] = value;
-                    }
-                }
-            }
-        }
+			map[key] = value;
+		}
         
         this.get = function(key) {
-            for (i=0; i < size; i++) {
-                if (keys[i] == key) {
-                    return values[i];
-                }
-            }
-            return null;
+            return map[key];
         }
+		
+		this.remove =  function(key) {
+			delete map[key] ;
+		}
         
         this.clear = function() {
-            size = 0;
-            keys = [];
-            values = [];
+			map = {};
         }
-        
-        // TODO: Need a remove
     }
 }
-   
+
 var oldLoad = window.onload;
 
 window.onload = function() {

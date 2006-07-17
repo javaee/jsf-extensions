@@ -164,6 +164,7 @@ public class AjaxZoneRenderer extends Renderer {
         String 
                 clientId = null,
                 interactionType = getAttr(context, comp, "interactionType"),
+                closureHook = null,
                 eventHook = null,
                 eventType = null,
 	        inspectElementHook = null,
@@ -199,6 +200,7 @@ public class AjaxZoneRenderer extends Renderer {
             if (writeAjaxifyChildren) {
                 eventHook = getAttr(context, comp, "eventHook");
                 eventType = getAttr(context, comp, "eventType");
+                closureHook = getAttr(context, comp, "closureHook");
                 inspectElementHook = getAttr(context, comp, "inspectElementHook");
                 replaceElementHook = getAttr(context, comp, "replaceElementHook");
 
@@ -206,7 +208,7 @@ public class AjaxZoneRenderer extends Renderer {
                     // PENDING: I18N
                     throw new IOException("If \"interactionType\" is specified, both \"eventHook\" and \"eventType\" must be specified");
                 }
-
+                
                 ajaxifyChildren = new StringBuffer();
                 ajaxifyChildren.append("\najaxifyChildren($(\'" + clientId + "\'), ");
                 ajaxifyChildren.append("{ eventType: \'" + eventType + 
@@ -220,7 +222,12 @@ public class AjaxZoneRenderer extends Renderer {
                 if (null != (action = comp.getActionExpression())) {
                     ajaxifyChildren.append(", action: \'" + action.getExpressionString() + "\'");
                 }
-                ajaxifyChildren.append(" } );");
+                ajaxifyChildren.append(" }");
+                if (null != closureHook) {
+                    ajaxifyChildren.append(", \'" + closureHook + "\'");
+                }
+                ajaxifyChildren.append(");");
+
                 writer.write(ajaxifyChildren.toString());
             }
 	}

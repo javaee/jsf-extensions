@@ -33,7 +33,8 @@ Copyright 2005 Sun Microsystems Inc. All Rights Reserved
 <jsfExt:ajaxZone id="zone2" interactionType="input" 
                 inspectElementHook="inspectElement"
                 eventType="click" eventHook="extractParams"
-                action="#{carstore.currentModel.updatePricing}">
+                action="#{carstore.currentModel.updatePricing}"
+                closureHook="getClosure">
 <h:panelGrid>
 
     <h:outputText value="#{bundle.OptionsPackages}"/>

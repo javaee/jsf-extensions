@@ -108,16 +108,56 @@ apply request values, rather than invoke application.</p>
 </dd>
 
 
-<dt><p>suppressXML</p>
+<dt><p>closure</p>
 </dt>
 
-<dd>If specified, the server will not wrap the response in XML.  This
-prevents the JavaScript library from receiving the response and
-including it in the DOM, but can be useful when you already have a
-JavaScript component on the client side that is expecting a particular
-kind of data.  For example, you can imagine having a JSF component that
-uses JSON to send data back and forth, rather than XML.
+<dd><p>If specified, this is a JavaScript associative array object that
+will be sent up to the server in the <code>X-JSON</code> header.  This
+value may be operated on by the server.  The possibly modified value
+will be returned to the client as the last argument in the
+<code>replaceElementHook</code> and/or the
+<code>postInstallHook</code>.</p>
 </dd>
+
+<dt><p>replaceElementHook</p>
+</dt>
+
+<dd><p>The name of a globally scoped function that conforms to the following signature.</p>
+
+<pre><code>
+function replaceElement(id, content, [closure]);
+</code></pre>
+
+<p>This function is called for each component that needs to be
+re-rendered with data from this ajax response.  The function is expected
+to take the content of the <code>content</code> argument and replace the
+DOM element referenced by the <code>id</code> argument.  The function is
+expected to invoke any scripts that may be present in
+<code>content</code>.  The optional argument <code>closure</code> is
+whatever was passed as the <code>closure</code> option to the
+<code>Faces.Event</code> or <code>Faces.Command</code> that initiated
+the ajax request for this response.</p>
+
+</dd>
+
+<dt><p>postReplaceHook</p>
+</dt>
+
+<dd><p>The name of a globally scoped function that conforms to the
+following signature.</p>
+
+<pre><code> function postReplaceHook(ajaxZone, innerHTML, [closure]);
+</code></pre>
+
+<p>This function is called after the markup replacement for each
+component that needs to be re-rendered with data from this ajax
+response.  The optional argument <code>closure</code> is whatever was
+passed as the <code>closure</code> option to the
+<code>Faces.Event</code> or <code>Faces.Command</code> that initiated
+the ajax request for this response.</p>
+
+</dd>
+
 
        </dl>      
 

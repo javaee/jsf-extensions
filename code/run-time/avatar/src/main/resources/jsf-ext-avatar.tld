@@ -374,14 +374,20 @@ function handler(element, originalScript, outProps, invocation) {<br />
           the following signature:</p>
 
 <pre><code>
-function postInstallHook(ajaxZone, innerHTML);
+function postReplaceHook(ajaxZone, innerHTML, [closure]);
 </code></pre>
 
+<p>This function is called after the markup replacement for each
+component that needs to be re-rendered with data from this ajax
+response.  The optional argument <code>closure</code> is whatever was
+passed as the <code>closure</code> option to the
+<code>Faces.Event</code> or <code>Faces.Command</code> that initiated
+the ajax request for this response.</p>
 
 ]]>
 
 </description>
-<name>postInstallHook</name>
+<name>postReplaceHook</name>
 <required>false</required>
 <deferred-value>
 	    <type>java.lang.String</type>
@@ -399,19 +405,50 @@ function postInstallHook(ajaxZone, innerHTML);
           </p>
 
 <pre><code>
-function replaceElement(id, content);
+function replaceElement(id, content, [closure]);
 </code></pre>
 
           <p>The function is expected to take the content of the
           <code>content</code> argument and replace the DOM element
           referenced by the <code>id</code> argument.  The function is
           expected to invoke any scripts that may be present in
-          <code>content</code>.</p>
+          <code>content</code>.  The optional argument
+          <code>closure</code> is whatever was passed as the
+          <code>closure</code> option to the <code>Faces.Event</code> or
+          <code>Faces.Command</code> that initiated the ajax request for
+          this response.</p>
 
           ]]>
 
         </description>
         <name>replaceElementHook</name>
+        <required>false</required>
+        <deferred-value>
+	    <type>java.lang.String</type>
+        </deferred-value>
+    </attribute>
+
+    <attribute>
+        <description>
+          <![CDATA[
+
+          <p>This function is called to provide a closure argument that
+          will be passed to the ajax request and made available to the
+          ajax response in the <code>replaceElementHook</code> or
+          <code>postReplaceHook </code> functions.  The function must
+          conform to the following signature.
+          </p>
+
+<pre><code>
+function getClosure(ajaxZone, element);
+</code></pre>
+
+          <p>The function must return a JavaScript Object.</p>
+
+          ]]>
+
+        </description>
+        <name>closureHook</name>
         <required>false</required>
         <deferred-value>
 	    <type>java.lang.String</type>

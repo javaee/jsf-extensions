@@ -84,12 +84,20 @@ public class AjaxZoneTag extends UIComponentELTag {
                 component.setValueExpression("replaceElementHook", replaceElementHook);
             }
         }
-        if (null != postInstallHook) {
-            if (postInstallHook.isLiteralText()) {
-                component.getAttributes().put("postInstallHook", postInstallHook.getValue(getFacesContext().getELContext()));
+        if (null != postReplaceHook) {
+            if (postReplaceHook.isLiteralText()) {
+                component.getAttributes().put("postReplaceHook", postReplaceHook.getValue(getFacesContext().getELContext()));
             }
             else {
-                component.setValueExpression("postInstallHook", postInstallHook);
+                component.setValueExpression("postReplaceHook", postReplaceHook);
+            }
+        }
+        if (null != closureHook) {
+            if (closureHook.isLiteralText()) {
+                component.getAttributes().put("closureHook", closureHook.getValue(getFacesContext().getELContext()));
+            }
+            else {
+                component.setValueExpression("closureHook", closureHook);
             }
         }
         if (action != null) {
@@ -186,16 +194,16 @@ public class AjaxZoneTag extends UIComponentELTag {
     }
 
     /**
-     * Holds value of property postInstallHook.
+     * Holds value of property postReplaceHook.
      */
-    private ValueExpression postInstallHook;
+    private ValueExpression postReplaceHook;
 
     /**
-     * Setter for property postInstallHook.
-     * @param postInstallHook New value of property postInstallHook.
+     * Setter for property postReplaceHook.
+     * @param postReplaceHook New value of property postReplaceHook.
      */
-    public void setPostInstallHook(ValueExpression postInstallHook) {
-        this.postInstallHook = postInstallHook;
+    public void setPostInstallHook(ValueExpression postReplaceHook) {
+        this.postReplaceHook = postReplaceHook;
     }
 
     /**
@@ -209,6 +217,19 @@ public class AjaxZoneTag extends UIComponentELTag {
      */
     public void setReplaceElementHook(ValueExpression replaceElementHook) {
         this.replaceElementHook = replaceElementHook;
+    }
+
+    /**
+     * Holds value of property closureHook.
+     */
+    private ValueExpression closureHook;
+
+    /**
+     * Setter for property closureHook.
+     * @param closureHook New value of property closureHook.
+     */
+    public void setClosureHook(ValueExpression closureHook) {
+        this.closureHook = closureHook;
     }
     
     

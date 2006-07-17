@@ -105,7 +105,7 @@ function userInplaceCallback(form, value, parent) {
     return result;
 }
 
-function postInstallHook(ajaxZone, innerHTML) {
+function postReplaceHook(ajaxZone, innerHTML) {
     var isJmaki;
     if ((isJmaki = (-1 != ajaxZone.id.indexOf("form:table")))) {
 	jmaki.clearWidgets();

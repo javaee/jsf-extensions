@@ -411,12 +411,12 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
 	    this.options.requestHeaders.push(gSuppressXML);
 	    this.options.requestHeaders.push("true");
 	}
-	if (this.options.postInstallHook || this.options.replaceElementHook ||
+	if (this.options.postReplaceHook || this.options.replaceElementHook ||
 	    this.options.closure) {
 	    var xjson = new Object();
-	    xjson.postInstallHook = this.options.postInstallHook;
+	    xjson.postReplaceHook = this.options.postReplaceHook;
 	    xjson.replaceElementHook = this.options.replaceElementHook;
-	    Object.extend(xjson, this.options.closure);
+	    xjson.closure = this.options.closure;
 	    xjson = gJSON.object(xjson);
 	    this.options.requestHeaders.push("X-JSON");
 	    this.options.requestHeaders.push(xjson);
@@ -466,14 +466,15 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
 		 // and its type is already a function...
 		 if (optionType == 'function') {
 		     // invoke it.
-		     options.replaceElementHook(id, markup);
+		     options.replaceElementHook(id, markup, options.closure);
 		 }
 		 // Otherwise, if there is a globally scoped function
 		 // named as the value of the replaceElementHook...
 		 else if (typeof gGlobalScope[options.replaceElementHook] ==
 			  'function') {
 		     // invoke it.
-		     gGlobalScope[options.replaceElementHook](id, markup);
+		     gGlobalScope[options.replaceElementHook](id, markup,
+							      options.closure);
 		 }
 	     }
 	     else {
@@ -481,21 +482,22 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
 		 Element.replace(id, str);
 	     }
 
-	     // If the user specified a postInstallHook...
-	     if (null != options.postInstallHook &&
-		 (optionType == typeof options.postInstallHook) !=
+	     // If the user specified a postReplaceHook...
+	     if (null != options.postReplaceHook &&
+		 (optionType == typeof options.postReplaceHook) !=
 		 'undefined') {
 		 // and its type is already a function...
 		 if (optionType == 'function') {
 		     // invoke it.
-		     options.postInstallHook($(id), markup);
+		     options.postReplaceHook($(id), markup, options.closure);
 		 }
 		 // Otherwise, if there is a globally scoped function
-		 // named as the value of the postInstallHook...
-		 else if (typeof gGlobalScope[options.postInstallHook] ==
+		 // named as the value of the postReplaceHook...
+		 else if (typeof gGlobalScope[options.postReplaceHook] ==
 			  'function') {
 		     // invoke it.
-		     gGlobalScope[options.postInstallHook]($(id), markup);
+		     gGlobalScope[options.postReplaceHook]($(id), markup,
+							   options.closure);
 		 }
 	     }
 	     else {

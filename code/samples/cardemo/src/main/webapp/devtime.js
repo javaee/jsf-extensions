@@ -234,5 +234,7 @@ function getParamNameFromElement(element, elementNodeName, elementType) {
     return name;
 }
     
-
+function getClosure(ajaxZone, element) {
+    return "Test Closure";
+}
 

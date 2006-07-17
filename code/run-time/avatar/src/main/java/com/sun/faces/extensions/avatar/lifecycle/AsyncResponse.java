@@ -282,7 +282,7 @@ public class AsyncResponse {
     private Object origResponse = null;
     
     /**
-     * <p>Called from {@link AjaxLifecycle#render}, this method replaces
+     * <p>Called from {@link PartialTraversalLifecycle#render}, this method replaces
      * the <code>ResponseWriter</code> and <code>ResponseStream</code> with 
      * no-op instances.</p>
      */
@@ -293,7 +293,7 @@ public class AsyncResponse {
     }
     
     /**
-     * <p>Called from {@link AjaxLifecycle#render}, this method replaces
+     * <p>Called from {@link PartialTraversalLifecycle#render}, this method replaces
      * the <code>ResponseWriter</code> and <code>ResponseStream</code> with 
      * their original instances.</p>
      */

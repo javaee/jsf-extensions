@@ -186,12 +186,7 @@ public class AjaxZoneRenderer extends Renderer {
 	    writer.startElement("script", comp);
 	    writer.writeAttribute("language", "javascript", "language");
 	    writer.writeAttribute("type", "text/javascript", "language");
-	    if (isXhtml = context.getExternalContext().getRequestMap().containsKey("com.sun.faces.ContentTypeIsXHTML")) {
-		writer.write("\n<![CDATA[\n");
-	    }
-	    else {
-		writer.write("\n<!--\n");
-	    }
+            writer.write("\n<!--\n");
             clientId = comp.getClientId(context);
             if (writeZoneAccruer) {
                 writer.write("\ng_zones.push(\"" + clientId + "\");");
@@ -232,12 +227,7 @@ public class AjaxZoneRenderer extends Renderer {
             }
 	}
 	finally {
-	    if (isXhtml) {
-		writer.write("\n]]>\n");
-	    }
-	    else {
-		writer.write("\n//-->\n");
-	    }
+            writer.write("\n//-->\n");
 	    writer.endElement("script");
 	}
 

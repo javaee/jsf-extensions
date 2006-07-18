@@ -20,7 +20,7 @@
        <h4>Usage</h4>
 
 <source><code>
-&lt;%@ taglib prefix="jsfExt" uri="http://java.sun.com/jsf/extensions/avatar" %&gt;
+&lt;%@ taglib prefix="jsfExt" uri="http://java.sun.com/jsf/extensions/dynafaces" %&gt;
 &lt;f:view&gt;
 &lt;html&gt;
   &lt;head&gt;

@@ -3,9 +3,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.sun.jsf-extensions</groupId>
-  <artifactId>jsf-extensions-avatar</artifactId>
+  <artifactId>jsf-extensions-dynafaces</artifactId>
   <packaging>jar</packaging>
-  <name>jsf-extensions-avatar</name>
+  <name>jsf-extensions-dynafaces</name>
   <url>https://jsf-extensions.dev.java.net/</url>
   <description>
     Run time jsf-extensions

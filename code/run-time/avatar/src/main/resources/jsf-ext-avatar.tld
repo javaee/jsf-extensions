@@ -16,7 +16,7 @@
 
   <tlib-version>0.03</tlib-version>
   <short-name>avatar</short-name>
-  <uri>http://java.sun.com/jsf/extensions/avatar</uri>
+  <uri>http://java.sun.com/jsf/extensions/dynafaces</uri>
 
   <tag>
     <description>

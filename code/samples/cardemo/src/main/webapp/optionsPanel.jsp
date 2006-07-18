@@ -25,7 +25,7 @@ Copyright 2005 Sun Microsystems Inc. All Rights Reserved
 <%@ page contentType="text/html" language="java" %>
 <%@ taglib prefix="f" uri="http://java.sun.com/jsf/core" %>
 <%@ taglib prefix="h" uri="http://java.sun.com/jsf/html" %>
-<%@ taglib prefix="jsfExt" uri="http://java.sun.com/jsf/extensions/avatar" %>
+<%@ taglib prefix="jsfExt" uri="http://java.sun.com/jsf/extensions/dynafaces" %>
 
 <script type="text/javascript" 
         src='<%= request.getContextPath() + "/devtime.js" %>'></script>

@@ -58,7 +58,7 @@
     </dependency>
     <dependency>
       <groupId>com.sun.jsf-extensions</groupId>
-      <artifactId>jsf-extensions-avatar</artifactId>
+      <artifactId>jsf-extensions-dynafaces</artifactId>
       <version>0.1-SNAPSHOT</version>
     </dependency>
     <dependency>

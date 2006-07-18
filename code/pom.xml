@@ -93,7 +93,7 @@
 	<module>run-time/flash</module>
 	<module>run-time/avatar</module>
 	<module>test-time</module>
-	<module>run-time-test</module>
+	<module>run-time/samples/jmaki</module>
 	<module>run-time/samples/cardemo</module>
 	<module>run-time/samples/j1</module>
       </modules>
@@ -112,7 +112,7 @@
 	<module>run-time/avatar</module>
 	<module>run-time/samples/j1</module>
 	<module>run-time/samples/cardemo</module>
-	<module>run-time-test</module>
+	<module>run-time/samples/jmaki</module>
       </modules>
     </profile>
     <profile>

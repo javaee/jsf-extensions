@@ -15,7 +15,7 @@
   </description>
 
   <tlib-version>0.03</tlib-version>
-  <short-name>avatar</short-name>
+  <short-name>jsfExt</short-name>
   <uri>http://java.sun.com/jsf/extensions/dynafaces</uri>
 
   <tag>

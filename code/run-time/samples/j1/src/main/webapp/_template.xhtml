@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:ui="http://java.sun.com/jsf/facelets">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>JavaServer Faces 1.2 JavaOne Demo</title>
+<link href="style/j1/screen.css" rel="stylesheet" type="text/css" />
+<script src="static/META-INF/dojo/dojo.js.jsf" type="text/javascript" ></script>
+<script src="static/META-INF/prototype.js.jsf" type="text/javascript"></script>
+<script src="static/META-INF/effects.js.jsf" type="text/javascript"></script>
+<script src="static/META-INF/dragdrop.js.jsf" type="text/javascript"></script>
+<script src="static/META-INF/controls.js.jsf" type="text/javascript"></script>
+<script src="static/META-INF/com_sun_faces_ajax.js.jsf" type="text/javascript" ></script>
+<ui:insert name="head"/>
+</head>
+
+<f:view contentType="text/html"/>
+
+<body>
+
+<div id="nav">
+	<ul class="menubar">
+		<li><a href="home.jsf">Home</a></li>
+		<li><a href="eg.autosuggest.jsf">Auto Suggest</a></li>
+		<li><a href="eg.detailview.jsf">Detail View</a></li>
+		<li><a href="eg.orderentry.jsf" class="last">Order Entry</a></li>
+	</ul>
+</div>
+
+<div id="page">
+<div class="wrapper">
+
+<div id="logo"><img src="style/j1/logo.gif" /></div>
+
+<h:form prependId="false">
+<div id="content">
+<ui:insert name="body">Default Body</ui:insert>
+</div>
+</h:form>
+
+
+</div>
+</div>
+
+<div id="footer">
+<div class="wrapper">
+Written with Facelets 1.2 and JavaServer Faces RI 1.2
+</div>
+</div>
+
+<div style="float: left; width: 100%; height: 20px; ">&#160;</div>
+
+</body>
+</html>

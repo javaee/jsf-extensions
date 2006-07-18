@@ -1,0 +1,15 @@
+<!DOCTYPE facelet-taglib PUBLIC
+  "-//Sun Microsystems, Inc.//DTD Facelet Taglib 1.0//EN"
+  "http://java.sun.com/dtd/facelet-taglib_1_0.dtd">
+  
+<facelet-taglib>
+	<namespace>http://java.sun.com/jsf/facelets/demo</namespace>
+	<tag>
+  		<tag-name>source</tag-name>
+  		<source>../_source.xhtml</source>
+	</tag>
+	<tag>
+  		<tag-name>section</tag-name>
+  		<source>../_section.xhtml</source>
+	</tag>
+</facelet-taglib>

@@ -1,0 +1,178 @@
+/* Setup defaults since variable in browsers
+----------------------------------------------- */
+body, div, dd, dt, dl, img, p, h1, h2, h3, h4, h5, form, pre, code {
+	margin: 0;
+	padding: 0;
+}
+/* Element Defaults
+----------------------------------------------- */
+html {
+	height: 100%;
+	background: #7A8593 url(bg.gif) 0 0 repeat-x;
+	overflow: -moz-scrollbars-vertical;
+}
+img {
+	border: 0;
+	vertical-align: middle;
+}
+body {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #67717D;
+	width: 680px;
+	margin-left: auto;
+	margin-right: auto;
+}
+input {
+	background: #fff url(input.bg.gif) 0 0 repeat-x;
+	text-align: left;
+	padding: 4px;
+}
+input, select {
+	border: 1px solid #aaa;
+	vertical-align: middle;
+}
+p {
+	padding: 2px 0;
+
+	font-size: 10px;
+}
+h1, h2, h3, h4 {
+	font-family: Helvetica, sans-serif;
+	line-height: normal;
+	color: #666;
+}
+h1 {
+	text-align: right;
+	font-size: 1.8em;
+	padding: 8px 0;
+	font-weight: normal;
+	color: #5D87A1;
+}
+h3 {
+	font-size: 1.4em;
+	color: #58606A;
+}
+h4 {
+	margin-top: 20px;
+	font-size: 1.2em;
+	color: #FF9900;
+}
+h4 a {
+	color: #FF9900;
+	text-decoration: none;
+}
+h4 a {
+	vertical-align: middle;
+}
+/* Layout
+----------------------------------------------- */
+#page {
+	background: #fff url(win.bg.top.gif) 0 1px repeat-x;
+	float: left;
+	width: 100%;
+}
+#page:before {
+  background: transparent url(win.bg.tr.gif) scroll no-repeat top right;
+  margin-bottom: -30px;
+  height: 30px;
+  display: block;
+  border: none;
+  content: url(win.bg.tl.gif);
+  padding: 0;
+  line-height: 0.1;
+  font-size: 1px;
+}
+#footer {
+	background: #fff url(win.bg.bottom.gif) 0 100% repeat-x;
+	font-size: 11px;
+	float: left;
+	width: 100%;
+	color: #7E8A99;
+	text-align: right;
+	line-height: 1.5em;
+}
+#footer:after {
+  display: block;
+  line-height: 0.1;
+  font-size: 1px;
+  text-align: left;
+  content:  url(win.bg.bl.gif);
+  background: white;
+  background: transparent url(win.bg.br.gif) no-repeat bottom right;
+  padding: 0;
+}
+.wrapper {
+  padding: 15px 25px;
+}
+#content {
+	padding-top: 30px;
+	float: left;
+	width: 100%;
+}
+/* header
+----------------------------------------------- */
+#logo {
+	text-align: left;
+	padding-top: 10px;
+}
+/* nav
+----------------------------------------------- */
+#nav {
+	padding: 25px 0 8px 0;
+	text-align: right;
+	font-size: 10px;
+	float: left;
+	width: 100%;
+}
+.menubar {
+	
+}
+ul.menubar  {
+	margin: 0;
+	padding: 0;
+	float: left;
+	width: 100%;
+	white-space: nowrap;
+}
+.menubar li {
+	display: inline;
+}
+.menubar a {
+	padding: 0 8px;
+	color: #E8EDF3;
+	text-decoration: none;
+	border-right: 1px solid #96A3B4;
+}
+.menubar a:hover {
+	color: #fff;
+}
+.menubar a.last {
+	border-right: 0;
+}
+
+
+.source {
+	padding-bottom: 20px;
+	text-align: right;
+}
+.source a {
+	text-decoration: none;
+	color: #96A3B4;
+}
+.code {
+	margin-top: 4px;
+	border: 1px solid #ccc;
+	font-family: "Courier New", Courier, mono;
+	text-align: left;
+	line-height: 1.5em;
+	padding: 5px;
+	color: #333;
+	background: #fafafa;
+}
+.code b {
+	color: #900;
+}
+.code i {
+	color: #093;
+}

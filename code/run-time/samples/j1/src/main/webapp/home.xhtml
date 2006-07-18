@@ -1,0 +1,128 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:e="http://www.enverio.com/jsf"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:d="http://java.sun.com/jsf/facelets/demo">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>Facelets JavaOne Demo</title>
+<link href="style/j1/screen.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/prototype.js"></script>
+<script src="js/effects.js" type="text/javascript"></script>
+<script src="js/dragdrop.js" type="text/javascript"></script>
+<script src="js/controls.js" type="text/javascript"></script>
+<script language="javascript" type="text/javascript" src="FACES-INF/javax.faces.js"></script>
+</head>
+
+<body>
+
+<ui:composition template="_template.xhtml">
+<ui:define name="body">
+<h3>Flexible Communication</h3>
+<p>Developers are turning towards components for application development in order to break down the problem into managable pieces and help avoid the issues related with stateful coordination between the client and server.  Now, with AJAX, developers are looking to asynchronous communication to enhance the user experience, but will it necessarily decrease development complexity?</p>
+
+<div style="height: 20px; ">&#160;</div>
+
+<h3>Mediator Architecture</h3>
+<p>Component frameworks can again step in and mediate the client/server communication with AJAX in order to:</p>
+<ul>
+	<li>Hide the need to deal with AJAX APIs</li>
+	<li>Components provide secure indirection over your business models</li>
+	<li>Help to keep business logic in Java and presentation logic on the client</li>
+	<li>Components know what information and when they need it from the server, keeping overhead low</li>
+	<li>Retain contextual congruence between the client and server representations of 'widgets'</li>
+</ul>
+
+<div style="height: 20px; ">&#160;</div>
+
+<h3>Facelets 1.2</h3>
+<p>With this version, we've built in support for mediating component communication between the client and server.</p>
+
+<d:section id="ex0" title="Event System"/>
+<p>By convention, Facelets introduces a simple event system such that any client JS/framework can fire events on the UIComponent counterpart on the server.</p>
+<div id="ex0" class="code" style="display: none;"><pre><code><i>// client javascript</i>
+new Faces.Event('clientId', { event: 'suggest' });
+
+<i>// Option A: SuggestRenderer</i>
+public Object onSuggest(FacesContext faces, UIComponent c) {
+  ResponseWriter rw = faces.getResponseWriter();
+  String result = // EL invocations
+  rw.writeText("response from renderer: " + result);
+}
+
+<i>// Option B: UISuggest</i>
+public Object onSuggest(FacesContext faces) {
+  ResponseWriter rw = faces.getResponseWriter();
+  String result = // EL invocations
+  rw.writeText("response from component: " + result);
+}</code></pre></div>
+
+<d:section id="ex1" title="Updating Multiple Parts at Once"/>
+<p>Many AJAX implementations/solutions are defficient in that they only have one 'body' to transport messages back and forth.  With rich UIs, a single event can propagate many different updates to the client.  The question then becomes, how can we scale multiple responses at once?</p>
+<p>By leveraging response headers, we can allow extra information/events to be passed back from the server without modifying possible information from the original, intended invocation.  For example, you could update and re-render the price, but send some javascript in the body to 'highlight' the price post updating as the actual body of the response.</p>
+<div id="ex1" class="code" style="display: none;"><pre><code><i>// client javascript</i>
+new Faces.Event('clientId', { update: 'input',  encode: 'table, orderTotal' });
+
+<i>// ends up passing the following headers</i>
+javax.faces.Update : input
+javax.faces.Encode : table,orderTotal
+
+<i>// Updates are selectively processed before encoding again</i>
+public static final ContextCallback Update = new ContextCallback() {
+  public void invokeContextCallback(FacesContext faces, UIComponent c) {
+    c.processUpdates(faces);
+  }
+};
+
+<i>// UIFacelet replaces UIViewRoot which has a Set of ids it should use</i>
+public void processUpdates(FacesContext faces) {
+  if (!this.update.isEmpty()) {
+    this.process(faces, this.update, Update);
+  } else {
+    super.processUpdates(faces);
+  }
+}
+
+<i>// Encoding happens later, allowing other biz code to add or remove ids
+// code is a little more complex, but works like updates and writes
+// each rendered output to a Response header</i>
+
+javax.faces.Encode : ['table','orderTotal']
+encode_table : &lt;table id="table" ...
+encode_orderTotal : &lt;span id="orderTotal">$1,232.00 ..</code></pre></div>
+
+<d:section id="ex2" title="Managing State"/>
+<p>The whole goal is to keep things as natural as possible to the developer.  An important factor in this is automatically mimicing a normal form post and passing the state of the page.  We do this by generating a ViewState object on the client which is marshalled as normal in the AJAX request such that components don't need to know that they are being processed without a full post.</p>
+<div id="ex2" class="code" style="display: none;"><pre><code><i>// client javascript</i>
+var viewState = new Faces.ViewState(this.form);
+
+<i>// build url</i>
+this.options.postBody = viewState.toQueryString();</code></pre></div>
+
+<d:section id="ex3" title="JavaScript Push, aka Reverse AJAX"/>
+<p>This is extremely simple in concept such that we render JavaScript back in the response that will be invoked on the client.  The magic of which may include JS snippets to invoke functions on the client.  This is extremely useful in that we can fully utilize our Java model on the server to coordinate client-side effects and changes without pushing data to the client, then determining effects.</p>
+<p>The implementation works much like Hibernate's Criteria API, allowing developers to easily plug-in Java-versions of their favorite JavaScript libraries, such as Scriptaculous or Rico.</p>
+<div id="ex3" class="code" style="display: none;"><pre><code><i>// your Java code</i>
+<b>boolean show = this.getBusinessProperty();</b>
+<b>UIComponent comp = this.getBoundComponent();</b>
+
+ResponseWriter rw = facesContext.getResponseWriter();
+ClientWriter cw = new ClientWriter(rw);
+cw.startScript();
+cw.select("div#body .menuItem", Element.toggle(<b>show</b>));
+cs.select(<b>comp</b>, Insertion.replace().text("Some Status Message"));
+cw.endScript();
+
+<i>// above code will produce the JS sent down to the client</i>
+&lt;script type="text/javascript">
+$$('div#body .menuItem').each(function(e){e.style.display='none';};
+$('compClientId').innerHTML = 'Some Status Message';
+&lt;/script></code></pre></div>
+
+</ui:define>
+</ui:composition>
+
+</body>
+</html>

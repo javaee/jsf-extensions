@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<document>
+
+  <properties>
+    <title>JSF Extensions Slides and Screencasts</title>
+  </properties>
+
+  <body>
+
+    <section name="Slides">
+    <a name="slides"/>
+
+     <p>Here are some presentations and screencasts about JSF Extensions.
+     </p>
+
+     	<ul>
+
+	  <li><p>Introduction to JSF Extensions Dynamic Faces (DynaFaces)</p>
+
+          <p><a href="/slides/dynafaces-intro.odp">OpenOffice 2.0</a></p>
+          <p><a href="/slides/dynafaces-intro.pdf">PDF</a></p>
+
+          </li>
+
+	</ul>
+
+
+    </section>
+
+  </body>
+
+</document>

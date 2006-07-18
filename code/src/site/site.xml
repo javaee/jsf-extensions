@@ -35,6 +35,7 @@
         <item name="Wiki"               href="http://wiki.java.net/bin/view/Projects/Jsf-extensions"/>
         <item name="Announcements"      href="http://jsf-extensions.dev.java.net/servlets/ProjectNewsList"/>
         <item name="Mailing Lists"      href="http://jsf-extensions.dev.java.net/servlets/ProjectMailingListList" />
+        <item name="Slides and Screencasts"  href="/slides.html" />
     </menu>
 
     <menu name="Runtime Features">

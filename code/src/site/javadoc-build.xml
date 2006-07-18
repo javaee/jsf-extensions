@@ -86,7 +86,7 @@
     <java fork="true" classname="com.sun.tlddoc.TLDDoc" 
                       classpathref="maven.compile.classpath">
         <arg line="-d ${ajax.tlddoc.dest.dir}"/>
-        <arg value="${ajax.resources.dir}/jsf-ext-avatar.tld"/>
+        <arg value="${ajax.resources.dir}/jsf-ext-dynafaces.tld"/>
     </java>
 
  

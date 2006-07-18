@@ -127,7 +127,8 @@ via AJAX would not always be localizable.
 <td><font color="red">WEB-INF/web.xml</font></td> <td>Change to server
 side state saving (not required).  Change to use prefix mapping for
 <code>FacesServlet</code>.  This is required due to a limitation of the
-current Shale Remoting implementation.
+current Shale Remoting implementation.  Add custom lifecycle
+<code>init-param</code>, as required for DynaFaces.
 </td>
 </tr>
 <tr>

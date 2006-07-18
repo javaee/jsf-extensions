@@ -9,6 +9,10 @@
 
     <section name="JSP/Facelets tags">
 
+<!-- PENDING(edburns): Add ajaxZone tag -->
+
+<!-- PENDING(edburns): Add Facelets tag library! -->
+
       <subsection name="Scripts Component">
 
       <p>Convenience component for rendering all the scripts
@@ -36,6 +40,8 @@
     
     <section name="JavaScript Objects">
     <a name="JavaScript Objects"/>
+
+<!-- PENDING(edburns): Add examples for each of these -->
 
       <subsection name="Faces.Event">
 
@@ -79,7 +85,7 @@ on|EVENT|="new Faces.Event(this, { |OPTIONS| }); return false;" /&gt;
 
 <dd><p>Comma separated string containing a list of client ids against
 which the <code>render</code> portion of the request processing
-lifececly must be run.  If not specified, the entire view is
+lifecycle must be run.  If not specified, the entire view is
 rendered.</p>
 </dd>
 

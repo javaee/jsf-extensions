@@ -511,7 +511,9 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
 	     markup.evalScripts();
 	 }
      }
-     
+
+     // This should happen for each of the elements in the collection,
+     // not just the zeroth.
      var state = state || xml.getElementsByTagName('state')[0].firstChild;
      if (state) {
 	 var hf = $(gViewState);

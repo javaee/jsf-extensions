@@ -27,6 +27,8 @@
  * Copyright 2005 Sun Microsystems Inc. All Rights Reserved
  */
 
+// ---------------------- Public Functions
+
 function extractParams(ajaxZone, element, outArray) {
     var name = null;
     var value = null;
@@ -53,19 +55,29 @@ function extractParams(ajaxZone, element, outArray) {
 
 }
 
-function refreshElement(name) {
-    var element = null;
-    if (null != name) {
-	element = document.getElementById(name);
-    }
-    if (null == element) {
-	var list = document.getElementsByName(name);
-	if (null != list && 0 < list.length) {
-	    element = list[0];
+function inspectElement(element) {
+    var result = false;
+    if (null != element) {
+	var nodeName = element.nodeName;
+	if (null != nodeName) {
+	    nodeName = nodeName.toLowerCase();
+	    if (-1 != nodeName.indexOf("input")) {
+		result = true;
+	    }
+	    else if (-1 != nodeName.indexOf("option")) {
+		result = true;
+	    }
+	    else if (-1 != nodeName.indexOf("button")) {
+		result = true;
+	    }
 	}
     }
-    return element;
+    return result;
 }
+
+
+// -------------------- Private helper functions
+
 
 /**
  * Operate recursively on the dom element and its children.
@@ -102,26 +114,6 @@ function collectParams(element, outProps) {
 	}
     }
     return;
-}
-
-function inspectElement(element) {
-    var result = false;
-    if (null != element) {
-	var nodeName = element.nodeName;
-	if (null != nodeName) {
-	    nodeName = nodeName.toLowerCase();
-	    if (-1 != nodeName.indexOf("input")) {
-		result = true;
-	    }
-	    else if (-1 != nodeName.indexOf("option")) {
-		result = true;
-	    }
-	    else if (-1 != nodeName.indexOf("button")) {
-		result = true;
-	    }
-	}
-    }
-    return result;
 }
 
 
@@ -234,7 +226,4 @@ function getParamNameFromElement(element, elementNodeName, elementType) {
     return name;
 }
     
-function getClosure(ajaxZone, element) {
-    return "Test Closure";
-}
 

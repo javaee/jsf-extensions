@@ -32,6 +32,8 @@
 
       <subsection name="Use Cases">
 
+<!-- PENDING(edburns): Update this to cover the ajaxZone concept -->
+
       <p>To understand the available features of JSF Extensions Avatar,
       let's take a look at several use cases for AJAX enabling a JSF
       application.</p>

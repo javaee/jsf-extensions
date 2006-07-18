@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>An overview of the JSF Avatar System</title>
+  </head>
+
+  <body>
+    <h1>An overview of the JSF Avatar System</h1>
+
+<h3>Outline</h3>
+
+<pre><code>
+I. Introduction
+
+Basic idea: Allow JSF to continue to be a pseudo-disconnected controller
+for the AJAX portion of a web application.
+
+Why this is important: JSF's strengths are its component abstraction and
+event model.  Why re-invent something specifically for AJAX when we can
+fully leverage the JSF model while preserving the AJAXian way?
+
+A. History
+
+  1. Jacob's 20050918 blog http://weblogs.java.net/blog/jhook/archive/2005/09/jsf_avatar_vs_m_1.html
+
+  2. Ed's 20051007 followup, make it more concrete
+
+  3. jsf-extensions project 
+
+    https://jsf-extensions.dev.java.net/
+
+    a. Intent: be a place for non-component extensions for Sun's JSF
+       implementation in Glassfish.
+
+    b. Currently in enterprise incubator
+
+    c. code currently in glassfish/jsf-extensions directory
+
+    d. Production quality ideas
+
+       RoR Flash
+
+       Generalization of Sun JSF Impl's automated testing framework (now
+       used by the Sun Impl).
+
+    e. Other ideas
+
+       ultra-simple templating ideas from Siebel
+
+       Generalization of JSP Tag Handler generation used in Sun JSF Impl
+
+       Avatar
+
+B. Details
+
+  1. Basic Avatar Concept
+
+    a. Existing JSF lifecycle overview
+
+<img src="avatar-fig1.jpg" />
+
+    b. Avatar JSF lifecycle overview
+
+<img src="avatar-fig2.jpg" />
+
+  2. Code deep dive
+
+    a. Use "retrofit wrapping" approach found in AJAX Validator:
+
+<img src="avatar-fig3.jpg" />
+
+    show result-set.jsp source
+
+      * show panelGroup subview1 around the dataTable
+
+      * show span and panelGroup subview2 around scroller control
+
+    show devtime.js source
+
+      * Point out complexity of ajaxifying this particular component:
+        need to "move aside" onousedown.  This can be done for arbitrary
+        components.  Alternatively, we could write components
+        specifically for avatar.
+
+      * cover submitViaAJAX
+
+      * cover processAjaxResponse
+
+        set the innerHTML to be from the ajax response.
+
+  2. Current prototype implementation
+
+    b. current state of prototype
+
+    c. next steps for prototype
+
+    
+
+</code></pre>
+
+
+
+    <hr>
+    <address><a href="mailto:ed.burns@sun.com">Edward Burns</a></address>
+<!-- Created: Wed Jan 11 10:47:55 EST 2006 -->
+<!-- hhmts start -->
+Last modified: Wed Jan 11 12:02:42 EST 2006
+<!-- hhmts end -->
+  </body>
+</html>

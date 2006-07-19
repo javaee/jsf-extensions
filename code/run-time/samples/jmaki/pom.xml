@@ -38,7 +38,7 @@
 	       <tasks>
                  <echo message="Copying sources jar to WEB-INF/lib" />
                  <copy todir="target/${project.build.finalName}/WEB-INF/lib">
-                   <fileset dir="../../run-time">
+                   <fileset dir="../..">
                      <include name="*-sources.jar" />
                    </fileset>
                  </copy>

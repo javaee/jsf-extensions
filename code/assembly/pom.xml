@@ -41,15 +41,26 @@
                    <fileset dir="../test-time/target">
                      <include name="*.jar" />
                    </fileset>
-                   <fileset dir="../run-time-test/target">
-                     <include name="*.war" />
-                   </fileset>
-                   <fileset dir="../samples/j1/target">
-                     <include name="*.war" />
-                   </fileset>
                    <fileset dir=".">
                      <include name="*.txt" />
                      <include name="COPYRIGHT" />
+                   </fileset>
+                 </copy>
+                 <copy flatten="true" todir="target/dist/samples">
+                   <fileset dir="../run-time/samples">
+                     <include name="**/*.war" />
+                     <exclude name="blank*/**" />
+                   </fileset>
+                 </copy>
+                 <copy todir="target/dist/samples">
+                   <fileset dir="../run-time/samples">
+                     <include name="blank*/**" />
+                     <exclude name="blank*/target/**" />
+                   </fileset>
+                 </copy>
+                 <copy todir="target/dist/samples">
+                   <fileset dir="../run-time/samples">
+                     <include name="blank*/**/*.war" />
                    </fileset>
                  </copy>
                  <tar destfile="target/jsf-extensions-${pom.version}.tar"
@@ -64,6 +75,21 @@
 	   </execution>
 	 </executions>
        </plugin>
-      </plugins>
-      </build>  
+    </plugins>
+  </build>  
+  <profiles>
+    <profile>
+      <id>default</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <modules>
+	<module>..</module>
+      </modules>
+    </profile>
+    <profile>
+      <id>local</id>
+    </profile>
+  </profiles>
+
 </project>

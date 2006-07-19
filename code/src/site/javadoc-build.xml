@@ -68,6 +68,7 @@
                  destdir="${ajax.javadoc.dest.dir}"
                  Overview="${ajax.src.dir}/overview.html"
                  private="${javadoc.private}"
+                 stylesheetfile="src/site/resources/css/site.css"
                  protected="${javadoc.protected}"
                  windowtitle="${pom.artifactId} (${pom.version})"
                  source="1.5"
@@ -88,6 +89,10 @@
         <arg line="-d ${ajax.tlddoc.dest.dir}"/>
         <arg value="${ajax.resources.dir}/jsf-ext-dynafaces.tld"/>
     </java>
+
+    <delete file="target/site/ajax/tlddocs/stylesheet.css" />
+    <copy tofile="target/site/ajax/tlddocs/stylesheet.css" 
+          file="src/site/resources/css/site.css" />
 
  
   </target>

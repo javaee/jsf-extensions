@@ -12,7 +12,7 @@
   </description>
 
   <parent>
-    <groupId>com.sun.faces.maven</groupId>
+    <groupId>com.sun.faces.extensions.maven</groupId>
     <artifactId>jsf-extensions-master</artifactId>
     <version>0.1-SNAPSHOT</version>
   </parent>
@@ -77,7 +77,7 @@
     <dependency>
       <groupId>javax.faces</groupId>
       <artifactId>jsf-impl</artifactId>
-      <version>1.2_01-SNAPSHOT</version>
+      <version>1.2</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -101,26 +101,6 @@
       <groupId>com.sun.javaee.blueprints</groupId>
       <artifactId>bp-ui-simple</artifactId>
       <version>5</version>
-    </dependency>
-    <dependency>
-      <groupId>net.sf.facestrace</groupId>
-      <artifactId>facestrace</artifactId>
-      <version>0.8.1-SNAPSHOT</version>
-      <scope>runtime</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>myfaces</groupId>
-          <artifactId>myfaces-api</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>myfaces</groupId>
-          <artifactId>myfaces-impl</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>log4j</groupId>
-          <artifactId>log4j</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.apache.struts.shale</groupId>

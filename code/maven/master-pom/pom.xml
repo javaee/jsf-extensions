@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.sun.faces.maven</groupId>
+  <groupId>com.sun.faces.extensions.maven</groupId>
   <artifactId>jsf-extensions-master</artifactId>
   <packaging>pom</packaging>
   <name>Master POM</name>
@@ -103,6 +103,7 @@
   </organization>
 
   <build>
+   <defaultGoal>install</defaultGoal>
 
    <pluginManagement>
      <plugins>
@@ -144,7 +145,7 @@
     <dependency>
       <groupId>javax.faces</groupId>
       <artifactId>jsf-api</artifactId>
-      <version>1.2_01-SNAPSHOT</version>
+      <version>1.2</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -203,6 +204,10 @@
         <exclusion>
           <groupId>myfaces</groupId>
           <artifactId>myfaces-api</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>myfaces</groupId>
+          <artifactId>myfaces-impl</artifactId>
         </exclusion>
       </exclusions>
       <scope>provided</scope>

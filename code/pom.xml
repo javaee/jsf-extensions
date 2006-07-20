@@ -4,6 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.sun.faces.extensions</groupId>
   <artifactId>jsf-extensions</artifactId>
+  <version>0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
   <description>
 
@@ -11,12 +12,6 @@
     including an implementation of the Avatar AJAX architecture.
 
   </description>
-
-  <parent>
-    <groupId>com.sun.faces.maven</groupId>
-    <artifactId>jsf-extensions-master</artifactId>
-    <version>0.1-SNAPSHOT</version>
-  </parent>
 
   <name>JavaServer(tm) Faces Extensions</name>
   <url>https://jsf-extensions.dev.java.net/</url>
@@ -88,11 +83,10 @@
         <activeByDefault>true</activeByDefault>
       </activation>
       <modules>
-	<module>maven</module>
+	<module>maven/master-pom</module>
 	<module>run-time/common</module>
 	<module>run-time/flash</module>
 	<module>run-time/avatar</module>
-	<module>test-time</module>
 	<module>run-time/samples/blank-facelets</module>
 	<module>run-time/samples/blank-jsp</module>
 	<module>run-time/samples/jmaki</module>

@@ -12,7 +12,7 @@
   </description>
 
   <parent>
-    <groupId>com.sun.faces.maven</groupId>
+    <groupId>com.sun.faces.extensions.maven</groupId>
     <artifactId>jsf-extensions-master</artifactId>
     <version>0.1-SNAPSHOT</version>
   </parent>

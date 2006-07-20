@@ -12,7 +12,7 @@
   </description>
 
   <parent>
-    <groupId>com.sun.faces.maven</groupId>
+    <groupId>com.sun.faces.extensions.maven</groupId>
     <artifactId>jsf-extensions-master</artifactId>
     <version>0.1-SNAPSHOT</version>
   </parent>
@@ -41,7 +41,7 @@
     <dependency>
       <groupId>javax.faces</groupId>
       <artifactId>jsf-impl</artifactId>
-      <version>1.2_01-SNAPSHOT</version>
+      <version>1.2</version>
       <scope>provided</scope>
     </dependency>
     <dependency>

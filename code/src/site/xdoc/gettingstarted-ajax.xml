@@ -1,0 +1,143 @@
+<?xml version="1.0"?>
+<document>
+
+  <properties>
+    <title>Getting Started with DynaFaces</title>
+  </properties>
+
+  <body>
+
+<p>This mini-guide will take you through the steps to get started using
+JavaServer(tm) Faces Dynamic Updating (DynaFaces) with JSP.  We'll build a </p>
+
+    <section name="What you need to know before doing the steps in this guide">
+
+    <p>You need to know basic JSF (and all of its pre-conditions, such
+    as JSP, servlets, and some J2EE).  If you're looking for a good book
+    on the subject, you might try <code>&lt;shameless-plug</code>&gt;<a
+    href="http://purl.oclc.org/NET/jsfbook/">JavaServer Faces: The
+    Complete Reference</a><code>&lt;shameless-plug&gt;</code>.</p>
+
+    <p>You also need to know Maven 2, if you want to use the automatic
+    build infrastructure.  <a href="http://maven.apache.org/">Check out
+    the maven site</a>.</p>
+
+    </section>
+
+    <section name="Application Configuration">
+
+<p>The first step is to configure your application.  A great way is to
+use one of the "Blank" applications included in the binary distribution.
+(Thanks to Craig McClanahan for turning me on to the "blank" application
+concept).</p>
+
+	<ol>
+
+	  <li><p>Get a container that runs JSF 1.2.  Sun's <a
+	  href="http://java.sun.com/javaee/downloads/">Java EE SDK</a>
+	  is a great choice.  It's dollar cost free, free to deploy,
+	  fully indemnified, and based on the open source <a
+	  href="https://glassfish.dev.java.net">Glassfish</a>
+	  application server.  </p>
+
+          <p>Once you've installed your container, and followed its
+          instructions for getting it up and running, you're ready to
+          continue.</p>
+
+          </li>
+
+	  <li><p>Download the binary distribution of DynaFaces by
+	  clicking on the "Download" link on the <a target="_"
+	  href="/">DynaFaces main page</a>.</p>
+
+<p>Unpack the binary somewhere on your local disk, we'll call it
+&lt;DIST&gt; in discussion.</p>
+
+          </li>
+
+	  <li><p>cd to <code>&lt;DIST&gt;/samples/blank-jsp</code>.
+	  This is a maven module pre-configured to build your app.  If
+	  you're not using maven, you can just unpack the pre-built war,
+	  in
+	  <code>&lt;DIST&gt;/samples/blank-jsp/target/dynafaces-jsp-blank.war</code>
+	  into a new directory and do your editing in place.  Then, when
+	  you're done, you can just jar up the directory as a war file
+	  and deploy it.  However, the rest of this mini-guide will
+	  assume you're using maven.</p></li>
+
+	  <li><p>Because you're using the blank app, the following steps
+	  are already done for you, but for educational purposes, we'll
+	  list them here.</p>
+
+<br />
+
+	<ol>
+
+	  <li><p>Set up the web.xml.</p>
+
+<p>In Maven, the web.xml file is located at
+<code>src/main/webapp/WEB-INF/web.xml</code> by default.  That means, on
+your disk, it's
+<code>&lt;DIST&gt;/samples/blank-jsp/src/main/webapp/WEB-INF/web.xml</code>.
+Open the file up and look at the <code>&lt;servlet&gt;</code> XML
+element.</p>
+
+<pre><code>
+    &lt;servlet&gt;
+        &lt;servlet-name&gt;Faces Servlet&lt;/servlet-name&gt;
+        &lt;servlet-class&gt;javax.faces.webapp.FacesServlet&lt;/servlet-class&gt;
+        &lt;init-param&gt;
+          &lt;param-name&gt;javax.faces.LIFECYCLE_ID&lt;/param-name&gt;
+          &lt;param-value&gt;com.sun.faces.lifecycle.PARTIAL&lt;/param-value&gt;
+        &lt;/init-param&gt;
+        &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;
+    &lt;/servlet&gt;
+
+</code></pre>
+
+<p>This is the only special configuration you need in your web.xml to
+use DynaFaces.  No filters, no extra servlets, no mess.</p>
+
+          </li>
+
+	  <li><p>Bundle the dependent jars in <code>WEB-INF/lib</code></p>
+
+<p>do a <code>jar -tf</code> on
+<code>&lt;DIST&gt;/samples/blank-jsp/target/dynafaces-jsp-blank.war</code>.
+Within <code>WEB-INF/lib</code> you will see the following jars.</p>
+
+<pre><code>
+WEB-INF/lib/commons-beanutils-1.7.0.jar
+WEB-INF/lib/commons-chain-1.0.jar
+WEB-INF/lib/commons-codec-1.2.jar
+WEB-INF/lib/commons-collections-2.1.jar
+WEB-INF/lib/commons-digester-1.6.jar
+WEB-INF/lib/commons-el-1.0.jar
+WEB-INF/lib/commons-fileupload-1.0.jar
+WEB-INF/lib/commons-logging-1.0.4.jar
+WEB-INF/lib/jsf-extensions-common-0.1-SNAPSHOT.jar
+WEB-INF/lib/jsf-extensions-dynafaces-0.1-SNAPSHOT.jar
+WEB-INF/lib/shale-remoting-1.0.3-SNAPSHOT.jar
+</code></pre>
+
+<p>All the extra commons-* jars are required by shale-remoting, which
+DynaFaces uses for loading JavaScript resources.</p>
+
+          </li>
+
+	</ol>
+
+
+          </li>
+
+	</ol>
+
+<p>That's it.  You're all set up and ready to begin coding!</p>
+
+    </section>
+
+    <section name="Application Configuration">
+
+  </body>
+
+</document>

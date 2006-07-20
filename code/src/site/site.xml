@@ -6,9 +6,9 @@
         <href>http://java.sun.com/</href>
     </bannerLeft>
     <bannerRight>
-        <name>Ajax at Sun</name>
-        <src>images/java_get_powered.png</src>
-        <href>http://developers.sun.com/ajax/</href>
+        <name>Runs on the Java EE SDK</name>
+        <src>images/javaeesdkdownload.gif</src>
+        <href>http://java.sun.com/javaee/downloads/</href>
     </bannerRight>
     <publishDate format="yyyy MM dd" />
     <body>

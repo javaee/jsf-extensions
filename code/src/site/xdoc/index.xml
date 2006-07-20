@@ -19,7 +19,10 @@
         compliant implementation, but in some cases the capabilities are
         enhanced when run with <a
         href="http://javaserverfaces.dev.java.net/">Sun's
-        implementation</a>.</p>
+        implementation</a>, which is bundled into <strong><a
+        href="https://glassfish.dev.java.net/">the Java EE SDK</a></strong> and
+        in <strong><a href="https://glassfish.dev.java.net/">Project
+        Glassfish</a></strong>.</p>
 
          <p>Similar to the <a
          href="http://struts.apache.org/struts-shale/">Struts Shale</a>

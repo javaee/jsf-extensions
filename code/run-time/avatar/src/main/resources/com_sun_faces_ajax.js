@@ -411,13 +411,8 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
 	    this.options.requestHeaders.push(gSuppressXML);
 	    this.options.requestHeaders.push("true");
 	}
-	if (this.options.postReplaceHook || this.options.replaceElementHook ||
-	    this.options.closure) {
-	    var xjson = new Object();
-	    xjson.postReplaceHook = this.options.postReplaceHook;
-	    xjson.replaceElementHook = this.options.replaceElementHook;
-	    xjson.closure = this.options.closure;
-	    xjson = gJSON.object(xjson);
+	if (this.options.xjson) {
+	    var xjson = gJSON.object(this.options.xjson);
 	    this.options.requestHeaders.push("X-JSON");
 	    this.options.requestHeaders.push(xjson);
 	}
@@ -425,8 +420,8 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
 	this.options.postBody = viewState.toQueryString();
 
     var onComplete = this.options.onComplete;
-    this.options.onComplete = (function(transport, options) {
-      this.renderView(options);
+    this.options.onComplete = (function(transport, xjson) {
+      this.renderView(xjson);
       if (onComplete) {
 	  onComplete(transport, options);
       } else if (this.doEvalResponse) {
@@ -441,7 +436,7 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
 	// send request
     this.request(this.url);
   },
-  renderView: function(options) {
+  renderView: function(xjson) {
      var xml = this.transport.responseXML;
      if (null == xml || typeof xml == 'undefined') {
 	 return;
@@ -455,59 +450,60 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
 	 markup = content.text || content.data;
 	 str = markup.stripScripts();
 	 this.doEvalResponse = false;
-	 // If there were some options passed to this function...
-	 if (null != options && typeof options != 'undefined') {
-	     // handle them.
+	 // If the user passed a replaceElementHook...
+	 if (this.options.replaceElementHook) {
 	     var optionType = null;
-	     // If the user specified a replaceElementHook...
-	     if (null != options.replaceElementHook &&
-		 (optionType = typeof options.replaceElementHook) != 
+	     // look at its type.
+	     if ((optionType = typeof this.options.replaceElementHook) != 
 		 'undefined') {
-		 // and its type is already a function...
+		 // If its type is already a function...
 		 if (optionType == 'function') {
 		     // invoke it.
-		     options.replaceElementHook(id, markup, options.closure);
+		     this.options.replaceElementHook(id, markup, 
+						     this.options.closure, 
+						     xjson);
 		 }
 		 // Otherwise, if there is a globally scoped function
 		 // named as the value of the replaceElementHook...
-		 else if (typeof gGlobalScope[options.replaceElementHook] ==
+		 else if (typeof gGlobalScope[this.options.replaceElementHook] ==
 			  'function') {
 		     // invoke it.
-		     gGlobalScope[options.replaceElementHook](id, markup,
-							      options.closure);
+		     gGlobalScope[this.options.replaceElementHook](id, markup,
+								   this.options.closure, 
+								   xjson);
 		 }
-	     }
-	     else {
-		 // Otherwise, just do our element replacement.
-		 Element.replace(id, str);
-	     }
-
-	     // If the user specified a postReplaceHook...
-	     if (null != options.postReplaceHook &&
-		 (optionType == typeof options.postReplaceHook) !=
-		 'undefined') {
-		 // and its type is already a function...
-		 if (optionType == 'function') {
-		     // invoke it.
-		     options.postReplaceHook($(id), markup, options.closure);
-		 }
-		 // Otherwise, if there is a globally scoped function
-		 // named as the value of the postReplaceHook...
-		 else if (typeof gGlobalScope[options.postReplaceHook] ==
-			  'function') {
-		     // invoke it.
-		     gGlobalScope[options.postReplaceHook]($(id), markup,
-							   options.closure);
-		 }
-	     }
-	     else {
-		 // Otherwise, just evaluate the scripts.
-		 markup.evalScripts();
 	     }
 	 }
 	 else {
-	     // If not, just do the default action
+	     // Otherwise, just do our element replacement.
 	     Element.replace(id, str);
+	 }
+	 
+	 // If the user specified a postReplaceHook...
+	 if (this.options.postReplaceHook) {
+	     // look at its type.
+	     if ((optionType == typeof this.options.postReplaceHook) !=
+		 'undefined') {
+		 // If its type is already a function...
+		 if (optionType == 'function') {
+		     // invoke it.
+		     this.options.postReplaceHook($(id), markup, 
+						  this.options.closure,
+						  xjson);
+		 }
+		 // Otherwise, if there is a globally scoped function
+		 // named as the value of the postReplaceHook...
+		 else if (typeof gGlobalScope[this.options.postReplaceHook] ==
+			  'function') {
+		     // invoke it.
+		     gGlobalScope[this.options.postReplaceHook]($(id), markup,
+								this.options.closure,
+								xjson);
+		 }
+	     }
+	 }
+	 else {
+	     // Otherwise, just evaluate the scripts.
 	     markup.evalScripts();
 	 }
      }

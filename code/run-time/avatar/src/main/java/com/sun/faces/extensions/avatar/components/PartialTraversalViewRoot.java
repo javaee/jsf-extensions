@@ -39,6 +39,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.component.ContextCallback;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIViewRootCopy;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
@@ -117,10 +118,15 @@ import javax.servlet.http.HttpServletResponse;
   * com.sun.faces.extensions.avatar.lifecycle.PartialTraversalLifecycle} for
   * additional information about how this class helps
   * <code>PartialTraversalViewRoot</code> get its job done.</p>
+ *
+ * <p>This class extends <code>UIViewRootCopy</code>, which is a local copy
+ * of <code>UIViewRoot</code> that makes the <code>broadcastEvents</code> method
+ * public.  This is necessary to allow easily broadcasting events during the 
+ * AJAX lifecycle.</p>
   *
   * @author edburns
   */
-public class PartialTraversalViewRoot extends UIViewRoot implements Serializable {
+public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializable {
     
     public PartialTraversalViewRoot() {
     }
@@ -141,6 +147,9 @@ public class PartialTraversalViewRoot extends UIViewRoot implements Serializable
         if (!invokedCallback) {
             super.processDecodes(context);
         }
+        else { 
+            super.broadcastEvents(context, PhaseId.APPLY_REQUEST_VALUES);
+        }
 
     }
 
@@ -151,6 +160,7 @@ public class PartialTraversalViewRoot extends UIViewRoot implements Serializable
             super.processValidators(context);
             return;
         }
+        super.broadcastEvents(context, PhaseId.PROCESS_VALIDATIONS);
     }
 
     public void processUpdates(FacesContext context) {
@@ -160,6 +170,7 @@ public class PartialTraversalViewRoot extends UIViewRoot implements Serializable
             super.processUpdates(context);
             return;
         }
+        super.broadcastEvents(context, PhaseId.UPDATE_MODEL_VALUES);
     }
 
     public void encodeAll(FacesContext context) throws IOException {

@@ -24,8 +24,8 @@
   </scm>
 
   <build>
-    <defaultGoal>install</defaultGoal>
     <sourceDirectory>src/main/java</sourceDirectory>
+    <defaultGoal>install</defaultGoal>
     <resources>
       <resource>
         <targetPath>META-INF</targetPath>
@@ -50,6 +50,64 @@
 	   </execution>
 	 </executions>
        </plugin>   
+       <plugin>
+	 <artifactId>maven-antrun-plugin</artifactId>
+	 <executions>
+	   <execution>
+             <id>getViewRootSource</id>
+	     <phase>generate-sources</phase>
+	     <configuration>
+	       <tasks>
+
+                 <!-- I need to download this using ant because of http://jira.codehaus.org/browse/MNG-2462 -->
+
+                 <!-- 
+
+                   This target gets the latest JSF 1.2 jsf-api source
+                   jar, extracts the UIViewRoot.java source file from it
+                   to a local directory, and performs the following
+                   modifications.
+
+                   Rename the class to UIViewRootCopy
+
+                   Make the class extend UIViewRoot instead of UIComponentBase
+
+                   Make the broadcastEvents method protected instead of
+                   private.
+
+                   Rename the file to UIViewRootCopy.java
+
+                   This file is then compiled to target/classes, so
+                   PartialTraversalViewRoot can extend it.
+
+                 -->
+                 <mkdir dir="target/jsf-api" />
+                 <mkdir dir="target/classes" />
+                 <!-- <setproxy proxyhost="firewall" proxyport="81"/> -->
+                 <get usetimestamp="true"
+                      src="https://maven-repository.dev.java.net/nonav/repository/javax.faces/java-sources/jsf-api-1.2-sources.jar" dest="target/jsf-api/jsf-api-1.2-sources.jar" /> 
+                 <unjar dest="target/jsf-api" src="target/jsf-api/jsf-api-1.2-sources.jar">
+                   <patternset>
+                     <include name="**/UIViewRoot.java" />
+                   </patternset>
+                 </unjar>
+                 <replace file="target/jsf-api/javax/faces/component/UIViewRoot.java" token="UIViewRoot" value="UIViewRootCopy"/>
+                 <replace file="target/jsf-api/javax/faces/component/UIViewRoot.java" token="extends UIComponentBase" value="extends UIViewRoot"/>
+                 <replace file="target/jsf-api/javax/faces/component/UIViewRoot.java" token="private void broadcastEvents" value="protected void broadcastEvents"/>
+                 <move file="target/jsf-api/javax/faces/component/UIViewRoot.java" 
+                       tofile="target/jsf-api/javax/faces/component/UIViewRootCopy.java" />
+                 <javac srcdir="target/jsf-api" 
+                        classpathref="maven.compile.classpath"
+                        destdir="target/classes"
+                        debug="on" />
+	       </tasks>
+	     </configuration>
+	     <goals>
+	       <goal>run</goal>
+	     </goals>
+	   </execution>
+	 </executions>
+       </plugin>
     </plugins>
 
   </build>
@@ -70,6 +128,14 @@
       <version>1.2</version>
       <scope>provided</scope>
     </dependency>
+<!--  Commented out due to http://jira.codehaus.org/browse/MRM-126
+    <dependency>
+      <groupId>javax.faces</groupId>
+      <artifactId>jsf-api</artifactId>
+      <version>1.2</version>
+      <classifier>sources</classifier>
+    </dependency>
+-->
     <dependency>
       <groupId>com.sun.jsf-extensions</groupId>
       <artifactId>jsf-extensions-common</artifactId>

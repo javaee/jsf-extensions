@@ -26,9 +26,7 @@ public class EditEmployee {
             cw.startScript().select(c, Effect.highlight()).endScript().close();
         } catch (Exception e) {
             log.log(Level.SEVERE, "Error in ValueChangeListener", e);
-        } finally {
-            faces.responseComplete();
-        }
+        } 
     }
 
     private transient UIData datagrid;

@@ -438,12 +438,17 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
   },
   renderView: function(xjson) {
      var xml = this.transport.responseXML;
+     var id, content, markup, str;
      if (null == xml || typeof xml == 'undefined') {
+	 // If the content contains javaScript, just execute it
+	 markup = this.transport.responseText;
+	 if (null != markup && typeof markup != 'undefined') {
+	     markup.evalScripts();
+	 }
 	 return;
      }    
      var components = xml.getElementsByTagName('components')[0];
      var render = components.getElementsByTagName('render');
-     var id, content, markup, str;
      for (var i = 0; i < render.length; i++) {
 	 id = render[i].getAttribute('id');
 	 content = render[i].firstChild.firstChild;

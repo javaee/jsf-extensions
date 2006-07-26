@@ -10,8 +10,10 @@
 package com.sun.faces.extensions.avatar.lifecycle;
 
 import java.io.IOException;
+import java.util.List;
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
+import javax.faces.event.FacesEvent;
 import javax.faces.event.PhaseListener;
 import javax.faces.lifecycle.Lifecycle;
 import java.util.Map;
@@ -71,7 +73,15 @@ public class PartialTraversalLifecycle extends Lifecycle {
      * implementation.</p>
      */
     public void execute(FacesContext context) throws FacesException {
-	parent.execute(context);
+        if (!AsyncResponse.isAjaxRequest()) {
+            parent.execute(context);
+            return;
+        }
+        List<FacesEvent> events = AsyncResponse.getFacesEvents(context);
+        for (FacesEvent event : events) {
+            event.queue();
+        }
+        parent.execute(context);
     }
     
     public void render(FacesContext context) throws FacesException {

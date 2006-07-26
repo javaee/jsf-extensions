@@ -3,9 +3,11 @@ package com.sun.faces.extensions.avatar.lifecycle;
 import com.sun.faces.extensions.avatar.application.DeferredStateManager;
 import com.sun.faces.extensions.avatar.event.EventCallback;
 import com.sun.faces.extensions.common.util.FastWriter;
+import com.sun.faces.extensions.common.util.Util;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -13,6 +15,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import javax.faces.FacesException;
+import javax.faces.component.ContextCallback;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.context.ResponseWriterWrapper;
@@ -21,11 +24,10 @@ import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.FactoryFinder;
 import javax.faces.component.UIComponent;
-import javax.faces.context.ResponseStream;
+import javax.faces.event.FacesEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.render.ResponseStateManager;
 import javax.servlet.ServletOutputStream;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
@@ -213,6 +215,75 @@ public class AsyncResponse {
         return result;
 
     }
+
+    /**
+     * <p>Look in the {@link #FACES_EVENT_HEADER} and parse it according to 
+     * the following syntax</p>
+     *
+     * <code><pre>EVENT_TYPE,clientId,PhaseId,...[&EVENT_TYPE,clientId,PhaseId,...]*</pre></code>
+     *
+     * <p>Where <code>EVENT_TYPE</code> is the String <code>ValueChangeEvent</code>,
+     * <code>ActionEvent</code>, or one of the event types defined to the system
+     * in the 
+     * that must be a subclass of <code>FacesEvent</code>.
+     *
+     */
+    
+    public static List<FacesEvent> getFacesEvents(FacesContext context) {
+        Map<String, String> p = 
+                FacesContext.getCurrentInstance().getExternalContext()
+                .getRequestHeaderMap();
+        List<FacesEvent> result = new ArrayList<FacesEvent>();
+        String header = p.get(FACES_EVENT_HEADER);
+        String [] events = null;
+        String [] params = null;
+        int i = 0, j = 0;
+        if (header != null) {
+            events = header.split("&");
+            for (i = 0; i < events.length; i++) {
+                params = events[i].split(",");
+                if (params.length >= 3) {
+                    result.add(getFacesEvent(context, params));
+                }
+                else {
+                    // Log Message.  Params must be 3
+                }
+            }
+        }
+        return result;
+    }
+    
+    private static FacesEvent getFacesEvent(FacesContext context,
+            String [] params) {
+        FacesEvent result = null;
+        Map<String,Constructor> eventsMap = (Map<String,Constructor>)
+                context.getExternalContext().getApplicationMap().get(FACES_EVENT_CONTEXT_PARAM);
+        assert(null != eventsMap);
+        Constructor eventCtor = eventsMap.get(params[0]);
+        final UIComponent [] source = new UIComponent[1];
+        if (null != eventCtor) {
+            
+            context.getViewRoot().invokeOnComponent(context, params[1], new ContextCallback() {
+                public void invokeContextCallback(FacesContext facesContext, 
+                        UIComponent comp) {
+                    source[0] = comp;
+                }
+            });
+            
+            try {
+                result = (FacesEvent) eventCtor.newInstance(source[0]);
+            } catch (InvocationTargetException ex) {
+                throw new FacesException(ex);
+            } catch (InstantiationException ex) {
+                throw new FacesException(ex);
+            } catch (IllegalAccessException ex) {
+                throw new FacesException(ex);
+            }
+            result.setPhaseId(Util.getPhaseIdFromString(params[2]));
+        }
+        
+        return result;
+    }
     
     private ResponseWriter createAjaxResponseWriter(FacesContext context) {
         // set up the ResponseWriter
@@ -337,7 +408,10 @@ public class AsyncResponse {
     public static final String EXECUTE_HEADER = FACES_PREFIX + "execute";
     public static final String RENDER_HEADER= FACES_PREFIX + "render";
     public static final String EVENT_HEADER= FACES_PREFIX + "event";
+    public static final String FACES_EVENT_HEADER= FACES_PREFIX + "facesevent";
     public static final String XJSON_HEADER= "X-JSON";
+    
+    public static final String FACES_EVENT_CONTEXT_PARAM = "com.sun.faces.extensions.avatar.FacesEvents";
     
      private static class StateCapture extends ResponseWriterWrapper {
         

@@ -73,6 +73,11 @@
         <param-value>false</param-value>
     </context-param>
 
+    <context-param>
+      <param-name>com.sun.faces.extensions.avatar.FacesEvents</param-name>
+      <param-value>SuggestEvent:com.enverio.jsf.SuggestEvent</param-value>
+    </context-param>
+
     <listener><listener-class>com.enverio.client.ClientWriterRequestListener</listener-class></listener>
 
     <!-- Faces Servlet -->

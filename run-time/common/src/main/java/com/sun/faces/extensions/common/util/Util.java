@@ -25,12 +25,14 @@
 
 package com.sun.faces.extensions.common.util;
 
+import java.util.List;
 import javax.faces.application.Application;
 import javax.faces.component.UIComponent;
 import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
+import javax.faces.event.PhaseId;
 
 /**
  *
@@ -103,6 +105,18 @@ public class Util {
         } catch (Exception e) {
             return (null);
         }
+    }
+    
+    public static PhaseId getPhaseIdFromString(String phaseIdString) {
+        PhaseId result = PhaseId.ANY_PHASE;
+        List<PhaseId> phaseIds = PhaseId.VALUES;
+        for (PhaseId curPhase : phaseIds) {
+            if (-1 != curPhase.toString().toLowerCase().
+                    indexOf(phaseIdString.toLowerCase())) {
+                return curPhase;
+            }
+        }
+        return result;
     }
     
 }

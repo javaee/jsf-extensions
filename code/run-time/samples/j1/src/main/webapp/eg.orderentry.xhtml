@@ -79,7 +79,7 @@
 	<script type="text/javascript">
 	document.forms[0].submit = function() {};
 	var a = $('datascroller').getElementsByTagName('a');
-	$A(a).each(function(e) { new Faces.Command(e, 'mousedown', { render: 'datagrid,scroller' }); });
+	$A(a).each(function(e) { new Faces.DeferredEvent(e, 'mousedown', { render: 'datagrid,scroller' }); });
 	</script>
 </h:panelGroup>
 </div>

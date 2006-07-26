@@ -219,6 +219,7 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
             }
             
             if (writeXML) {
+                writeMessages(context, null, null, writer);
                 writer.endElement("components");
             }
         }
@@ -263,9 +264,42 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
         }
         return result;
     }
+    
+    private boolean writeMessages(FacesContext context, UIComponent comp,
+            ConverterException converterException,
+            ResponseWriter writer) throws IOException {
+        Iterator<FacesMessage> messages;
+        boolean
+                wroteStart = false,
+                hasMessages = false;
+        messages = context.getMessages(null == comp ? null : comp.getClientId(context));
+        while (messages.hasNext()) {
+            hasMessages = true;
+            if (!wroteStart) {
+                writer.startElement("messages", comp);
+                wroteStart = true;
+            }
+            writer.startElement("message", comp);
+            // PENDING(edburns): this is a rendering decision.
+            // We should do something with the MessageRenderer.
+            writer.write(messages.next().getSummary() + " ");
+            writer.endElement("message");
+        }
+        if (null != converterException) {
+            if (!wroteStart) {
+                writer.startElement("messages", comp);
+                wroteStart = true;
+            }
+            writer.write(converterException.getFacesMessage().getSummary());
+        }
+        if (wroteStart) {
+            writer.endElement("messages");
+        }
+        return hasMessages;
+    }
 
     private class PhaseAwareContextCallback implements ContextCallback {
-        
+
         private PhaseId curPhase = null;
         private PhaseAwareContextCallback(PhaseId curPhase) {
             this.curPhase = curPhase;
@@ -312,7 +346,7 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
                         converterException = ce;
                     }
                     if (writeXML) {
-                        writeMessages(facesContext, comp,
+                        PartialTraversalViewRoot.this.writeMessages(facesContext, comp,
                                 converterException, writer);
                         writer.endElement("render");
                     }
@@ -326,39 +360,6 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
             catch (IOException ex) {
                 ex.printStackTrace();
             }
-        }
-        
-        private boolean writeMessages(FacesContext context, UIComponent comp,
-                ConverterException converterException,
-                ResponseWriter writer) throws IOException {
-            Iterator<FacesMessage> messages;
-            boolean
-                    wroteStart = false,
-                    hasMessages = false;
-            messages = context.getMessages(comp.getClientId(context));
-            while (messages.hasNext()) {
-                hasMessages = true;
-                if (!wroteStart) {
-                    writer.startElement("messages", comp);
-                    wroteStart = true;
-                }
-                writer.startElement("message", comp);
-                // PENDING(edburns): this is a rendering decision.
-                // We should do something with the MessageRenderer.
-                writer.write(messages.next().getSummary() + " ");
-                writer.endElement("message");
-            }
-            if (null != converterException) {
-                if (!wroteStart) {
-                    writer.startElement("messages", comp);
-                    wroteStart = true;
-                }
-                writer.write(converterException.getFacesMessage().getSummary());
-            }
-            if (wroteStart) {
-                writer.endElement("messages");
-            }
-            return hasMessages;
         }
         
     }

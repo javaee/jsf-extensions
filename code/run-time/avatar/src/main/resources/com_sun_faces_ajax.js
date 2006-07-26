@@ -539,10 +539,10 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
   }
 });
 
-/* Turn any Element into a Faces.Command
+/* Turn any Element into a Faces.DeferredEvent
  ***********************************************************/
-Faces.Command = Faces.create();
-Faces.Command.prototype = {
+Faces.DeferredEvent = Faces.create();
+Faces.DeferredEvent.prototype = {
 	initialize: function(action, event, options) {
 		var event = (event) || 'click';
 		var options = options;

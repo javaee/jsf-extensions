@@ -57,7 +57,7 @@ function moveAsideEventType(ajaxZone, element, options, closureHook) {
 	    options.closure = gGlobalScope[closureHook](ajaxZone, element);
 	}
     }
-    var c = new Faces.Command(element, options.eventType, options);
+    var c = new Faces.DeferredEvent(element, options.eventType, options);
 }
 
 function takeActionAndTraverseTree(target, element, action, options, 

@@ -109,7 +109,7 @@ Rendered via Faces components:
     document.forms[0].submit = function() {}; 
     var a = $('form:subview2').getElementsByTagName('a'); 
     $A(a).each(function(e) { 
-      new Faces.Command(e, 'mousedown', { postReplaceHook: 'postReplaceHook', render: 'form:table,form:subview2' }); 
+      new Faces.DeferredEvent(e, 'mousedown', { postReplaceHook: 'postReplaceHook', render: 'form:table,form:subview2' }); 
     }); 
   </script>
   </h:panelGroup>

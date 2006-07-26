@@ -381,7 +381,7 @@ function postReplaceHook(ajaxZone, innerHTML, [closure]);
 component that needs to be re-rendered with data from this ajax
 response.  The optional argument <code>closure</code> is whatever was
 passed as the <code>closure</code> option to the
-<code>Faces.Event</code> or <code>Faces.Command</code> that initiated
+<code>Faces.Event</code> or <code>Faces.DeferredEvent</code> that initiated
 the ajax request for this response.</p>
 
 ]]>
@@ -415,7 +415,7 @@ function replaceElement(id, content, [closure]);
           <code>content</code>.  The optional argument
           <code>closure</code> is whatever was passed as the
           <code>closure</code> option to the <code>Faces.Event</code> or
-          <code>Faces.Command</code> that initiated the ajax request for
+          <code>Faces.DeferredEvent</code> that initiated the ajax request for
           this response.</p>
 
           ]]>

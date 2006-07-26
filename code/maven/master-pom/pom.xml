@@ -123,14 +123,9 @@
   <repositories>
     <repository>
       <snapshots />
-      <id>ibiblio</id>
-      <url>http://www.ibiblio.org/maven2/</url>
-    </repository>
-    <repository>
-      <snapshots />
       <id>java.net</id>
       <name>Java.net Maven 1.x Repository for external projects</name>
-      <url>https://maven-repository.dev.java.net/nonav/repository/</url>
+      <url>https://maven-repository.dev.java.net/nonav/repository</url>
       <layout>legacy</layout>
     </repository>
     <repository>
@@ -140,36 +135,17 @@
       <url>http://download.java.net/javaee5/external/shared</url>
       <layout>legacy</layout>
     </repository>
+    <repository>
+      <snapshots />
+      <id>ibiblio</id>
+      <url>http://www.ibiblio.org/maven2/</url>
+    </repository>
   </repositories>
   <dependencies>
     <dependency>
       <groupId>javax.faces</groupId>
       <artifactId>jsf-api</artifactId>
       <version>1.2</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>com-sun-commons-logging</groupId>
-      <artifactId>com-sun-commons-logging</artifactId>
-      <version>1.0.4</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>com-sun-commons-digester</groupId>
-      <artifactId>com-sun-commons-digester</artifactId>
-      <version>1.5</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>com-sun-commons-collections</groupId>
-      <artifactId>com-sun-commons-collections</artifactId>
-      <version>2.1</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>com-sun-commons-beanutils</groupId>
-      <artifactId>com-sun-commons-beanutils</artifactId>
-      <version>1.6.1</version>
       <scope>provided</scope>
     </dependency>
     <dependency>

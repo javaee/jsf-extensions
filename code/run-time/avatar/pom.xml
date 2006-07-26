@@ -59,8 +59,6 @@
 	     <configuration>
 	       <tasks>
 
-                 <!-- I need to download this using ant because of http://jira.codehaus.org/browse/MNG-2462 -->
-
                  <!-- 
 
                    This target gets the latest JSF 1.2 jsf-api source
@@ -83,10 +81,7 @@
                  -->
                  <mkdir dir="target/jsf-api" />
                  <mkdir dir="target/classes" />
-                 <!-- <setproxy proxyhost="firewall" proxyport="81"/> -->
-                 <get usetimestamp="true"
-                      src="https://maven-repository.dev.java.net/nonav/repository/javax.faces/java-sources/jsf-api-1.2-sources.jar" dest="target/jsf-api/jsf-api-1.2-sources.jar" /> 
-                 <unjar dest="target/jsf-api" src="target/jsf-api/jsf-api-1.2-sources.jar">
+                 <unjar dest="target/jsf-api" src="${settings.localRepository}/javax/faces/jsf-api/1.2/jsf-api-1.2-sources.jar">
                    <patternset>
                      <include name="**/UIViewRoot.java" />
                    </patternset>
@@ -128,14 +123,12 @@
       <version>1.2</version>
       <scope>provided</scope>
     </dependency>
-<!--  Commented out due to http://jira.codehaus.org/browse/MRM-126
     <dependency>
       <groupId>javax.faces</groupId>
       <artifactId>jsf-api</artifactId>
       <version>1.2</version>
-      <classifier>sources</classifier>
+      <type>java-source</type>
     </dependency>
--->
     <dependency>
       <groupId>com.sun.jsf-extensions</groupId>
       <artifactId>jsf-extensions-common</artifactId>

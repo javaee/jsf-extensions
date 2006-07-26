@@ -19,7 +19,7 @@ Object.extend(Object.extend(Enverio.Autocompleter.prototype, Autocompleter.Base.
     this.options.parameters = this.options.callback ?
 	this.options.callback(this.element, entry) : entry;
 
-    new Faces.Event(this.element, this.options);
+    DynaFaces.fireEvent(this.element, this.options);
   },
 
   onComplete: function(request) {

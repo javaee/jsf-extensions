@@ -25,15 +25,15 @@
 <h:dataTable id="datagrid" binding="#{page.dataGrid}" value="#{company.allEmployees}" var="emp" rows="5" style="width: 100%;">
 	<h:column>
 		<f:facet name="header">Last Name</f:facet>
-		<h:inputText id="lastName" value="#{emp.lastName}" onblur="new Faces.Event(this, { execute: this.name });" valueChangeListener="#{page.highlight}"/>
+		<h:inputText id="lastName" value="#{emp.lastName}" onblur="DynaFaces.fireEvent(this, { execute: this.name });" valueChangeListener="#{page.highlight}"/>
 	</h:column>
 	<h:column>
 		<f:facet name="header">First Name</f:facet>
-		<h:inputText id="firstName" value="#{emp.firstName}" onblur="new Faces.Event(this, { execute: this.name });" valueChangeListener="#{page.highlight}"/>
+		<h:inputText id="firstName" value="#{emp.firstName}" onblur="DynaFaces.fireEvent(this, { execute: this.name });" valueChangeListener="#{page.highlight}"/>
 	</h:column>
 	<h:column>
 		<f:facet name="header">Email</f:facet>
-		<h:inputText id="email" value="#{emp.email}" style="width: 200px;" onblur="new Faces.Event(this, { execute: this.name });" valueChangeListener="#{page.highlight}"/>
+		<h:inputText id="email" value="#{emp.email}" style="width: 200px;" onblur="DynaFaces.fireEvent(this, { execute: this.name });" valueChangeListener="#{page.highlight}"/>
 	</h:column>
 </h:dataTable>
 
@@ -46,7 +46,7 @@
 	<script type="text/javascript">
 	document.forms[0].submit = function() {};
 	var a = $('datascroller').getElementsByTagName('a');
-	$A(a).each(function(e) { new Faces.DeferredEvent(e, 'mousedown', { render: 'datagrid,scroller' }); });
+	$A(a).each(function(e) { DynaFaces.installDeferredEvent(e, 'mousedown', { render: 'datagrid,scroller' }); });
 	</script>
 </h:panelGroup>
 </div>
@@ -63,21 +63,21 @@
     &lt;f:facet name="header">Last Name&lt;/f:facet>
     &lt;h:inputText id="lastName"
       value="\#{emp.lastName}"
-      onblur="<b>new Faces.Event(this, { execute: this.name });</b>"
+      onblur="<b>DynaFaces.fireEvent(this, { execute: this.name });</b>"
       valueChangeListener="<b>\#{page.highlight}</b>"/>
     &lt;/h:column>
     &lt;h:column>
       &lt;f:facet name="header">First Name&lt;/f:facet>
       &lt;h:inputText id="firstName"
         value="\#{emp.firstName}"
-        onblur="<b>new Faces.Event(this, { execute: this.name });</b>"
+        onblur="<b>DynaFaces.fireEvent(this, { execute: this.name });</b>"
         valueChangeListener="<b>\#{page.highlight}</b>"/>
     &lt;/h:column>
     &lt;h:column>
       &lt;f:facet name="header">Email&lt;/f:facet>
       &lt;h:inputText id="email"
         value="\#{emp.email}"
-        onblur="<b>new Faces.Event(this, { execute: this.name });</b>"
+        onblur="<b>DynaFaces.fireEvent(this, { execute: this.name });</b>"
         valueChangeListener="<b>\#{page.highlight}</b>"/>
   &lt;/h:column>
 &lt;/h:dataTable>

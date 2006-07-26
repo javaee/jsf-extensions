@@ -26,7 +26,7 @@
 <h:dataTable id="details" binding="#{orderEntry.header}" value="#{order.lines}" var="ln" style="width: 100%">
 	<h:column>
 		<h:commandButton action="#{orderEntry.deleteLine}" class="delete" image="style/j1/delete.png"
-						 onclick="new Faces.Event(this, { render: 'details, orderTotal' }); return false;"/>
+						 onclick="DynaFaces.fireEvent(this, { render: 'details, orderTotal' }); return false;"/>
 	</h:column>
 	<h:column>#{ln.quantity}</h:column>
 	<h:column>#{ln.uom}</h:column>
@@ -65,7 +65,7 @@
 		<h:inputText id="qty" binding="#{orderEntry.quantity}" size="2" converter="javax.faces.Number"/>
 	</h:column>
 	<h:column>
-		<h:commandButton class="orange" value="Add Item" action="#{orderEntry.addProduct}" onclick="new Faces.Event(this); return false;"/>
+		<h:commandButton class="orange" value="Add Item" action="#{orderEntry.addProduct}" onclick="DynaFaces.fireEvent(this); return false;"/>
 	</h:column>
 </h:dataTable>
 
@@ -79,7 +79,7 @@
 	<script type="text/javascript">
 	document.forms[0].submit = function() {};
 	var a = $('datascroller').getElementsByTagName('a');
-	$A(a).each(function(e) { new Faces.DeferredEvent(e, 'mousedown', { render: 'datagrid,scroller' }); });
+	$A(a).each(function(e) { DynaFaces.installDeferredEvent(e, 'mousedown', { render: 'datagrid,scroller' }); });
 	</script>
 </h:panelGroup>
 </div>

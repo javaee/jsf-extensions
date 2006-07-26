@@ -589,3 +589,19 @@ Faces.Observer.prototype = {
 		}
 	}
 };
+
+
+
+if (typeof DynaFaces != 'undefined') {
+    alert("DynaFaces already defined!"); 
+}
+
+var DynaFaces = new Object();
+
+DynaFaces.fireEvent = function(element, options) {
+    new Faces.Event(element, options);
+}
+
+DynaFaces.installDeferredEvent = function(action, event, options) {
+    new Faces.DeferredEvent(action, event, options);
+}

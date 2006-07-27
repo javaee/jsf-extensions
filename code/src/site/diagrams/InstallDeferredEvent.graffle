@@ -133,8 +133,8 @@
 			<integer>6</integer>
 			<key>Points</key>
 			<array>
-				<string>{208.051, 244}</string>
-				<string>{206.283, 271.125}</string>
+				<string>{219.988, 244}</string>
+				<string>{220.875, 271.125}</string>
 			</array>
 			<key>Style</key>
 			<dict>
@@ -161,7 +161,7 @@
 			<array>
 				<dict>
 					<key>Bounds</key>
-					<string>{{83, 271.125}, {240.963, 86}}</string>
+					<string>{{83.0001, 271.125}, {278.56, 86}}</string>
 					<key>Class</key>
 					<string>ShapedGraphic</string>
 					<key>ID</key>
@@ -179,7 +179,7 @@
 				</dict>
 				<dict>
 					<key>Bounds</key>
-					<string>{{86.1567, 279.125}, {278.843, 70}}</string>
+					<string>{{86.6493, 279.125}, {322.351, 70}}</string>
 					<key>Class</key>
 					<string>ShapedGraphic</string>
 					<key>FitText</key>
@@ -222,7 +222,7 @@
 \f1\i \cf2 e
 \f0\i0 \cf0  in the scroller, do: \
 \
-new Faces.DeferredEvent(
+DynaFaces.installDeferredEvent(
 \f1\i \cf2 e
 \f0\i0 \cf0 , 'mousedown', \{ postReplaceHook: 'postReplaceHook', \
     render: '\cf2 form:table\cf0 ,\cf2 form:scroller\cf0 ' \}); }</string>
@@ -1401,7 +1401,7 @@ new Faces.DeferredEvent(
 	<key>MagnetsVisible</key>
 	<string>NO</string>
 	<key>ModificationDate</key>
-	<string>2006-07-26 12:27:42 -0700</string>
+	<string>2006-07-27 13:00:56 -0700</string>
 	<key>Modifier</key>
 	<string>Edward Burns</string>
 	<key>Orientation</key>
@@ -1488,7 +1488,7 @@ new Faces.DeferredEvent(
 	CQkJCTwvYXJyYXk+CgkJCQkJPGtleT5jb20uYXBwbGUucHJpbnQudGlja2V0LmNsaWVu
 	dDwva2V5PgoJCQkJCTxzdHJpbmc+Y29tLmFwcGxlLnByaW50aW5nbWFuYWdlcjwvc3Ry
 	aW5nPgoJCQkJCTxrZXk+Y29tLmFwcGxlLnByaW50LnRpY2tldC5tb2REYXRlPC9rZXk+
-	CgkJCQkJPGRhdGU+MjAwNi0wNy0yNlQxOToyNzoyNVo8L2RhdGU+CgkJCQkJPGtleT5j
+	CgkJCQkJPGRhdGU+MjAwNi0wNy0yN1QyMDowMDoxM1o8L2RhdGU+CgkJCQkJPGtleT5j
 	b20uYXBwbGUucHJpbnQudGlja2V0LnN0YXRlRmxhZzwva2V5PgoJCQkJCTxpbnRlZ2Vy
 	PjA8L2ludGVnZXI+CgkJCQk8L2RpY3Q+CgkJCTwvYXJyYXk+CgkJPC9kaWN0PgoJCTxr
 	ZXk+Y29tLmFwcGxlLnByaW50LlBhZ2VGb3JtYXQuUE1BZGp1c3RlZFBhcGVyUmVjdDwv
@@ -1502,7 +1502,7 @@ new Faces.DeferredEvent(
 	CQkJCTxrZXk+Y29tLmFwcGxlLnByaW50LnRpY2tldC5jbGllbnQ8L2tleT4KCQkJCQk8
 	c3RyaW5nPmNvbS5hcHBsZS5wcmludGluZ21hbmFnZXI8L3N0cmluZz4KCQkJCQk8a2V5
 	PmNvbS5hcHBsZS5wcmludC50aWNrZXQubW9kRGF0ZTwva2V5PgoJCQkJCTxkYXRlPjIw
-	MDYtMDctMjZUMTk6Mjc6MjVaPC9kYXRlPgoJCQkJCTxrZXk+Y29tLmFwcGxlLnByaW50
+	MDYtMDctMjdUMjA6MDA6MTNaPC9kYXRlPgoJCQkJCTxrZXk+Y29tLmFwcGxlLnByaW50
 	LnRpY2tldC5zdGF0ZUZsYWc8L2tleT4KCQkJCQk8aW50ZWdlcj4wPC9pbnRlZ2VyPgoJ
 	CQkJPC9kaWN0PgoJCQk8L2FycmF5PgoJCTwvZGljdD4KCQk8a2V5PmNvbS5hcHBsZS5w
 	cmludC5QYXBlckluZm8uUE1QYXBlck5hbWU8L2tleT4KCQk8ZGljdD4KCQkJPGtleT5j

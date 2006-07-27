@@ -91,7 +91,13 @@
         </exclusion>
       </exclusions>
       <scope>provided</scope>
-    </dependency>  </dependencies>
+    </dependency>  
+    <dependency>
+      <groupId>com.sun.jsf-extensions</groupId>
+      <artifactId>jsf-extensions-dynafaces</artifactId>
+      <version>0.1-SNAPSHOT</version>
+    </dependency>
+  </dependencies>
   <reporting>
     <plugins>
       <plugin>

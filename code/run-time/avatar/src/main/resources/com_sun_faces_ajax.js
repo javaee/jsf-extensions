@@ -600,8 +600,10 @@ var DynaFaces = new Object();
 
 DynaFaces.fireEvent = function(element, options) {
     new Faces.Event(element, options);
+    return false;
 }
-
+    
 DynaFaces.installDeferredEvent = function(action, event, options) {
     new Faces.DeferredEvent(action, event, options);
+    return false;
 }

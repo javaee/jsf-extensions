@@ -236,8 +236,8 @@
 +        src='&lt;%= request.getContextPath() + "/devtime.js" %&gt;'&gt;&lt;/script&gt;
  
 +&lt;jsfExt:ajaxZone id="zone2" interactionType="input" 
-+                inspectElementHook="inspectElement"
-+                eventType="click" eventHook="extractParams"
++                inspectElement="inspectElement"
++                eventType="click" collectPostData="extractParams"
 +                action="#{carstore.currentModel.updatePricing}"&gt;
  &lt;h:panelGrid&gt;
  

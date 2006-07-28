@@ -60,8 +60,8 @@
 
 <source><code>
 &lt;jsfExt:ajaxZone id="zone2" interactionType="input" 
-                inspectElementHook="inspectElement"
-                eventType="click" eventHook="extractParams"
+                inspectElement="inspectElement"
+                eventType="click" collectPostData="extractParams"
                 action="#{carstore.currentModel.updatePricing}"&gt;
   &lt;!-- JSF and HTML content goes here. --&gt;
 &lt;/jsfExt:ajaxZone&gt;
@@ -162,7 +162,7 @@ apply request values, rather than invoke application.</p>
 </dt>
 
 <dd><p>If specified, this is a JavaScript object is kept locally and
-passed to the <code>replaceElementHook</code> and/or the
+passed to the <code>replaceElement</code> and/or the
 <code>postInstallHook</code> callback functions.</p>
 </dd>
 
@@ -173,12 +173,12 @@ passed to the <code>replaceElementHook</code> and/or the
 will be sent up to the server in the <code>X-JSON</code> header.  This
 value may be operated on by the server.  The possibly modified value
 will be returned to the client as the last argument in the
-<code>replaceElementHook</code> and/or the
+<code>replaceElement</code> and/or the
 <code>postInstallHook</code> callback functions.</p>
 </dd>
 
 
-<dt><p>replaceElementHook</p>
+<dt><p>replaceElement</p>
 </dt>
 
 <dd><p>The name of a globally scoped function that conforms to the following signature.</p>
@@ -205,13 +205,13 @@ server.</p>
 
 </dd>
 
-<dt><p>postReplaceHook</p>
+<dt><p>postReplace</p>
 </dt>
 
 <dd><p>The name of a globally scoped function that conforms to the
 following signature.</p>
 
-<pre><code> function postReplaceHook(ajaxZone, innerHTML, [closure], [xjson]);
+<pre><code> function postReplace(ajaxZone, innerHTML, [closure], [xjson]);
 </code></pre>
 
 <p>This function is called after the markup replacement for each

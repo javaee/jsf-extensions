@@ -164,11 +164,11 @@ public class AjaxZoneRenderer extends Renderer {
         String 
                 clientId = null,
                 interactionType = getAttr(context, comp, "interactionType"),
-                closureHook = null,
-                eventHook = null,
+                getCallbackData = null,
+                collectPostData = null,
                 eventType = null,
-	        inspectElementHook = null,
-                replaceElementHook = null;
+	        inspectElement = null,
+                replaceElement = null;
 	StringBuffer ajaxifyChildren = null;
         MethodExpression action = null;
 	boolean isXhtml = false,
@@ -193,33 +193,33 @@ public class AjaxZoneRenderer extends Renderer {
             }
             
             if (writeAjaxifyChildren) {
-                eventHook = getAttr(context, comp, "eventHook");
+                collectPostData = getAttr(context, comp, "collectPostData");
                 eventType = getAttr(context, comp, "eventType");
-                closureHook = getAttr(context, comp, "closureHook");
-                inspectElementHook = getAttr(context, comp, "inspectElementHook");
-                replaceElementHook = getAttr(context, comp, "replaceElementHook");
+                getCallbackData = getAttr(context, comp, "getCallbackData");
+                inspectElement = getAttr(context, comp, "inspectElement");
+                replaceElement = getAttr(context, comp, "replaceElement");
 
-                if (null == eventHook || null == eventType) {
+                if (null == collectPostData || null == eventType) {
                     // PENDING: I18N
-                    throw new IOException("If \"interactionType\" is specified, both \"eventHook\" and \"eventType\" must be specified");
+                    throw new IOException("If \"interactionType\" is specified, both \"collectPostData\" and \"eventType\" must be specified");
                 }
                 
                 ajaxifyChildren = new StringBuffer();
                 ajaxifyChildren.append("\najaxifyChildren($(\'" + clientId + "\'), ");
                 ajaxifyChildren.append("{ eventType: \'" + eventType + 
-                        "\', eventHook: \'" + eventHook + "\'");
-                if (null != inspectElementHook) {
-                    ajaxifyChildren.append(", inspectElementHook: \'" + inspectElementHook + "\'");
+                        "\', collectPostData: \'" + collectPostData + "\'");
+                if (null != inspectElement) {
+                    ajaxifyChildren.append(", inspectElement: \'" + inspectElement + "\'");
                 }
-                if (null != replaceElementHook) {
-                    ajaxifyChildren.append(", replaceElementHook: \'" + replaceElementHook + "\'");
+                if (null != replaceElement) {
+                    ajaxifyChildren.append(", replaceElement: \'" + replaceElement + "\'");
                 }
                 if (null != (action = comp.getActionExpression())) {
                     ajaxifyChildren.append(", action: \'" + action.getExpressionString() + "\'");
                 }
                 ajaxifyChildren.append(" }");
-                if (null != closureHook) {
-                    ajaxifyChildren.append(", \'" + closureHook + "\'");
+                if (null != getCallbackData) {
+                    ajaxifyChildren.append(", \'" + getCallbackData + "\'");
                 }
                 ajaxifyChildren.append(");");
 

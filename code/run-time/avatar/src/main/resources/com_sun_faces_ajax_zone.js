@@ -29,49 +29,49 @@
 
 var g_zones = [];
 
-function ajaxifyChildren(target, options, closureHook) {
+function ajaxifyChildren(target, options, getCallbackData) {
     if (null == target.isAjaxified && 
         target.hasChildNodes()) {
 	for (var i = 0; i < target.childNodes.length; i++) {
 	    takeActionAndTraverseTree(target, target.childNodes[i], 
 				      moveAsideEventType, options, 
-				      closureHook);
+				      getCallbackData);
 	}
     }
     target.isAjaxified = true;
     return false;
 }
 
-function moveAsideEventType(ajaxZone, element, options, closureHook) {
+function moveAsideEventType(ajaxZone, element, options, getCallbackData) {
     if (null != options.eventType &&
 	'on' == options.eventType.substring(0,2)) {
 	options.eventType = eventType.substring(2);
     }
     options.render = g_zones.join(',');
     options.ajaxZone = ajaxZone;
-    if (closureHook) {
-	if (typeof closureHook == 'function') {
-	    options.closure = closureHook(ajaxZone, element);
+    if (getCallbackData) {
+	if (typeof getCallbackData == 'function') {
+	    options.closure = getCallbackData(ajaxZone, element);
 	}
-	else if (typeof gGlobalScope[closureHook] == 'function') {
-	    options.closure = gGlobalScope[closureHook](ajaxZone, element);
+	else if (typeof gGlobalScope[getCallbackData] == 'function') {
+	    options.closure = gGlobalScope[getCallbackData](ajaxZone, element);
 	}
     }
     var c = new Faces.DeferredEvent(element, options.eventType, options);
 }
 
 function takeActionAndTraverseTree(target, element, action, options, 
-				   closureHook) {
+				   getCallbackData) {
     var takeAction = false;
 
     // If the user defined an "inspectElement" function, call it.
-    if (!(typeof options.inspectElementHook == 'function')) {
-	if (typeof gGlobalScope[options.inspectElementHook] == 'function') {
-	    options.inspectElementHook = gGlobalScope[options.inspectElementHook];
+    if (!(typeof options.inspectElement == 'function')) {
+	if (typeof gGlobalScope[options.inspectElement] == 'function') {
+	    options.inspectElement = gGlobalScope[options.inspectElement];
 	}
     }
-    if (null != options.inspectElementHook) {
-	takeAction = options.inspectElementHook(element);
+    if (null != options.inspectElement) {
+	takeAction = options.inspectElement(element);
     }
     // If the function returned false or null, or was not defined...
     if (null == takeAction || !takeAction) {
@@ -83,12 +83,12 @@ function takeActionAndTraverseTree(target, element, action, options,
     }
     if (takeAction) {
 	// take the action on this element.
-	action(target, element, options, closureHook);
+	action(target, element, options, getCallbackData);
     }
     if (element.hasChildNodes()) {
 	for (var i = 0; i < element.childNodes.length; i++) {
 	    takeActionAndTraverseTree(target, element.childNodes[i], action, 
-				      options, closureHook);
+				      options, getCallbackData);
 	}
     }
     return false;

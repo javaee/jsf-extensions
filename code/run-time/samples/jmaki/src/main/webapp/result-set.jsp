@@ -109,7 +109,7 @@ Rendered via Faces components:
     document.forms[0].submit = function() {}; 
     var a = $('form:subview2').getElementsByTagName('a'); 
     $A(a).each(function(e) { 
-      DynaFaces.installDeferredEvent(e, 'mousedown', { postReplaceHook: 'postReplaceHook', render: 'form:table,form:subview2' }); 
+      DynaFaces.installDeferredEvent(e, 'mousedown', { postReplace: 'postReplace', render: 'form:table,form:subview2' }); 
     }); 
   </script>
   </h:panelGroup>

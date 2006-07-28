@@ -97,8 +97,8 @@ declaration of Zone 2 is represented like this in JSP:
 
 <pre><code>
 &lt;jsfExt:ajaxZone id="zone2" interactionType="input" 
-                inspectElementHook="inspectElement"
-                eventType="onclick" eventHook="extractParams"
+                inspectElement="inspectElement"
+                eventType="onclick" collectPostData="extractParams"
                 action="#{carstore.currentModel.updatePricing}"&gt;
 
 </code></pre>
@@ -106,7 +106,7 @@ declaration of Zone 2 is represented like this in JSP:
 <p><code>interactionType</code> element states that this zone contains
 input components.</p>
 
-<p><code>inspectElementHook</code> names a developer supplied JavaScript
+<p><code>inspectElement</code> names a developer supplied JavaScript
 function that will be called by the JSF-Extensions Dynamic Updating
 system to inspect a DOM element within the zone and determine if that
 element should be ajaxified.</p>
@@ -115,7 +115,7 @@ element should be ajaxified.</p>
 this AjaxZone to "fire", causing an AJAX request to be sent to the
 server.</p>
 
-<p><code>eventHook</code> names a developer supplied JavaScript function
+<p><code>collectPostData</code> names a developer supplied JavaScript function
 that is called when the JavaScript event given in the
 <code>eventType</code> parameter is fired.  The function is passed a
 number of parameters and is responsible for extracting the current state
@@ -125,7 +125,7 @@ request.</p>
 <p><code>action</code> is a standard JSF action MethodExpression that
 will be invoked on the server side when the AJAX Zone fires, in this
 case in response to any onclick on any of the elements in the zone for
-which the script specified by the <code>inspectElementHook</code>
+which the script specified by the <code>inspectElement</code>
 attribute returned true. </p>
 
 

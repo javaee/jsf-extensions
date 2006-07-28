@@ -121,6 +121,9 @@ public class AsyncResponse {
         // If we have a processingContext Request Parameter
         param = 
             requestMap.get(headerName).toString();
+        if (null != param && param.equalsIgnoreCase("none")) {
+            return result;
+        }
         if (null != (pcs = param.split(",[ \t]*"))) {
             for (String cur : pcs) {
                 cur = cur.trim();

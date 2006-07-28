@@ -118,19 +118,24 @@ made asynchronously.
 
         <dd><p>Comma separated string containing a list of client ids
         against which the <code>execute</code> portion of the request
-        processing lifecycle must be run.  If not specified, the value
-        of the <code>render</code> parameter is used.  If that is not
-        specified, the entire view is traversed during the
-        <code>execute</code> portion of the request proecssing
-        lifecycle.</p></dd>
+        processing lifecycle must be run.  If the value of the option is
+        the single string "none" without the quotes, the
+        <code>execute</code> portion of the lifecycle will be
+        effectively skipped.  If this option is not specified at all,
+        the value of the <code>render</code> parameter is used as the
+        value of the option.  If that is not specified, the entire view
+        is traversed during the <code>execute</code> portion of the
+        request proecssing lifecycle.</p></dd>
 
 <dt><p>render</p>
 </dt>
 
 <dd><p>Comma separated string containing a list of client ids against
 which the <code>render</code> portion of the request processing
-lifecycle must be run.  If not specified, the entire view is
-rendered.</p>
+lifecycle must be run.  If not specified, the entire view is rendered.
+If the value of the option is the single string "none" without the
+quotes, the <code>render</code> portion of the lifecycle will be
+effectively skipped.</p>
 </dd>
 
 <dt><p>inputs</p>

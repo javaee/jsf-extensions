@@ -85,11 +85,10 @@ import javax.servlet.http.HttpServletResponse;
  * each client id in the list, using {@link
  * javax.faces.component.UIComponent#invokeOnComponent}, call the
  * <code>encodeAll</code> method on the component with that clientId.
- * If {@link
- * com.sun.faces.extensions.avatar.lifecycle.AsyncResponse#isRenderXML}
- * returns <code>true</code> set the response content-type and headers
- * approriately for XML, and wrap the rendered output from the 
- * components in the list as in the following example.</p>
+ * If the list of subtrees to render for this request is non-empty, set
+ * the response content-type and headers approriately for XML, and wrap
+ * the rendered output from the components in the list as in the
+ * following example.</p>
  *
 <pre><code>
 &lt;partial-response&gt;
@@ -182,6 +181,7 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
         ResponseWriter orig = null, writer = null;
         AsyncResponse async = AsyncResponse.getInstance();
         EventCallback cb = null;
+        boolean renderNone = false;
         
         try {
             // Remove the no-op response so our content can be written.
@@ -192,7 +192,9 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
             // Install the AjaxResponseWriter
             context.setResponseWriter(writer);
             ExternalContext extContext = context.getExternalContext();
-            if (!async.getRenderSubtrees().isEmpty()) {
+            // If the client did not explicitly request that no subtrees be rendered...
+            if (!(renderNone = async.isRenderNone())) {
+                // prepare to render the partial response.
                 if (extContext.getResponse() instanceof HttpServletResponse) {
                     HttpServletResponse servletResponse = (HttpServletResponse)
                     extContext.getResponse();
@@ -209,9 +211,17 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
                     writer.startElement("components", root);
                 }
             }
-        
-            invokeContextCallbackOnSubtrees(context, 
-                new PhaseAwareContextCallback(PhaseId.RENDER_RESPONSE));
+            // If the context callback was not invoked on any subtrees
+            // and the client did not explicitly request that no subtrees be rendered...
+            if (!invokeContextCallbackOnSubtrees(context, 
+                    new PhaseAwareContextCallback(PhaseId.RENDER_RESPONSE)) &&
+                    !renderNone) {
+                // then render the children of the UIViewRoot as if they had been given
+                // as the list of subtrees to render.  This handles the case when 
+                // no value has been given for the "render" header.
+                invokeContextCallbackOnViewRootChildren(context,
+                        new PhaseAwareContextCallback(PhaseId.RENDER_RESPONSE));
+            }
             
             if (null != (cb = async.getEventCallbackForPhase(PhaseId.RENDER_RESPONSE))) {
                 cb.invoke(context);
@@ -256,6 +266,21 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
         
         for (String cur : subtrees) {
             if (this.invokeOnComponent(context, cur, cb)) {
+                result = true;
+            }
+        }
+        return result;
+    }
+    
+    private boolean invokeContextCallbackOnViewRootChildren(FacesContext context, 
+            PhaseAwareContextCallback cb) {
+        AsyncResponse async = AsyncResponse.getInstance();
+        List<UIComponent> children = context.getViewRoot().getChildren();
+        
+        boolean result = false;
+        
+        for (UIComponent cur : children) {
+            if (this.invokeOnComponent(context, cur.getClientId(context), cb)) {
                 result = true;
             }
         }

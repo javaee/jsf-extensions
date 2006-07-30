@@ -170,6 +170,36 @@ public class AsyncResponse {
         renderSubtrees = populateListFromHeader(RENDER_HEADER);
         return this.renderSubtrees;
     }
+    
+    public boolean isRenderNone() {
+        boolean result = false;
+        String param = null;
+        Map requestMap = FacesContext.getCurrentInstance().
+                getExternalContext().getRequestHeaderMap();
+
+        if (!requestMap.containsKey(RENDER_HEADER)) {
+            return result;
+        }
+        param = requestMap.get(RENDER_HEADER).toString();
+        result = null != param && param.equalsIgnoreCase("none");
+        
+        return result;
+    }
+
+    public boolean isExecuteNone() {
+        boolean result = false;
+        String param = null;
+        Map requestMap = FacesContext.getCurrentInstance().
+                getExternalContext().getRequestHeaderMap();
+
+        if (!requestMap.containsKey(EXECUTE_HEADER)) {
+            return result;
+        }
+        param = requestMap.get(EXECUTE_HEADER).toString();
+        result = null != param && param.equalsIgnoreCase("none");
+        
+        return result;
+    }
 
     public void setRenderSubtrees(List<String> renderSubtrees) {
 

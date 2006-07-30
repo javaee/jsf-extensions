@@ -335,7 +335,7 @@ Faces.ViewState.prototype = {
 
 	if (this.options.action) {
 	    p = (this.options.ajaxZone) ? this.options.ajaxZone.id :
-	      this.options.source.id;
+	      this.options.source.id || this.options.source.name;
 	    q.push(encodeURIComponent(p)+'='+
 		   encodeURIComponent(this.options.action));
 	}

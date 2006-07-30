@@ -181,7 +181,6 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
         UIViewRoot root = context.getViewRoot();
         ResponseWriter orig = null, writer = null;
         AsyncResponse async = AsyncResponse.getInstance();
-        boolean writeXML = AsyncResponse.isRenderXML();
         EventCallback cb = null;
         
         try {
@@ -192,23 +191,23 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
             orig = context.getResponseWriter();
             // Install the AjaxResponseWriter
             context.setResponseWriter(writer);
-            if (writeXML) {
-                ExternalContext extContext = context.getExternalContext();
+            ExternalContext extContext = context.getExternalContext();
+            if (!async.getRenderSubtrees().isEmpty()) {
                 if (extContext.getResponse() instanceof HttpServletResponse) {
                     HttpServletResponse servletResponse = (HttpServletResponse)
                     extContext.getResponse();
                     servletResponse.setContentType("text/xml");
                     servletResponse.setHeader("Cache-Control", "no-cache");
-                    String xjson = 
+                    String xjson =
                             extContext.getRequestHeaderMap().get(AsyncResponse.XJSON_HEADER);
                     if (null != xjson) {
-                        servletResponse.setHeader(AsyncResponse.XJSON_HEADER, 
+                        servletResponse.setHeader(AsyncResponse.XJSON_HEADER,
                                 xjson);
                     }
+
+                    writer.startElement("partial-response", root);
+                    writer.startElement("components", root);
                 }
-                
-                writer.startElement("partial-response", root);
-                writer.startElement("components", root);
             }
         
             invokeContextCallbackOnSubtrees(context, 
@@ -217,11 +216,9 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
             if (null != (cb = async.getEventCallbackForPhase(PhaseId.RENDER_RESPONSE))) {
                 cb.invoke(context);
             }
-            
-            if (writeXML) {
-                writeMessages(context, null, null, writer);
-                writer.endElement("components");
-            }
+
+            writeMessages(context, null, null, writer);
+            writer.endElement("components");
         }
         catch (IOException ioe) {
             
@@ -312,7 +309,6 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
         public void invokeContextCallback(FacesContext facesContext, UIComponent comp) {
             try {
                 ConverterException converterException = null;
-                boolean writeXML = AsyncResponse.isRenderXML();
                 
                 if (curPhase == PhaseId.APPLY_REQUEST_VALUES) {
                     comp.processDecodes(facesContext);
@@ -326,31 +322,21 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
                 else if (curPhase == PhaseId.RENDER_RESPONSE) {
                     ResponseWriter writer = AsyncResponse.getInstance().getResponseWriter();
 
-                    if (writeXML) {
-                        writer.startElement("render", comp);
-                        writer.writeAttribute("id",
-                                comp.getClientId(facesContext), "id");
-                    }
+                    writer.startElement("render", comp);
+                    writer.writeAttribute("id", comp.getClientId(facesContext), "id");
                     try {
-                        if (writeXML) {
-                            writer.startElement("markup", comp);
-                            writer.write("<![CDATA[");
-                        }
+                        writer.startElement("markup", comp);
+                        writer.write("<![CDATA[");
                         comp.encodeAll(facesContext);
-                        if (writeXML) {
-                            writer.write("]]>");
-                            writer.endElement("markup");
-                        }
+                        writer.write("]]>");
+                        writer.endElement("markup");
                     }
                     catch (ConverterException ce) {
                         converterException = ce;
                     }
-                    if (writeXML) {
-                        PartialTraversalViewRoot.this.writeMessages(facesContext, comp,
-                                converterException, writer);
-                        writer.endElement("render");
-                    }
-                    
+                    PartialTraversalViewRoot.this.writeMessages(facesContext, comp,
+                            converterException, writer);
+                    writer.endElement("render");
                 }
                 else {
                     throw new IllegalStateException("I18N: Unexpected PhaseId passed to PhaseAwareContextCallback: " + curPhase.toString());

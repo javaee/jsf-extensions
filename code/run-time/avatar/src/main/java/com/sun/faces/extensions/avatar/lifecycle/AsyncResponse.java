@@ -268,20 +268,6 @@ public class AsyncResponse {
         return result;
     }
     
-    /**
-     * <p>Return <code>true</code> if and only if the request headers 
-     * <b>do not</b> include
-     * an entry for {@link #SUPPRESS_XML_HEADER}.
-     */
-
-    public static boolean isRenderXML() {
-        FacesContext context = FacesContext.getCurrentInstance();
-        Map<String, String> p = context.getExternalContext().getRequestHeaderMap();
-        boolean result = false;
-        result = p.containsKey(SUPPRESS_XML_HEADER);
-        return !result;
-    }
-    
     private Object origResponse = null;
     
     /**
@@ -336,7 +322,6 @@ public class AsyncResponse {
     
     public static final String FACES_PREFIX = "com.sun.faces.avatar.";
     public static final String PARTIAL_HEADER= FACES_PREFIX + "partial";
-    public static final String SUPPRESS_XML_HEADER= FACES_PREFIX + "suppressxml";
     public static final String EXECUTE_HEADER = FACES_PREFIX + "execute";
     public static final String RENDER_HEADER= FACES_PREFIX + "render";
     public static final String EVENT_HEADER= FACES_PREFIX + "event";

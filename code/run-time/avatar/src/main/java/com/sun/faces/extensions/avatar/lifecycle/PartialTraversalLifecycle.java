@@ -66,12 +66,8 @@ public class PartialTraversalLifecycle extends Lifecycle {
     }
 
 
-    /**
-     * <p>Take no specific action.  Delegate to parent
-     * implementation.</p>
-     */
     public void execute(FacesContext context) throws FacesException {
-	parent.execute(context);
+        parent.execute(context);
     }
     
     public void render(FacesContext context) throws FacesException {
@@ -82,7 +78,6 @@ public class PartialTraversalLifecycle extends Lifecycle {
         AsyncResponse async = AsyncResponse.getInstance();
         UIViewRoot root = context.getViewRoot();
         ResponseWriter writer = null;
-        boolean writeXML = AsyncResponse.isRenderXML();
         String state = null;
 
         try {
@@ -90,19 +85,18 @@ public class PartialTraversalLifecycle extends Lifecycle {
 
             parent.render(context);
             
-            // gain access once more to the AxaxResponseWriter.  At this point,
-            // the writer does not need to be installed on the FacesContext.
-            writer = async.getResponseWriter();
-            if (writeXML) {
+            // If we rendered some content
+            if (!async.getRenderSubtrees().isEmpty()) {
+                // gain access once more to the AxaxResponseWriter.  At this point,
+                // the writer does not need to be installed on the FacesContext.
+                writer = async.getResponseWriter();
                 writer.startElement("state", root);
-            }
-            state = async.getViewState(context);
-            if (writeXML) {
+                state = async.getViewState(context);
                 writer.write("<![CDATA[" + state + "]]>");
                 writer.endElement("state");
                 writer.endElement("partial-response");
             }
-
+            
         }
         catch (IOException ioe) {
             // PENDING edburns

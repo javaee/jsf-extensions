@@ -9,7 +9,7 @@ Object.extend(Object.extend(Enverio.Autocompleter.prototype, Autocompleter.Base.
 		      this.options.onComplete    = this.onComplete.bind(this);
 		      this.options.defaultParams = this.options.parameters;
 		      this.options.event = 'suggest';
-		      this.options.suppressXML = true;
+		      this.options.render = 'none';
   },
 
   getUpdatedChoices: function() {

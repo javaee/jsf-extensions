@@ -32,7 +32,6 @@ var gPartial = gFacesPrefix + "Partial";
 var gExecute = gFacesPrefix + "Execute";
 var gRender = gFacesPrefix + "Render";
 var gEvent = gFacesPrefix + "Event";
-var gSuppressXML = gFacesPrefix + "SuppressXML";
 var gViewState = "javax.faces.ViewState";
 var gGlobalScope = this;
 
@@ -407,10 +406,6 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
 		this.options.requestHeaders.push(Faces.toArray(this.options.render,',').join(','));
 	}
 
-	if (this.options.suppressXML) {
-	    this.options.requestHeaders.push(gSuppressXML);
-	    this.options.requestHeaders.push("true");
-	}
 	if (this.options.xjson) {
 	    var xjson = gJSON.object(this.options.xjson);
 	    this.options.requestHeaders.push("X-JSON");

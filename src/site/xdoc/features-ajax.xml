@@ -57,7 +57,7 @@
        will dynamically replace the content appropriately.</p>
 
        <p>In addition to <code>Faces.Event</code>, the JavaScript
-       library includes a subclass, <code>Faces.Command</code>, that
+       library includes a subclass, <code>Faces.DeferredEvent</code>, that
        turns any markup element in the page, including JSF components,
        into an AJAX capable widget.  For example:</p>
 
@@ -89,7 +89,7 @@
     document.forms[0].submit = function() {}; 
     var a = $('form:subview2').getElementsByTagName('a'); 
     $A(a).each(function(e) { 
-      new Faces.Command(e, 'mousedown', { render: 'form:table,form:subview2' }); 
+      new Faces.DeferredEvent(e, 'mousedown', { render: 'form:table,form:subview2' }); 
     }); 
   &lt;/script&gt;
   &lt;/h:panelGroup&gt;
@@ -98,9 +98,9 @@
     <p>The previous example AJAXifies the Scroller component from the <a
     href="https://bpcatalog.dev.java.net/files/documents/1432/34000/bp-ui-simple-5.jar">Sun
     Blueprints Simple UI Components</a> by installing a
-    <code>Faces.Command</code> on the mousedown of each hyperlink within
+    <code>Faces.DeferredEvent</code> on the mousedown of each hyperlink within
     the scroller component.  The arguments to the
-    <code>Faces.Command</code> are:</p>
+    <code>Faces.DeferredEvent</code> are:</p>
 
 	<ol>
 
@@ -119,7 +119,7 @@
 	</ol>
 
         <p>Complete documentation on the supported options for
-        <code>Faces.Command</code> and <code>Faces.Event</code> can be
+        <code>Faces.DeferredEvent</code> and <code>Faces.Event</code> can be
         found in <a href="reference-ajax.html">reference
         document</a>.</p>
 

@@ -123,6 +123,9 @@ public class AsyncResponse {
         // If we have a processingContext Request Parameter
         param = 
             requestMap.get(headerName).toString();
+        if (null != param && param.equalsIgnoreCase("none")) {
+            return result;
+        }
         if (null != (pcs = param.split(",[ \t]*"))) {
             for (String cur : pcs) {
                 cur = cur.trim();
@@ -168,6 +171,36 @@ public class AsyncResponse {
         }
         renderSubtrees = populateListFromHeader(RENDER_HEADER);
         return this.renderSubtrees;
+    }
+    
+    public boolean isRenderNone() {
+        boolean result = false;
+        String param = null;
+        Map requestMap = FacesContext.getCurrentInstance().
+                getExternalContext().getRequestHeaderMap();
+
+        if (!requestMap.containsKey(RENDER_HEADER)) {
+            return result;
+        }
+        param = requestMap.get(RENDER_HEADER).toString();
+        result = null != param && param.equalsIgnoreCase("none");
+        
+        return result;
+    }
+
+    public boolean isExecuteNone() {
+        boolean result = false;
+        String param = null;
+        Map requestMap = FacesContext.getCurrentInstance().
+                getExternalContext().getRequestHeaderMap();
+
+        if (!requestMap.containsKey(EXECUTE_HEADER)) {
+            return result;
+        }
+        param = requestMap.get(EXECUTE_HEADER).toString();
+        result = null != param && param.equalsIgnoreCase("none");
+        
+        return result;
     }
 
     public void setRenderSubtrees(List<String> renderSubtrees) {
@@ -229,7 +262,7 @@ public class AsyncResponse {
      *
      */
     
-    public static List<FacesEvent> getFacesEvents(FacesContext context) {
+    public void queueFacesEvents(FacesContext context) {
         Map<String, String> p = 
                 FacesContext.getCurrentInstance().getExternalContext()
                 .getRequestHeaderMap();
@@ -243,46 +276,42 @@ public class AsyncResponse {
             for (i = 0; i < events.length; i++) {
                 params = events[i].split(",");
                 if (params.length >= 3) {
-                    result.add(getFacesEvent(context, params));
+                    queueFacesEvent(context, params);
                 }
                 else {
                     // Log Message.  Params must be 3
                 }
             }
         }
-        return result;
     }
     
-    private static FacesEvent getFacesEvent(FacesContext context,
-            String [] params) {
+    private void queueFacesEvent(FacesContext context,
+            final String [] params) {
         FacesEvent result = null;
         Map<String,Constructor> eventsMap = (Map<String,Constructor>)
                 context.getExternalContext().getApplicationMap().get(FACES_EVENT_CONTEXT_PARAM);
         assert(null != eventsMap);
-        Constructor eventCtor = eventsMap.get(params[0]);
-        final UIComponent [] source = new UIComponent[1];
+        final Constructor eventCtor = eventsMap.get(params[0]);
         if (null != eventCtor) {
             
             context.getViewRoot().invokeOnComponent(context, params[1], new ContextCallback() {
                 public void invokeContextCallback(FacesContext facesContext, 
                         UIComponent comp) {
-                    source[0] = comp;
+                    FacesEvent event = null;
+                    try {
+                        event = (FacesEvent) eventCtor.newInstance(comp);
+                    } catch (InvocationTargetException ex) {
+                        throw new FacesException(ex);
+                    } catch (InstantiationException ex) {
+                        throw new FacesException(ex);
+                    } catch (IllegalAccessException ex) {
+                        throw new FacesException(ex);
+                    }
+                    event.setPhaseId(Util.getPhaseIdFromString(params[2]));
+                    comp.queueEvent(event);
                 }
             });
-            
-            try {
-                result = (FacesEvent) eventCtor.newInstance(source[0]);
-            } catch (InvocationTargetException ex) {
-                throw new FacesException(ex);
-            } catch (InstantiationException ex) {
-                throw new FacesException(ex);
-            } catch (IllegalAccessException ex) {
-                throw new FacesException(ex);
-            }
-            result.setPhaseId(Util.getPhaseIdFromString(params[2]));
         }
-        
-        return result;
     }
     
     private ResponseWriter createAjaxResponseWriter(FacesContext context) {
@@ -334,20 +363,6 @@ public class AsyncResponse {
         boolean result = false;
         result = p.containsKey(PARTIAL_HEADER);
         return result;
-    }
-    
-    /**
-     * <p>Return <code>true</code> if and only if the request headers 
-     * <b>do not</b> include
-     * an entry for {@link #SUPPRESS_XML_HEADER}.
-     */
-
-    public static boolean isRenderXML() {
-        FacesContext context = FacesContext.getCurrentInstance();
-        Map<String, String> p = context.getExternalContext().getRequestHeaderMap();
-        boolean result = false;
-        result = p.containsKey(SUPPRESS_XML_HEADER);
-        return !result;
     }
     
     private Object origResponse = null;
@@ -404,7 +419,6 @@ public class AsyncResponse {
     
     public static final String FACES_PREFIX = "com.sun.faces.avatar.";
     public static final String PARTIAL_HEADER= FACES_PREFIX + "partial";
-    public static final String SUPPRESS_XML_HEADER= FACES_PREFIX + "suppressxml";
     public static final String EXECUTE_HEADER = FACES_PREFIX + "execute";
     public static final String RENDER_HEADER= FACES_PREFIX + "render";
     public static final String EVENT_HEADER= FACES_PREFIX + "event";

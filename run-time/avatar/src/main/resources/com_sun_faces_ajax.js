@@ -31,8 +31,8 @@ var gFacesPrefix = "com.sun.faces.avatar.";
 var gPartial = gFacesPrefix + "Partial";
 var gExecute = gFacesPrefix + "Execute";
 var gRender = gFacesPrefix + "Render";
+var gFacesEvent = gFacesPrefix + "FacesEvent";
 var gEvent = gFacesPrefix + "Event";
-var gSuppressXML = gFacesPrefix + "SuppressXML";
 var gViewState = "javax.faces.ViewState";
 var gGlobalScope = this;
 
@@ -228,10 +228,10 @@ Faces.ViewState.prototype = {
 
 	// Skip the traversal if the user elected to have more control over
 	// the post data.
-	var eventHookType = typeof this.options.eventHook;
+	var collectPostDataType = typeof this.options.collectPostData;
 	var inputsType = typeof this.options.inputs;
-	if (('void' != eventHookType && 'undefined' != eventHookType) ||
-	    ('void' != inputsType && 'undefined' != eventHookType)) {
+	if (('void' != collectPostDataType && 'undefined' != collectPostDataType) ||
+	    ('void' != inputsType && 'undefined' != collectPostDataType)) {
 	    // Just get the state data.
 	    var viewState = $(gViewState);
 	    t = viewState.tagName.toLowerCase();
@@ -325,18 +325,18 @@ Faces.ViewState.prototype = {
 	if (this.options.parameters) {
 	    q.push(this.options.parameters);
 	}
-	if (typeof this.options.eventHook == 'function') {
-	    this.options.eventHook(this.options.ajaxZone, this.options.source,
+	if (typeof this.options.collectPostData == 'function') {
+	    this.options.collectPostData(this.options.ajaxZone, this.options.source,
 				   q);
 	}
-	else if (typeof gGlobalScope[this.options.eventHook] == 'function') {
-	    gGlobalScope[this.options.eventHook](this.options.ajaxZone, 
+	else if (typeof gGlobalScope[this.options.collectPostData] == 'function') {
+	    gGlobalScope[this.options.collectPostData](this.options.ajaxZone, 
 						 this.options.source, q);
 	}
 
 	if (this.options.action) {
 	    p = (this.options.ajaxZone) ? this.options.ajaxZone.id :
-	      this.options.source.id;
+	      this.options.source.id || this.options.source.name;
 	    q.push(encodeURIComponent(p)+'='+
 		   encodeURIComponent(this.options.action));
 	}
@@ -407,10 +407,6 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
 		this.options.requestHeaders.push(Faces.toArray(this.options.render,',').join(','));
 	}
 
-	if (this.options.suppressXML) {
-	    this.options.requestHeaders.push(gSuppressXML);
-	    this.options.requestHeaders.push("true");
-	}
 	if (this.options.xjson) {
 	    var xjson = gJSON.object(this.options.xjson);
 	    this.options.requestHeaders.push("X-JSON");
@@ -455,25 +451,25 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
 	 markup = content.text || content.data;
 	 str = markup.stripScripts();
 	 this.doEvalResponse = false;
-	 // If the user passed a replaceElementHook...
-	 if (this.options.replaceElementHook) {
+	 // If the user passed a replaceElement...
+	 if (this.options.replaceElement) {
 	     var optionType = null;
 	     // look at its type.
-	     if ((optionType = typeof this.options.replaceElementHook) != 
+	     if ((optionType = typeof this.options.replaceElement) != 
 		 'undefined') {
 		 // If its type is already a function...
 		 if (optionType == 'function') {
 		     // invoke it.
-		     this.options.replaceElementHook(id, markup, 
+		     this.options.replaceElement(id, markup, 
 						     this.options.closure, 
 						     xjson);
 		 }
 		 // Otherwise, if there is a globally scoped function
-		 // named as the value of the replaceElementHook...
-		 else if (typeof gGlobalScope[this.options.replaceElementHook] ==
+		 // named as the value of the replaceElement...
+		 else if (typeof gGlobalScope[this.options.replaceElement] ==
 			  'function') {
 		     // invoke it.
-		     gGlobalScope[this.options.replaceElementHook](id, markup,
+		     gGlobalScope[this.options.replaceElement](id, markup,
 								   this.options.closure, 
 								   xjson);
 		 }
@@ -484,24 +480,24 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
 	     Element.replace(id, str);
 	 }
 	 
-	 // If the user specified a postReplaceHook...
-	 if (this.options.postReplaceHook) {
+	 // If the user specified a postReplace...
+	 if (this.options.postReplace) {
 	     // look at its type.
-	     if ((optionType == typeof this.options.postReplaceHook) !=
+	     if ((optionType == typeof this.options.postReplace) !=
 		 'undefined') {
 		 // If its type is already a function...
 		 if (optionType == 'function') {
 		     // invoke it.
-		     this.options.postReplaceHook($(id), markup, 
+		     this.options.postReplace($(id), markup, 
 						  this.options.closure,
 						  xjson);
 		 }
 		 // Otherwise, if there is a globally scoped function
-		 // named as the value of the postReplaceHook...
-		 else if (typeof gGlobalScope[this.options.postReplaceHook] ==
+		 // named as the value of the postReplace...
+		 else if (typeof gGlobalScope[this.options.postReplace] ==
 			  'function') {
 		     // invoke it.
-		     gGlobalScope[this.options.postReplaceHook]($(id), markup,
+		     gGlobalScope[this.options.postReplace]($(id), markup,
 								this.options.closure,
 								xjson);
 		 }
@@ -539,10 +535,10 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
   }
 });
 
-/* Turn any Element into a Faces.Command
+/* Turn any Element into a Faces.DeferredEvent
  ***********************************************************/
-Faces.Command = Faces.create();
-Faces.Command.prototype = {
+Faces.DeferredEvent = Faces.create();
+Faces.DeferredEvent.prototype = {
 	initialize: function(action, event, options) {
 		var event = (event) || 'click';
 		var options = options;
@@ -589,3 +585,21 @@ Faces.Observer.prototype = {
 		}
 	}
 };
+
+
+
+if (typeof DynaFaces != 'undefined') {
+    alert("DynaFaces already defined!"); 
+}
+
+var DynaFaces = new Object();
+
+DynaFaces.fireEvent = function(element, options) {
+    new Faces.Event(element, options);
+    return false;
+}
+    
+DynaFaces.installDeferredEvent = function(action, event, options) {
+    new Faces.DeferredEvent(action, event, options);
+    return false;
+}

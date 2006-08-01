@@ -9,7 +9,9 @@ Object.extend(Object.extend(Enverio.Autocompleter.prototype, Autocompleter.Base.
 		      this.options.onComplete    = this.onComplete.bind(this);
 		      this.options.defaultParams = this.options.parameters;
 		      this.options.event = 'suggest';
-		      this.options.suppressXML = true;
+		      this.options.render = 'none';
+
+		      
   },
 
   getUpdatedChoices: function() {
@@ -18,8 +20,13 @@ Object.extend(Object.extend(Enverio.Autocompleter.prototype, Autocompleter.Base.
 
     this.options.parameters = this.options.callback ?
 	this.options.callback(this.element, entry) : entry;
+    this.options.requestHeaders = this.options.requestHeaders || [];
+    this.options.requestHeaders.push(gFacesEvent);
+    var elementId = this.element.id || this.element.name;
+    this.options.requestHeaders.push("SuggestEvent," + elementId +
+				     ",INVOKE_APPLICATION");
 
-    new Faces.Event(this.element, this.options);
+    DynaFaces.fireEvent(this.element, this.options);
   },
 
   onComplete: function(request) {

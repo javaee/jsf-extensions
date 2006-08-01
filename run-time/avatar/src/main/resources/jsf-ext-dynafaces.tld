@@ -18,11 +18,9 @@
   <short-name>jsfExt</short-name>
   <uri>http://java.sun.com/jsf/extensions/dynafaces</uri>
 
- <listener>
+  <listener>
      <listener-class>com.sun.faces.extensions.avatar.lifecycle.DynaFacesContextListener</listener-class>
- </listener>
-   
-
+  </listener>
 
   <tag>
     <description>
@@ -145,8 +143,8 @@ function inspectElement(element);
 <pre><code>
 &lt;jsfExt:ajaxZone interactionType="input" <br /> 
 &nbsp;&nbsp;&nbsp;eventType="onmousedown" <br /> 
-&nbsp;&nbsp;&nbsp;inspectElementHook="inspectElement" <br /> 
-&nbsp;&nbsp;&nbsp;eventHook="replaceOnMouseDown"&gt;<br /> 
+&nbsp;&nbsp;&nbsp;inspectElement="inspectElement" <br /> 
+&nbsp;&nbsp;&nbsp;collectPostData="replaceOnMouseDown"&gt;<br /> 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  &lt;d:scroller&gt;<br /> 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    &lt;!-- nested components  --&gt;<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  &lt;/d:scroller&gt;<br /> 
@@ -174,7 +172,7 @@ function inspectElement(element) {<br />
           ]]>
 
         </description>
-        <name>inspectElementHook</name>
+        <name>inspectElement</name>
         <required>false</required>
         <deferred-value>
 	    <type>java.lang.String</type>
@@ -190,7 +188,7 @@ function inspectElement(element) {<br />
           "input" will cause the DOM children of this component to have
           the event handler specified as the value of the "eventType"
           attribute replaced with the user supplied function given as
-          the value of the "eventHook" attribute.  For example, if the
+          the value of the "collectPostData" attribute.  For example, if the
           components inside this zone did a form submit on the
           "onmousedown" event, we would indicate our desire to replace
           this "onmousedown" with our own user supplied function like
@@ -200,7 +198,7 @@ function inspectElement(element) {<br />
 <pre><code>
 &lt;jsfExt:ajaxZone interactionType="input" <br /> 
 &nbsp;&nbsp;&nbsp;eventType="onmousedown" <br /> 
-&nbsp;&nbsp;&nbsp;eventHook="replaceOnMouseDown"&gt;<br /> 
+&nbsp;&nbsp;&nbsp;collectPostData="replaceOnMouseDown"&gt;<br /> 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  &lt;d:scroller&gt;<br /> 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    &lt;!-- nested components  --&gt;<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  &lt;/d:scroller&gt;<br /> 
@@ -208,7 +206,7 @@ function inspectElement(element) {<br />
 </code></pre>
 
           <p>The details of the <code>replaceOnMouseDown</code> function
-          are described in the docs for the <code>eventHook</code>
+          are described in the docs for the <code>collectPostData</code>
           attribute.</p>
 
           <p>If "output" is specified as the value, none of the child
@@ -230,12 +228,12 @@ function inspectElement(element) {<br />
 
           <p>This optional attribute indicates what kind of JavaScript
           event to intercept with the function named as the value of the
-          <code>eventHook</code> attribute.  For example:
+          <code>collectPostData</code> attribute.  For example:
           </p>
 
 <pre><code>
 &lt;jsfExt:ajaxZone interactionType="input" eventType="onmousedown" <br /> 
-&nbsp;&nbsp;&nbsp;eventHook="replaceOnMouseDown"&gt;<br /> 
+&nbsp;&nbsp;&nbsp;collectPostData="replaceOnMouseDown"&gt;<br /> 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  &lt;d:scroller&gt;<br /> 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    &lt;!-- nested components  --&gt;<br /> 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  &lt;/d:scroller&gt;<br /> 
@@ -287,7 +285,7 @@ function handler(ajaxZone, element, originalScript, outProps, invocation);
 
 <pre><code>
 &lt;jsfExt:ajaxZone interactionType="input" eventType="onmousedown" <br /> 
-          eventHook="handler"&gt;<br /> 
+          collectPostData="handler"&gt;<br /> 
   &lt;d:scroller&gt;<br /> 
     &lt;!-- nested components  --&gt;<br /> 
   &lt;/d:scroller&gt;<br /> 
@@ -363,7 +361,7 @@ function handler(element, originalScript, outProps, invocation) {<br />
 ]]>
 
 </description>
-<name>eventHook</name>
+<name>collectPostData</name>
 <required>false</required>
 <deferred-value>
 	    <type>java.lang.String</type>
@@ -380,20 +378,20 @@ function handler(element, originalScript, outProps, invocation) {<br />
           the following signature:</p>
 
 <pre><code>
-function postReplaceHook(ajaxZone, innerHTML, [closure]);
+function postReplace(ajaxZone, innerHTML, [closure]);
 </code></pre>
 
 <p>This function is called after the markup replacement for each
 component that needs to be re-rendered with data from this ajax
 response.  The optional argument <code>closure</code> is whatever was
 passed as the <code>closure</code> option to the
-<code>Faces.Event</code> or <code>Faces.Command</code> that initiated
+<code>Faces.Event</code> or <code>Faces.DeferredEvent</code> that initiated
 the ajax request for this response.</p>
 
 ]]>
 
 </description>
-<name>postReplaceHook</name>
+<name>postReplace</name>
 <required>false</required>
 <deferred-value>
 	    <type>java.lang.String</type>
@@ -421,13 +419,13 @@ function replaceElement(id, content, [closure]);
           <code>content</code>.  The optional argument
           <code>closure</code> is whatever was passed as the
           <code>closure</code> option to the <code>Faces.Event</code> or
-          <code>Faces.Command</code> that initiated the ajax request for
+          <code>Faces.DeferredEvent</code> that initiated the ajax request for
           this response.</p>
 
           ]]>
 
         </description>
-        <name>replaceElementHook</name>
+        <name>replaceElement</name>
         <required>false</required>
         <deferred-value>
 	    <type>java.lang.String</type>
@@ -440,8 +438,8 @@ function replaceElement(id, content, [closure]);
 
           <p>This function is called to provide a closure argument that
           will be passed to the ajax request and made available to the
-          ajax response in the <code>replaceElementHook</code> or
-          <code>postReplaceHook </code> functions.  The function must
+          ajax response in the <code>replaceElement</code> or
+          <code>postReplace </code> functions.  The function must
           conform to the following signature.
           </p>
 
@@ -454,7 +452,7 @@ function getClosure(ajaxZone, element);
           ]]>
 
         </description>
-        <name>closureHook</name>
+        <name>getCallbackData</name>
         <required>false</required>
         <deferred-value>
 	    <type>java.lang.String</type>

@@ -44,12 +44,12 @@ public class AjaxZoneTag extends UIComponentELTag {
                 component.setValueExpression("style", style);
             }
         }
-        if (null != eventHook) {
-            if (eventHook.isLiteralText()) {
-                component.getAttributes().put("eventHook", eventHook.getValue(getFacesContext().getELContext()));
+        if (null != collectPostData) {
+            if (collectPostData.isLiteralText()) {
+                component.getAttributes().put("collectPostData", collectPostData.getValue(getFacesContext().getELContext()));
             }
             else {
-                component.setValueExpression("eventHook", eventHook);
+                component.setValueExpression("collectPostData", collectPostData);
             }
         }
         if (null != eventType) {
@@ -68,36 +68,36 @@ public class AjaxZoneTag extends UIComponentELTag {
                 component.setValueExpression("interactionType", interactionType);
             }
         }
-        if (null != inspectElementHook) {
-            if (inspectElementHook.isLiteralText()) {
-                component.getAttributes().put("inspectElementHook", inspectElementHook.getValue(getFacesContext().getELContext()));
+        if (null != inspectElement) {
+            if (inspectElement.isLiteralText()) {
+                component.getAttributes().put("inspectElement", inspectElement.getValue(getFacesContext().getELContext()));
             }
             else {
-                component.setValueExpression("inspectElementHook", inspectElementHook);
+                component.setValueExpression("inspectElement", inspectElement);
             }
         }
-        if (null != replaceElementHook) {
-            if (replaceElementHook.isLiteralText()) {
-                component.getAttributes().put("replaceElementHook", replaceElementHook.getValue(getFacesContext().getELContext()));
+        if (null != replaceElement) {
+            if (replaceElement.isLiteralText()) {
+                component.getAttributes().put("replaceElement", replaceElement.getValue(getFacesContext().getELContext()));
             }
             else {
-                component.setValueExpression("replaceElementHook", replaceElementHook);
+                component.setValueExpression("replaceElement", replaceElement);
             }
         }
-        if (null != postReplaceHook) {
-            if (postReplaceHook.isLiteralText()) {
-                component.getAttributes().put("postReplaceHook", postReplaceHook.getValue(getFacesContext().getELContext()));
+        if (null != postReplace) {
+            if (postReplace.isLiteralText()) {
+                component.getAttributes().put("postReplace", postReplace.getValue(getFacesContext().getELContext()));
             }
             else {
-                component.setValueExpression("postReplaceHook", postReplaceHook);
+                component.setValueExpression("postReplace", postReplace);
             }
         }
-        if (null != closureHook) {
-            if (closureHook.isLiteralText()) {
-                component.getAttributes().put("closureHook", closureHook.getValue(getFacesContext().getELContext()));
+        if (null != getCallbackData) {
+            if (getCallbackData.isLiteralText()) {
+                component.getAttributes().put("getCallbackData", getCallbackData.getValue(getFacesContext().getELContext()));
             }
             else {
-                component.setValueExpression("closureHook", closureHook);
+                component.setValueExpression("getCallbackData", getCallbackData);
             }
         }
         if (action != null) {
@@ -142,29 +142,29 @@ public class AjaxZoneTag extends UIComponentELTag {
     }
 
     /**
-     * Holds value of property eventHook.
+     * Holds value of property collectPostData.
      */
-    private ValueExpression eventHook;
+    private ValueExpression collectPostData;
 
     /**
-     * Setter for property eventHook.
-     * @param eventHook New value of property eventHook.
+     * Setter for property collectPostData.
+     * @param collectPostData New value of property collectPostData.
      */
-    public void setEventHook(ValueExpression eventHook) {
-        this.eventHook = eventHook;
+    public void setCollectPostData(ValueExpression collectPostData) {
+        this.collectPostData = collectPostData;
     }
 
     /**
-     * Holds value of property inspectElementHook.
+     * Holds value of property inspectElement.
      */
-    private ValueExpression inspectElementHook;
+    private ValueExpression inspectElement;
 
     /**
-     * Setter for property inspectElementHook.
-     * @param inspectElementHook New value of property inspectElementHook.
+     * Setter for property inspectElement.
+     * @param inspectElement New value of property inspectElement.
      */
-    public void setInspectElementHook(ValueExpression inspectElementHook) {
-        this.inspectElementHook = inspectElementHook;
+    public void setInspectElement(ValueExpression inspectElement) {
+        this.inspectElement = inspectElement;
     }
 
     /**
@@ -194,42 +194,42 @@ public class AjaxZoneTag extends UIComponentELTag {
     }
 
     /**
-     * Holds value of property postReplaceHook.
+     * Holds value of property postReplace.
      */
-    private ValueExpression postReplaceHook;
+    private ValueExpression postReplace;
 
     /**
-     * Setter for property postReplaceHook.
-     * @param postReplaceHook New value of property postReplaceHook.
+     * Setter for property postReplace.
+     * @param postReplace New value of property postReplace.
      */
-    public void setPostInstallHook(ValueExpression postReplaceHook) {
-        this.postReplaceHook = postReplaceHook;
+    public void setPostReplace(ValueExpression postReplace) {
+        this.postReplace = postReplace;
     }
 
     /**
-     * Holds value of property replaceElementHook.
+     * Holds value of property replaceElement.
      */
-    private ValueExpression replaceElementHook;
+    private ValueExpression replaceElement;
 
     /**
-     * Setter for property replaceElementHook.
-     * @param replaceElementHook New value of property replaceElementHook.
+     * Setter for property replaceElement.
+     * @param replaceElement New value of property replaceElement.
      */
-    public void setReplaceElementHook(ValueExpression replaceElementHook) {
-        this.replaceElementHook = replaceElementHook;
+    public void setReplaceElementHook(ValueExpression replaceElement) {
+        this.replaceElement = replaceElement;
     }
 
     /**
-     * Holds value of property closureHook.
+     * Holds value of property getCallbackData.
      */
-    private ValueExpression closureHook;
+    private ValueExpression getCallbackData;
 
     /**
-     * Setter for property closureHook.
-     * @param closureHook New value of property closureHook.
+     * Setter for property getCallbackData.
+     * @param getCallbackData New value of property getCallbackData.
      */
-    public void setClosureHook(ValueExpression closureHook) {
-        this.closureHook = closureHook;
+    public void setGetCallbackData(ValueExpression getCallbackData) {
+        this.getCallbackData = getCallbackData;
     }
     
     

@@ -36,7 +36,7 @@
 				<real>14</real>
 			</dict>
 			<key>ID</key>
-			<integer>9</integer>
+			<integer>8</integer>
 			<key>Shape</key>
 			<string>Rectangle</string>
 			<key>Style</key>
@@ -87,7 +87,7 @@
 				<real>14</real>
 			</dict>
 			<key>ID</key>
-			<integer>8</integer>
+			<integer>7</integer>
 			<key>Shape</key>
 			<string>Rectangle</string>
 			<key>Style</key>
@@ -127,14 +127,14 @@
 			<key>Head</key>
 			<dict>
 				<key>ID</key>
-				<integer>5</integer>
+				<integer>4</integer>
 			</dict>
 			<key>ID</key>
-			<integer>7</integer>
+			<integer>6</integer>
 			<key>Points</key>
 			<array>
-				<string>{203.71, 244}</string>
-				<string>{200.977, 271.125}</string>
+				<string>{219.988, 244}</string>
+				<string>{220.875, 271.125}</string>
 			</array>
 			<key>Style</key>
 			<dict>
@@ -151,7 +151,7 @@
 			<key>Tail</key>
 			<dict>
 				<key>ID</key>
-				<integer>2</integer>
+				<integer>1</integer>
 			</dict>
 		</dict>
 		<dict>
@@ -161,11 +161,11 @@
 			<array>
 				<dict>
 					<key>Bounds</key>
-					<string>{{83, 271.125}, {227.291, 86}}</string>
+					<string>{{83.0001, 271.125}, {278.56, 86}}</string>
 					<key>Class</key>
 					<string>ShapedGraphic</string>
 					<key>ID</key>
-					<integer>5</integer>
+					<integer>4</integer>
 					<key>Shape</key>
 					<string>RoundedRectangle</string>
 					<key>Style</key>
@@ -179,7 +179,7 @@
 				</dict>
 				<dict>
 					<key>Bounds</key>
-					<string>{{85.9776, 279.125}, {263.022, 70}}</string>
+					<string>{{86.6493, 279.125}, {322.351, 70}}</string>
 					<key>Class</key>
 					<string>ShapedGraphic</string>
 					<key>FitText</key>
@@ -187,7 +187,7 @@
 					<key>Flow</key>
 					<string>Resize</string>
 					<key>ID</key>
-					<integer>6</integer>
+					<integer>5</integer>
 					<key>Shape</key>
 					<string>Rectangle</string>
 					<key>Style</key>
@@ -216,21 +216,21 @@
 						<string>{\rtf1\mac\ansicpg10000\cocoartf824\cocoasubrtf410
 {\fonttbl\f0\fswiss\fcharset77 Helvetica;\f1\fswiss\fcharset77 Helvetica-Oblique;}
 {\colortbl;\red255\green255\blue255;\red255\green44\blue22;}
-\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
 \f0\fs24 \cf0 For each anchor 
 \f1\i \cf2 e
 \f0\i0 \cf0  in the scroller, do: \
 \
-new Faces.Command(
+DynaFaces.installDeferredEvent(
 \f1\i \cf2 e
-\f0\i0 \cf0 , 'mousedown', \{ postReplaceHook: 'postReplaceHook', \
+\f0\i0 \cf0 , 'mousedown', \{ postReplace: 'postReplace', \
     render: '\cf2 form:table\cf0 ,\cf2 form:scroller\cf0 ' \}); }</string>
 					</dict>
 				</dict>
 			</array>
 			<key>ID</key>
-			<integer>4</integer>
+			<integer>3</integer>
 		</dict>
 		<dict>
 			<key>Bounds</key>
@@ -238,7 +238,7 @@ new Faces.Command(
 			<key>Class</key>
 			<string>ShapedGraphic</string>
 			<key>ID</key>
-			<integer>3</integer>
+			<integer>2</integer>
 			<key>Shape</key>
 			<string>RoundedRectangle</string>
 			<key>Style</key>
@@ -270,7 +270,7 @@ new Faces.Command(
 			<key>Class</key>
 			<string>ShapedGraphic</string>
 			<key>ID</key>
-			<integer>2</integer>
+			<integer>1</integer>
 			<key>ImageID</key>
 			<integer>1</integer>
 			<key>Shape</key>
@@ -1392,13 +1392,16 @@ new Faces.Command(
 		</dict>
 	</array>
 	<key>LayoutInfo</key>
-	<dict/>
+	<dict>
+		<key>ChildOrdering</key>
+		<integer>0</integer>
+	</dict>
 	<key>LinksVisible</key>
 	<string>NO</string>
 	<key>MagnetsVisible</key>
 	<string>NO</string>
 	<key>ModificationDate</key>
-	<string>2006-07-19 11:32:20 -0700</string>
+	<string>2006-07-27 13:19:30 -0700</string>
 	<key>Modifier</key>
 	<string>Edward Burns</string>
 	<key>Orientation</key>
@@ -1485,7 +1488,7 @@ new Faces.Command(
 	CQkJCTwvYXJyYXk+CgkJCQkJPGtleT5jb20uYXBwbGUucHJpbnQudGlja2V0LmNsaWVu
 	dDwva2V5PgoJCQkJCTxzdHJpbmc+Y29tLmFwcGxlLnByaW50aW5nbWFuYWdlcjwvc3Ry
 	aW5nPgoJCQkJCTxrZXk+Y29tLmFwcGxlLnByaW50LnRpY2tldC5tb2REYXRlPC9rZXk+
-	CgkJCQkJPGRhdGU+MjAwNi0wNy0xOVQxODoyMzoxOVo8L2RhdGU+CgkJCQkJPGtleT5j
+	CgkJCQkJPGRhdGU+MjAwNi0wNy0yN1QyMDoxOToxOFo8L2RhdGU+CgkJCQkJPGtleT5j
 	b20uYXBwbGUucHJpbnQudGlja2V0LnN0YXRlRmxhZzwva2V5PgoJCQkJCTxpbnRlZ2Vy
 	PjA8L2ludGVnZXI+CgkJCQk8L2RpY3Q+CgkJCTwvYXJyYXk+CgkJPC9kaWN0PgoJCTxr
 	ZXk+Y29tLmFwcGxlLnByaW50LlBhZ2VGb3JtYXQuUE1BZGp1c3RlZFBhcGVyUmVjdDwv
@@ -1499,7 +1502,7 @@ new Faces.Command(
 	CQkJCTxrZXk+Y29tLmFwcGxlLnByaW50LnRpY2tldC5jbGllbnQ8L2tleT4KCQkJCQk8
 	c3RyaW5nPmNvbS5hcHBsZS5wcmludGluZ21hbmFnZXI8L3N0cmluZz4KCQkJCQk8a2V5
 	PmNvbS5hcHBsZS5wcmludC50aWNrZXQubW9kRGF0ZTwva2V5PgoJCQkJCTxkYXRlPjIw
-	MDYtMDctMTlUMTg6MjM6MTlaPC9kYXRlPgoJCQkJCTxrZXk+Y29tLmFwcGxlLnByaW50
+	MDYtMDctMjdUMjA6MTk6MThaPC9kYXRlPgoJCQkJCTxrZXk+Y29tLmFwcGxlLnByaW50
 	LnRpY2tldC5zdGF0ZUZsYWc8L2tleT4KCQkJCQk8aW50ZWdlcj4wPC9pbnRlZ2VyPgoJ
 	CQkJPC9kaWN0PgoJCQk8L2FycmF5PgoJCTwvZGljdD4KCQk8a2V5PmNvbS5hcHBsZS5w
 	cmludC5QYXBlckluZm8uUE1QYXBlck5hbWU8L2tleT4KCQk8ZGljdD4KCQkJPGtleT5j

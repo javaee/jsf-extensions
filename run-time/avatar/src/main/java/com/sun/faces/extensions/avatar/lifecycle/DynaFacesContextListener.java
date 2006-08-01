@@ -26,56 +26,77 @@ public class DynaFacesContextListener implements ServletContextListener {
 
     
     /**
-     * <p>Parse the {@link com.sun.faces.extensions.avatar.lifecycle.AsyncResponse#FACES_EVENT_CONTEXT_PARAM}
+     * <p>Parse the {@link 
+     * com.sun.faces.extensions.avatar.lifecycle.AsyncResponse#FACES_EVENT_CONTEXT_PARAM}
      * context param and populate the application scoped Map under the same key
-     * with the <code>eventType</code>:<code>event Constructor</code> pairings.</p>
-     *
+     * with according to the following syntax: </p>
+     * 
+     * <code><pre>
+&lt;facesevent-header-value&gt; ::= &lt;facesevent-info&gt;[,&lt;facesevent-info&gt;...]
+
+  &lt;facesevent-info&gt; :: = &lt;fqcn&gt;[":"&lt;fqcn&gt;[:&lt;fqcn&gt;...]]
+
+  &lt;fqcn&gt; :: Java Language Fully Qualified Class Name
+     * </pre></code>.
+     * 
      * <p>Pairings for the jsf api are pre-populated in this map</p>
      */
     
     public void contextInitialized(ServletContextEvent evt) {
+        String [] eventCtorInfo;
+        String [] eventCtorParams;
+        Class [] eventCtorClasses;
+        String eventId = null;
+        String eventClass = null;
+        Map<String,Constructor> eventMap = null;
+        int len, i = 0, j = 0;
         String eventsParam = 
                 evt.getServletContext().getInitParameter(AsyncResponse.FACES_EVENT_CONTEXT_PARAM);
         if (null == eventsParam) {
             eventsParam = "";
         }
-        // Populate for the jsf-api events.
-        eventsParam = eventsParam + ",ValueChangeEvent:javax.faces.event.ValueChangeEvent" +
-                ",ActionEvent:javax.faces.event.ActionEvent";
+        eventsParam = eventsParam + ",ValueChangeEvent:javax.faces.event.ValueChangeEvent:" + 
+                "javax.faces.component.UIComponent:java.lang.Object:java.lang.Object" +
+                ",ActionEvent:javax.faces.event.ActionEvent:javax.faces.component.UIComponent";
+        
         String [] facesEvents = eventsParam.split(",");
-        String [] keyValue;
-        Map<String,Constructor> eventMap = null;
-        int i = 0;
-        if (0 < facesEvents.length) {
-            eventMap = new HashMap<String,Constructor>();
-            evt.getServletContext().setAttribute(AsyncResponse.FACES_EVENT_CONTEXT_PARAM,
-                    eventMap);
-        }
+        eventMap = new HashMap<String,Constructor>();
+        evt.getServletContext().setAttribute(AsyncResponse.FACES_EVENT_CONTEXT_PARAM,
+                eventMap);
         for (i = 0; i < facesEvents.length; i++) {
-            keyValue = facesEvents[i].split(":");
-            assert(null != eventMap);
-            if (2 == keyValue.length) {
-                // PENDING() I18N
-                String message = "Can't get class for event type " +
-                            keyValue[0] + ".  Given class name is " + keyValue[1] +
-                            ".";
-                try {
-                        eventMap.put(keyValue[0], 
-                                Class.forName(keyValue[1]).getConstructor(UIComponent.class));
-                } catch (SecurityException ex) {
-                    throw new FacesException(message);
-                } catch (NoSuchMethodException ex) {
-                    throw new FacesException(message);
-                } catch (ClassNotFoundException ex) {
-                    throw new FacesException(message);
+            eventCtorInfo = facesEvents[i].split(":");
+            if (eventCtorInfo.length < 2) {
+                throw new FacesException("Can't understand " + 
+                        AsyncResponse.FACES_EVENT_CONTEXT_PARAM + " " +
+                        facesEvents[i]);
+            }
+            assert(2 <= eventCtorInfo.length);
+            // PENDING() I18N
+            String message = "Can't get class for event type " +
+                    eventCtorInfo[0] + ".";
+            eventId = eventCtorInfo[0];
+            eventClass = eventCtorInfo[1];
+            try {
+                if (2 < eventCtorInfo.length) {
+                    eventCtorParams = new String[(len = eventCtorInfo.length - 2)];
+                    eventCtorClasses = new Class[len];
+                    System.arraycopy(eventCtorInfo, 2, eventCtorParams, 0, len);
+                    for (j = 0; j < len; j++) {
+                        eventCtorClasses[j] = Class.forName(eventCtorParams[j]);
+                    }
                 }
+                else {
+                    eventCtorClasses = new Class[0];
+                }
+                eventMap.put(eventId,
+                    Class.forName(eventClass).getConstructor(eventCtorClasses));
+            } catch (SecurityException ex) {
+                throw new FacesException(message);
+            } catch (NoSuchMethodException ex) {
+                throw new FacesException(message);
+            } catch (ClassNotFoundException ex) {
+                throw new FacesException(message);
             }
-            else {
-                // PENDING(edburns): log message.
-                throw new FacesException("Can't parse value of " + 
-                        AsyncResponse.FACES_EVENT_CONTEXT_PARAM + " parameter");
-            }
-            
         }
     }
 

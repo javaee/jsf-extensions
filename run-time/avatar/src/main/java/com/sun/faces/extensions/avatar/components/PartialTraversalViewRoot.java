@@ -234,10 +234,8 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
                         new PhaseAwareContextCallback(PhaseId.RENDER_RESPONSE));
             }
             
-            if (null != (cb = async.getEventCallbackForPhase(PhaseId.RENDER_RESPONSE))) {
-                cb.invoke(context);
-            }
-
+            super.broadcastEvents(context, PhaseId.RENDER_RESPONSE);
+            
             writeMessages(context, null, null, writer);
             writer.endElement("components");
         }

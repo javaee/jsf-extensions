@@ -594,12 +594,14 @@ if (typeof DynaFaces != 'undefined') {
 
 var DynaFaces = new Object();
 
-DynaFaces.fireEvent = function(element, options) {
+DynaFaces.fireAjaxTransaction = function(element, options) {
     new Faces.Event(element, options);
     return false;
 }
     
-DynaFaces.installDeferredEvent = function(action, event, options) {
+DynaFaces.installDeferredAjaxTransaction = function(action, event, options) {
     new Faces.DeferredEvent(action, event, options);
     return false;
 }
+
+

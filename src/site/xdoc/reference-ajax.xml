@@ -79,7 +79,7 @@
       <p>This section lists the JavaScript functions and classes exposed
       by the DynaFaces JavaScript library.</p>
 
-      <subsection name="DynaFaces.fireEvent">
+      <subsection name="DynaFaces.fireAjaxTransaction">
 
         <p>When invoked, causes an AJAX request with the specified
         options to be sent to the Faces server immediately.  The
@@ -91,7 +91,7 @@
 
 <source><code>
 &lt;ANY_HTML_OR_JSF_ELEMENT 
-on|EVENT|="DynaFaces.fireEvent(THIS, { |OPTIONS| });" /&gt;
+on|EVENT|="DynaFaces.fireAjaxTransaction(THIS, { |OPTIONS| });" /&gt;
 </code></source>
 
        <p>Where <code>ANY_HTML_OR_JSF_ELEMENT</code> is any jsf
@@ -199,11 +199,11 @@ DOM element referenced by the <code>id</code> argument.  The function is
 expected to invoke any scripts that may be present in
 <code>content</code>.  The optional argument <code>closure</code> is
 whatever was passed as the <code>closure</code> option to the
-<code>DynaFaces.fireEvent</code> or
-<code>DynaFaces.installDeferredEvent</code> that initiated the ajax
+<code>DynaFaces.fireAjaxTransaction</code> or
+<code>DynaFaces.installDeferredAjaxTransaction</code> that initiated the ajax
 request for this response.  The optional argument <code>xjson</code> is
 whatever was passed as the <code>xjson</code> option to the
-<code>DynaFaces.fireEvent</code> or <code>DynaFaces.installDeferredEvent</code> that
+<code>DynaFaces.fireAjaxTransaction</code> or <code>DynaFaces.installDeferredAjaxTransaction</code> that
 initiated the ajax request for this response.  The <code>xjson</code>
 agrument is passed to the server and may have been modified by the
 server.</p>
@@ -223,12 +223,12 @@ following signature.</p>
 component that needs to be re-rendered with data from this ajax
 response.  The optional argument <code>closure</code> is whatever was
 passed as the <code>closure</code> option to the
-<code>DynaFaces.fireEvent</code> or
-<code>DynaFaces.installDeferredEvent</code> that initiated the ajax
+<code>DynaFaces.fireAjaxTransaction</code> or
+<code>DynaFaces.installDeferredAjaxTransaction</code> that initiated the ajax
 request for this response.  The optional argument <code>xjson</code> is
 whatever was passed as the <code>xjson</code> option to the
-<code>DynaFaces.fireEvent</code> or
-<code>DynaFaces.installDeferredEvent</code> that initiated the ajax
+<code>DynaFaces.fireAjaxTransaction</code> or
+<code>DynaFaces.installDeferredAjaxTransaction</code> that initiated the ajax
 request for this response.  The <code>xjson</code> agrument is passed to
 the server and may have been modified by the server.</p>
 
@@ -239,20 +239,20 @@ the server and may have been modified by the server.</p>
 
       </subsection>
 
-      <subsection name="DynaFaces.installDeferredEvent">
+      <subsection name="DynaFaces.installDeferredAjaxTransaction">
 
        <p>This function extends the functionality of
-       <code>DynaFaces.fireEvent</code> and uses the Prototype <a
+       <code>DynaFaces.fireAjaxTransaction</code> and uses the Prototype <a
        href="http://www.sergiopereira.com/articles/prototype.js.html#Reference">Event.observe</a>
-       feature to cause a <code>DynaFaces.fireEvent</code> call to be
+       feature to cause a <code>DynaFaces.fireAjaxTransaction</code> call to be
        emitted from a specific element in the DOM when the specified
        JavaScript event occurs.  The options supported are exactly the
-       same as in <code>DynaFaces.fireEvent</code>.</p>
+       same as in <code>DynaFaces.fireAjaxTransaction</code>.</p>
 
        <h4>Usage</h4>
 
 <pre><code>
-DynaFaces.installDeferredEvent(ELEMENT, EVENT_STRING_LITERAL, { |OPTIONS| });
+DynaFaces.installDeferredAjaxTransaction(ELEMENT, EVENT_STRING_LITERAL, { |OPTIONS| });
 </code></pre>
 
 <p>Where <code>ELEMENT</code> is a JavaScript reference to a DOM element
@@ -261,7 +261,7 @@ that is to be instrumented with AJAX behavior.
 prefix, that must be a JavaScript event type.  Examples include,
 "click", "blur", "mouseover", etc.  <code>|OPTIONS|</code> is as
 specified above, in the section <a
-href="#DynaFaces.fireEvent">DynaFaces.fireEvent</a>.</p>
+href="#DynaFaces.fireAjaxTransaction">DynaFaces.fireAjaxTransaction</a>.</p>
 
 <source><pre>
 &lt;script type="text/javascript"&gt;
@@ -273,12 +273,12 @@ href="#DynaFaces.fireEvent">DynaFaces.fireEvent</a>.</p>
 
   // Assume there is code to populate the options.  The set of
   // supported options is described previously in the section
-  // <a href="#DynaFaces.fireEvent">DynaFaces.fireEvent</a>.
+  // <a href="#DynaFaces.fireAjaxTransaction">DynaFaces.fireAjaxTransaction</a>.
 
   var element;
   for (var e in elements) {
     element = elements[e];
-    DynaFaces.installDeferredEvent(e, "click", options);
+    DynaFaces.installDeferredAjaxTransaction(e, "click", options);
   }
 </pre></source>
 

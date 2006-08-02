@@ -23,9 +23,9 @@ Object.extend(Object.extend(Enverio.Autocompleter.prototype, Autocompleter.Base.
     this.options.requestHeaders.push(gFacesEvent);
     var elementId = this.element.id || this.element.name;
     this.options.requestHeaders.push("SuggestEvent," + elementId +
-				     ",INVOKE_APPLICATION");
+				     ",RENDER_RESPONSE");
 
-    DynaFaces.fireEvent(this.element, this.options);
+    DynaFaces.fireAjaxTransaction(this.element, this.options);
   },
 
   onComplete: function(request) {

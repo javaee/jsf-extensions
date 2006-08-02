@@ -222,7 +222,7 @@
 \f1\i \cf2 e
 \f0\i0 \cf0  in the scroller, do: \
 \
-DynaFaces.installDeferredEvent(
+DynaFaces.installDeferredAjaxTransaction(
 \f1\i \cf2 e
 \f0\i0 \cf0 , 'mousedown', \{ postReplace: 'postReplace', \
     render: '\cf2 form:table\cf0 ,\cf2 form:scroller\cf0 ' \}); }</string>

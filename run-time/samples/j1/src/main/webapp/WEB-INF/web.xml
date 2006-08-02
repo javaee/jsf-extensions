@@ -75,7 +75,7 @@
 
     <context-param>
       <param-name>com.sun.faces.extensions.avatar.FacesEvents</param-name>
-      <param-value>SuggestEvent:com.enverio.jsf.SuggestEvent:javax.faces.component.UIComponent</param-value>
+      <param-value>SuggestEvent:com.enverio.jsf.SuggestEvent:com.enverio.jsf.UISuggest</param-value>
     </context-param>
 
     <listener><listener-class>com.enverio.client.ClientWriterRequestListener</listener-class></listener>

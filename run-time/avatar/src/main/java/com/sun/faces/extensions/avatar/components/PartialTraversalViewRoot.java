@@ -35,6 +35,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
+import javax.faces.FacesException;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.ContextCallback;
 import javax.faces.component.UIComponent;
@@ -44,7 +45,6 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.convert.ConverterException;
-import javax.faces.event.FacesEvent;
 import javax.faces.event.PhaseId;
 import javax.servlet.http.HttpServletResponse;
 
@@ -142,13 +142,18 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
                 new PhaseAwareContextCallback(PhaseId.APPLY_REQUEST_VALUES));
         
         // Queue any events for this request in a context aware manner
-        AsyncResponse.getInstance().queueFacesEvents(context);
-        
-        // PENDING(edburns): remove Jacob's original event system.
-        if (null != (cb =
-                AsyncResponse.getEventCallbackForPhase(PhaseId.APPLY_REQUEST_VALUES))) {
-            cb.invoke(context);
+        AsyncResponse async = AsyncResponse.getInstance();
+        ResponseWriter writer = null;
+        try {
+            writer = async.getResponseWriter();
+        } catch (IOException ex) {
+            throw new FacesException(ex);
         }
+        // Install the AjaxResponseWriter
+        context.setResponseWriter(writer);
+        
+        async.queueFacesEvents(context);
+        
         if (!invokedCallback) {
             super.processDecodes(context);
         }

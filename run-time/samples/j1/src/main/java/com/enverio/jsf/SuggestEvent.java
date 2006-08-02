@@ -20,8 +20,12 @@ import javax.faces.event.FacesListener;
 public class SuggestEvent extends FacesEvent {
     
     /** Creates a new instance of SuggestEvent */
-    public SuggestEvent(UIComponent source) {
+    public SuggestEvent(UISuggest source) {
         super(source);
+    }
+    
+    public UISuggest getSuggestSource() {
+        return (UISuggest) getComponent();
     }
 
     public void processListener(FacesListener facesListener) {

@@ -7,6 +7,7 @@
 package com.sun.faces.extensions.avatar.lifecycle;
 
 import java.lang.reflect.Constructor;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import javax.faces.FacesException;
@@ -62,8 +63,12 @@ public class DynaFacesContextListener implements ServletContextListener {
         String [] facesEvents = eventsParam.split(",");
         eventMap = new HashMap<String,Constructor>();
         evt.getServletContext().setAttribute(AsyncResponse.FACES_EVENT_CONTEXT_PARAM,
-                eventMap);
+                Collections.unmodifiableMap(eventMap));
         for (i = 0; i < facesEvents.length; i++) {
+            // Skip empty entries
+            if (0 == facesEvents[i].length()) {
+                continue;
+            }
             eventCtorInfo = facesEvents[i].split(":");
             if (eventCtorInfo.length < 2) {
                 throw new FacesException("Can't understand " + 

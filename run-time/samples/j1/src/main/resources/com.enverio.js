@@ -8,7 +8,6 @@ Object.extend(Object.extend(Enverio.Autocompleter.prototype, Autocompleter.Base.
 		      this.options.frequency = 0.2;
 		      this.options.onComplete    = this.onComplete.bind(this);
 		      this.options.defaultParams = this.options.parameters;
-		      this.options.event = 'suggest';
 		      this.options.render = 'none';
 
 		      

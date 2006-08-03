@@ -15,10 +15,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import javax.faces.FacesException;
+import javax.faces.application.Application;
 import javax.faces.component.ContextCallback;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.context.ResponseWriterWrapper;
+import javax.faces.convert.Converter;
 
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
@@ -253,7 +255,7 @@ public class AsyncResponse {
      * <p>Look in the {@link #FACES_EVENT_HEADER} and parse it according to 
      * the following syntax</p>
      *
-     * <code><pre>EVENT_TYPE,clientId,PhaseId,...[&EVENT_TYPE,clientId,PhaseId,...]*</pre></code>
+     * <code><pre>EVENT_TYPE,clientId,PhaseId[,eventCtorArgs...],...[;EVENT_TYPE,clientId,PhaseId,...]*</pre></code>
      *
      * <p>Where <code>EVENT_TYPE</code> is the String <code>ValueChangeEvent</code>,
      * <code>ActionEvent</code>, or one of the event types defined to the system
@@ -270,36 +272,56 @@ public class AsyncResponse {
         String header = p.get(FACES_EVENT_HEADER);
         String [] events = null;
         String [] params = null;
+        String [] ctorArgs = null;
+        PhaseId phaseId = null;
         int i = 0, j = 0;
         if (header != null) {
-            events = header.split("&");
+            events = header.split(";");
             for (i = 0; i < events.length; i++) {
                 params = events[i].split(",");
-                if (params.length >= 3) {
-                    queueFacesEvent(context, params);
+                phaseId = Util.getPhaseIdFromString(params[2]);
+                // If we only have the EVENT_TYPE, clientId, and PhaseId...
+                if (3 == params.length) {
+                    // pass no ctor args.
+                    queueFacesEvent(context, params[0], params[1], phaseId, 
+                            new String[0]);
+                }
+                // Otherwise, if we have more than just those three pieces of data...
+                else if (3 < params.length) {
+                    // assume they are argument values
+                    ctorArgs = new String[params.length - 3];
+                    System.arraycopy(params, 3, ctorArgs, 0, ctorArgs.length);
+                    queueFacesEvent(context, params[0], params[1], phaseId, ctorArgs);
                 }
                 else {
-                    // Log Message.  Params must be 3
+                    // Log Message.  Params must be >= 3
                 }
             }
         }
     }
     
     private void queueFacesEvent(FacesContext context,
+            String eventId, String clientId, final PhaseId phaseId, 
             final String [] params) {
         FacesEvent result = null;
-        Map<String,Constructor> eventsMap = (Map<String,Constructor>)
+        Map<String,ConstructorWrapper> eventsMap = (Map<String,ConstructorWrapper>)
                 context.getExternalContext().getApplicationMap().get(FACES_EVENT_CONTEXT_PARAM);
+        
         assert(null != eventsMap);
-        final Constructor eventCtor = eventsMap.get(params[0]);
+        final ConstructorWrapper eventCtor = eventsMap.get(eventId);
         if (null != eventCtor) {
             
-            context.getViewRoot().invokeOnComponent(context, params[1], new ContextCallback() {
+            context.getViewRoot().invokeOnComponent(context, clientId, new ContextCallback() {
                 public void invokeContextCallback(FacesContext facesContext, 
                         UIComponent comp) {
                     FacesEvent event = null;
+                    Class [] ctorArgClasses = eventCtor.getArgClasses();
+                    int len = 0;
+                    Object [] ctorArgs = getEventCtorArgs(facesContext, comp, 
+                            ctorArgClasses, params);
                     try {
-                        event = (FacesEvent) eventCtor.newInstance(comp);
+                        event = (FacesEvent) 
+                                eventCtor.getConstructor().newInstance(ctorArgs);
                     } catch (InvocationTargetException ex) {
                         throw new FacesException(ex);
                     } catch (InstantiationException ex) {
@@ -307,11 +329,68 @@ public class AsyncResponse {
                     } catch (IllegalAccessException ex) {
                         throw new FacesException(ex);
                     }
-                    event.setPhaseId(Util.getPhaseIdFromString(params[2]));
+                    event.setPhaseId(phaseId);
                     comp.queueEvent(event);
                 }
             });
         }
+    }
+    
+    private Object [] getEventCtorArgs(FacesContext context, UIComponent comp, 
+            Class [] ctorArgClasses,
+            String [] ctorArgValues) {
+        Object [] result = null;
+        Application app = context.getApplication();
+        Converter converter = null;
+        int argClassesLen = ctorArgClasses.length, 
+            argValuesLen = ctorArgValues.length, 
+            i = 0;
+        
+
+        // Special case heuristic.  Not sure if this is a good idea.
+        
+        // If ctorArgClasses.length == 1, ctorArgValues.length == 0
+        // and ctorArgClasses[0] is a UIComponent, assume the only
+        // argument is our comp argument.
+        if (1 == argClassesLen && 0 == argValuesLen &&
+            UIComponent.class.isAssignableFrom(ctorArgClasses[0])) {
+            result = new Object[1];
+            result[0] = comp;
+        }
+        // Otherwise, if the argument class list is a different length
+        // than the argument values list...
+        else if (argClassesLen != argValuesLen) {
+            // return a result that indicates we cannot derive the 
+            // constructor arguments.
+            result = new Object[0];
+        }
+        else {
+            // Otherwise, we know that the length of the argument class array
+            // and the argument value array is the same.  Therefore, we assume
+            // the ordering is the same and try to convert the values.
+            assert(argClassesLen == argValuesLen);
+            
+            result = new Object[ctorArgClasses.length];
+
+            // Iterate over both arrays and convert the elements using converters
+            for (i = 0; i < ctorArgClasses.length; i++) {
+                // First, check if this argument is an instanceof UIComponent...
+                if (UIComponent.class.isAssignableFrom(ctorArgClasses[i])) {
+                    // if so, assume it is intended to be the "source" argument.
+                    result[i] = comp;
+                }
+                // Otherwise, try to use a converter to convert the type.
+                else if (null != (converter = app.createConverter(ctorArgClasses[i]))) {
+                    result[i] = converter.getAsObject(context, comp, ctorArgValues[i]);
+                }
+                // Otherwise, just use the unconverted value.
+                else {
+                    result[i] = ctorArgValues[i];
+                }
+            }
+        }
+        
+        return result;
     }
     
     private ResponseWriter createAjaxResponseWriter(FacesContext context) {

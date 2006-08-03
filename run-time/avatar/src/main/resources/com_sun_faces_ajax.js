@@ -413,6 +413,21 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
 	    this.options.requestHeaders.push(xjson);
 	}
 	
+	if (typeof DynaFaces != 'undefined') {
+	    if (0 < DynaFaces._eventQueue.length) {
+		this.options.requestHeaders.push(gFacesEvent);
+		var arr = new Array();
+		for (i = 0; i < DynaFaces._eventQueue.length; i++) {
+		    arr.push(DynaFaces._eventQueue[i].toString());
+		}
+		var events = arr.join(';');
+		this.options.requestHeaders.push(events);
+
+		// Clear out the queue
+		DynaFaces._eventQueue = new Array();
+	    }
+	}
+	
 	this.options.postBody = viewState.toQueryString();
 
     var onComplete = this.options.onComplete;
@@ -594,6 +609,8 @@ if (typeof DynaFaces != 'undefined') {
 
 var DynaFaces = new Object();
 
+DynaFaces._eventQueue = new Array();
+
 DynaFaces.fireAjaxTransaction = function(element, options) {
     new Faces.Event(element, options);
     return false;
@@ -604,4 +621,46 @@ DynaFaces.installDeferredAjaxTransaction = function(action, event, options) {
     return false;
 }
 
+DynaFaces.PhaseId = {
+    ANY_PHASE: "ANY_PHASE",
+    RESTORE_VIEW: "RESTORE_VIEW",
+    APPLY_REQUEST_VALUES: "APPLY_REQUEST_VALUES",
+    UPDATE_MODEL_VALUES: "UPDATE_MODEL_VALUES",
+    INVOKE_APPLICATION: "INVOKE_APPLICATION",
+    RENDER_RESPONSE: "RENDER_RESPONSE"
+};
 
+DynaFaces.PhaseId.values = new Array();
+DynaFaces.PhaseId.values[0] = DynaFaces.PhaseId.ANY_PHASE;
+DynaFaces.PhaseId.values[1] = DynaFaces.PhaseId.RESTORE_VIEW;
+DynaFaces.PhaseId.values[2] = DynaFaces.PhaseId.APPLY_REQUEST_VALUES;
+DynaFaces.PhaseId.values[3] = DynaFaces.PhaseId.UPDATE_MODEL_VALUES;
+DynaFaces.PhaseId.values[4] = DynaFaces.PhaseId.INVOKE_APPLICATION;
+DynaFaces.PhaseId.values[5] = DynaFaces.PhaseId.RENDER_RESPONSE
+
+DynaFaces.FacesEvent = function(eventId, clientId, phaseId) {
+    this.eventId = eventId;
+    this.clientId = clientId;
+    this.phaseId = phaseId;
+};
+
+DynaFaces.FacesEvent.prototype.toString = function () {
+    return this.eventId + ',' + this.clientId + ',' + this.phaseId + ",source";
+};
+
+DynaFaces.ValueChangeEvent = function(clientId, 
+				      phaseId, oldValue, newValue) {
+    this.base = DynaFaces.FacesEvent;
+    this.base("ValueChangeEvent", clientId, phaseId);
+    this.oldValue = oldValue;
+    this.newValue = newValue;
+};
+DynaFaces.ValueChangeEvent.prototype = new DynaFaces.FacesEvent;
+DynaFaces.ValueChangeEvent.prototype.toString = function() {
+    return (this.eventId + ',' + this.clientId + ',' + this.phaseId +  
+	    ",source," + this.oldValue + ',' + this.newValue);
+};
+
+DynaFaces.queueFacesEvent = function (facesEvent) {
+    DynaFaces._eventQueue.push(facesEvent);
+}

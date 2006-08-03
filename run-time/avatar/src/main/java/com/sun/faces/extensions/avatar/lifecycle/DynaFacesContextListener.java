@@ -49,7 +49,7 @@ public class DynaFacesContextListener implements ServletContextListener {
         Class [] eventCtorClasses;
         String eventId = null;
         String eventClass = null;
-        Map<String,Constructor> eventMap = null;
+        Map<String,ConstructorWrapper> eventMap = null;
         int len, i = 0, j = 0;
         String eventsParam = 
                 evt.getServletContext().getInitParameter(AsyncResponse.FACES_EVENT_CONTEXT_PARAM);
@@ -61,7 +61,7 @@ public class DynaFacesContextListener implements ServletContextListener {
                 ",ActionEvent:javax.faces.event.ActionEvent:javax.faces.component.UIComponent";
         
         String [] facesEvents = eventsParam.split(",");
-        eventMap = new HashMap<String,Constructor>();
+        eventMap = new HashMap<String,ConstructorWrapper>();
         evt.getServletContext().setAttribute(AsyncResponse.FACES_EVENT_CONTEXT_PARAM,
                 Collections.unmodifiableMap(eventMap));
         for (i = 0; i < facesEvents.length; i++) {
@@ -93,8 +93,9 @@ public class DynaFacesContextListener implements ServletContextListener {
                 else {
                     eventCtorClasses = new Class[0];
                 }
-                eventMap.put(eventId,
-                    Class.forName(eventClass).getConstructor(eventCtorClasses));
+                eventMap.put(eventId, 
+                        new ConstructorWrapper(Class.forName(eventClass).getConstructor(eventCtorClasses),
+                            eventCtorClasses));
             } catch (SecurityException ex) {
                 throw new FacesException(message);
             } catch (NoSuchMethodException ex) {

@@ -1,6 +1,7 @@
 package com.sun.faces.extensions.avatar.taglib;
 
 import com.sun.faces.extensions.avatar.components.AjaxZone;
+import com.sun.faces.extensions.common.util.Util;
 import java.util.List;
 import java.util.Map;
 import javax.el.MethodExpression;
@@ -103,11 +104,11 @@ public class AjaxZoneTag extends UIComponentELTag {
         if (action != null) {
             component.setActionExpression(action);
         }
-        if (immediate != null) {
-            if (!immediate.isLiteralText()) {
-                component.setValueExpression("immediate", immediate);
+        if (phaseId != null) {
+            if (!phaseId.isLiteralText()) {
+                component.setValueExpression("phaseId", phaseId);
             } else {
-                component.setImmediate(java.lang.Boolean.valueOf(immediate.getExpressionString()).booleanValue());
+                component.setPhaseId(Util.getPhaseIdFromString(phaseId.getExpressionString()));
             }
         }
         
@@ -181,16 +182,16 @@ public class AjaxZoneTag extends UIComponentELTag {
     }
 
     /**
-     * Holds value of property immediate.
+     * Holds value of property phaseId.
      */
-    private ValueExpression immediate;
+    private ValueExpression phaseId;
 
     /**
-     * Setter for property immediate.
-     * @param immediate New value of property immediate.
+     * Setter for property phaseId.
+     * @param phaseId New value of property phaseId.
      */
-    public void setImmediate(ValueExpression immediate) {
-        this.immediate = immediate;
+    public void setphaseId(ValueExpression phaseId) {
+        this.phaseId = phaseId;
     }
 
     /**

@@ -39,6 +39,7 @@ import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.component.ContextCallback;
 import javax.faces.component.UIComponent;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.event.FacesEvent;
@@ -101,6 +102,33 @@ public class EventParser {
                     // Log Message.  Params must be >= 3
                 }
             }
+        }
+    }
+
+    public static void invokeMethodExpressionCallbackForPhase(FacesContext context,
+            PhaseId curPhase) {
+        ExternalContext extContext = context.getExternalContext();
+        Map<String, String> headersMap = extContext.getRequestHeaderMap();
+        Map<String, Object> requestMap = extContext.getRequestMap();
+        MethodExpressionCallback callback = null;
+        final String REQUEST_MAP_KEY = "com.sun.faces.MethodExpressionCallback";
+
+        if (null == (callback = 
+                (MethodExpressionCallback) requestMap.get(REQUEST_MAP_KEY))) {
+            String de = headersMap.get(AsyncResponse.METHOD_NAME_HEADER);
+            if (de != null) {
+                String[] ep = de.split(",");
+                String clientId = ep[0];
+                String method = (ep.length > 1) ? ep[1] : null;
+                PhaseId phaseId = (ep.length > 2) ?
+                    Util.getPhaseIdFromString(ep[2]) : PhaseId.RENDER_RESPONSE;
+
+                callback = new MethodExpressionCallback(clientId, method, phaseId);
+                requestMap.put(REQUEST_MAP_KEY, callback);
+            }
+        }
+        if (null != callback && 0 == curPhase.compareTo(callback.getPhaseId())) {
+            callback.invoke(context);
         }
     }
 

@@ -105,21 +105,19 @@
     </attribute>
     <attribute>
         <description>
-            <![CDATA[Flag indicating that, if this component is activated by the user,
-            notifications should be delivered to interested listeners and actions
-            immediately (that is, during Apply Request Values phase) rather than
-            waiting until Invoke Application phase.]]>
+            <![CDATA[When using the context aware componetn
+            <code>MethodExpression</code> invocation mechanism, this
+            attribute allows customizing the lifecycle phase in which
+            the <code>MethodExpression</code> will be delivered. ]]>
         </description>
         <name>
-            immediate
+            phaseId
         </name>
         <required>
             false
         </required>
         <deferred-value>
-            <type>
-                boolean
-            </type>
+	    <type>javax.faces.event.PhaseId</type>
         </deferred-value>
     </attribute>
     

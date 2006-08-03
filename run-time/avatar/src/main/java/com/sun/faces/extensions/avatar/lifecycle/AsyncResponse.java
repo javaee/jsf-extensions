@@ -1,7 +1,6 @@
 package com.sun.faces.extensions.avatar.lifecycle;
 
 import com.sun.faces.extensions.avatar.application.DeferredStateManager;
-import com.sun.faces.extensions.avatar.event.EventCallback;
 import com.sun.faces.extensions.common.util.FastWriter;
 import com.sun.faces.extensions.common.util.Util;
 import java.io.IOException;
@@ -227,30 +226,6 @@ public class AsyncResponse {
         list.add(component.getClientId(context));
     }
     
-    public static EventCallback getEventCallbackForPhase(PhaseId curPhase) {
-        Map<String, String> p = 
-                FacesContext.getCurrentInstance().getExternalContext()
-                .getRequestHeaderMap();
-        EventCallback result = null;
-
-        String de = p.get(EVENT_HEADER);
-        if (de != null) {
-            String[] ep = de.split(",");
-            String clientId = ep[0];
-            String method = (ep.length > 1) ? ep[1] : null;
-            boolean immediate = (ep.length > 2) ? "immediate".equals(ep[2]) : false;
-
-            // If immediate is true, and we are in apply requset values,
-            // or immediate is false, and we are in render response
-            if ((immediate && curPhase == PhaseId.APPLY_REQUEST_VALUES) ||
-                (!immediate && curPhase == PhaseId.RENDER_RESPONSE)) {
-                result = new EventCallback(clientId, method, immediate);
-            }
-        }
-        return result;
-
-    }
-
     private ResponseWriter createAjaxResponseWriter(FacesContext context) {
         // set up the ResponseWriter
         ResponseWriter responseWriter = null;
@@ -358,7 +333,7 @@ public class AsyncResponse {
     public static final String PARTIAL_HEADER= FACES_PREFIX + "partial";
     public static final String EXECUTE_HEADER = FACES_PREFIX + "execute";
     public static final String RENDER_HEADER= FACES_PREFIX + "render";
-    public static final String EVENT_HEADER= FACES_PREFIX + "event";
+    public static final String METHOD_NAME_HEADER= FACES_PREFIX + "methodname";
     public static final String FACES_EVENT_HEADER= FACES_PREFIX + "facesevent";
     public static final String XJSON_HEADER= "X-JSON";
     

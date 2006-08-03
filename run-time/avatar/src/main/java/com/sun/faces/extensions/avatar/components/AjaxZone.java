@@ -6,6 +6,7 @@ import javax.faces.component.UICommand;
 import javax.el.ELContext;
 import javax.el.MethodExpression;
 import javax.el.MethodInfo;
+import javax.faces.event.PhaseId;
 
 /**
  * 
@@ -60,6 +61,27 @@ public class AjaxZone extends UICommand implements Serializable {
 	    };
 		    
         super.setActionExpression(me);
+    }
+
+    /**
+     * Holds value of property phaseId.
+     */
+    private PhaseId phaseId;
+
+    /**
+     * Getter for property phaseId.
+     * @return Value of property phaseId.
+     */
+    public PhaseId getPhaseId() {
+        return this.phaseId;
+    }
+
+    /**
+     * Setter for property phaseId.
+     * @param phaseId New value of property phaseId.
+     */
+    public void setPhaseId(PhaseId phaseId) {
+        this.phaseId = phaseId;
     }
 
     

@@ -147,18 +147,23 @@ specified, all the values of all input elements in the current form are
 submitted.</p>
 </dd>
 
-<dt><p>event</p>
+<dt><p>methodName</p>
 </dt>
 
-<dd><p>|CLIENT_ID|,|EVENT_NAME|,[immediate]</p>
+<dd><p>|CLIENT_ID|,|METHOD_NAME|,[phaseId]</p>
 
 <p>If specified, must be the only option, and must conform to the above
 syntax, where <code>|CLIENT_ID|</code> is the client id of the component
-to be the source of the event, <code>|EVENT_NAME|</code> is a JavaBeans
-property name of an event method on the component identified by the
-<code>|CLIENT_ID|</code> parameter, and the optional
-<code>immediate</code> value indicates that the event should run during
-apply request values, rather than invoke application.</p>
+to be the source of the event, <code>|METHOD_NAME|</code> is the name of
+a method on the component named by <code>|CLIENT_ID|</code>, and the
+optional <code>phaseId</code> indicates the lifecycle phase in which
+this method expression should be invoked.  Given the
+<code>|METHOD_NAME|</code>, the renderer for the component, if any, is
+consulted for for a matching method with the signature <code>public void
+methodName(FacesContext c)</code>.  If found, that method is used.  If
+not, the component is consulted for a matching method with the signature
+<code>public void methodName(FacesContext c)</code>, if found, that
+method is used.  Otherwise an exception is thrown.</p>
 
 </dd>
 

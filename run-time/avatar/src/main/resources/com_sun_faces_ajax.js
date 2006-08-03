@@ -32,7 +32,7 @@ var gPartial = gFacesPrefix + "Partial";
 var gExecute = gFacesPrefix + "Execute";
 var gRender = gFacesPrefix + "Render";
 var gFacesEvent = gFacesPrefix + "FacesEvent";
-var gEvent = gFacesPrefix + "Event";
+var gMethodName = gFacesPrefix + "MethodName";
 var gViewState = "javax.faces.ViewState";
 var gGlobalScope = this;
 
@@ -386,14 +386,14 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
 	this.options.requestHeaders.push(gPartial);
 	this.options.requestHeaders.push('true');
 	
-	// add event
-	if (this.options.event) {
+	// add methodName
+	if (this.options.methodName) {
 	    var sourceId = $(source).id || $(source).name;
-		sourceId += "," + this.options.event;
-		if (this.options.immediate) {
-			sourceId += ",immediate";
+		sourceId += "," + this.options.methodName;
+		if (this.options.phaseId) {
+			sourceId += "," + this.options.phaseId;
 		}
-		this.options.requestHeaders.push(gEvent);
+		this.options.requestHeaders.push(gMethodName);
 		this.options.requestHeaders.push(sourceId);
 	}
 

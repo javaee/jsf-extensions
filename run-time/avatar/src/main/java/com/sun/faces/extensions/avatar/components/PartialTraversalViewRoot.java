@@ -30,6 +30,7 @@
 package com.sun.faces.extensions.avatar.components;
 
 import com.sun.faces.extensions.avatar.event.EventCallback;
+import com.sun.faces.extensions.avatar.event.EventParser;
 import com.sun.faces.extensions.avatar.lifecycle.AsyncResponse;
 import java.io.IOException;
 import java.io.Serializable;
@@ -152,7 +153,7 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
         // Install the AjaxResponseWriter
         context.setResponseWriter(writer);
         
-        async.queueFacesEvents(context);
+        EventParser.queueFacesEvents(context);
         
         if (!invokedCallback) {
             super.processDecodes(context);

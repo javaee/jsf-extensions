@@ -4,8 +4,9 @@
  * Created on July 25, 2006, 9:01 PM
  */
 
-package com.sun.faces.extensions.avatar.lifecycle;
+package com.sun.faces.extensions.avatar.event;
 
+import com.sun.faces.extensions.avatar.lifecycle.*;
 import java.lang.reflect.Constructor;
 import java.util.Collections;
 import java.util.HashMap;

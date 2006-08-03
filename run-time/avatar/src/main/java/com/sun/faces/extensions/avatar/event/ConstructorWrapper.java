@@ -7,8 +7,9 @@
  * and open the template in the editor.
  */
 
-package com.sun.faces.extensions.avatar.lifecycle;
+package com.sun.faces.extensions.avatar.event;
 
+import com.sun.faces.extensions.avatar.lifecycle.*;
 import java.lang.reflect.Constructor;
 
 /**

@@ -19,7 +19,7 @@
   <uri>http://java.sun.com/jsf/extensions/dynafaces</uri>
 
   <listener>
-     <listener-class>com.sun.faces.extensions.avatar.lifecycle.DynaFacesContextListener</listener-class>
+     <listener-class>com.sun.faces.extensions.avatar.event.DynaFacesContextListener</listener-class>
   </listener>
 
   <tag>

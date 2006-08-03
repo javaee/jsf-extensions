@@ -22,18 +22,13 @@ function queueEvent() {
   var oldValue = oldValueElement.value;
   var newValueElement = document.getElementById("newValue");
   var newValue = newValueElement.value;
-  oldValueElement.value = "";
+  oldValueElement.value = newValue;
   newValueElement.value = "";
   var valueChangeEvent = 
     new DynaFaces.ValueChangeEvent("input", 
-                                   DynaFaces.PhaseId.APPLY_REQUEST_VALUES,
+                                   DynaFaces.PhaseId.UPDATE_MODEL_VALUES,
                                    oldValue, newValue);
   DynaFaces.queueFacesEvent(valueChangeEvent);
-
-  var facesEvent = new DynaFaces.FacesEvent("ValueChangeEvent", "input", 
-        DynaFaces.PhaseId.APPLY_REQUEST_VALUES);
-  var foo = facesEvent.toString();
-  foo = valueChangeEvent.toString();
   return false;
 }
 
@@ -51,17 +46,17 @@ function queueEvent() {
 
   <h:commandButton value="submit via ajax"
                    onclick="DynaFaces.fireAjaxTransaction(this,
-                                   { render: 'label' }); return false;"/>
-
-  <p>ValueChangeEvent Output:</p>
-
-  <h:outputText class="label" id="label" 
-                value="#{requestScope.valueChangeEvents}" /> 
-
-  
-
+                                   { execute: 'input', render: 'label,input', 
+                                     inputs: 'input' }); return false;"/>
 
 </h:panelGrid>
+
+  <p>ValueChangeEvent Output:
+
+  <h:outputText id="label" 
+                value="#{requestScope.valueChangeEvents}" /> 
+  </p>
+
 
 <p>Queue additional <code>ValueChangeEvents</code>, just for kicks.
 </p>

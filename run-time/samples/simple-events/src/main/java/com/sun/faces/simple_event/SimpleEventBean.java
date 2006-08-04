@@ -11,6 +11,7 @@ package com.sun.faces.simple_event;
 
 import java.util.Map;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
 
 /**
@@ -36,6 +37,19 @@ public class SimpleEventBean {
                 e.getComponent().getClientId(FacesContext.getCurrentInstance())+
                 "]";
         requestMap.put("valueChangeEvents", curValue);
+    }
+    
+    public void processAction(ActionEvent e) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        Map<String,Object> requestMap = 
+                FacesContext.getCurrentInstance().getExternalContext().getRequestMap();
+        String curValue = (String) requestMap.get("actionEvents");
+        if (null == curValue) {
+            curValue = "";
+        }
+        curValue = curValue + " [" + e.getComponent().getClientId(context) + "]";
+        requestMap.put("actionEvents", curValue);
+        
     }
     
 }

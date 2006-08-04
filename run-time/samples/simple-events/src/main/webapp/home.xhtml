@@ -15,92 +15,15 @@
 <ui:define name="body">
 <h1>Simple DynaFaces Event Application</h1>
 
-<script type="text/JavaScript">
-/* <![CDATA[ */
-function queueEvent() {
-  var oldValueElement = document.getElementById("oldValue");
-  var oldValue = oldValueElement.value;
-  var newValueElement = document.getElementById("newValue");
-  var newValue = newValueElement.value;
-  oldValueElement.value = newValue;
-  newValueElement.value = "";
-  var valueChangeEvent = 
-    new DynaFaces.ValueChangeEvent("input", 
-                                   DynaFaces.PhaseId.UPDATE_MODEL_VALUES,
-                                   oldValue, newValue);
-  DynaFaces.queueFacesEvent(valueChangeEvent);
-  return false;
-}
+	<ul>
 
-/* ]]> */
-</script>
+	  <li><p><a href="valueChangeEvent.jsf">ValueChangeEvent</a>
+	  </p></li>
 
+	  <li><p><a href="actionEvent.jsf">ActionEvent</a>
+	  </p></li>
 
-<h:form prependId="false">
-
-<h:panelGrid columns="3">
-
-  <p>Type a value, submit it via ajax.</p>
-
-  <h:inputText id="input" valueChangeListener="#{bean.valueChange}" />
-
-  <h:commandButton value="submit via ajax"
-                   onclick="DynaFaces.fireAjaxTransaction(this,
-                                   { execute: 'input', render: 'label,input', 
-                                     inputs: 'input' }); return false;"/>
-
-</h:panelGrid>
-
-  <p>ValueChangeEvent Output:
-
-  <h:outputText id="label" 
-                value="#{requestScope.valueChangeEvents}" /> 
-  </p>
-
-
-<p>Queue additional <code>ValueChangeEvents</code>, just for kicks.
-</p>
-
-<table border="1">
-
-<tr>
-
-<td>oldValue
-</td>
-
-<td><input type="text" name="oldValue" id="oldValue" />
-</td>
-
-</tr>
-
-<tr>
-
-<td>newValue
-</td>
-
-<td><input type="text" name="newValue" id="newValue" />
-</td>
-
-</tr>
-
-<tr>
-
-<td>&nbsp;
-</td>
-
-<td><input type="submit" name="newValue" id="newValue" value="queue event"
-           onclick="queueEvent(); return false;" />
-</td>
-
-</tr>
-
-</table>
-
-
-
-
-
-</h:form>
+	</ul>
 
 
 </ui:define>

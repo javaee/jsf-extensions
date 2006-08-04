@@ -661,6 +661,13 @@ DynaFaces.ValueChangeEvent.prototype.toString = function() {
 	    ",source," + this.oldValue + ',' + this.newValue);
 };
 
+DynaFaces.ActionEvent = function(clientId, phaseId) {
+    this.base = DynaFaces.FacesEvent;
+    this.base("ActionEvent", clientId, phaseId);
+};
+DynaFaces.ActionEvent.prototype = new DynaFaces.FacesEvent;
+
+
 DynaFaces.queueFacesEvent = function (facesEvent) {
     DynaFaces._eventQueue.push(facesEvent);
 }

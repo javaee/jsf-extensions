@@ -16,10 +16,5 @@
             <renderer-type>com.enverio.ServerSuggest</renderer-type>
             <renderer-class>com.enverio.jsf.render.ServerSuggestRenderer</renderer-class>
         </renderer>
-        <renderer>
-            <component-family>com.enverio</component-family>
-            <renderer-type>com.enverio.ClientSuggest</renderer-type>
-            <renderer-class>com.enverio.jsf.render.ClientSuggestRenderer</renderer-class>
-        </renderer>
     </render-kit>
 </faces-config>

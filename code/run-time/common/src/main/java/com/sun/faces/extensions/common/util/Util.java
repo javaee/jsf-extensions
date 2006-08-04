@@ -25,12 +25,17 @@
 
 package com.sun.faces.extensions.common.util;
 
+import java.util.List;
+import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.component.UIComponent;
 import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
+import javax.faces.event.PhaseId;
+import javax.faces.render.RenderKit;
+import javax.faces.render.RenderKitFactory;
 
 /**
  *
@@ -105,4 +110,31 @@ public class Util {
         }
     }
     
+    public static PhaseId getPhaseIdFromString(String phaseIdString) {
+        PhaseId result = PhaseId.ANY_PHASE;
+        List<PhaseId> phaseIds = PhaseId.VALUES;
+        for (PhaseId curPhase : phaseIds) {
+            if (-1 != curPhase.toString().toLowerCase().
+                    indexOf(phaseIdString.toLowerCase())) {
+                return curPhase;
+            }
+        }
+        return result;
+    }
+      
+    public static RenderKit getRenderKit(FacesContext context) {
+       String renderKitId = context.getViewRoot().getRenderKitId();
+       renderKitId = (null != renderKitId) ? renderKitId : RenderKitFactory.HTML_BASIC_RENDER_KIT;
+       return getRenderKit(context, renderKitId);
+    }
+ 
+    public static RenderKit getRenderKit(FacesContext context,
+            String renderKitId) {
+       RenderKitFactory fact = (RenderKitFactory)
+            FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+       assert(null != fact);
+ 
+       RenderKit curRenderKit = fact.getRenderKit(context, renderKitId);
+       return curRenderKit;
+    }
 }

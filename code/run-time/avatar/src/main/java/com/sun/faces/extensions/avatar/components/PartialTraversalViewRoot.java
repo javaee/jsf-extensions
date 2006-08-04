@@ -29,12 +29,13 @@
 
 package com.sun.faces.extensions.avatar.components;
 
-import com.sun.faces.extensions.avatar.event.EventCallback;
+import com.sun.faces.extensions.avatar.event.EventParser;
 import com.sun.faces.extensions.avatar.lifecycle.AsyncResponse;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
+import javax.faces.FacesException;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.ContextCallback;
 import javax.faces.component.UIComponent;
@@ -131,7 +132,6 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
     }
     
     public void processDecodes(FacesContext context) {
-        EventCallback cb = null;
         boolean invokedCallback = false;
         if (!AsyncResponse.isAjaxRequest()) {
             super.processDecodes(context);
@@ -139,15 +139,25 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
         }
         invokedCallback = invokeContextCallbackOnSubtrees(context,
                 new PhaseAwareContextCallback(PhaseId.APPLY_REQUEST_VALUES));
-        if (null != (cb =
-                AsyncResponse.getEventCallbackForPhase(PhaseId.APPLY_REQUEST_VALUES))) {
-            cb.invoke(context);
+        
+        // Queue any events for this request in a context aware manner
+        AsyncResponse async = AsyncResponse.getInstance();
+        ResponseWriter writer = null;
+        try {
+            writer = async.getResponseWriter();
+        } catch (IOException ex) {
+            throw new FacesException(ex);
         }
+        // Install the AjaxResponseWriter
+        context.setResponseWriter(writer);
+        
+        EventParser.queueFacesEvents(context);
+        
         if (!invokedCallback) {
             super.processDecodes(context);
         }
         else { 
-            super.broadcastEvents(context, PhaseId.APPLY_REQUEST_VALUES);
+            this.broadcastEvents(context, PhaseId.APPLY_REQUEST_VALUES);
         }
 
     }
@@ -159,7 +169,7 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
             super.processValidators(context);
             return;
         }
-        super.broadcastEvents(context, PhaseId.PROCESS_VALIDATIONS);
+        this.broadcastEvents(context, PhaseId.PROCESS_VALIDATIONS);
     }
 
     public void processUpdates(FacesContext context) {
@@ -169,7 +179,7 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
             super.processUpdates(context);
             return;
         }
-        super.broadcastEvents(context, PhaseId.UPDATE_MODEL_VALUES);
+        this.broadcastEvents(context, PhaseId.UPDATE_MODEL_VALUES);
     }
 
     public void encodeAll(FacesContext context) throws IOException {
@@ -180,7 +190,6 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
         UIViewRoot root = context.getViewRoot();
         ResponseWriter orig = null, writer = null;
         AsyncResponse async = AsyncResponse.getInstance();
-        EventCallback cb = null;
         boolean renderNone = false;
         
         try {
@@ -223,10 +232,12 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
                         new PhaseAwareContextCallback(PhaseId.RENDER_RESPONSE));
             }
             
-            if (null != (cb = async.getEventCallbackForPhase(PhaseId.RENDER_RESPONSE))) {
-                cb.invoke(context);
-            }
-
+            
+            // PENDING(edburns): The core JSF spec does not dispatch events for
+            // Render Response.  We need to do it here so that events that require
+            // template text can rely on the tree including template text.
+            this.broadcastEvents(context, PhaseId.RENDER_RESPONSE);
+            
             writeMessages(context, null, null, writer);
             writer.endElement("components");
         }
@@ -242,6 +253,14 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
             }
         }
     }
+    
+    
+    protected void broadcastEvents(FacesContext context, PhaseId phaseId) {
+        // Broadcast the regular FacesEvents
+        super.broadcastEvents(context, phaseId);
+        // Do our extra special MethodExpression invocation
+        EventParser.invokeComponentMethodCallbackForPhase(context, phaseId);
+    }    
     
     private boolean invokeContextCallbackOnSubtrees(FacesContext context, 
             PhaseAwareContextCallback cb) {

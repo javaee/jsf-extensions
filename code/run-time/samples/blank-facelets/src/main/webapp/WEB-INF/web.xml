@@ -58,10 +58,12 @@
         <param-value>true</param-value>
     </context-param>
 
+<!-- uncomment this for your own taglibs
     <context-param>
 	<param-name>facelets.LIBRARIES</param-name>
 	<param-value>/WEB-INF/demo.taglib.xml</param-value>
     </context-param>
+-->
 
     <!-- Faces Servlet -->
   <servlet>

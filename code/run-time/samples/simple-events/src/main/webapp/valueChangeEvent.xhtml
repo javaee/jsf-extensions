@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:d="http://java.sun.com/jsf/facelets/demo">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>Simple DynaFaces Event Application</title>
+</head>
+
+<body>
+
+<ui:composition template="_template.xhtml">
+<ui:define name="body">
+<h1>Simple DynaFaces Event Application</h1>
+
+<script type="text/JavaScript">
+/* <![CDATA[ */
+function queueEvent() {
+  var oldValueElement = document.getElementById("oldValue");
+  var oldValue = oldValueElement.value;
+  var newValueElement = document.getElementById("newValue");
+  var newValue = newValueElement.value;
+  oldValueElement.value = newValue;
+  newValueElement.value = "";
+  var valueChangeEvent = 
+    new DynaFaces.ValueChangeEvent("input", 
+                                   DynaFaces.PhaseId.UPDATE_MODEL_VALUES,
+                                   oldValue, newValue);
+  DynaFaces.queueFacesEvent(valueChangeEvent);
+  return false;
+}
+
+/* ]]> */
+</script>
+
+
+<h:form prependId="false">
+
+<h:panelGrid columns="3">
+
+  <p>Type a value, submit it via ajax.</p>
+
+  <h:inputText id="input" valueChangeListener="#{bean.valueChange}" />
+
+  <h:commandButton value="submit via ajax"
+                   onclick="DynaFaces.fireAjaxTransaction(this,
+                                   { execute: 'input', render: 'label,input', 
+                                     inputs: 'input' }); return false;"/>
+
+</h:panelGrid>
+
+  <p>ValueChangeEvent Output:
+
+  <h:outputText id="label" 
+                value="#{requestScope.valueChangeEvents}" /> 
+  </p>
+
+
+<p>Queue additional <code>ValueChangeEvents</code>, just for kicks.
+</p>
+
+<table border="1">
+
+<tr>
+
+<td>oldValue
+</td>
+
+<td><input type="text" name="oldValue" id="oldValue" />
+</td>
+
+</tr>
+
+<tr>
+
+<td>newValue
+</td>
+
+<td><input type="text" name="newValue" id="newValue" />
+</td>
+
+</tr>
+
+<tr>
+
+<td>&nbsp;
+</td>
+
+<td><input type="submit" name="newValue" id="newValue" value="queue event"
+           onclick="queueEvent(); return false;" />
+</td>
+
+</tr>
+
+</table>
+
+
+
+
+
+</h:form>
+
+
+</ui:define>
+</ui:composition>
+
+</body>
+</html>

@@ -30,8 +30,8 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 
-    <display-name>Facelets J1 Demo</display-name>
-    <description>Facelets J1 Demo</description>
+    <display-name>DynaFaces Blank Facelets App</display-name>
+    <description>DynaFaces Blank Facelets App</description>
 
     <context-param>
         <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
@@ -57,28 +57,6 @@
         <param-name>com.sun.faces.validateXml</param-name>
         <param-value>true</param-value>
     </context-param>
-
-    <context-param>
-	<param-name>facelets.LIBRARIES</param-name>
-	<param-value>/WEB-INF/demo.taglib.xml</param-value>
-    </context-param>
-
-    <context-param>
-        <description>
-         PENDING: set to false because demo-components.jar has
-         components that can only be created in the context of
-         a current request.
-        </description>
-        <param-name>com.sun.faces.verifyObjects</param-name>
-        <param-value>false</param-value>
-    </context-param>
-
-    <context-param>
-      <param-name>com.sun.faces.extensions.avatar.FacesEvents</param-name>
-      <param-value>SuggestEvent:com.enverio.jsf.SuggestEvent:com.enverio.jsf.UISuggest</param-value>
-    </context-param>
-
-    <listener><listener-class>com.enverio.client.ClientWriterRequestListener</listener-class></listener>
 
     <!-- Faces Servlet -->
   <servlet>

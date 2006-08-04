@@ -13,14 +13,6 @@
   		</component>
 	</tag>
 	<tag>
-  		<tag-name>clientSuggest</tag-name>
-  		<handler-class>com.enverio.jsf.UISuggestHandler</handler-class>
-  		<component>
-    		<component-type>com.enverio.Suggest</component-type>
-    		<renderer-type>com.enverio.ClientSuggest</renderer-type>
-  		</component>
-	</tag>
-	<tag>
 		<tag-name>lookup</tag-name>
 		<converter>
 			<converter-id>com.enverio.LookupConverter</converter-id>

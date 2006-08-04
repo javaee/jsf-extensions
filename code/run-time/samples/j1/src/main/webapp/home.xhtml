@@ -43,7 +43,7 @@
 <d:section id="ex0" title="Event System"/>
 <p>By convention, Facelets introduces a simple event system such that any client JS/framework can fire events on the UIComponent counterpart on the server.</p>
 <div id="ex0" class="code" style="display: none;"><pre><code><i>// client javascript</i>
-DynaFaces.fireEvent('clientId', { event: 'suggest' });
+DynaFaces.fireAjaxTransaction('clientId', { event: 'suggest' });
 
 <i>// Option A: SuggestRenderer</i>
 public Object onSuggest(FacesContext faces, UIComponent c) {
@@ -63,7 +63,7 @@ public Object onSuggest(FacesContext faces) {
 <p>Many AJAX implementations/solutions are defficient in that they only have one 'body' to transport messages back and forth.  With rich UIs, a single event can propagate many different updates to the client.  The question then becomes, how can we scale multiple responses at once?</p>
 <p>By leveraging response headers, we can allow extra information/events to be passed back from the server without modifying possible information from the original, intended invocation.  For example, you could update and re-render the price, but send some javascript in the body to 'highlight' the price post updating as the actual body of the response.</p>
 <div id="ex1" class="code" style="display: none;"><pre><code><i>// client javascript</i>
-DynaFaces.fireEvent('clientId', { update: 'input',  encode: 'table, orderTotal' });
+DynaFaces.fireAjaxTransaction('clientId', { update: 'input',  encode: 'table, orderTotal' });
 
 <i>// ends up passing the following headers</i>
 javax.faces.Update : input

@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:d="http://java.sun.com/jsf/facelets/demo">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>Simple DynaFaces Event Application</title>
+
+<script type="text/javascript" src="/Users/edburns/Projects/J2EE/workareas/jsf-extensions-branch/run-time/avatar/src/main/resources/prototype.js"></script>
+<script type="text/javascript" src="/Users/edburns/Projects/J2EE/workareas/jsf-extensions-branch/run-time/avatar/src/main/resources/effects.js"></script>
+<script type="text/javascript" src="/Users/edburns/Projects/J2EE/workareas/jsf-extensions-branch/run-time/avatar/src/main/resources/dragdrop.js"></script>
+<script type="text/javascript" src="/Users/edburns/Projects/J2EE/workareas/jsf-extensions-branch/run-time/avatar/src/main/resources/controls.js"></script>
+<script type="text/javascript" src="/Users/edburns/Projects/J2EE/workareas/jsf-extensions-branch/run-time/avatar/src/main/resources/com_sun_faces_ajax.js"></script>
+<script type="text/javascript" src="/Users/edburns/Projects/J2EE/workareas/jsf-extensions-branch/run-time/avatar/src/main/resources/com_sun_faces_ajax_zone.jsx"></script>
+
+</head>
+
+<body>
+
+<ui:composition template="_template.xhtml">
+<ui:define name="body">
+<h1>Simple DynaFaces Event Application</h1>
+
+<script type="text/JavaScript">
+/* <![CDATA[ */
+
+
+
+
+function queueEvent() {
+  var actionEvent = 
+    new DynaFaces.ActionEvent("ajax", DynaFaces.PhaseId.INVOKE_APPLICATION);
+  DynaFaces.queueFacesEvent(actionEvent);
+  return false;
+}
+
+/* ]]> */
+</script>
+
+
+<h:form prependId="false">
+
+<h:panelGrid columns="2">
+
+  <p>Submit queued actionEvents.</p>
+
+  <h:commandButton id="ajax" 
+         value="submit via ajax"
+                   onclick="DynaFaces.fireAjaxTransaction(this,
+                                   { execute: 'input', render: 'label,input', 
+                                     inputs: 'input' }); return false;"
+         actionListener="#{bean.processAction}"/>
+
+</h:panelGrid>
+
+  <p>ActionListener Output:
+
+  <h:outputText id="label" 
+                value="#{requestScope.actionEvents}" /> 
+  </p>
+
+
+<p>Queue additional <code>ActionEvents</code>.
+</p>
+
+<p><input type="submit" name="queueAction" id="queueAction" 
+          value="queue action" onclick="queueEvent(); return false;" />
+</p>
+
+</h:form>
+
+
+</ui:define>
+</ui:composition>
+
+</body>
+</html>

@@ -37,6 +37,15 @@
     <view-handler>com.sun.facelets.FaceletViewHandler</view-handler>
   </application>
 
+  <render-kit>
+
+    <renderer>
+        <component-family>javax.faces.Output</component-family>
+        <renderer-type>com.sun.faces.simple_event.Text</renderer-type>
+        <renderer-class>com.sun.faces.simple_event.SpecialOutputTextRenderer</renderer-class>
+    </renderer>
+  </render-kit>
+
   <managed-bean>
     <managed-bean-name>bean</managed-bean-name>
     <managed-bean-class>com.sun.faces.simple_event.SimpleEventBean</managed-bean-class>

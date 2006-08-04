@@ -11,7 +11,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseId;
 import javax.faces.render.Renderer;
 
-public class MethodExpressionCallback implements ContextCallback {
+public class ComponentMethodCallback implements ContextCallback {
 
     private final static Class[] RENDER_PARAM = new Class[] {
             FacesContext.class, UIComponent.class };
@@ -26,7 +26,7 @@ public class MethodExpressionCallback implements ContextCallback {
 
     private Object result;
 
-    public MethodExpressionCallback(String clientId, String methodName, 
+    public ComponentMethodCallback(String clientId, String methodName, 
             PhaseId phaseId) {
         this.clientId = clientId;
         this.methodName = methodName;

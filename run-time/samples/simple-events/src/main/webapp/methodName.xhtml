@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+          xmlns:simpleEvents="http://jsf-extensions.dev.java.net/samples"
+	  xmlns:d="http://java.sun.com/jsf/facelets/demo">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>Simple DynaFaces Event Application</title>
+
+<script type="text/javascript" src="/Users/edburns/Projects/J2EE/workareas/jsf-extensions-branch/run-time/avatar/src/main/resources/prototype.js"></script>
+<script type="text/javascript" src="/Users/edburns/Projects/J2EE/workareas/jsf-extensions-branch/run-time/avatar/src/main/resources/effects.js"></script>
+<script type="text/javascript" src="/Users/edburns/Projects/J2EE/workareas/jsf-extensions-branch/run-time/avatar/src/main/resources/dragdrop.js"></script>
+<script type="text/javascript" src="/Users/edburns/Projects/J2EE/workareas/jsf-extensions-branch/run-time/avatar/src/main/resources/controls.js"></script>
+<script type="text/javascript" src="/Users/edburns/Projects/J2EE/workareas/jsf-extensions-branch/run-time/avatar/src/main/resources/com_sun_faces_ajax.js"></script>
+<script type="text/javascript" src="/Users/edburns/Projects/J2EE/workareas/jsf-extensions-branch/run-time/avatar/src/main/resources/com_sun_faces_ajax_zone.jsx"></script>
+
+</head>
+
+<body>
+
+<ui:composition template="_template.xhtml">
+<ui:define name="body">
+<h1>Simple DynaFaces Event Application</h1>
+
+<h:form id="form" prependId="false">  
+
+  <h1>DynaFaces JSP Blank App</h1>
+
+<p>Pressing this button will cause a method on our custom OutputText
+renderer to be called, which will place a value in request scope that is
+rendered using this outputText component.</p>
+
+<p><simpleEvents:outputText id="output" 
+                            value="#{requestScope.addedFromRenderer}" /></p>
+
+<p><h:commandButton id="doMethodNameTransaction" 
+          value="Commence a 'methodName' Ajax transaction" 
+          onclick="DynaFaces.fireAjaxTransaction($('output'), 
+                      { render: 'output',
+                        methodName: 'addToRequestScope', 
+                        phaseId: DynaFaces.PhaseId.UPDATE_MODEL_VALUES }); return false;" /></p>
+
+<p>Pressing this button is a normal, non-ajax form submit which will not
+cause the special method to be called.</p>
+
+<p><h:commandButton id="normalSubmit" value="non-AJAX submit" /></p>
+
+
+
+</h:form>
+
+</ui:define>
+</ui:composition>
+
+</body>
+</html>

@@ -110,11 +110,11 @@ public class EventParser {
         ExternalContext extContext = context.getExternalContext();
         Map<String, String> headersMap = extContext.getRequestHeaderMap();
         Map<String, Object> requestMap = extContext.getRequestMap();
-        MethodExpressionCallback callback = null;
+        ComponentMethodCallback callback = null;
         final String REQUEST_MAP_KEY = "com.sun.faces.MethodExpressionCallback";
 
         if (null == (callback = 
-                (MethodExpressionCallback) requestMap.get(REQUEST_MAP_KEY))) {
+                (ComponentMethodCallback) requestMap.get(REQUEST_MAP_KEY))) {
             String de = headersMap.get(AsyncResponse.METHOD_NAME_HEADER);
             if (de != null) {
                 String[] ep = de.split(",");
@@ -123,7 +123,7 @@ public class EventParser {
                 PhaseId phaseId = (ep.length > 2) ?
                     Util.getPhaseIdFromString(ep[2]) : PhaseId.RENDER_RESPONSE;
 
-                callback = new MethodExpressionCallback(clientId, method, phaseId);
+                callback = new ComponentMethodCallback(clientId, method, phaseId);
                 requestMap.put(REQUEST_MAP_KEY, callback);
             }
         }

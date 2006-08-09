@@ -8,12 +8,12 @@
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <title>Simple DynaFaces Event Application</title>
 
-<script type="text/javascript" src="/Users/edburns/Projects/J2EE/workareas/jsf-extensions-branch/run-time/avatar/src/main/resources/prototype.js"></script>
-<script type="text/javascript" src="/Users/edburns/Projects/J2EE/workareas/jsf-extensions-branch/run-time/avatar/src/main/resources/effects.js"></script>
-<script type="text/javascript" src="/Users/edburns/Projects/J2EE/workareas/jsf-extensions-branch/run-time/avatar/src/main/resources/dragdrop.js"></script>
-<script type="text/javascript" src="/Users/edburns/Projects/J2EE/workareas/jsf-extensions-branch/run-time/avatar/src/main/resources/controls.js"></script>
-<script type="text/javascript" src="/Users/edburns/Projects/J2EE/workareas/jsf-extensions-branch/run-time/avatar/src/main/resources/com_sun_faces_ajax.js"></script>
-<script type="text/javascript" src="/Users/edburns/Projects/J2EE/workareas/jsf-extensions-branch/run-time/avatar/src/main/resources/com_sun_faces_ajax_zone.jsx"></script>
+<script type="text/javascript" src="/Users/edburns/Projects/J2EE/workareas/jsf-extensions-trunk/code/run-time/avatar/src/main/resources/prototype.js"></script>
+<script type="text/javascript" src="/Users/edburns/Projects/J2EE/workareas/jsf-extensions-trunk/code/run-time/avatar/src/main/resources/effects.js"></script>
+<script type="text/javascript" src="/Users/edburns/Projects/J2EE/workareas/jsf-extensions-trunk/code/run-time/avatar/src/main/resources/dragdrop.js"></script>
+<script type="text/javascript" src="/Users/edburns/Projects/J2EE/workareas/jsf-extensions-trunk/code/run-time/avatar/src/main/resources/controls.js"></script>
+<script type="text/javascript" src="/Users/edburns/Projects/J2EE/workareas/jsf-extensions-trunk/code/run-time/avatar/src/main/resources/com_sun_faces_ajax.js"></script>
+<script type="text/javascript" src="/Users/edburns/Projects/J2EE/workareas/jsf-extensions-trunk/code/run-time/avatar/src/main/resources/com_sun_faces_ajax_zone.jsx"></script>
 
 </head>
 
@@ -30,6 +30,8 @@
 
 
 function queueEvent() {
+
+  Element.replace(gViewRoot, "<html><head></head><body><p>hello</p></body></html>");
   var actionEvent = 
     new DynaFaces.ActionEvent("ajax", DynaFaces.PhaseId.INVOKE_APPLICATION);
   DynaFaces.queueFacesEvent(actionEvent);

@@ -9,9 +9,11 @@
 
 package com.sun.faces.extensions.avatar.lifecycle;
 
+import com.sun.faces.extensions.avatar.components.PartialTraversalViewRoot;
 import java.io.IOException;
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
+import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
 import javax.faces.lifecycle.Lifecycle;
 import java.util.Map;
@@ -76,17 +78,35 @@ public class PartialTraversalLifecycle extends Lifecycle {
             return;
         }
         AsyncResponse async = AsyncResponse.getInstance();
-        UIViewRoot root = context.getViewRoot();
-        ResponseWriter writer = null;
+        PartialTraversalViewRoot root =
+                (PartialTraversalViewRoot) context.getViewRoot();
+        ResponseWriter orig = null, writer = null;
         String state = null;
+        boolean isRenderAll = false;
 
         try {
-            async.installNoOpResponse(context);
+            
+            if (isRenderAll = async.isRenderAll()) {
+                // Get (and maybe create) the AjaxResponseWriter
+                writer = async.getResponseWriter();
+                orig = context.getResponseWriter();
+                // Install the AjaxResponseWriter
+                context.setResponseWriter(writer);
+
+                root.encodePartialResponseBegin(context);
+            }
+            else {
+                async.installNoOpResponse(context);
+            }
 
             parent.render(context);
             
+            if (isRenderAll) {
+                root.encodePartialResponseEnd(context);
+            }
+            
             // If we rendered some content
-            if (!async.getRenderSubtrees().isEmpty()) {
+            if (!async.isRenderNone()) {
                 // gain access once more to the AxaxResponseWriter.  At this point,
                 // the writer does not need to be installed on the FacesContext.
                 writer = async.getResponseWriter();
@@ -103,6 +123,7 @@ public class PartialTraversalLifecycle extends Lifecycle {
         }
         finally {
             async.removeNoOpResponse(context);
+            context.setResponseWriter(orig);
             AsyncResponse.clearInstance();
         }
         

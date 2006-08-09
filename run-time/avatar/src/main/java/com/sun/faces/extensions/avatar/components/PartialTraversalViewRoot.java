@@ -31,13 +31,17 @@ package com.sun.faces.extensions.avatar.components;
 
 import com.sun.faces.extensions.avatar.event.EventParser;
 import com.sun.faces.extensions.avatar.lifecycle.AsyncResponse;
+import com.sun.faces.extensions.common.util.Util;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 import javax.faces.FacesException;
+import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
+import javax.faces.component.ActionSource;
 import javax.faces.component.ContextCallback;
+import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.UIViewRootCopy;
@@ -91,41 +95,41 @@ import javax.servlet.http.HttpServletResponse;
  * the rendered output from the components in the list as in the
  * following example.</p>
  *
-<pre><code>
-&lt;partial-response&gt;
-  &lt;components&gt;
-    &lt;render id="form:table"/&gt;
-      &lt;markup&gt;&lt;![CDATA[
-        Rendered content from component
-      ]]&gt;&lt;/markup&gt;
-      &lt;messages&gt;
-        &lt;message&gt;The messages element is optional.  If present,
-                 it is a list of FacesMessage.getSummary() output
-        &lt;/message&gt;
-      &lt;/messages&gt;
-    &lt;/render&gt;
-    &lt;!-- repeat for the appropriate number of components --&gt;
-  &lt;/components&gt;
-  &lt;state&gt;&lt;![CDATA[state information for this view ]]&gt;&lt;/state&gt;
-&lt;/partial-response&gt;
-</code></pre>
-  *
-  * if the <code>isRenderXML</code> value is <code>false</code>, assume
-  * the renderers are handling the content-type, header, and component
-  * encapsulation details and write nothing to the response.</p>
-  *
-  * <p>See {@link
-  * com.sun.faces.extensions.avatar.lifecycle.PartialTraversalLifecycle} for
-  * additional information about how this class helps
-  * <code>PartialTraversalViewRoot</code> get its job done.</p>
+ * <pre><code>
+ * &lt;partial-response&gt;
+ * &lt;components&gt;
+ * &lt;render id="form:table"/&gt;
+ * &lt;markup&gt;&lt;![CDATA[
+ * Rendered content from component
+ * ]]&gt;&lt;/markup&gt;
+ * &lt;messages&gt;
+ * &lt;message&gt;The messages element is optional.  If present,
+ * it is a list of FacesMessage.getSummary() output
+ * &lt;/message&gt;
+ * &lt;/messages&gt;
+ * &lt;/render&gt;
+ * &lt;!-- repeat for the appropriate number of components --&gt;
+ * &lt;/components&gt;
+ * &lt;state&gt;&lt;![CDATA[state information for this view ]]&gt;&lt;/state&gt;
+ * &lt;/partial-response&gt;
+ * </code></pre>
+ *
+ * if the <code>isRenderXML</code> value is <code>false</code>, assume
+ * the renderers are handling the content-type, header, and component
+ * encapsulation details and write nothing to the response.</p>
+ *
+ * <p>See {@link
+ * com.sun.faces.extensions.avatar.lifecycle.PartialTraversalLifecycle} for
+ * additional information about how this class helps
+ * <code>PartialTraversalViewRoot</code> get its job done.</p>
  *
  * <p>This class extends <code>UIViewRootCopy</code>, which is a local copy
  * of <code>UIViewRoot</code> that makes the <code>broadcastEvents</code> method
- * public.  This is necessary to allow easily broadcasting events during the 
+ * public.  This is necessary to allow easily broadcasting events during the
  * AJAX lifecycle.</p>
-  *
-  * @author edburns
-  */
+ *
+ * @author edburns
+ */
 public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializable {
     
     public PartialTraversalViewRoot() {
@@ -153,44 +157,67 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
         
         EventParser.queueFacesEvents(context);
         
+        if (async.isImmediateAjaxRequest()) {
+            Util.TreeTraversalCallback markImmediate = new Util.TreeTraversalCallback() {
+                public boolean takeActionOnNode(FacesContext context, UIComponent comp) throws FacesException {
+                    if (comp instanceof ActionSource) {
+                        ((ActionSource)comp).setImmediate(true);
+                    } else if (comp instanceof EditableValueHolder) {
+                        ((EditableValueHolder)comp).setImmediate(true);
+                    }
+                    
+                    return true;
+                }
+                
+            };
+            Util.prefixViewTraversal(context, this, markImmediate);
+        }
+        
         if (!invokedCallback) {
             super.processDecodes(context);
         }
-        else { 
-            this.broadcastEvents(context, PhaseId.APPLY_REQUEST_VALUES);
-        }
-
+        this.broadcastEvents(context, PhaseId.APPLY_REQUEST_VALUES);
+        
     }
-
+    
     public void processValidators(FacesContext context) {
         if (!AsyncResponse.isAjaxRequest() ||
-            !invokeContextCallbackOnSubtrees(context, 
+                !invokeContextCallbackOnSubtrees(context,
                 new PhaseAwareContextCallback(PhaseId.PROCESS_VALIDATIONS))) {
             super.processValidators(context);
             return;
         }
         this.broadcastEvents(context, PhaseId.PROCESS_VALIDATIONS);
     }
-
+    
     public void processUpdates(FacesContext context) {
         if (!AsyncResponse.isAjaxRequest() ||
-            !invokeContextCallbackOnSubtrees(context, 
+                !invokeContextCallbackOnSubtrees(context,
                 new PhaseAwareContextCallback(PhaseId.UPDATE_MODEL_VALUES))) {
             super.processUpdates(context);
             return;
         }
         this.broadcastEvents(context, PhaseId.UPDATE_MODEL_VALUES);
     }
-
+    
     public void encodeAll(FacesContext context) throws IOException {
-        if (!AsyncResponse.isAjaxRequest()) {
+        AsyncResponse async = AsyncResponse.getInstance();
+        // If this is not an ajax request...
+        if (!async.isAjaxRequest()) {
+            // do default behavior
             super.encodeAll(context);
             return;
         }
-        UIViewRoot root = context.getViewRoot();
+        boolean renderNone = async.isRenderNone();
         ResponseWriter orig = null, writer = null;
-        AsyncResponse async = AsyncResponse.getInstance();
-        boolean renderNone = false;
+        
+        // If this is an ajax request, but it is one where the whole tree
+        // is requested to be re-rendered...
+        if (async.isRenderAll()) {
+            // do the default behavior
+            super.encodeAll(context);
+            return;
+        }
         
         try {
             // Remove the no-op response so our content can be written.
@@ -200,51 +227,22 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
             orig = context.getResponseWriter();
             // Install the AjaxResponseWriter
             context.setResponseWriter(writer);
-            ExternalContext extContext = context.getExternalContext();
-            // If the client did not explicitly request that no subtrees be rendered...
-            if (!(renderNone = async.isRenderNone())) {
-                // prepare to render the partial response.
-                if (extContext.getResponse() instanceof HttpServletResponse) {
-                    HttpServletResponse servletResponse = (HttpServletResponse)
-                    extContext.getResponse();
-                    servletResponse.setContentType("text/xml");
-                    servletResponse.setHeader("Cache-Control", "no-cache");
-                    String xjson =
-                            extContext.getRequestHeaderMap().get(AsyncResponse.XJSON_HEADER);
-                    if (null != xjson) {
-                        servletResponse.setHeader(AsyncResponse.XJSON_HEADER,
-                                xjson);
-                    }
-
-                    writer.startElement("partial-response", root);
-                    writer.startElement("components", root);
-                }
-            }
+            
+            this.encodePartialResponseBegin(context);
+            
             // If the context callback was not invoked on any subtrees
             // and the client did not explicitly request that no subtrees be rendered...
-            if (!invokeContextCallbackOnSubtrees(context, 
+            if (!invokeContextCallbackOnSubtrees(context,
                     new PhaseAwareContextCallback(PhaseId.RENDER_RESPONSE)) &&
                     !renderNone) {
-                // then render the children of the UIViewRoot as if they had been given
-                // as the list of subtrees to render.  This handles the case when 
-                // no value has been given for the "render" header.
-                invokeContextCallbackOnViewRootChildren(context,
-                        new PhaseAwareContextCallback(PhaseId.RENDER_RESPONSE));
+                assert(false);
             }
             
+            this.encodePartialResponseEnd(context);
             
-            // PENDING(edburns): The core JSF spec does not dispatch events for
-            // Render Response.  We need to do it here so that events that require
-            // template text can rely on the tree including template text.
-            this.broadcastEvents(context, PhaseId.RENDER_RESPONSE);
+        } catch (IOException ioe) {
             
-            writeMessages(context, null, null, writer);
-            writer.endElement("components");
-        }
-        catch (IOException ioe) {
-            
-        }
-        finally {
+        } finally {
             // re-install the no-op classes so any post f:view content is not written
             async.installNoOpResponse(context);
             // move aside the AjaxResponseWriter
@@ -254,15 +252,58 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
         }
     }
     
+    public void encodePartialResponseBegin(FacesContext context) throws IOException {
+        ResponseWriter writer = context.getResponseWriter();
+        AsyncResponse async = AsyncResponse.getInstance();
+        
+        ExternalContext extContext = context.getExternalContext();
+        // If the client did not explicitly request that no subtrees be rendered...
+        if (!async.isRenderNone()) {
+            // prepare to render the partial response.
+            if (extContext.getResponse() instanceof HttpServletResponse) {
+                HttpServletResponse servletResponse = (HttpServletResponse)
+                extContext.getResponse();
+                servletResponse.setContentType("text/xml");
+                servletResponse.setHeader("Cache-Control", "no-cache");
+                String xjson =
+                        extContext.getRequestHeaderMap().get(AsyncResponse.XJSON_HEADER);
+                if (null != xjson) {
+                    servletResponse.setHeader(AsyncResponse.XJSON_HEADER,
+                            xjson);
+                }
+                
+                writer.startElement("partial-response", this);
+                writer.startElement("components", this);
+            }
+        }
+    }
+    
+    public void encodePartialResponseEnd(FacesContext context) throws IOException {
+        ResponseWriter writer = context.getResponseWriter();
+        AsyncResponse async = AsyncResponse.getInstance();
+        
+        // PENDING(edburns): The core JSF spec does not dispatch events for
+        // Render Response.  We need to do it here so that events that require
+        // template text can rely on the tree including template text.
+        this.broadcastEvents(context, PhaseId.RENDER_RESPONSE);
+        
+        // If the client did not explicitly request that no subtrees be rendered...
+        if (!async.isRenderNone()) {
+            writeMessages(context, null, null, writer);
+            writer.endElement("components");
+        }
+        
+    }
+    
     
     protected void broadcastEvents(FacesContext context, PhaseId phaseId) {
         // Broadcast the regular FacesEvents
         super.broadcastEvents(context, phaseId);
         // Do our extra special MethodExpression invocation
         EventParser.invokeComponentMethodCallbackForPhase(context, phaseId);
-    }    
+    }
     
-    private boolean invokeContextCallbackOnSubtrees(FacesContext context, 
+    private boolean invokeContextCallbackOnSubtrees(FacesContext context,
             PhaseAwareContextCallback cb) {
         AsyncResponse async = AsyncResponse.getInstance();
         List<String> subtrees = null;
@@ -273,8 +314,7 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
         
         if (cb.getPhaseId() == PhaseId.RENDER_RESPONSE) {
             subtrees = async.getRenderSubtrees();
-        }
-        else {
+        } else {
             subtrees = async.getExecuteSubtrees();
             if (subtrees.isEmpty()) {
                 subtrees = async.getRenderSubtrees();
@@ -285,21 +325,6 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
         
         for (String cur : subtrees) {
             if (this.invokeOnComponent(context, cur, cb)) {
-                result = true;
-            }
-        }
-        return result;
-    }
-    
-    private boolean invokeContextCallbackOnViewRootChildren(FacesContext context, 
-            PhaseAwareContextCallback cb) {
-        AsyncResponse async = AsyncResponse.getInstance();
-        List<UIComponent> children = context.getViewRoot().getChildren();
-        
-        boolean result = false;
-        
-        for (UIComponent cur : children) {
-            if (this.invokeOnComponent(context, cur.getClientId(context), cb)) {
                 result = true;
             }
         }
@@ -338,9 +363,9 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
         }
         return hasMessages;
     }
-
+    
     private class PhaseAwareContextCallback implements ContextCallback {
-
+        
         private PhaseId curPhase = null;
         private PhaseAwareContextCallback(PhaseId curPhase) {
             this.curPhase = curPhase;
@@ -355,17 +380,19 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
                 ConverterException converterException = null;
                 
                 if (curPhase == PhaseId.APPLY_REQUEST_VALUES) {
+                    // If the user requested an immediate request
+                    // Make sure to set the immediate flag.
+                    if (AsyncResponse.isImmediateAjaxRequest()) {
+                    }
+                    
                     comp.processDecodes(facesContext);
-                }
-                else if (curPhase == PhaseId.PROCESS_VALIDATIONS) {
+                } else if (curPhase == PhaseId.PROCESS_VALIDATIONS) {
                     comp.processValidators(facesContext);
-                }
-                else if (curPhase == PhaseId.UPDATE_MODEL_VALUES) {
+                } else if (curPhase == PhaseId.UPDATE_MODEL_VALUES) {
                     comp.processUpdates(facesContext);
-                }
-                else if (curPhase == PhaseId.RENDER_RESPONSE) {
+                } else if (curPhase == PhaseId.RENDER_RESPONSE) {
                     ResponseWriter writer = AsyncResponse.getInstance().getResponseWriter();
-
+                    
                     writer.startElement("render", comp);
                     writer.writeAttribute("id", comp.getClientId(facesContext), "id");
                     try {
@@ -374,20 +401,17 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
                         comp.encodeAll(facesContext);
                         writer.write("]]>");
                         writer.endElement("markup");
-                    }
-                    catch (ConverterException ce) {
+                    } catch (ConverterException ce) {
                         converterException = ce;
                     }
                     PartialTraversalViewRoot.this.writeMessages(facesContext, comp,
                             converterException, writer);
                     writer.endElement("render");
-                }
-                else {
+                } else {
                     throw new IllegalStateException("I18N: Unexpected PhaseId passed to PhaseAwareContextCallback: " + curPhase.toString());
                 }
-                    
-            }
-            catch (IOException ex) {
+                
+            } catch (IOException ex) {
                 ex.printStackTrace();
             }
         }

@@ -16,6 +16,7 @@ import java.util.Map;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.component.ContextCallback;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.context.ResponseWriterWrapper;
@@ -177,29 +178,57 @@ public class AsyncResponse {
     public boolean isRenderNone() {
         boolean result = false;
         String param = null;
-        Map requestMap = FacesContext.getCurrentInstance().
-                getExternalContext().getRequestHeaderMap();
+        final String RENDER_NONE = FACES_PREFIX + "RenderNone";
+        ExternalContext extContext = FacesContext.getCurrentInstance().getExternalContext();
+        Map<String, String> requestHeaderMap = extContext.getRequestHeaderMap();
+        Map<String, Object> requestMap = extContext.getRequestMap();
 
-        if (!requestMap.containsKey(RENDER_HEADER)) {
-            return result;
+        if (requestMap.containsKey(RENDER_NONE)) {
+            return true;
         }
-        param = requestMap.get(RENDER_HEADER).toString();
+        param = requestHeaderMap.get(RENDER_HEADER);
         result = null != param && param.equalsIgnoreCase("none");
+        if (result) {
+            requestMap.put(RENDER_NONE, Boolean.TRUE);
+        }
         
         return result;
     }
+    
+    public boolean isRenderAll() {
+        boolean result = false;
+        final String RENDER_ALL = FACES_PREFIX + "RenderAll";
+        ExternalContext extContext = FacesContext.getCurrentInstance().getExternalContext();
+        Map<String, Object> requestMap = extContext.getRequestMap();
+
+        if (requestMap.containsKey(RENDER_ALL)) {
+            return true;
+        }
+        result = isAjaxRequest() && !isRenderNone() && getRenderSubtrees().isEmpty();
+        if (result) {
+            requestMap.put(RENDER_ALL, Boolean.TRUE);
+        }
+        
+        return result;
+    }
+    
 
     public boolean isExecuteNone() {
         boolean result = false;
         String param = null;
-        Map requestMap = FacesContext.getCurrentInstance().
-                getExternalContext().getRequestHeaderMap();
+        final String EXECUTE_NONE = FACES_PREFIX + "ExecuteNone";
+        ExternalContext extContext = FacesContext.getCurrentInstance().getExternalContext();
+        Map<String, String> requestHeaderMap = extContext.getRequestHeaderMap();
+        Map<String, Object> requestMap = extContext.getRequestMap();
 
-        if (!requestMap.containsKey(EXECUTE_HEADER)) {
-            return result;
+        if (requestMap.containsKey(EXECUTE_NONE)) {
+            return true;
         }
-        param = requestMap.get(EXECUTE_HEADER).toString();
+        param = requestHeaderMap.get(EXECUTE_HEADER);
         result = null != param && param.equalsIgnoreCase("none");
+        if (result) {
+            requestMap.put(EXECUTE_NONE, Boolean.TRUE);
+        }
         
         return result;
     }
@@ -270,13 +299,47 @@ public class AsyncResponse {
      */
     
     public static boolean isAjaxRequest() {
-        FacesContext context = FacesContext.getCurrentInstance();
-        Map<String, String> p = context.getExternalContext().getRequestHeaderMap();
+        ExternalContext ext = FacesContext.getCurrentInstance().getExternalContext();
+        Map<String, Object> requestMap = ext.getRequestMap();
+        final String ajaxFlag = FACES_PREFIX + "IsAjax";
+        if (requestMap.containsKey(ajaxFlag)) {
+            return true;
+        }
+        
+        Map<String, String> p = ext.getRequestHeaderMap();
         boolean result = false;
         result = p.containsKey(PARTIAL_HEADER);
+        if (result) {
+            requestMap.put(ajaxFlag, Boolean.TRUE);
+        }
         return result;
     }
+
+    /**
+     * <p>Return <code>true</code> if and only if the request headers include
+     * an entry for {@link #PARTIAL_HEADER} and the value for that header is 
+     * <code>true</code>.  Otherwise return <code>false</code>.
+     */
     
+    public static boolean isImmediateAjaxRequest() {
+        ExternalContext ext = FacesContext.getCurrentInstance().getExternalContext();
+        Map<String, Object> requestMap = ext.getRequestMap();
+        final String immediateFlag = FACES_PREFIX + "IsImmediate";
+        if (requestMap.containsKey(immediateFlag)) {
+            return true;
+        }
+
+        Map<String, String> p = ext.getRequestHeaderMap();
+        String partialValue = p.get(PARTIAL_HEADER);
+        boolean result = false;
+        if (null != partialValue) {
+            result = partialValue.equalsIgnoreCase("immediate");
+        }
+        if (result) {
+            requestMap.put(immediateFlag, Boolean.TRUE);
+        }
+        return result;
+    }    
     private Object origResponse = null;
     
     /**

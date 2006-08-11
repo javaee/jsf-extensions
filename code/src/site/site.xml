@@ -22,6 +22,8 @@
     <menu name="JSF Extensions">
         <item name="home" href="/index.html" />
         <item name="FAQ" href="http://wiki.java.net/bin/view/Projects/JsfExtensionsFaq" />
+        <item name="Join Project"           href="http://jsf-extensions.dev.java.net/servlets/ProjectMembershipRequest"/>
+        <item name="Watch Project"           href="http://jsf-extensions.dev.java.net/servlets/WatchProject"/>
         <item name="Download"           href="http://jsf-extensions.dev.java.net/servlets/ProjectDocumentList"/>
 <!--
         <item name="Combined API Docs"           collapse="false">

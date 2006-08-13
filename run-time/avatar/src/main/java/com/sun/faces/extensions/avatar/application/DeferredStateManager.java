@@ -47,7 +47,9 @@ public class DeferredStateManager extends StateManagerWrapper {
      */
 
     public void writeState(FacesContext context, Object state) throws IOException {
-        if (!AsyncResponse.isAjaxRequest()) {
+        AsyncResponse async = AsyncResponse.getInstance();
+
+        if (!async.isAjaxRequest() || async.isRenderAll()) {
             getWrapped().writeState(context, state);
         }
     }
@@ -61,7 +63,9 @@ public class DeferredStateManager extends StateManagerWrapper {
 
     public Object saveView(FacesContext context) {
         Object result = null;
-        if (!AsyncResponse.isAjaxRequest()) {
+        AsyncResponse async = AsyncResponse.getInstance();
+
+        if (!async.isAjaxRequest() || async.isRenderAll()) {
             result = getWrapped().saveView(context);
         }
         return result;
@@ -76,8 +80,9 @@ public class DeferredStateManager extends StateManagerWrapper {
 
     public StateManager.SerializedView saveSerializedView(FacesContext context) {
         StateManager.SerializedView result = null;
+        AsyncResponse async = AsyncResponse.getInstance();
 
-        if (!AsyncResponse.isAjaxRequest()) {
+        if (!async.isAjaxRequest() || async.isRenderAll()) {
             result = getWrapped().saveSerializedView(context);
         }
 
@@ -92,7 +97,9 @@ public class DeferredStateManager extends StateManagerWrapper {
      */
 
     public void writeState(FacesContext context, StateManager.SerializedView state) throws IOException {
-        if (!AsyncResponse.isAjaxRequest()) {
+        AsyncResponse async = AsyncResponse.getInstance();
+
+        if (!async.isAjaxRequest() || async.isRenderAll()) {
             getWrapped().writeState(context, state);
         }
     }

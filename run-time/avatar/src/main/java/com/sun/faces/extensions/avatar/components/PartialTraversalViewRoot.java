@@ -156,10 +156,8 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
         if (!invokedCallback) {
             super.processDecodes(context);
         }
-        else { 
-            this.broadcastEvents(context, PhaseId.APPLY_REQUEST_VALUES);
-        }
-
+        this.broadcastEvents(context, PhaseId.APPLY_REQUEST_VALUES);
+        
     }
 
     public void processValidators(FacesContext context) {
@@ -183,75 +181,118 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
     }
 
     public void encodeAll(FacesContext context) throws IOException {
-        if (!AsyncResponse.isAjaxRequest()) {
+        AsyncResponse async = AsyncResponse.getInstance();
+        // If this is not an ajax request...
+        if (!async.isAjaxRequest()) {
+            // do default behavior
             super.encodeAll(context);
             return;
         }
-        UIViewRoot root = context.getViewRoot();
+        boolean renderAll = async.isRenderAll(),
+                renderNone = async.isRenderNone();
         ResponseWriter orig = null, writer = null;
-        AsyncResponse async = AsyncResponse.getInstance();
-        boolean renderNone = false;
         
         try {
-            // Remove the no-op response so our content can be written.
-            async.removeNoOpResponse(context);
-            // Get (and maybe create) the AjaxResponseWriter
-            writer = async.getResponseWriter();
-            orig = context.getResponseWriter();
-            // Install the AjaxResponseWriter
-            context.setResponseWriter(writer);
-            ExternalContext extContext = context.getExternalContext();
-            // If the client did not explicitly request that no subtrees be rendered...
-            if (!(renderNone = async.isRenderNone())) {
-                // prepare to render the partial response.
-                if (extContext.getResponse() instanceof HttpServletResponse) {
-                    HttpServletResponse servletResponse = (HttpServletResponse)
-                    extContext.getResponse();
-                    servletResponse.setContentType("text/xml");
-                    servletResponse.setHeader("Cache-Control", "no-cache");
-                    String xjson =
-                            extContext.getRequestHeaderMap().get(AsyncResponse.XJSON_HEADER);
-                    if (null != xjson) {
-                        servletResponse.setHeader(AsyncResponse.XJSON_HEADER,
-                                xjson);
-                    }
-
-                    writer.startElement("partial-response", root);
-                    writer.startElement("components", root);
-                }
+            // If this is an ajax request, and it is a partial render request...
+            if (!renderAll) {
+                // Remove the no-op response so our content can be written.
+                async.removeNoOpResponse(context);
+            
+                // replace the context's responseWriter with the AjaxResponseWriter
+                // Get (and maybe create) the AjaxResponseWriter
+                writer = async.getResponseWriter();
+                orig = context.getResponseWriter();
+                // Install the AjaxResponseWriter
+                context.setResponseWriter(writer);
             }
+            
+            this.encodePartialResponseBegin(context);
+
+            if (renderAll) {
+                writer = context.getResponseWriter();
+                // If this is a "render all via ajax" request,
+                // make sure to wrap the entire page in a <render> elemnt
+                // with the special id of VIEW_ROOT_ID.  This is how the client
+                // JavaScript knows how to replace the entire document with 
+                // this response.
+                writer.startElement("render", this);
+                writer.writeAttribute("id", AsyncResponse.VIEW_ROOT_ID, "id");
+                writer.startElement("markup", this);
+                writer.write("<![CDATA[");
+                // do the default behavior...
+                super.encodeAll(context);
+                writer.write("]]>");
+                writer.endElement("markup");
+                writer.endElement("render");
+                // then bail out.  
+                return;
+            }
+            
             // If the context callback was not invoked on any subtrees
             // and the client did not explicitly request that no subtrees be rendered...
-            if (!invokeContextCallbackOnSubtrees(context, 
+            if (!invokeContextCallbackOnSubtrees(context,
                     new PhaseAwareContextCallback(PhaseId.RENDER_RESPONSE)) &&
                     !renderNone) {
-                // then render the children of the UIViewRoot as if they had been given
-                // as the list of subtrees to render.  This handles the case when 
-                // no value has been given for the "render" header.
-                invokeContextCallbackOnViewRootChildren(context,
-                        new PhaseAwareContextCallback(PhaseId.RENDER_RESPONSE));
+                assert(false);
             }
             
+            this.encodePartialResponseEnd(context);
             
-            // PENDING(edburns): The core JSF spec does not dispatch events for
-            // Render Response.  We need to do it here so that events that require
-            // template text can rely on the tree including template text.
-            this.broadcastEvents(context, PhaseId.RENDER_RESPONSE);
+        } catch (IOException ioe) {
             
-            writeMessages(context, null, null, writer);
-            writer.endElement("components");
-        }
-        catch (IOException ioe) {
-            
-        }
-        finally {
-            // re-install the no-op classes so any post f:view content is not written
-            async.installNoOpResponse(context);
+        } finally {
+            if (!renderAll) {
+                // re-install the no-op classes so any post f:view content is not written
+                async.installNoOpResponse(context);
+            }
             // move aside the AjaxResponseWriter
             if (null != orig) {
                 context.setResponseWriter(orig);
             }
         }
+    }
+    
+    public void encodePartialResponseBegin(FacesContext context) throws IOException {
+        ResponseWriter writer = context.getResponseWriter();
+        AsyncResponse async = AsyncResponse.getInstance();
+        
+        ExternalContext extContext = context.getExternalContext();
+        // If the client did not explicitly request that no subtrees be rendered...
+        if (!async.isRenderNone()) {
+            // prepare to render the partial response.
+            if (extContext.getResponse() instanceof HttpServletResponse) {
+                HttpServletResponse servletResponse = (HttpServletResponse)
+                extContext.getResponse();
+                servletResponse.setContentType("text/xml");
+                servletResponse.setHeader("Cache-Control", "no-cache");
+                String xjson =
+                        extContext.getRequestHeaderMap().get(AsyncResponse.XJSON_HEADER);
+                if (null != xjson) {
+                    servletResponse.setHeader(AsyncResponse.XJSON_HEADER,
+                            xjson);
+                }
+                
+                writer.startElement("partial-response", this);
+                writer.startElement("components", this);
+            }
+        }
+    }
+    
+    public void encodePartialResponseEnd(FacesContext context) throws IOException {
+        ResponseWriter writer = context.getResponseWriter();
+        AsyncResponse async = AsyncResponse.getInstance();
+        
+        // PENDING(edburns): The core JSF spec does not dispatch events for
+        // Render Response.  We need to do it here so that events that require
+        // template text can rely on the tree including template text.
+        this.broadcastEvents(context, PhaseId.RENDER_RESPONSE);
+        
+        // If the client did not explicitly request that no subtrees be rendered...
+        if (!async.isRenderNone()) {
+            writeMessages(context, null, null, writer);
+            writer.endElement("components");
+        }
+        
     }
     
     
@@ -285,21 +326,6 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
         
         for (String cur : subtrees) {
             if (this.invokeOnComponent(context, cur, cb)) {
-                result = true;
-            }
-        }
-        return result;
-    }
-    
-    private boolean invokeContextCallbackOnViewRootChildren(FacesContext context, 
-            PhaseAwareContextCallback cb) {
-        AsyncResponse async = AsyncResponse.getInstance();
-        List<UIComponent> children = context.getViewRoot().getChildren();
-        
-        boolean result = false;
-        
-        for (UIComponent cur : children) {
-            if (this.invokeOnComponent(context, cur.getClientId(context), cb)) {
                 result = true;
             }
         }

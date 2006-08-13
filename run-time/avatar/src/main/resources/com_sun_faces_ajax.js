@@ -31,6 +31,7 @@ var gFacesPrefix = "com.sun.faces.avatar.";
 var gPartial = gFacesPrefix + "Partial";
 var gExecute = gFacesPrefix + "Execute";
 var gRender = gFacesPrefix + "Render";
+var gViewRoot = gFacesPrefix + "ViewRoot";
 var gFacesEvent = gFacesPrefix + "FacesEvent";
 var gMethodName = gFacesPrefix + "MethodName";
 var gViewState = "javax.faces.ViewState";
@@ -128,9 +129,92 @@ Object.extend(String.prototype, {
 	}
 });
 Object.extend(Element, {
+    elementReplace: function elementReplace(d, tempTagName, src) {
+    var parent = d.parentNode;
+    var temp = document.createElement(tempTagName);
+    var result = null;
+    temp.id = d.id;
+    temp.innerHTML = src;
+    
+    result = temp
+    parent.replaceChild(temp, d);
+    return result;
+  },
   replace: function(dest, src)  {
-    var d = $(dest);
-    if (!d) alert(dest + " not found");
+
+    // If this partial response is the entire view...
+    if (-1 != dest.indexOf(gViewRoot)) {
+	// if src contains <html>, trim the <html> and </html>, if present.
+	//   if src contains <head>
+	//      extract the contents of <head> and replace current document's
+	//      <head> with the contents.
+	//   if src contains <body> 
+	//      extract the contents of <body> and replace the current
+	//      document's <body> with the contents.
+	//   if src does not contain <body>
+	//      replace the current document's <body> with the contents.
+
+        var 
+	    htmlStartEx = new RegExp("< *html\W*>", "gi"),
+	    htmlEndEx = new RegExp("< */ *html\W*>", "gi"),
+	    headStartEx = new RegExp("< *head\W*>", "gi"),
+	    headEndEx = new RegExp("< */ *head\W*>", "gi"),
+	    bodyStartEx = new RegExp("< *body\W*>", "gi"),
+	    bodyEndEx = new RegExp("< */ *body\W*>", "gi"),
+	    htmlStart, htmlEnd, headStart, headEnd, bodyStart, bodyEnd;
+	var srcHead = null, srcBody = null;
+	// find the current document's "body" element
+	var docBody = document.getElementsByTagName("body")[0];
+	// if src contains <html>
+	if (null != (htmlStart = htmlStartEx.exec(src))) {
+	    // if src contains </html>
+	    if (null != (htmlEnd = htmlEndEx.exec(src))) {
+		src = src.substring(htmlStartEx.lastIndex,
+				     htmlEnd.index);
+	    }
+	    else {
+		src = src.substring(htmlStartEx.lastIndex);
+	    }
+	}
+
+	// if src contains <head>
+	if (null != (headStart = headStartEx.exec(src))) {
+	    // if src contains </head>
+	    if (null != (headEnd = headEndEx.exec(src))) {
+		srcHead = src.substring(headStartEx.lastIndex,
+					headEnd.index);
+	    }
+	    else {
+		srcHead = src.substring(headStartEx.lastIndex);
+	    }
+	    // find the "head" element
+	    var docHead = document.getElementsByTagName("head")[0];
+	    if (docHead) {
+		this.elementReplace(docHead, "head", srcHead);
+	    }
+	}
+	// if src contains <body>
+	if (null != (bodyStart = bodyStartEx.exec(src))) {
+	    // if src contains </body>
+	    if (null != (bodyEnd = bodyEndEx.exec(src))) {
+		srcBody = src.substring(bodyStartEx.lastIndex,
+				     bodyEnd.index);
+	    }
+	    else {
+		srcBody = src.substring(bodyStartEx.lastIndex);
+	    }
+	    result = this.elementReplace(docBody, "body", srcBody);
+	}
+	if (!srcBody) {
+	    result = this.elementReplace(docBody, "body", src);
+	}
+	
+    }
+    else {
+	var d = $(dest);
+	if (!d) { 
+	    alert(dest + " not found");
+	}
 	var parent = d.parentNode;
 	var temp = document.createElement('div');
 	var result = null;
@@ -139,8 +223,9 @@ Object.extend(Element, {
 
 	result = temp.firstChild;
 	parent.replaceChild(temp.firstChild,d);
-	return result;
-
+    }
+    return result;
+    
   },
   serialize: function(e) {
 	  var str = (e.xml) ? this.serializeIE(e) : this.serializeMozilla(e);
@@ -237,9 +322,15 @@ Faces.ViewState.prototype = {
 	    t = viewState.tagName.toLowerCase();
 	    p = Form.Element.Serializers[t](viewState);
 	    if (p && p[0].length != 0) {
-		if (p[1].constructor != Array) p[1] = [p[1]];
-		if (this[p[0]]) { this[p[0]] = this[p[0]].concat(p[1]); }
-		else this[p[0]] = p[1];
+		if (p[1].constructor != Array) { 
+		    p[1] = [p[1]];
+		}
+		if (this[p[0]]) { 
+		    this[p[0]] = this[p[0]].concat(p[1]); 
+		}
+		else { 
+		    this[p[0]] = p[1];
+		}
 	    }
 	    
 	    return;
@@ -253,9 +344,15 @@ Faces.ViewState.prototype = {
 		t = e[i].tagName.toLowerCase();
 		p = Form.Element.Serializers[t](e[i]);
 		if (p && p[0].length != 0) {
-		    if (p[1].constructor != Array) p[1] = [p[1]];
-		    if (this[p[0]]) { this[p[0]] = this[p[0]].concat(p[1]); }
-		    else this[p[0]] = p[1];
+		    if (p[1].constructor != Array) {
+			p[1] = [p[1]];
+		    }
+		    if (this[p[0]]) { 
+			this[p[0]] = this[p[0]].concat(p[1]); 
+		    }
+		    else {
+			this[p[0]] = p[1];
+		    }
 		}
 	    }
 	};
@@ -289,7 +386,7 @@ Faces.ViewState.prototype = {
 			if (this[inputs[i]].constructor == Array) {
 			    for (j = 0; j < this[inputs[i]].length; j++){
 				v = this[inputs[i]][j];
-				if (v) {
+				if (null != v) {
 				    v = encodeURIComponent(v);
 				    q.push(p+'='+v);
 				}
@@ -310,7 +407,7 @@ Faces.ViewState.prototype = {
 		    if (this[property].constructor == Array) {
 			for (j = 0; j < this[property].length; j++) {
 			    v = this[property][j];
-			    if (v) {
+			    if (null != v) {
 				v = encodeURIComponent(v);
 				q.push(p+'='+v);
 			    }

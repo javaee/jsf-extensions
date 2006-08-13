@@ -9,9 +9,14 @@
 
 package com.sun.faces.extensions.avatar.lifecycle;
 
+import com.sun.faces.extensions.avatar.components.PartialTraversalViewRoot;
 import java.io.IOException;
+import java.io.Writer;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
+import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
 import javax.faces.lifecycle.Lifecycle;
 import java.util.Map;
@@ -76,20 +81,40 @@ public class PartialTraversalLifecycle extends Lifecycle {
             return;
         }
         AsyncResponse async = AsyncResponse.getInstance();
-        UIViewRoot root = context.getViewRoot();
+        PartialTraversalViewRoot root =
+                (PartialTraversalViewRoot) context.getViewRoot();
         ResponseWriter writer = null;
         String state = null;
+        boolean isRenderAll = async.isRenderAll();
 
         try {
-            async.installNoOpResponse(context);
+            
+            // We don't want to prevent the state marker replacement from working
+            // in the case of isRenderAll == true, but we do want to prevent
+            // it in the case of isRenderAll == false.
+            if (!isRenderAll) {
+                async.installNoOpResponse(context);
+            }
 
             parent.render(context);
             
+            if (isRenderAll) {
+                root.encodePartialResponseEnd(context);
+            }
+            
             // If we rendered some content
-            if (!async.getRenderSubtrees().isEmpty()) {
-                // gain access once more to the AxaxResponseWriter.  At this point,
-                // the writer does not need to be installed on the FacesContext.
-                writer = async.getResponseWriter();
+            if (!async.isRenderNone()) {
+                // If this is a "render all" request...
+                if (isRenderAll) {
+                    // use the default responseWriter
+                    writer = context.getResponseWriter();
+                }
+                else {
+                    // otherwise, gain access once more to the AjaxResponseWriter.  
+                    // At this point, the writer does not need to be installed 
+                    // on the FacesContext.
+                    writer = async.getResponseWriter();
+                }
                 writer.startElement("state", root);
                 state = async.getViewState(context);
                 writer.write("<![CDATA[" + state + "]]>");

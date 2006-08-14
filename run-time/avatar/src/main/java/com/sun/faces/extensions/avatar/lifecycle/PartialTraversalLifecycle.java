@@ -72,6 +72,13 @@ public class PartialTraversalLifecycle extends Lifecycle {
 
 
     public void execute(FacesContext context) throws FacesException {
+        if (AsyncResponse.isAjaxRequest()) {
+            AsyncResponse async = AsyncResponse.getInstance();
+            async.installOnOffResponse(context);
+            // Allow writing to the response during the "execute"
+            // portion of the lifecycle.
+            async.setOnOffResponseEnabled(true);
+        }
         parent.execute(context);
     }
     
@@ -88,14 +95,10 @@ public class PartialTraversalLifecycle extends Lifecycle {
         boolean isRenderAll = async.isRenderAll();
 
         try {
-            
-            // We don't want to prevent the state marker replacement from working
-            // in the case of isRenderAll == true, but we do want to prevent
-            // it in the case of isRenderAll == false.
-            if (!isRenderAll) {
-                async.installNoOpResponse(context);
-            }
 
+            // Don't allow any content between now and the call
+            // to PartialTraversalViewRoot.encodeAll() to be written to the response.
+            async.setOnOffResponseEnabled(false);
             parent.render(context);
             
             if (isRenderAll) {
@@ -104,17 +107,7 @@ public class PartialTraversalLifecycle extends Lifecycle {
             
             // If we rendered some content
             if (!async.isRenderNone()) {
-                // If this is a "render all" request...
-                if (isRenderAll) {
-                    // use the default responseWriter
-                    writer = context.getResponseWriter();
-                }
-                else {
-                    // otherwise, gain access once more to the AjaxResponseWriter.  
-                    // At this point, the writer does not need to be installed 
-                    // on the FacesContext.
-                    writer = async.getResponseWriter();
-                }
+                writer = async.getResponseWriter();
                 writer.startElement("state", root);
                 state = async.getViewState(context);
                 writer.write("<![CDATA[" + state + "]]>");
@@ -127,7 +120,7 @@ public class PartialTraversalLifecycle extends Lifecycle {
             // PENDING edburns
         }
         finally {
-            async.removeNoOpResponse(context);
+            async.removeOnOffResponse(context);
             AsyncResponse.clearInstance();
         }
         

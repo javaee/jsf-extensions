@@ -17,20 +17,33 @@
   </head>
 
   <body>
-    <h1>DynaFaces immediate attribute test</h1>
+    <h1>DynaFaces simple partial update</h1>
             <h:form prependId="false">
 
-            <h:outputText id="text" value="#{testBean.text}"/>
+<table border="1">
 
-            <p>Required value. </p> 
+<tr>
 
-            <h:inputText id="value" required="true"  />
-         
-            <p>    <h:commandButton id="button"
-                actionListener="#{testBean.changeText}"
-                value="submit via ajax, update whole page"/></p>
+<td>Value of <code>&#35;{testBean.text}</code> on last render.
+</td>
 
+<td><h:outputText id="text" value="#{testBean.text}"/>
+</td>
 
+</tr>
+
+<tr>
+
+<td>Button with actionListener that changes <code>&#35;{testBean.text}</code></td>
+
+<td><h:commandButton id="button" actionListener="#{testBean.changeText}"
+    value="submit"/>
+</td>
+
+</tr>
+
+</table>
+            
             </h:form>
   <script type='text/javascript'>
     DynaFaces.installDeferredAjaxTransaction($('button'), 'click'); 

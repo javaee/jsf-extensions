@@ -193,11 +193,11 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
         ResponseWriter orig = null, writer = null;
         
         try {
+            // Turn on the response that has been embedded in the ViewHandler.
+            async.setOnOffResponseEnabled(true);
             // If this is an ajax request, and it is a partial render request...
+
             if (!renderAll) {
-                // Remove the no-op response so our content can be written.
-                async.removeNoOpResponse(context);
-            
                 // replace the context's responseWriter with the AjaxResponseWriter
                 // Get (and maybe create) the AjaxResponseWriter
                 writer = async.getResponseWriter();
@@ -241,10 +241,13 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
         } catch (IOException ioe) {
             
         } finally {
-            if (!renderAll) {
-                // re-install the no-op classes so any post f:view content is not written
-                async.installNoOpResponse(context);
-            }
+            // PENDING(edburns): this is a big hack to get around the
+            // way the JSP based faces implementation handles the
+            // after view content.
+            // We will have to do something different for other implementations.
+            // This is not a problem for Facelets.
+            context.getExternalContext().getRequestMap().remove("com.sun.faces.AFTER_VIEW_CONTENT");
+            
             // move aside the AjaxResponseWriter
             if (null != orig) {
                 context.setResponseWriter(orig);

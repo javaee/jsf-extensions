@@ -30,6 +30,8 @@ import javax.faces.event.FacesEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.render.ResponseStateManager;
 import javax.servlet.ServletOutputStream;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
@@ -65,7 +67,7 @@ public class AsyncResponse {
         if (null != instance) {
             instance.clearSubtrees();
             instance.ajaxResponseWriter = null;
-            instance.removeNoOpResponse(FacesContext.getCurrentInstance());
+            instance.removeOnOffResponse(FacesContext.getCurrentInstance());
         }
         Instance.remove();
     }
@@ -323,7 +325,7 @@ public class AsyncResponse {
      * no-op instances.</p>
      */
     
-    public void installNoOpResponse(FacesContext context) {
+    public void installOnOffResponse(FacesContext context) {
         origResponse = context.getExternalContext().getResponse();
         context.getExternalContext().setResponse(getNoOpResponse(origResponse));
     }
@@ -334,37 +336,44 @@ public class AsyncResponse {
      * their original instances.</p>
      */
     
-    public void removeNoOpResponse(FacesContext context) {
+    public void removeOnOffResponse(FacesContext context) {
         if (null != origResponse) {
             context.getExternalContext().setResponse(origResponse);
             origResponse = null;
         }
+        noOpResponse = null;
     }
     
-    private Object getNoOpResponse(Object orig) {
-        Object result = null;
-        if (orig instanceof HttpServletResponse) {
-            result = new NoOpResponseWrapper((HttpServletResponse)orig);
-        }
-        else {
-            try {
-                Method getPortletOutputStream =
-                        orig.getClass().getMethod("getPortletOutputStream",
-                        (Class []) null);
-                if (null == getPortletOutputStream) {
-                    throw new FacesException("Response is not a portlet or servlet");
-                }
-            } catch (NoSuchMethodException ex) {
-                throw new FacesException("Response is not a portlet or servlet",ex);
-            } catch (IllegalArgumentException ex) {
-                throw new FacesException("Response is not a portlet or servlet", ex);
-            } catch (SecurityException ex) {
-                throw new FacesException("Response is not a portlet or servlet", ex);
-            } 
-            // PENDING(edburns): support portlet
-            throw new UnsupportedOperationException();
+
+    public boolean isOnOffResponseEnabled() {
+        boolean result = false;
+        if (null != this.noOpResponse) {
+            result = this.noOpResponse.isEnabled();
         }
         return result;
+    }
+
+    public void setOnOffResponseEnabled(boolean newValue) {
+        if (null != this.noOpResponse) {
+            this.noOpResponse.setEnabled(newValue);
+        }
+    }
+    
+    private OnOffResponseWrapper noOpResponse = null;
+    
+    private Object getNoOpResponse(Object orig) {
+        
+        if (null == noOpResponse) {
+            if (orig instanceof HttpServletResponse) {
+                noOpResponse = new OnOffResponseWrapper((HttpServletResponse)orig);
+                noOpResponse.setEnabled(false);
+            }
+            else {
+                // PENDING(edburns): support portlet
+                throw new UnsupportedOperationException();
+            }
+        }
+        return noOpResponse;
     }
     
     public static final String FACES_PREFIX = "com.sun.faces.avatar.";
@@ -421,25 +430,149 @@ public class AsyncResponse {
         
     }
 
-    private static class NoOpResponseWrapper extends HttpServletResponseWrapper {
-        public NoOpResponseWrapper(HttpServletResponse orig) {
+    /**
+     * <p>An HttpServletResponseWrapper that can be enabled or disabled
+     * with respect to the methods that deal with the writing of contents
+     * to the response.  This is necessary to avoid sending content 
+     * that appears outside of the <f:view> tag to the Ajax response.</p>
+     */
+    private static class OnOffResponseWrapper extends HttpServletResponseWrapper {
+        public OnOffResponseWrapper(HttpServletResponse orig) {
             super(orig);
-        }
-
-        public int getBufferSize() {
-            return 0;
-        }
-
-        public void flushBuffer() throws IOException {
-        }
+        }        
         
         private ServletOutputStream noOpServletOutputStream = null;
 
         public ServletOutputStream getOutputStream() throws IOException {
             if (null == noOpServletOutputStream) {
+                // We implement *all* the methods of ServetOutputStream that
+                // could possibly cause output.  This is because we cannot count
+                // on the superclass behavior, so we need to guarantee that 
+                // nothing is written unlis our outer class is enabled.
                 noOpServletOutputStream = new ServletOutputStream() {
-                    public void write(int c) throws IOException {
+                    
+                    ServletOutputStream out = 
+                            OnOffResponseWrapper.this.getResponse().getOutputStream();
+                    
+                    public void println(String s) throws IOException {
+                        if (OnOffResponseWrapper.this.isEnabled()) {
+                            out.println(s);
+                        }
                     }
+
+                    public void print(String s) throws IOException {
+                        if (OnOffResponseWrapper.this.isEnabled()) {
+                            out.print(s);
+                        }
+                    }
+
+                    public void write(byte[] b, int off, int len) throws IOException {
+                        if (OnOffResponseWrapper.this.isEnabled()) {
+                            out.write(b, off, len);
+                        }
+                    }
+
+                    public void write(byte[] b) throws IOException {
+                        if (OnOffResponseWrapper.this.isEnabled()) {
+                            out.write(b);
+                        }
+                    }
+
+                    public void write(int b) throws IOException {
+                        if (OnOffResponseWrapper.this.isEnabled()) {
+                            out.write(b);
+                        }
+                    }
+
+                    public void println(int i) throws IOException {
+                        if (OnOffResponseWrapper.this.isEnabled()) {
+                            out.println(i);
+                        }
+                    }
+
+                    public void print(int i) throws IOException {
+                        if (OnOffResponseWrapper.this.isEnabled()) {
+                            out.print(i);
+                        }
+                    }
+
+                    public void print(boolean b) throws IOException {
+                        if (OnOffResponseWrapper.this.isEnabled()) {
+                            out.print(b);
+                        }
+                    }
+
+                    public void println(boolean b) throws IOException {
+                        if (OnOffResponseWrapper.this.isEnabled()) {
+                            out.println(b);
+                        }
+                    }
+
+                    public void print(long b) throws IOException {
+                        if (OnOffResponseWrapper.this.isEnabled()) {
+                            out.print(b);
+                        }
+                    }
+
+                    public void println(long b) throws IOException {
+                        if (OnOffResponseWrapper.this.isEnabled()) {
+                            out.println(b);
+                        }
+                    }
+
+                    public void print(double b) throws IOException {
+                        if (OnOffResponseWrapper.this.isEnabled()) {
+                            out.print(b);
+                        }
+                    }
+
+                    public void println(double b) throws IOException {
+                        if (OnOffResponseWrapper.this.isEnabled()) {
+                            out.println(b);
+                        }
+                    }
+
+                    public void print(char b) throws IOException {
+                        if (OnOffResponseWrapper.this.isEnabled()) {
+                            out.print(b);
+                        }
+                    }
+
+                    public void println(char b) throws IOException {
+                        if (OnOffResponseWrapper.this.isEnabled()) {
+                            out.println(b);
+                        }
+                    }
+
+                    public void print(float b) throws IOException {
+                        if (OnOffResponseWrapper.this.isEnabled()) {
+                            out.print(b);
+                        }
+                    }
+
+                    public void println(float b) throws IOException {
+                        if (OnOffResponseWrapper.this.isEnabled()) {
+                            out.println(b);
+                        }
+                    }
+                    public void close() throws IOException {
+                        if (OnOffResponseWrapper.this.isEnabled()) {
+                            out.close();
+                        }
+                    }
+
+                    public void flush() throws IOException {
+                        if (OnOffResponseWrapper.this.isEnabled()) {
+                            out.flush();
+                        }
+                    }
+
+                    public void println() throws IOException {
+                        if (OnOffResponseWrapper.this.isEnabled()) {
+                            out.println();
+                        }
+                    }
+                    
                 };
             }
             return noOpServletOutputStream;
@@ -449,19 +582,132 @@ public class AsyncResponse {
 
         public PrintWriter getWriter() throws IOException {
             if (null == noOpPrintWriter) {
+                // We implement *all* the methods of PrintWriter that
+                // could possibly cause output.  This is because we cannot count
+                // on the superclass behavior, so we need to guarantee that 
+                // nothing is written unlis our outer class is enabled.
                 noOpPrintWriter = new PrintWriter(new Writer() {
-                    public void write(char[] cbuf, int off, int len) {}
-                    public void flush() {}
-                    public void close() {}
+                    
+                    private PrintWriter writer = 
+                            OnOffResponseWrapper.this.getResponse().getWriter();
+                    
+                    
+                    public void write(String str) throws IOException {
+                        if (OnOffResponseWrapper.this.isEnabled()) {
+                            writer.write(str);
+                        }
+                    }
+
+                    public void write(char[] cbuf) throws IOException {
+                        if (OnOffResponseWrapper.this.isEnabled()) {
+                            writer.write(cbuf);
+                        }
+                    }
+
+                    public Writer append(char c) throws IOException {
+                        if (OnOffResponseWrapper.this.isEnabled()) {
+                            writer.append(c);
+                        }
+                        return this;
+                    }
+
+                    public Writer append(CharSequence csq, int start, int end) throws IOException {
+                        if (OnOffResponseWrapper.this.isEnabled()) {
+                            writer.append(csq, start, end);
+                        }
+                        return this;
+                    }
+
+                    public void write(char[] cbuf, int off, int len) throws IOException {
+                        if (OnOffResponseWrapper.this.isEnabled()) {
+                            writer.write(cbuf, off, len);
+                        }
+                    }
+
+                    public Writer append(CharSequence csq) throws IOException {
+                        if (OnOffResponseWrapper.this.isEnabled()) {
+                            writer.append(csq);
+                        }
+                        return this;
+                    }
+
+                    public void write(String str, int off, int len) throws IOException {
+                        if (OnOffResponseWrapper.this.isEnabled()) {
+                            writer.write(str, off, len);
+                        }
+                    }
+
+                    public void write(int c) throws IOException {
+                        if (OnOffResponseWrapper.this.isEnabled()) {
+                            writer.write(c);
+                        }
+                        
+                    }
+
+                    public void close() throws IOException {
+                        if (OnOffResponseWrapper.this.isEnabled()) {
+                            writer.close();
+                        }
+                    }
+
+                    public void flush() throws IOException {
+                        if (OnOffResponseWrapper.this.isEnabled()) {
+                            writer.flush();
+                        }
+                        
+                    }
+                    
                 });
             }
             return noOpPrintWriter;
         }
 
+        private boolean enabled;
+
+        public boolean isEnabled() {
+            return this.enabled;
+        }
+
+        public void setEnabled(boolean enabled) {
+            this.enabled = enabled;
+        }
+
+        public void setResponse(ServletResponse response) {
+            // No-op.
+        }
+
+        public int getBufferSize() {
+            int result = 0;
+            if (this.isEnabled()) {
+                result = getResponse().getBufferSize();
+            }
+            return result;
+        }
+
+        public void flushBuffer() throws IOException {
+            if (this.isEnabled()) {
+                getResponse().flushBuffer();
+            }
+        }
+
+        public boolean isCommitted() {
+            boolean result = false;
+            if (this.isEnabled()) {
+                result = getResponse().isCommitted();
+            }
+            return result;
+        }
+
         public void reset() {
+            if (this.isEnabled()) {
+                getResponse().reset();
+            }
         }
 
         public void resetBuffer() {
+            if (this.isEnabled()) {
+                getResponse().resetBuffer();
+            }
         }
         
     }

@@ -33,8 +33,9 @@ public class TestBean {
     }
 
     public void changeText(ActionEvent e) {
-	setText("event: currentTimeMillis " + System.currentTimeMillis() +
-                " phase for event: " + e.getPhaseId().toString());
+	setText("Received ActionEvent at: currentTimeMillis " + System.currentTimeMillis() +
+                " phase for event: " + e.getPhaseId().toString() + 
+                " source of event: " + e.getComponent().getId());
     }
 
     public String getText() {

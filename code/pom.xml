@@ -132,6 +132,7 @@
 	<module>run-time/samples/cardemo</module>
 	<module>run-time/samples/j1</module>
 	<module>run-time/samples/simple-events</module>
+	<module>run-time/samples/simple-partial-update</module>
       </modules>
     </profile>
     <profile>
@@ -164,6 +165,16 @@
 	<module>run-time/common</module>
 	<module>run-time/avatar</module>
 	<module>run-time/samples/simple-events</module>
+      </modules>
+    </profile>
+
+    <profile>
+      <id>simple-partial-update</id>
+      <modules>
+	<module>maven/master-pom</module>
+	<module>run-time/common</module>
+	<module>run-time/avatar</module>
+	<module>run-time/samples/simple-partial-update</module>
       </modules>
     </profile>
 

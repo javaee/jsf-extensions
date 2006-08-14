@@ -9,6 +9,7 @@
 
 package com.sun.faces.extensions.avatar.lifecycle;
 
+import com.sun.faces.extensions.avatar.components.PartialTraversalViewRoot;
 import java.io.IOException;
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
@@ -67,6 +68,13 @@ public class PartialTraversalLifecycle extends Lifecycle {
 
 
     public void execute(FacesContext context) throws FacesException {
+        if (AsyncResponse.isAjaxRequest()) {
+            AsyncResponse async = AsyncResponse.getInstance();
+            async.installOnOffResponse(context);
+            // Allow writing to the response during the "execute"
+            // portion of the lifecycle.
+            async.setOnOffResponseEnabled(true);
+        }
         parent.execute(context);
     }
     
@@ -76,19 +84,25 @@ public class PartialTraversalLifecycle extends Lifecycle {
             return;
         }
         AsyncResponse async = AsyncResponse.getInstance();
-        UIViewRoot root = context.getViewRoot();
+        PartialTraversalViewRoot root =
+                (PartialTraversalViewRoot) context.getViewRoot();
         ResponseWriter writer = null;
         String state = null;
+        boolean isRenderAll = async.isRenderAll();
 
         try {
-            async.installNoOpResponse(context);
 
+            // Don't allow any content between now and the call
+            // to PartialTraversalViewRoot.encodeAll() to be written to the response.
+            async.setOnOffResponseEnabled(false);
             parent.render(context);
             
+            if (isRenderAll) {
+                root.encodePartialResponseEnd(context);
+            }
+            
             // If we rendered some content
-            if (!async.getRenderSubtrees().isEmpty()) {
-                // gain access once more to the AxaxResponseWriter.  At this point,
-                // the writer does not need to be installed on the FacesContext.
+            if (!async.isRenderNone()) {
                 writer = async.getResponseWriter();
                 writer.startElement("state", root);
                 state = async.getViewState(context);
@@ -102,7 +116,7 @@ public class PartialTraversalLifecycle extends Lifecycle {
             // PENDING edburns
         }
         finally {
-            async.removeNoOpResponse(context);
+            async.removeOnOffResponse(context);
             AsyncResponse.clearInstance();
         }
         

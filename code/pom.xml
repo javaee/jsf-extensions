@@ -145,6 +145,7 @@
     <profile>
       <id>samples</id>
       <modules>
+	<module>maven/master-pom</module>
 	<module>run-time/avatar</module>
 	<module>run-time/samples/j1</module>
 	<module>run-time/samples/cardemo</module>

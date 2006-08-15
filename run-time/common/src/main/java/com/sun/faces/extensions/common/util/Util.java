@@ -25,7 +25,9 @@
 
 package com.sun.faces.extensions.common.util;
 
+import java.util.Iterator;
 import java.util.List;
+import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.component.UIComponent;
@@ -137,4 +139,25 @@ public class Util {
        RenderKit curRenderKit = fact.getRenderKit(context, renderKitId);
        return curRenderKit;
     }
+    
+    public static boolean prefixViewTraversal(FacesContext context,
+					      UIComponent root,
+					      TreeTraversalCallback action) throws FacesException {
+	boolean keepGoing = false;
+	if (keepGoing = action.takeActionOnNode(context, root)) {
+	    Iterator<UIComponent> kids = root.getFacetsAndChildren();
+	    while (kids.hasNext() && keepGoing) {
+		keepGoing = prefixViewTraversal(context, 
+						kids.next(), 
+						action);
+	    }
+	}
+	return keepGoing;
+    }
+
+    public static interface TreeTraversalCallback {
+	public boolean takeActionOnNode(FacesContext context, 
+					UIComponent curNode) throws FacesException;
+    }
+    
 }

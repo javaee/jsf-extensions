@@ -481,7 +481,12 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
 	
 	// guarantee our header
 	this.options.requestHeaders.push(gPartial);
-	this.options.requestHeaders.push('true');
+	if (this.options.immediate) {
+	    this.options.requestHeaders.push('immediate');
+	}
+	else {
+	    this.options.requestHeaders.push('true');
+	}
 	
 	// add methodName
 	if (this.options.methodName) {

@@ -314,7 +314,32 @@ public class AsyncResponse {
         }
         return result;
     }
+
+    /**
+     * <p>Return <code>true</code> if and only if the request headers include
+     * an entry for {@link #PARTIAL_HEADER} and the value for that header is 
+     * <code>immediate</code>.  Otherwise return <code>false</code>.
+     */
     
+    public static boolean isImmediateAjaxRequest() {
+        ExternalContext ext = FacesContext.getCurrentInstance().getExternalContext();
+        Map<String, Object> requestMap = ext.getRequestMap();
+        final String immediateFlag = FACES_PREFIX + "IsImmediate";
+        if (requestMap.containsKey(immediateFlag)) {
+            return true;
+        }
+
+        Map<String, String> p = ext.getRequestHeaderMap();
+        String partialValue = p.get(PARTIAL_HEADER);
+        boolean result = false;
+        if (null != partialValue) {
+            result = partialValue.equalsIgnoreCase("immediate");
+        }
+        if (result) {
+            requestMap.put(immediateFlag, Boolean.TRUE);
+        }
+        return result;
+    }    
     private Object origResponse = null;
     
     /**

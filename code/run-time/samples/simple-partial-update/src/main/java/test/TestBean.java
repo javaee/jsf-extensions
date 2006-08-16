@@ -5,11 +5,9 @@
 
 package test;
 
-import com.sun.faces.extensions.avatar.lifecycle.AsyncResponse;
-import java.util.ArrayList;
-import java.util.List;
+import javax.faces.component.ActionSource;
+import javax.faces.component.ContextCallback;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIData;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
@@ -44,6 +42,24 @@ public class TestBean {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    /**
+     * Getter for property immediateButtonImmediate.
+     * @return Value of property immediateButtonImmediate.
+     */
+    public boolean isImmediateButtonIsImmediate() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        final boolean [] result = new boolean[1];
+        result[0] = false;
+        
+        context.getViewRoot().invokeOnComponent(context, "immediate", new ContextCallback() {
+            public void invokeContextCallback(FacesContext facesContext, UIComponent comp) {
+                result[0] = ((ActionSource)comp).isImmediate();
+            }
+        });
+
+        return result[0];
     }
     
    

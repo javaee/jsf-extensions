@@ -347,7 +347,8 @@ Faces.ViewState.prototype = {
 		    if (p[1].constructor != Array) {
 			p[1] = [p[1]];
 		    }
-		    if (this[p[0]]) { 
+		    // Don't concatenate the viewState.
+		    if (this[p[0]] && -1 == gViewState.indexOf(p[0])) { 
 			this[p[0]] = this[p[0]].concat(p[1]); 
 		    }
 		    else {
@@ -481,7 +482,12 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
 	
 	// guarantee our header
 	this.options.requestHeaders.push(gPartial);
-	this.options.requestHeaders.push('true');
+	if (this.options.immediate) {
+	    this.options.requestHeaders.push('immediate');
+	}
+	else {
+	    this.options.requestHeaders.push('true');
+	}
 	
 	// add methodName
 	if (this.options.methodName) {

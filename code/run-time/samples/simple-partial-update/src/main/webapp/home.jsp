@@ -42,11 +42,37 @@
 
 </tr>
 
+<tr>
+
+<td>Same as above but with <code>immediate</code> set to
+<code>true</code> <i>for this request only</i>.</td>
+
+<td><h:commandButton id="immediate" actionListener="#{testBean.changeText}"
+    value="submit immediate"/>
+</td>
+
+</tr>
+
+<tr>
+
+<td>Value of <code>immediate</code> property of "submit immediate" button.
+</td>
+
+<td><code><h:outputText value="#{testBean.immediateButtonIsImmediate}" /></code>
+</td>
+
+</tr>
+
+
 </table>
             
             </h:form>
   <script type='text/javascript'>
     DynaFaces.installDeferredAjaxTransaction($('button'), 'click'); 
+    DynaFaces.installDeferredAjaxTransaction($('immediate'), 'click', { 
+        execute: "immediate",
+        immediate: true 
+    }); 
   </script>
 
 

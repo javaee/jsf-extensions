@@ -31,13 +31,17 @@ package com.sun.faces.extensions.avatar.components;
 
 import com.sun.faces.extensions.avatar.event.EventParser;
 import com.sun.faces.extensions.avatar.lifecycle.AsyncResponse;
+import com.sun.faces.extensions.common.util.Util;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javax.faces.FacesException;
 import javax.faces.application.FacesMessage;
+import javax.faces.component.ActionSource;
 import javax.faces.component.ContextCallback;
+import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.UIViewRootCopy;
@@ -129,6 +133,47 @@ import javax.servlet.http.HttpServletResponse;
 public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializable {
     
     public PartialTraversalViewRoot() {
+        modifiedComponents = new ArrayList<UIComponent>();
+
+        markImmediate = new Util.TreeTraversalCallback() {
+            public boolean takeActionOnNode(FacesContext context, UIComponent comp) throws FacesException {
+                if (comp instanceof ActionSource) {
+                    ActionSource as = (ActionSource)comp;
+                    if (!as.isImmediate()) {
+                        as.setImmediate(true);
+                        modifiedComponents.add(comp);
+                    }
+                } else if (comp instanceof EditableValueHolder) {
+                    EditableValueHolder ev = (EditableValueHolder)comp;
+                    if (!ev.isImmediate()) {
+                        ev.setImmediate(true);
+                        modifiedComponents.add(comp);
+                    }
+                }
+
+                return true;
+            }
+
+        };
+    }
+    
+    private transient List<UIComponent> modifiedComponents;
+    
+    private transient Util.TreeTraversalCallback markImmediate;
+    
+    public void postExecuteCleanup(FacesContext context) {
+        for (UIComponent comp : modifiedComponents) {
+            if (comp instanceof ActionSource) {
+                ActionSource as = (ActionSource)comp;
+                assert(as.isImmediate());
+                as.setImmediate(false);
+            } else if (comp instanceof EditableValueHolder) {
+                EditableValueHolder ev = (EditableValueHolder)comp;
+                assert(ev.isImmediate());
+                ev.setImmediate(false);
+            }
+        }
+        modifiedComponents.clear();
     }
     
     public void processDecodes(FacesContext context) {
@@ -137,11 +182,24 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
             super.processDecodes(context);
             return;
         }
+        AsyncResponse async = AsyncResponse.getInstance();
+        modifiedComponents.clear();
+        
+        // If this is an immediate "render all" request and there are
+        // no explicit execute subtrees and the user didn't request
+        // execute: none...
+        if (async.isImmediateAjaxRequest() && async.isRenderAll() &&
+            async.getExecuteSubtrees().isEmpty() &&
+            !async.isExecuteNone()) {
+            // Traverse the entire view and mark every ActionSource or
+            // EditableValueHolder as immediate.
+            Util.prefixViewTraversal(context, this, markImmediate);
+        }
+        
         invokedCallback = invokeContextCallbackOnSubtrees(context,
                 new PhaseAwareContextCallback(PhaseId.APPLY_REQUEST_VALUES));
         
         // Queue any events for this request in a context aware manner
-        AsyncResponse async = AsyncResponse.getInstance();
         ResponseWriter writer = null;
         try {
             writer = async.getResponseWriter();
@@ -384,15 +442,18 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
                 ConverterException converterException = null;
                 
                 if (curPhase == PhaseId.APPLY_REQUEST_VALUES) {
+                    // If the user requested an immediate request
+                    // Make sure to set the immediate flag.
+                    if (AsyncResponse.isImmediateAjaxRequest()) {
+                        PartialTraversalViewRoot.this.markImmediate.takeActionOnNode(facesContext, comp);
+                    }
+
                     comp.processDecodes(facesContext);
-                }
-                else if (curPhase == PhaseId.PROCESS_VALIDATIONS) {
+                } else if (curPhase == PhaseId.PROCESS_VALIDATIONS) {
                     comp.processValidators(facesContext);
-                }
-                else if (curPhase == PhaseId.UPDATE_MODEL_VALUES) {
+                } else if (curPhase == PhaseId.UPDATE_MODEL_VALUES) {
                     comp.processUpdates(facesContext);
-                }
-                else if (curPhase == PhaseId.RENDER_RESPONSE) {
+                } else if (curPhase == PhaseId.RENDER_RESPONSE) {
                     ResponseWriter writer = AsyncResponse.getInstance().getResponseWriter();
 
                     writer.startElement("render", comp);

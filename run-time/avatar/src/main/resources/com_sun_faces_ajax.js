@@ -347,7 +347,8 @@ Faces.ViewState.prototype = {
 		    if (p[1].constructor != Array) {
 			p[1] = [p[1]];
 		    }
-		    if (this[p[0]]) { 
+		    // Don't concatenate the viewState.
+		    if (this[p[0]] && -1 == gViewState.indexOf(p[0])) { 
 			this[p[0]] = this[p[0]].concat(p[1]); 
 		    }
 		    else {

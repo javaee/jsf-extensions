@@ -75,7 +75,12 @@ public class PartialTraversalLifecycle extends Lifecycle {
             // portion of the lifecycle.
             async.setOnOffResponseEnabled(true);
         }
-        parent.execute(context);
+        try {
+            parent.execute(context);
+        }
+        finally {
+            ((PartialTraversalViewRoot)context.getViewRoot()).postExecuteCleanup(context);
+        }
     }
     
     public void render(FacesContext context) throws FacesException {

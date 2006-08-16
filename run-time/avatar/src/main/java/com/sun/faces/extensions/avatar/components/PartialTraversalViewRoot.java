@@ -34,6 +34,7 @@ import com.sun.faces.extensions.avatar.lifecycle.AsyncResponse;
 import com.sun.faces.extensions.common.util.Util;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javax.faces.FacesException;
@@ -132,6 +133,47 @@ import javax.servlet.http.HttpServletResponse;
 public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializable {
     
     public PartialTraversalViewRoot() {
+        modifiedComponents = new ArrayList<UIComponent>();
+
+        markImmediate = new Util.TreeTraversalCallback() {
+            public boolean takeActionOnNode(FacesContext context, UIComponent comp) throws FacesException {
+                if (comp instanceof ActionSource) {
+                    ActionSource as = (ActionSource)comp;
+                    if (!as.isImmediate()) {
+                        as.setImmediate(true);
+                        modifiedComponents.add(comp);
+                    }
+                } else if (comp instanceof EditableValueHolder) {
+                    EditableValueHolder ev = (EditableValueHolder)comp;
+                    if (!ev.isImmediate()) {
+                        ev.setImmediate(true);
+                        modifiedComponents.add(comp);
+                    }
+                }
+
+                return true;
+            }
+
+        };
+    }
+    
+    private transient List<UIComponent> modifiedComponents;
+    
+    private transient Util.TreeTraversalCallback markImmediate;
+    
+    public void postExecuteCleanup(FacesContext context) {
+        for (UIComponent comp : modifiedComponents) {
+            if (comp instanceof ActionSource) {
+                ActionSource as = (ActionSource)comp;
+                assert(as.isImmediate());
+                as.setImmediate(false);
+            } else if (comp instanceof EditableValueHolder) {
+                EditableValueHolder ev = (EditableValueHolder)comp;
+                assert(ev.isImmediate());
+                ev.setImmediate(false);
+            }
+        }
+        modifiedComponents.clear();
     }
     
     public void processDecodes(FacesContext context) {
@@ -141,6 +183,7 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
             return;
         }
         AsyncResponse async = AsyncResponse.getInstance();
+        modifiedComponents.clear();
         
         // If this is an immediate "render all" request and there are
         // no explicit execute subtrees and the user didn't request
@@ -148,20 +191,8 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
         if (async.isImmediateAjaxRequest() && async.isRenderAll() &&
             async.getExecuteSubtrees().isEmpty() &&
             !async.isExecuteNone()) {
-            // Traverse the entire view and mark every ActionSource or 
+            // Traverse the entire view and mark every ActionSource or
             // EditableValueHolder as immediate.
-            Util.TreeTraversalCallback markImmediate = new Util.TreeTraversalCallback() {
-                public boolean takeActionOnNode(FacesContext context, UIComponent comp) throws FacesException {
-                    if (comp instanceof ActionSource) {
-                        ((ActionSource)comp).setImmediate(true);
-                    } else if (comp instanceof EditableValueHolder) {
-                        ((EditableValueHolder)comp).setImmediate(true);
-                    }
-                    
-                    return true;
-                }
-                
-            };
             Util.prefixViewTraversal(context, this, markImmediate);
         }
         
@@ -414,11 +445,7 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
                     // If the user requested an immediate request
                     // Make sure to set the immediate flag.
                     if (AsyncResponse.isImmediateAjaxRequest()) {
-                        if (comp instanceof ActionSource) {
-                            ((ActionSource)comp).setImmediate(true);
-                        } else if (comp instanceof EditableValueHolder) {
-                            ((EditableValueHolder)comp).setImmediate(true);
-                        }
+                        PartialTraversalViewRoot.this.markImmediate.takeActionOnNode(facesContext, comp);
                     }
 
                     comp.processDecodes(facesContext);

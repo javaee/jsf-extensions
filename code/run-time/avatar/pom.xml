@@ -49,7 +49,25 @@
 	     </goals>
 	   </execution>
 	 </executions>
-       </plugin>   
+       </plugin>
+       <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>add-source</id>
+            <phase>process-sources</phase>
+            <goals>
+              <goal>add-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>target/jsf-api</source>
+              </sources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
        <plugin>
 	 <artifactId>maven-antrun-plugin</artifactId>
 	 <executions>
@@ -91,10 +109,6 @@
                  <replace file="target/jsf-api/javax/faces/component/UIViewRoot.java" token="private void broadcastEvents" value="protected void broadcastEvents"/>
                  <move file="target/jsf-api/javax/faces/component/UIViewRoot.java" 
                        tofile="target/jsf-api/javax/faces/component/UIViewRootCopy.java" />
-                 <javac srcdir="target/jsf-api" 
-                        classpathref="maven.compile.classpath"
-                        destdir="target/classes"
-                        debug="on" />
 	       </tasks>
 	     </configuration>
 	     <goals>

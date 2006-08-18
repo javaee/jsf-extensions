@@ -34,6 +34,18 @@
 
 <tr>
 
+<td>Text field with <code>required</code> = <code>true</code>.
+</td>
+
+<td><h:inputText id="required" required="true" 
+                 value="#{testBean.requiredText}"/>
+</td>
+
+</tr>
+
+
+<tr>
+
 <td>Button with actionListener that changes <code>&#35;{testBean.text}</code></td>
 
 <td><h:commandButton id="button" actionListener="#{testBean.changeText}"
@@ -44,7 +56,21 @@
 
 <tr>
 
-<td>Same as above but with <code>immediate</code> set to
+<td>Text field with <code>required</code> = <code>true</code> and <code>immediate</code> = <code>true</code>.
+</td>
+
+<td><h:inputText id="requiredImmediate" 
+                 value="#{testBean.requiredImmediateText}"
+                 required="true" immediate="true" />
+</td>
+
+</tr>
+
+
+
+<tr>
+
+<td>Button same as above but with <code>immediate</code> set to
 <code>true</code> <i>for this request only</i>.</td>
 
 <td><h:commandButton id="immediate" actionListener="#{testBean.changeText}"

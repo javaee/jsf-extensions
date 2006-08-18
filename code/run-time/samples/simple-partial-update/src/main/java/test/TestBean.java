@@ -61,6 +61,48 @@ public class TestBean {
 
         return result[0];
     }
+
+    /**
+     * Holds value of property requiredText.
+     */
+    private String requiredText;
+
+    /**
+     * Getter for property requiredText.
+     * @return Value of property requiredText.
+     */
+    public String getRequiredText() {
+        return this.requiredText;
+    }
+
+    /**
+     * Setter for property requiredText.
+     * @param requiredText New value of property requiredText.
+     */
+    public void setRequiredText(String requiredText) {
+        this.requiredText = requiredText;
+    }
+
+    /**
+     * Holds value of property requiredImmediateText.
+     */
+    private String requiredImmediateText;
+
+    /**
+     * Getter for property requiredImmediateText.
+     * @return Value of property requiredImmediateText.
+     */
+    public String getRequiredImmediateText() {
+        return this.requiredImmediateText;
+    }
+
+    /**
+     * Setter for property requiredImmediateText.
+     * @param requiredImmediateText New value of property requiredImmediateText.
+     */
+    public void setRequiredImmediateText(String requiredImmediateText) {
+        this.requiredImmediateText = requiredImmediateText;
+    }
     
    
     

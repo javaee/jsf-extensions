@@ -89,6 +89,15 @@
 
 </tr>
 
+<tr>
+
+<td>Messages
+</td>
+
+<td><h:messages />
+</td>
+</tr>
+
 
 </table>
             

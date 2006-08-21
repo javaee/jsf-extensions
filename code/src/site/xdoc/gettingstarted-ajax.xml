@@ -8,7 +8,9 @@
   <body>
 
 <p>This mini-guide will take you through the steps to get started using
-JavaServer(tm) Faces Dynamic Updating (DynaFaces) with JSP.  We'll build a </p>
+JavaServer(tm) Faces Dynamic Updating (DynaFaces) with JSP.  We'll build
+a simple application login page with an ajax enabled button to check if
+your chosen userid is available.</p>
 
     <section name="What you need to know before doing the steps in this guide">
 
@@ -71,7 +73,7 @@ concept).</p>
 
 <br />
 
-	<ol>
+	<ol type="a">
 
 	  <li><p>Set up the web.xml.</p>
 
@@ -136,7 +138,11 @@ DynaFaces uses for loading JavaScript resources.</p>
 
     </section>
 
-    <section name="Application Configuration">
+    <section name="Creating the Application">
+
+    <p>In this section, we will create a very simple logon form with an
+    extra button to check, via ajax, whether your chosen userid is
+    available or not.</p>
 
     </section>
 

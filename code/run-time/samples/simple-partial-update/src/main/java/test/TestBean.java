@@ -18,7 +18,7 @@ import javax.faces.event.ActionEvent;
 public class TestBean {
     
     
-    private String text;
+    private String text = "initial value";
     
     
     
@@ -53,7 +53,7 @@ public class TestBean {
         final boolean [] result = new boolean[1];
         result[0] = false;
         
-        context.getViewRoot().invokeOnComponent(context, "immediate", new ContextCallback() {
+        context.getViewRoot().invokeOnComponent(context, "immediateButton", new ContextCallback() {
             public void invokeContextCallback(FacesContext facesContext, UIComponent comp) {
                 result[0] = ((ActionSource)comp).isImmediate();
             }

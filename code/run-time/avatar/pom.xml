@@ -97,9 +97,9 @@
                    PartialTraversalViewRoot can extend it.
 
                  -->
-                 <mkdir dir="target/jsf-api" />
-                 <mkdir dir="target/classes" />
-                 <unjar dest="target/jsf-api" src="${settings.localRepository}/javax/faces/jsf-api/1.2/jsf-api-1.2-sources.jar">
+                 <mkdir dir="${project.basedir}/target/jsf-api" />
+                 <mkdir dir="${project.basedir}/target/classes" />
+                 <unjar dest="${project.basedir}/target/jsf-api" src="${settings.localRepository}/javax/faces/jsf-api/1.2/jsf-api-1.2-sources.jar">
                    <patternset>
                      <include name="**/UIViewRoot.java" />
                    </patternset>

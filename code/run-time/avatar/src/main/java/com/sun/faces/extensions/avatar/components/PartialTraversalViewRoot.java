@@ -357,10 +357,19 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
     
     
     protected void broadcastEvents(FacesContext context, PhaseId phaseId) {
+        String postViewId, preViewId = context.getViewRoot().getViewId();
         // Broadcast the regular FacesEvents
         super.broadcastEvents(context, phaseId);
         // Do our extra special MethodExpression invocation
         EventParser.invokeComponentMethodCallbackForPhase(context, phaseId);
+        postViewId = context.getViewRoot().getViewId();
+        
+        // If the view id changed as result of the broadcastEvents...
+        if (!postViewId.equals(preViewId)) {
+            // Advise the browser to re-render the entire view.
+            AsyncResponse.getInstance().setRenderAll(true);
+        }
+        
     }    
     
     private boolean invokeContextCallbackOnSubtrees(FacesContext context, 

@@ -196,14 +196,32 @@ public class AsyncResponse {
         return result;
     }
     
-    public boolean isRenderAll() {
-        boolean result = false;
-        final String RENDER_ALL = FACES_PREFIX + "RenderAll";
+    
+    public void setRenderAll(boolean newValue) {
         ExternalContext extContext = FacesContext.getCurrentInstance().getExternalContext();
         Map<String, Object> requestMap = extContext.getRequestMap();
+        if (newValue) {
+            requestMap.put(RENDER_ALL, Boolean.TRUE);
+        }
+        else {
+            requestMap.put(RENDER_ALL, Boolean.FALSE);
+        }
 
-        if (requestMap.containsKey(RENDER_ALL)) {
-            return true;
+    }
+    
+    public boolean isRenderAll() {
+        boolean result = false;
+        ExternalContext extContext = FacesContext.getCurrentInstance().getExternalContext();
+        Map<String, Object> requestMap = extContext.getRequestMap();
+        Boolean renderAllCache = null;
+
+        if (null != (renderAllCache = (Boolean) requestMap.get(RENDER_ALL))) {
+            if (renderAllCache.booleanValue()) {
+                return true;
+            }
+            else {
+                return false;
+            }
         }
         result = isAjaxRequest() && !isRenderNone() && getRenderSubtrees().isEmpty();
         if (result) {
@@ -407,6 +425,7 @@ public class AsyncResponse {
     public static final String METHOD_NAME_HEADER= FACES_PREFIX + "methodname";
     public static final String FACES_EVENT_HEADER= FACES_PREFIX + "facesevent";
     public static final String XJSON_HEADER= "X-JSON";
+    private static final String RENDER_ALL = FACES_PREFIX + "RenderAll";
     
     public static final String FACES_EVENT_CONTEXT_PARAM = "com.sun.faces.extensions.avatar.FacesEvents";
     

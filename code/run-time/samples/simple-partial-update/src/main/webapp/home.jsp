@@ -89,6 +89,7 @@ is simple and gets the point across.</p>
 
 <td><h:commandButton id="nonImmediateButton" 
     actionListener="#{testBean.changeText}"
+    onclick="DynaFaces.fireAjaxTransaction($('nonImmediateButton'), 'click'); return false;"
     value="submit"/>
 </td>
 
@@ -101,6 +102,7 @@ is simple and gets the point across.</p>
 
 <td><h:commandButton id="immediateButton" 
     actionListener="#{testBean.changeText}"
+    onclick="DynaFaces.fireAjaxTransaction(this, { execute: 'immediateButton', immediate: true }); return false;"
     value="submit immediate"/>
 </td>
 
@@ -208,16 +210,6 @@ performed as normal.
 </table>
             
             </h:form>
-  <script type='text/javascript'>
-    DynaFaces.installDeferredAjaxTransaction($('nonImmediateButton'), 'click'); 
-    DynaFaces.installDeferredAjaxTransaction($('immediateButton'), 'click', { 
-        execute: "immediateButton",
-        immediate: true 
-    }); 
-  </script>
-
-
-
 
   </body>
 </html>

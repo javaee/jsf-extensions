@@ -138,6 +138,7 @@
 	<module>run-time/samples/j1</module>
 	<module>run-time/samples/simple-events</module>
 	<module>run-time/samples/simple-partial-update</module>
+	<module>run-time/samples/dynafaces-getting-started</module>
       </modules>
     </profile>
     <profile>
@@ -158,6 +159,7 @@
 	<module>run-time/samples/jmaki</module>
 	<module>run-time/samples/simple-events</module>
 	<module>run-time/samples/simple-partial-update</module>
+	<module>run-time/samples/dynafaces-getting-started</module>
       </modules>
     </profile>
     <profile>

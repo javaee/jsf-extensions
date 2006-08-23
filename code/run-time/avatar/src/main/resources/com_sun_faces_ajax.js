@@ -134,7 +134,57 @@ Object.extend(Element, {
     var temp = document.createElement(tempTagName);
     var result = null;
     temp.id = d.id;
-    temp.innerHTML = src;
+
+    // If we are creating a head element...
+    if (-1 != d.tagName.indexOf("head") && d.tagName.length == 4) {
+	// Strip link elements from src.
+	if (-1 != src.indexOf("link")) {
+	    var 
+		linkStartEx = new RegExp("< *link.*>", "gi");
+	    var linkStart;
+	    while (null != (linkStart = linkStartEx.exec(src))) {
+		src = src.substring(0, linkStart.index) +
+		    src.substring(linkStartEx.lastIndex);
+		linkStartEx.lastIndex = 0;
+	    }
+	}
+
+	// Strip style elements from src
+	if (-1 != src.indexOf("style")) {
+	    var 
+		styleStartEx = new RegExp("< *style.*>", "gi"),
+		styleEndEx = new RegExp("< */ *style.*>", "gi");
+	    var styleStart, styleEnd;
+	    while (null != (styleStart = styleStartEx.exec(src))) {
+		styleEnd = styleEndEx.exec(src);
+		src = src.substring(0, styleStart.index) +
+		    src.substring(styleStartEx.lastIndex);
+		styleStartEx.lastIndex = 0;
+	    }
+	}
+
+	temp.innerHTML = src;
+
+	// clone all the link elements...
+	var i, links, styles;
+	links = d.getElementsByTagName("link");
+	if (links) {
+	    for (i = 0; i < links.length; i++) {
+		temp.appendChild(links[i].cloneNode(true));
+	    }
+	}
+	// then clone all the style elements.
+	styles = d.getElementsByTagName("style");
+	if (styles) {
+	    for (i = 0; i < styles.length; i++) {
+		temp.appendChild(styles[i].cloneNode(true));
+	    }
+	}
+    }
+    else {
+	temp.innerHTML = src;
+    }
+	    
     
     result = temp
     parent.replaceChild(temp, d);
@@ -155,12 +205,12 @@ Object.extend(Element, {
 	//      replace the current document's <body> with the contents.
 
         var 
-	    htmlStartEx = new RegExp("< *html\W*>", "gi"),
-	    htmlEndEx = new RegExp("< */ *html\W*>", "gi"),
-	    headStartEx = new RegExp("< *head\W*>", "gi"),
-	    headEndEx = new RegExp("< */ *head\W*>", "gi"),
-	    bodyStartEx = new RegExp("< *body\W*>", "gi"),
-	    bodyEndEx = new RegExp("< */ *body\W*>", "gi"),
+	    htmlStartEx = new RegExp("< *html.*>", "gi"),
+	    htmlEndEx = new RegExp("< */ *html.*>", "gi"),
+	    headStartEx = new RegExp("< *head.*>", "gi"),
+	    headEndEx = new RegExp("< */ *head.*>", "gi"),
+	    bodyStartEx = new RegExp("< *body.*>", "gi"),
+	    bodyEndEx = new RegExp("< */ *body.*>", "gi"),
 	    htmlStart, htmlEnd, headStart, headEnd, bodyStart, bodyEnd;
 	var srcHead = null, srcBody = null;
 	// find the current document's "body" element

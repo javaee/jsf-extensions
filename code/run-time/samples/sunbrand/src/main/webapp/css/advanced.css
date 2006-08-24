@@ -333,9 +333,7 @@ br.ifx {font-size:1px;line-height:0px;height:0px;display:none}
 
 /* g9 */
 div.g9{background:url("../im/bg_sunblue.gif") repeat-x left top #5382A1;margin:5px 10px 15px 10px}
-.g9 div.cornerTL{width:100%;background:url("../im/a2_corner_tl.gif") no-repeat top left;padding:0px}
 .g9 div.cornerTR{width:100%;background:url("../im/a2_corner_tr.gif") no-repeat top right;padding:0px}
-.g9 div.cornerBL{width:100%;background:url("../im/a2_corner_bl.gif") no-repeat bottom left;padding:0px}
 .g9 div.cornerBR{width:100%;background:url("../im/a2_corner_br.gif") no-repeat bottom right;padding:0px}
 .g9 table{height:40px}
 .g9 td.ques div{color:#FFF;padding:3px 5px 3px 20px}

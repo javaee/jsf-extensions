@@ -53,7 +53,7 @@ ul,ul li,ol,ol li{margin-left:9px;padding-left:0px}
 /* a2 */
 .a2w0 .a2{float:left}
 .a2w0 + table,.a2w0 + br,.a2w0 + div,.a2w0 + form > table{clear:both}
-.a2{background:#5885A4 url("../im/a2_bg_logo.gif") no-repeat;margin:3px 10px;float:none;min-width:780px;clear:both}
+.a2{background: url("../im/a2_bg_java_logo.png") no-repeat;margin:3px 10px;float:none;min-width:780px;clear:both}
 .browserSafari .a2w0{width:98%}
 .browserSafari .a2{width:100%}
 .a0v0 .a2{width:780px}

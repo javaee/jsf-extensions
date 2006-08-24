@@ -277,7 +277,6 @@ body.a0v1{width:auto}
 /* a2 same as defaut, but change a2_bg_logo.gif --> vnv1_bg_logo.gif */
 .a2w0 .a2{float:left}
 .a2w0 + table,.a2w0 + br,.a2w0 + div,.a2w0 + form > table{clear:both}
-.a2{background:#5885A4 url("../im/vnv1_bg_logo.gif") no-repeat;margin:3px 10px;float:none;min-width:780px;clear:both}
 .browserSafari .a2w0{width:98%}
 .browserSafari .a2{width:100%}
 .a0v0 .a2{width:780px}
@@ -287,9 +286,7 @@ body.a0v1{width:auto}
 .a0v0 .a2{_margin:3px 5px !important}/* iepc56 */
 #a2v7,#a2v7 .a2w4{min-width:400px}
 .a2 .a2w1,.a2 .a2w21,.a2 .a2w3,.a2 .a2w4{background-color:transparent}
-.a2 .a2w1{width:100%;background:url("../im/a2_corner_tl.gif") no-repeat top left;float:left}
 .a2 .a2w2{width:100%;background:url("../im/a2_corner_tr.gif") no-repeat top right;float:left}
-.a2	.a2w3{width:100%;background:url("../im/a2_corner_bl.gif") no-repeat bottom left;float:left}
 .a2 .a2w4{width:100%;background:url("../im/a2_corner_br.gif") no-repeat bottom right;float:left;min-width:780px}
 .a2 .tpclink:link,.a2 .tpclink:hover,.a2 .tpclink:active,.a2 .tpclink:visited {color:#fff;font-weight:bold;text-decoration:none;display:block;float:left}
 .a2topiclinks ul{margin:0px;padding-left:7px;float:left}
@@ -375,9 +372,7 @@ div#newsextra span.newslink{float:none}
 #vnv1v0 .vnv1topiclinks td {vertical-align:bottom}
 #vnv1v0 .vnv1search{padding:16px 10px 0px 10px}
 .vnv1{background:#35556B url("../im/vnv1_bg_logo.gif");margin:0px 10px 5px 10px;height:60px;min-width:780px}
-.vnv1 div.cornerTL{width:100%;height:60px;background:url("../im/a2_corner_tl.gif") no-repeat top left}
 .vnv1 div.cornerTR{width:100%;height:60px;background:url("../im/a2_corner_tr.gif") no-repeat top right}
-.vnv1 div.cornerBL{width:100%;height:60px;background:url("../im/a2_corner_bl.gif") no-repeat bottom left}
 .vnv1 div.cornerBR{width:100%;height:60px;background:url("../im/a2_corner_br.gif") no-repeat bottom right}
 .vnv1 .globalsearch{background:#A3B8CB;width:130px;padding:0px;border-left:#1A242C solid 2px;border-top:#1A242C solid 2px;border-right:#BCC9D4 solid 2px;border-bottom:#BCC9D4 solid 2px}
 .vnv1search{float:right;background-color:transparent;text-align:right}

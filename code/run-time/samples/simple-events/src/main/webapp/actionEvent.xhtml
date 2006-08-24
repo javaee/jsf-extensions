@@ -4,9 +4,13 @@
 	  xmlns:f="http://java.sun.com/jsf/core"
 	  xmlns:ui="http://java.sun.com/jsf/facelets"
 	  xmlns:d="http://java.sun.com/jsf/facelets/demo">
+<ui:composition template="_template.xhtml">
+
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<title>Simple DynaFaces Event Application</title>
+<ui:define name="head">
+<title>ActionEvent Example</title>
+</ui:define>
 
 <script type="text/javascript" src="/Users/edburns/Projects/J2EE/workareas/jsf-extensions-branch/run-time/avatar/src/main/resources/prototype.js"></script>
 <script type="text/javascript" src="/Users/edburns/Projects/J2EE/workareas/jsf-extensions-branch/run-time/avatar/src/main/resources/effects.js"></script>
@@ -19,9 +23,22 @@
 
 <body>
 
-<ui:composition template="_template.xhtml">
-<ui:define name="body">
-<h1>Simple DynaFaces Event Application</h1>
+<ui:define name="pageTitle">ActionEvent Example</ui:define>
+
+<ui:define name="topPanel">
+
+<p>This example shows how to dispatch a jsf <code>ActionEvent</code>
+from JavaScript directly to the JSF Lifecycle via AJAX.  Any
+<code>actionListeners</code> installed on components that are subject to
+traversal in this transaction will be fired as normal. </p>
+
+<p><a href="home.jsf">Back to demo homepage.</a></p>
+
+</ui:define>
+
+<ui:define name="mainColumn">
+<h:form prependId="false">
+
 
 <script type="text/JavaScript">
 /* <![CDATA[ */
@@ -39,41 +56,117 @@ function queueEvent() {
 /* ]]> */
 </script>
 
+<table bgcolor="#eeeeee" border="0" cellpadding="2" cellspacing="0" width="100%" class="vtop">
+<colgroup>
+  <col width="45%" />
+  <col width="55%" />
+</colgroup>
 
-<h:form prependId="false">
+<tr>
 
-<h:panelGrid columns="2">
+<td colspan="2" class="headerbar3">
+  <div class="headerpadding2">
+    <span style="color:#fff;">ActionEvent Example</span>
+  </div>
+</td>
+
+</tr>
+
+<tr>
+
+<td>
 
   <p>Submit queued actionEvents.</p>
 
-  <h:commandButton id="ajax" 
-         value="submit via ajax"
-                   onclick="DynaFaces.fireAjaxTransaction(this,
-                                   { execute: 'input', render: 'label,input', 
-                                     inputs: 'input' }); return false;"
-         actionListener="#{bean.processAction}"/>
+</td>
 
-</h:panelGrid>
+<td>
 
-  <p>ActionListener Output:
+  <h:commandButton id="ajax" value="submit via ajax" onclick="DynaFaces.fireAjaxTransaction(this, { execute: 'input', render: 'label,input', inputs: 'input' }); return false;" actionListener="#{bean.processAction}" />
 
-  <h:outputText id="label" 
-                value="#{requestScope.actionEvents}" /> 
+</td>
+
+</tr>
+
+<tr>
+
+  <td>  
+
+  <p>ActionListener Output:</p>
+
+  </td>
+
+  <td>
+
+    <h:outputText id="label" value="#{requestScope.actionEvents}" /> 
+  </td>
+
+</tr>
+
+<tr>
+
+  <td>
+  <p>Queue additional <code>ActionEvents</code>.
   </p>
 
+  </td>
 
-<p>Queue additional <code>ActionEvents</code>.
-</p>
+  <td>
 
-<p><input type="submit" name="queueAction" id="queueAction" 
-          value="queue action" onclick="queueEvent(); return false;" />
-</p>
+  <input type="submit" name="queueAction" id="queueAction" 
+	    value="queue action" onclick="queueEvent(); return false;" />
+
+  </td>
+
+</tr>
+
+</table>
 
 </h:form>
 
+</ui:define>
+
+<ui:define name="bottomPanel">
+
+<p>The <code>queue action</code> button calls a local JavaScript
+function <code>queueEvent()</code>.  This calls through to
+<code>DynaFaces.queueFacesEvent()</code>.  Eventually, the
+<code>actionListener</code> installed on the <code>submit via
+ajax</code> button is called.  This listener appends a string contaning
+the clientid of the source component of the event to a request scoped
+attribute, <code>actionEvents</code>, which is output in the
+<code>ActionListener Output:</code> row in the table.</p>
+
+	<ol>
+
+	  <li><p>Click the <code>queue action</code> button a few times.
+	  Keep track of how many times you clicked it.  </p></li>
+
+	  <li><p>Click the <code>submit via ajax</code> button.
+	  </p></li>
+
+	  <li><p>You should see a number of <code>[ajax]</code> outputs
+	  to the number of times you clicked the <code>queue
+	  action</code> button.  </p></li>
+
+	</ol>
+
 
 </ui:define>
-</ui:composition>
+
+<ui:define name="rightColumn">
+
+<div class="navtitle">Example Files</div>
+
+<div class="bluearrows"><a href="ShowSource.jsp?filename=/com/sun/faces/simple_event/SimpleEventBean.java">SimpleEventBean.java</a></div>
+<div class="bluearrows"><a href="ShowSource.jsp?filename=/actionEvent.xhtml">actionEvent.xhtml</a></div>
+<div class="bluearrows"><a href="ShowSource.jsp?filename=/_template.xhtml">_template.xhtml</a></div>
+<div class="bluearrows"><a href="ShowSource.jsp?filename=/WEB-INF/web.xml">WEB-INF/web.xml</a></div>
+<div class="bluearrows"><a href="ShowSource.jsp?filename=/WEB-INF/faces-config.xml">WEB-INF/faces-config.xml</a></div>
+
+
+</ui:define>
 
 </body>
+</ui:composition>
 </html>

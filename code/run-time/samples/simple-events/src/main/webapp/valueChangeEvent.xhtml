@@ -4,16 +4,34 @@
 	  xmlns:f="http://java.sun.com/jsf/core"
 	  xmlns:ui="http://java.sun.com/jsf/facelets"
 	  xmlns:d="http://java.sun.com/jsf/facelets/demo">
+<ui:composition template="_template.xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<title>Simple DynaFaces Event Application</title>
+<ui:define name="head">
+<title>ValueChangeEvent Example</title>
+</ui:define>
 </head>
 
 <body>
 
-<ui:composition template="_template.xhtml">
-<ui:define name="body">
-<h1>Simple DynaFaces Event Application</h1>
+<ui:define name="pageTitle">ValueChangeEvent Example</ui:define>
+
+
+<ui:define name="topPanel">
+
+<p>This example shows how to dispatch a jsf
+<code>ValueChangeEvent</code> from JavaScript directly to the JSF
+Lifecycle via AJAX.  Any <code>valueChangeListeners</code> installed on
+components that are subject to traversal in this transaction will be
+fired as normal. </p>
+
+<p><a href="home.jsf">Back to demo homepage.</a></p>
+
+</ui:define>
+
+
+<ui:define name="mainColumn">
+<h:form prependId="false">
 
 <script type="text/JavaScript">
 /* <![CDATA[ */
@@ -35,76 +53,157 @@ function queueEvent() {
 /* ]]> */
 </script>
 
+<table bgcolor="#eeeeee" border="0" cellpadding="2" cellspacing="0" width="100%" class="vtop">
+<colgroup>
+  <col width="45%" />
+  <col width="55%" />
+</colgroup>
 
-<h:form prependId="false">
+<tr>
 
-<h:panelGrid columns="3">
+<td colspan="3" class="headerbar3">
+  <div class="headerpadding2">
+    <span style="color:#fff;">ActionEvent Example</span>
+  </div>
+</td>
 
-  <p>Type a value, submit it via ajax.</p>
+</tr>
 
-  <h:inputText id="input" valueChangeListener="#{bean.valueChange}" />
+<tr>
 
-  <h:commandButton value="submit via ajax"
-                   onclick="DynaFaces.fireAjaxTransaction(this,
-                                   { execute: 'input', render: 'label,input', 
-                                     inputs: 'input' }); return false;"/>
+  <td>
 
-</h:panelGrid>
+    <p>Type a value, submit it via ajax.</p>
 
-  <p>ValueChangeEvent Output:
+  </td>
 
-  <h:outputText id="label" 
-                value="#{requestScope.valueChangeEvents}" /> 
+  <td colspan="2">
+
+    <h:inputText id="input" valueChangeListener="#{bean.valueChange}" />
+
+    <h:commandButton value="submit via ajax" onclick="DynaFaces.fireAjaxTransaction(this, { execute: 'input', render: 'label,input', inputs: 'input' }); return false;"/>
+
+  </td>
+
+</tr>
+
+<tr>
+
+  <td>
+
+    <p>ValueChangeEvent Output:  </p>
+
+  </td>
+
+  <td colspan="2">
+
+    <h:outputText id="label" 
+		  value="#{requestScope.valueChangeEvents}" /> 
+  </td>
+
+</tr>
+
+<tr>
+
+  <td>
+
+  <p>Queue additional <code>ValueChangeEvents</code>, just for kicks.
   </p>
 
+  </td>
 
-<p>Queue additional <code>ValueChangeEvents</code>, just for kicks.
-</p>
+  <td>
 
-<table border="1">
+  <table border="1">
 
-<tr>
+  <tr>
 
-<td>oldValue
-</td>
+  <td>oldValue
+  </td>
 
-<td><input type="text" name="oldValue" id="oldValue" />
-</td>
+  <td><input type="text" name="oldValue" id="oldValue" />
+  </td>
 
-</tr>
+  </tr>
 
-<tr>
+  <tr>
 
-<td>newValue
-</td>
+  <td>newValue
+  </td>
 
-<td><input type="text" name="newValue" id="newValue" />
-</td>
+  <td><input type="text" name="newValue" id="newValue" />
+  </td>
 
-</tr>
+  </tr>
 
-<tr>
+  <tr>
 
-<td>&nbsp;
-</td>
+  <td>&nbsp;
+  </td>
 
-<td><input type="submit" name="newValue" id="newValue" value="queue event"
-           onclick="queueEvent(); return false;" />
-</td>
+  <td><input type="submit" name="newValue" id="newValue" value="queue event"
+	     onclick="queueEvent(); return false;" />
+  </td>
+
+  </tr>
+
+  </table>
+
+  </td>
 
 </tr>
 
 </table>
 
-
-
-
-
 </h:form>
+
+</ui:define>
+
+<ui:define name="rightColumn">
+
+<div class="navtitle">Example Files</div>
+
+<div class="bluearrows"><a href="ShowSource.jsp?filename=/com/sun/faces/simple_event/SimpleEventBean.java">SimpleEventBean.java</a></div>
+<div class="bluearrows"><a href="ShowSource.jsp?filename=/valueChangeEvent.xhtml">actionEvent.xhtml</a></div>
+<div class="bluearrows"><a href="ShowSource.jsp?filename=/_template.xhtml">_template.xhtml</a></div>
+<div class="bluearrows"><a href="ShowSource.jsp?filename=/WEB-INF/web.xml">WEB-INF/web.xml</a></div>
+<div class="bluearrows"><a href="ShowSource.jsp?filename=/WEB-INF/faces-config.xml">WEB-INF/faces-config.xml</a></div>
+
+</ui:define>
+
+<ui:define name="bottomPanel">
+
+<p>This example allows you to queue some <code>ValueChangeEvent</code>s
+locally, then submit them via ajax.  The <code>queue event</code> button
+calls through to <code>DynaFaces.queueFacesEvent()</code>.  Eventually,
+the <code>valueChangeListener</code> installed on the <code>submit it
+via ajax</code> text field is called.  This listener appends a string
+contaning the new value, the old value, and clientid of the source
+component of the event to a request scoped attribute,
+<code>valueChangeEvents</code>, which is output in the
+<code>ValueChangeEvent Output:</code> row in the table.</p>
+
+	<ol>
+
+	  <li><p>Type values into the "oldValue" and "newValue" text
+	  fields and press the <code>queueEvent</code> button.  Repeat a
+	  few times, with different values each time. </p></li>
+
+	  <li><p>Press the <code>submit via ajax</code> button.  
+	  </p></li>
+
+	  <li><p>Observe in the <code>ValueChangeEvent</code> output row
+	  the correct number of ValueChangeEvent instances.</p></li>
+
+
+	</ol>
+
+
 
 
 </ui:define>
-</ui:composition>
+
 
 </body>
+</ui:composition>
 </html>

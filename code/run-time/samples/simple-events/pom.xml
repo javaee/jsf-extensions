@@ -8,7 +8,7 @@
   <name>simple-events</name>
   <url>https://jsf-extensions.dev.java.net/</url>
   <description>
-    Blank DynaFaces Facelets App
+    Simple Events example
   </description>
 
   <parent>
@@ -33,6 +33,23 @@
    </resources>
     <finalName>jsf-simple-events</finalName>
    <plugins>
+    <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-war-plugin</artifactId>
+      <version>2.0</version>
+      <configuration>
+        <webResources>
+          <resource>
+            <directory>${project.basedir}/src/main/java</directory>
+            <targetPath>WEB-INF</targetPath>
+          </resource>
+          <resource>
+            <directory>${project.basedir}/../sunbrand/src/main/webapp</directory>
+          </resource>
+
+        </webResources>
+       </configuration>
+     </plugin>
    </plugins>
   </build>
 

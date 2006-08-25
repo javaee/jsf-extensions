@@ -6,7 +6,6 @@
 <div class="bluearrows"><a href="ShowSource.jsp?filename=/WEB-INF/faces-config.xml">WEB-INF/faces-config.xml</a></div>
 <div class="bluearrows"><a href="ShowSource.jsp?filename=/com/sun/faces/run_time_test/model/CustomerBean.java">CustomerBean.java</a></div>
 <div class="bluearrows"><a href="ShowSource.jsp?filename=/com/sun/faces/run_time_test/model/ResultSetBean.java">ResultSetBean.java</a></div>
-<div class="bluearrows"><a href="ShowSource.jsp?filename=/com/sun/faces/run_time_test/model/ResultSetBean.java">ResultSetBean.java</a></div>
 <div class="bluearrows"><a href="ShowSource.jsp?filename=/devtime.js">devtime.js</a></div>
 <div class="bluearrows"><a href="ShowSource.jsp?filename=/jmaki.js">jmaki.js</a></div>
 <div class="bluearrows"><a href="ShowSource.jsp?filename=/inplace/component.css">inplace/component.css</a></div>

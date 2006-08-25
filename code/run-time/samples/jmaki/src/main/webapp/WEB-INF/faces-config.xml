@@ -29,7 +29,7 @@
   <managed-bean>
     <managed-bean-name>ResultSetBean</managed-bean-name>
     <managed-bean-class>com.sun.faces.run_time_test.model.ResultSetBean</managed-bean-class>
-    <managed-bean-scope>session</managed-bean-scope>
+    <managed-bean-scope>application</managed-bean-scope>
   </managed-bean>
 
 </faces-config>

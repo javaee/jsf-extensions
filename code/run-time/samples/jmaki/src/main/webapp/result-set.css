@@ -75,10 +75,11 @@
 }
 
 .list-row-even { 
+  background-color: #EDF2F5;
 }
 
 .list-row-odd { 
-  background-color: #717171;
+  background-color: #DCE6EC;
 }
 
 
@@ -110,3 +111,7 @@
   text-align: center;
 }
 
+span.jmaki:link {color: white;}
+span.jmaki:visited {color: purple;}
+span.jmaki:hover {color: red;}
+span.jmaki:active {color: orange;}

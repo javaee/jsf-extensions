@@ -1,6 +1,4 @@
-<!DOCTYPE html
-PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 
 <!--
  The contents of this file are subject to the terms
@@ -33,7 +31,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 
 <f:view>
 
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<html>
   <head>
     <title><%@ include file="title.jsp" %></title>
 
@@ -41,9 +39,10 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     <link rel="stylesheet" href="css/default.css" />
     <link rel="stylesheet" href="css/homepage.css" />    
     <jsfExt:scripts/>
+    <%@ include file="extraHeadContent.jsp" %>
   </head>
 
-    <%@ page contentType="application/xhtml+xml" %>
+    <%@ page contentType="text/html" %>
 
 <body leftmargin="0" topmargin="0" marginheight="0" marginwidth="0" rightmargin="0" bgcolor="#ffffff" class="vaa2v0">
 

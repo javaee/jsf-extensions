@@ -72,7 +72,7 @@
 
     </section>
     
-    <section name="JavaScript Functions">
+    <section name="DynaFaces JavaScript Library Reference">
 
 <!-- PENDING(edburns): Add examples for each of these -->
 
@@ -118,14 +118,15 @@ made asynchronously.
 
         <dd><p>Comma separated string containing a list of client ids
         against which the <code>execute</code> portion of the request
-        processing lifecycle must be run.  If the value of the option is
-        the single string "none" without the quotes, the
-        <code>execute</code> portion of the lifecycle will be
-        effectively skipped.  If this option is not specified at all,
-        the value of the <code>render</code> parameter is used as the
-        value of the option.  If that is not specified, the entire view
-        is traversed during the <code>execute</code> portion of the
-        request proecssing lifecycle.</p></dd>
+        processing lifecycle must be run.  This is known as a "partial
+        traversal".  If the value of the option is the single string
+        "none" without the quotes, the <code>execute</code> portion of
+        the lifecycle will be effectively skipped.  If this option is
+        not specified at all, the value of the <code>render</code>
+        parameter is used as the value of the option.  If that is not
+        specified, the entire view is traversed during the
+        <code>execute</code> portion of the request proecssing
+        lifecycle.</p></dd>
 
 <dt><p>render</p>
 </dt>
@@ -137,6 +138,16 @@ If the value of the option is the single string "none" without the
 quotes, the <code>render</code> portion of the lifecycle will be
 effectively skipped.</p>
 </dd>
+
+<dt><p>immediate</p>
+
+<dd><p>JavaScript <code>boolean</code> value.  If true, the
+<code>immediate</code> attribute will be set to <code>true</code>, for
+this request only, on any input or command components that are
+encountered during the partial traversal as specified in the
+<code>execute</code>, or <code>render</code> options.</p>
+</dd>
+</dt>
 
 <dt><p>inputs</p>
 </dt>
@@ -247,12 +258,12 @@ the server and may have been modified by the server.</p>
       <subsection name="DynaFaces.installDeferredAjaxTransaction">
 
        <p>This function extends the functionality of
-       <code>DynaFaces.fireAjaxTransaction</code> and uses the Prototype <a
-       href="http://www.sergiopereira.com/articles/prototype.js.html#Reference">Event.observe</a>
-       feature to cause a <code>DynaFaces.fireAjaxTransaction</code> call to be
-       emitted from a specific element in the DOM when the specified
-       JavaScript event occurs.  The options supported are exactly the
-       same as in <code>DynaFaces.fireAjaxTransaction</code>.</p>
+       <code>DynaFaces.fireAjaxTransaction</code> and uses a JavaScript
+       event observer solution to cause a
+       <code>DynaFaces.fireAjaxTransaction</code> call to be emitted
+       from a specific element in the DOM when the specified JavaScript
+       event occurs.  The options supported are exactly the same as in
+       <code>DynaFaces.fireAjaxTransaction</code>.</p>
 
        <h4>Usage</h4>
 
@@ -288,6 +299,126 @@ href="#DynaFaces.fireAjaxTransaction">DynaFaces.fireAjaxTransaction</a>.</p>
 </pre></source>
 
       </subsection>
+
+      <subsection name="DynaFaces.queueEvent">
+
+       <p>Queues a JavaScript version of a server side
+       <code>FacesEvent</code> for processing on the client when the
+       next AJAX transaction happens.  JavaScript classes are provided
+       for the standard JSF event classes:
+       <code>DynaFaces.ValueChangeEvent</code> and
+       <code>DynaFaces.ActionEvent</code>, and the "base class"
+       <code>Dynafaces.FacesEvent</code>.</p>
+
+       <h4>Usage</h4>
+
+       <p><code>DynaFaces.FacesEvent</code> can be "subclassed" as in
+       the following code fragement:</p>
+
+<pre><code>
+var Foo = {};
+
+Foo.FooEvent = function(clientId, phaseId) {
+    this.base = DynaFaces.FacesEvent;
+    this.base("FooEvent", clientId, phaseId);
+}
+Foo.FooEvent.prototype = new DynaFaces.FacesEvent;
+</code></pre>
+
+      <p>Once you have instantiated a new
+      <code>DynaFaces.FacesEvent</code> "subclasses", you may then queue
+      it, along with any number and combination of
+      <code>DynaFaces.ValueChangeEvent</code> or
+      <code>DynaFaces.ActionEvent</code> instances, as in the following
+      code fragment.</p>
+
+<pre><code>
+var actionElementIds = getArrayOfElementIdsForActionEvents();
+var i;
+var event;
+for (i = 0; i &lt; actionElementIds.length; i++) {
+  event = new DynaFaces.ActionEvent(actionElementIds[i], 
+                                    DynaFaces.PhaseId.INVOKE_APPLICATION);
+  DynaFaces.queueFacesEvent(event);
+}
+
+var valueChangeStructs = getArrayOfElementIdsForValueChangeEvents();
+for (i = 0; i &lt; valueChangeStructs.length; i++) {
+  event = new DynaFaces.ValueChangeEvent(valueChangeStructs[i].id, 
+                                    DynaFaces.PhaseId.UPDATE_MODEL_VALUES,
+                                    valueChangeStructs[i].oldValue,
+                                    valueChangeStructs[i].newValue);
+  DynaFaces.queueFacesEvent(event);
+}
+
+var fooElementIds = getArrayOfElementIdsForValueChangeEvents();
+for (i = 0; i &lt; fooElementIds.length; i++) {
+  event = new DynaFaces.ValueChangeEvent(fooElementIds[i].id, 
+                                    DynaFaces.PhaseId.UPDATE_MODEL_VALUES);
+  DynaFaces.queueFacesEvent(event);
+}
+
+</code></pre>
+
+  <p></p>
+
+    </subsection>
+
+    <subsection name="DynaFaces.ActionEvent">
+
+      <p>JavaScript object to facilitate dispatching an actual
+      <code>ActionEvent</code> on the server.</p>
+
+      <h4>Usage</h4>
+
+<pre><code>
+var event = new DynaFaces.ActionEvent(CLIENTID, PHASEID);</code></pre>
+
+<p>Where <code>CLIENTID</code> is the clientId of a JSF component in the
+view, and <code>PHASEID</code> is one of the <code><a
+href="#DynaFaces.PhaseId">DynaFaces.PhaseId</a></code> symbolic
+constants.</p>
+
+    </subsection>
+
+    <subsection name="DynaFaces.VauleChangeEvent">
+
+      <p>JavaScript object to facilitate dispatching an actual
+      <code>ValueChangeEvent</code> on the server.</p>
+
+      <h4>Usage</h4>
+
+<pre><code>
+var event = new DynaFaces.ValueChangeEvent(CLIENTID, PHASEID, OLDVALUE, NEWVALUE);</code></pre>
+
+<p>Where <code>CLIENTID</code> is the clientId of a JSF component in the
+view, <code>PHASEID</code> is one of the <code><a
+href="#DynaFaces.PhaseId">DynaFaces.PhaseId</a></code> symbolic
+constants, and <code>OLDVALUE</code> and <code>NEWVALUE</code> are the
+old and new values of the components, as unconverted strings.</p>
+
+    </subsection>
+
+    <subsection name="DynaFaces.PhaseId">
+
+      <p>A collection of constants for the phases of the JSF Request
+      Processing Lifecycle.</p>
+
+<h4>Usage</h4>
+
+<pre><code>
+var any = DynaFaces.PhaseId.ANY_PHASE;
+var restore = DynaFaces.PhaseId.RESTORE_VIEW;
+var apply = DynaFaces.PhaseId.APPLY_REQUEST_VALUES;
+var process = DynaFaces.PhaseId.PROCESS_VALIDATIONS;
+var update = DynaFaces.PhaseId.UPDATE_MODEL_VALUES;
+var invoke DynaFaces.PhaseId.INVOKE_APPLICATION;
+var render = DynaFaces.PhaseId.RENDER_RESPONSE;
+</code></pre>
+
+
+    </subsection>
+
 
 
     </section>

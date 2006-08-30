@@ -46,7 +46,7 @@
 
 <source><code>
 &lt;h:commandButton value="Add Item" action="#{orderEntry.addProduct}" 
-   onclick="new Faces.Event(this); return false;"/&gt;
+   onclick="DynaFaces.fireAjaxTransaction(this); return false;"/&gt;
 </code></source>
 
        <p>Will cause an AJAX request to be sent to the server.  Any
@@ -56,10 +56,11 @@
        will send down only those parts, where the JavaScript library
        will dynamically replace the content appropriately.</p>
 
-       <p>In addition to <code>Faces.Event</code>, the JavaScript
-       library includes a subclass, <code>Faces.DeferredEvent</code>, that
-       turns any markup element in the page, including JSF components,
-       into an AJAX capable widget.  For example:</p>
+       <p>In addition to <code>DynaFaces.fireAjaxTransaction</code>, the
+       JavaScript library includes a subclass,
+       <code>DynaFaces.installDeferredAjaxTransaction</code>, that turns
+       any markup element in the page, including JSF components, into an
+       AJAX capable widget.  For example:</p>
 
 <source><code>
 &lt;h:panelGroup id="subview2"&gt;
@@ -89,7 +90,7 @@
     document.forms[0].submit = function() {}; 
     var a = $('form:subview2').getElementsByTagName('a'); 
     $A(a).each(function(e) { 
-      new Faces.DeferredEvent(e, 'mousedown', { render: 'form:table,form:subview2' }); 
+      DynaFaces.installDeferredAjaxTransaction(e, 'mousedown', { render: 'form:table,form:subview2' }); 
     }); 
   &lt;/script&gt;
   &lt;/h:panelGroup&gt;
@@ -97,10 +98,11 @@
 
     <p>The previous example AJAXifies the Scroller component from the <a
     href="https://bpcatalog.dev.java.net/files/documents/1432/34000/bp-ui-simple-5.jar">Sun
-    Blueprints Simple UI Components</a> by installing a
-    <code>Faces.DeferredEvent</code> on the mousedown of each hyperlink within
-    the scroller component.  The arguments to the
-    <code>Faces.DeferredEvent</code> are:</p>
+    Blueprints Simple UI Components</a> by calling
+    <code>DynaFaces.installDeferredAjaxTransaction</code> on the
+    mousedown of each hyperlink within the scroller component.  The
+    arguments to the
+    <code>DynaFaces.installDeferredAjaxTransaction</code> are:</p>
 
 	<ol>
 
@@ -119,7 +121,8 @@
 	</ol>
 
         <p>Complete documentation on the supported options for
-        <code>Faces.DeferredEvent</code> and <code>Faces.Event</code> can be
+        <code>DynaFaces.fireAjaxTransaction</code> and
+        <code>DynaFaces.installDeferredAjaxTransaction</code> can be
         found in <a href="reference-ajax.html">reference
         document</a>.</p>
 

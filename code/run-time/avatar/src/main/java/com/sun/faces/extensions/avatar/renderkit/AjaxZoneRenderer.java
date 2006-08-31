@@ -203,15 +203,17 @@ public class AjaxZoneRenderer extends Renderer {
                 inspectElement = getAttr(context, comp, "inspectElement");
                 replaceElement = getAttr(context, comp, "replaceElement");
 
-                if (null == collectPostData || null == eventType) {
+                if (null == collectPostData) {
                     // PENDING: I18N
                     throw new IOException("If \"interactionType\" is specified, both \"collectPostData\" and \"eventType\" must be specified");
                 }
                 
                 ajaxifyChildren = new StringBuffer();
                 ajaxifyChildren.append("\nDynaFacesZones.ajaxifyChildren($(\'" + clientId + "\'), ");
-                ajaxifyChildren.append("{ eventType: \'" + eventType + 
-                        "\', collectPostData: \'" + collectPostData + "\'");
+                ajaxifyChildren.append("{ collectPostData: \'" + collectPostData + "\'");
+                if (null != eventType) {
+                    ajaxifyChildren.append(", eventType: \'" + eventType + "\'");
+                }
                 if (null != inspectElement) {
                     ajaxifyChildren.append(", inspectElement: \'" + inspectElement + "\'");
                 }

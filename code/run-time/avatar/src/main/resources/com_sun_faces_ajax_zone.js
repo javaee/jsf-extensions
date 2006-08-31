@@ -53,9 +53,13 @@ function ajaxifyChildren(target, options, getCallbackData) {
 
 DynaFacesZones.moveAsideEventType = 
 function moveAsideEventType(ajaxZone, element, options, getCallbackData) {
-    if (null != options.eventType &&
-	'on' == options.eventType.substring(0,2)) {
-	options.eventType = eventType.substring(2);
+    if (null != options.eventType) {
+	if('on' == options.eventType.substring(0,2)) {
+	    options.eventType = eventType.substring(2);
+	}
+    }
+    else {
+	options.eventType = 'click';
     }
     options.render = DynaFacesZones.g_zones.join(',');
     options.ajaxZone = ajaxZone;

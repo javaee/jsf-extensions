@@ -149,7 +149,7 @@ function inspectElement(element);
          tag.  Example:</p>
 
 <pre><code>
-&lt;jsfExt:ajaxZone eventType="onmousedown" <br /> 
+&lt;jsfExt:ajaxZone 
 &nbsp;&nbsp;&nbsp;inspectElement="inspectElement" <br /> 
 &nbsp;&nbsp;&nbsp;collectPostData="replaceOnMouseDown"&gt;<br /> 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  &lt;d:scroller&gt;<br /> 
@@ -192,7 +192,8 @@ function inspectElement(element) {<br />
 
           <p>This optional attribute indicates what kind of JavaScript
           event to intercept with the function named as the value of the
-          <code>collectPostData</code> attribute.  For example:
+          <code>collectPostData</code> attribute.  If not specified, the
+          "onclick" JavaScript event is intercepted.  For example:
           </p>
 
 <pre><code>
@@ -248,8 +249,7 @@ function handler(ajaxZone, element, originalScript, outProps, invocation);
           function named "replaceOnMouseDown".</p>
 
 <pre><code>
-&lt;jsfExt:ajaxZone eventType="onmousedown" <br /> 
-          collectPostData="handler"&gt;<br /> 
+&lt;jsfExt:ajaxZone collectPostData="handler"&gt;<br /> 
   &lt;d:scroller&gt;<br /> 
     &lt;!-- nested components  --&gt;<br /> 
   &lt;/d:scroller&gt;<br /> 

@@ -74,6 +74,7 @@ DynaFacesZones.takeActionAndTraverseTree =
 function takeActionAndTraverseTree(target, element, action, options, 
 				   getCallbackData) {
     var takeAction = false;
+    var inspectElementFunction = DynaFacesZones.inspectElement;
 
     // If the user defined an "inspectElement" function, call it.
     if (!(typeof options.inspectElement == 'function')) {
@@ -82,8 +83,10 @@ function takeActionAndTraverseTree(target, element, action, options,
 	}
     }
     if (null != options.inspectElement) {
-	takeAction = options.inspectElement(element);
+        inspectElementFunction = options.inspectElement;
     }
+    takeAction = inspectElementFunction(element);
+
     // If the function returned false or null, or was not defined...
     if (null == takeAction || !takeAction) {
       // if this element has a handler for the eventType
@@ -105,3 +108,25 @@ function takeActionAndTraverseTree(target, element, action, options,
     }
     return false;
 }
+
+DynaFacesZones.inspectElement = 
+function inspectElement(element) {
+    var result = false;
+    if (null != element) {
+	var nodeName = element.nodeName;
+	if (null != nodeName) {
+	    nodeName = nodeName.toLowerCase();
+	    if (-1 != nodeName.indexOf("input")) {
+		result = true;
+	    }
+	    else if (-1 != nodeName.indexOf("option")) {
+		result = true;
+	    }
+	    else if (-1 != nodeName.indexOf("button")) {
+		result = true;
+	    }
+	}
+    }
+    return result;
+}
+

@@ -55,27 +55,6 @@ function extractParams(ajaxZone, element, outArray) {
 
 }
 
-function inspectElement(element) {
-    var result = false;
-    if (null != element) {
-	var nodeName = element.nodeName;
-	if (null != nodeName) {
-	    nodeName = nodeName.toLowerCase();
-	    if (-1 != nodeName.indexOf("input")) {
-		result = true;
-	    }
-	    else if (-1 != nodeName.indexOf("option")) {
-		result = true;
-	    }
-	    else if (-1 != nodeName.indexOf("button")) {
-		result = true;
-	    }
-	}
-    }
-    return result;
-}
-
-
 // -------------------- Private helper functions
 
 

@@ -53,7 +53,10 @@
        easy ajaxification of a portion of the page.  When using this
        tag, any elements within the zone are updated via AJAX.  If using
        multiple zones on a single page, all of them are updated for each
-       AJAX request.</p>]]>
+       AJAX request.  The default behavior of this component is to
+       AJAXify every input component within the zone, but the set of
+       components within the zone that should be AJAXified can be
+       customized with the <code>inspectElement</code> attribute.</p>]]>
     </description>
     <name>ajaxZone</name>
     <tag-class>com.sun.faces.extensions.avatar.taglib.AjaxZoneTag</tag-class>
@@ -137,8 +140,13 @@
 function inspectElement(element);
 </code></pre>
 
-         <p>The function must return true to indicate that the element 
-         should be instrumented for AJAX behavior.  Example:</p>
+         <p>This optional argument is the name of a function that must
+         return <code>true</code> to indicate that the element should be
+         instrumented for AJAX behavior.  If not specified, the default
+         <code>inspectElement</code> function will return
+         <code>true</code> for every child of this zone that is an HTML
+         <code>input</code>, <code>button</code>, or <code>option</code>
+         tag.  Example:</p>
 
 <pre><code>
 &lt;jsfExt:ajaxZone eventType="onmousedown" <br /> 

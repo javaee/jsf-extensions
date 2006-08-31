@@ -193,7 +193,7 @@ public class AjaxZoneRenderer extends Renderer {
             writer.write("\n<!--\n");
             clientId = comp.getClientId(context);
             if (writeZoneAccruer) {
-                writer.write("\ng_zones.push(\"" + clientId + "\");");
+                writer.write("\nDynaFacesZones.g_zones.push(\"" + clientId + "\");");
             }
             
             if (writeAjaxifyChildren) {
@@ -209,7 +209,7 @@ public class AjaxZoneRenderer extends Renderer {
                 }
                 
                 ajaxifyChildren = new StringBuffer();
-                ajaxifyChildren.append("\najaxifyChildren($(\'" + clientId + "\'), ");
+                ajaxifyChildren.append("\nDynaFacesZones.ajaxifyChildren($(\'" + clientId + "\'), ");
                 ajaxifyChildren.append("{ eventType: \'" + eventType + 
                         "\', collectPostData: \'" + collectPostData + "\'");
                 if (null != inspectElement) {

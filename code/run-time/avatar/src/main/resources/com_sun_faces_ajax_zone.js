@@ -27,14 +27,23 @@
  * Copyright 2005 Sun Microsystems Inc. All Rights Reserved
  */
 
-var g_zones = [];
+if (typeof DynaFacesZones != 'undefined') {
+    alert("DynaFacesZones already defined!"); 
+}
 
+var DynaFacesZones = new Object();
+
+DynaFacesZones.g_zones = [];
+
+DynaFacesZones.ajaxifyChildren = 
 function ajaxifyChildren(target, options, getCallbackData) {
     if (null == target.isAjaxified && 
         target.hasChildNodes()) {
 	for (var i = 0; i < target.childNodes.length; i++) {
-	    takeActionAndTraverseTree(target, target.childNodes[i], 
-				      moveAsideEventType, options, 
+	    DynaFacesZones.takeActionAndTraverseTree(target, 
+                                      target.childNodes[i], 
+				      DynaFacesZones.moveAsideEventType, 
+                                      options, 
 				      getCallbackData);
 	}
     }
@@ -42,12 +51,13 @@ function ajaxifyChildren(target, options, getCallbackData) {
     return false;
 }
 
+DynaFacesZones.moveAsideEventType = 
 function moveAsideEventType(ajaxZone, element, options, getCallbackData) {
     if (null != options.eventType &&
 	'on' == options.eventType.substring(0,2)) {
 	options.eventType = eventType.substring(2);
     }
-    options.render = g_zones.join(',');
+    options.render = DynaFacesZones.g_zones.join(',');
     options.ajaxZone = ajaxZone;
     if (getCallbackData) {
 	if (typeof getCallbackData == 'function') {
@@ -60,6 +70,7 @@ function moveAsideEventType(ajaxZone, element, options, getCallbackData) {
     var c = new Faces.DeferredEvent(element, options.eventType, options);
 }
 
+DynaFacesZones.takeActionAndTraverseTree = 
 function takeActionAndTraverseTree(target, element, action, options, 
 				   getCallbackData) {
     var takeAction = false;
@@ -87,7 +98,8 @@ function takeActionAndTraverseTree(target, element, action, options,
     }
     if (element.hasChildNodes()) {
 	for (var i = 0; i < element.childNodes.length; i++) {
-	    takeActionAndTraverseTree(target, element.childNodes[i], action, 
+	    DynaFacesZones.takeActionAndTraverseTree(target, 
+                                      element.childNodes[i], action, 
 				      options, getCallbackData);
 	}
     }

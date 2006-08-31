@@ -31,11 +31,14 @@ package com.sun.faces.extensions.avatar.renderkit;
 
 import com.sun.faces.extensions.avatar.components.AjaxZone;
 import com.sun.faces.extensions.avatar.lifecycle.AsyncResponse;
+import com.sun.faces.extensions.common.util.Util;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
 import javax.el.MethodExpression;
 import javax.el.ValueExpression;
+import javax.faces.FacesException;
+import javax.faces.component.EditableValueHolder;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -140,8 +143,9 @@ public class AjaxZoneRenderer extends Renderer {
     }
     
     /**
-     * <p>Take different action depending on the value of isAjaxResuest and 
-     * interactionType component attribute.</p>
+     * <p>Take different action depending on the value of isAjaxResuest 
+     * component attribute and the result of calling 
+     * <code>getInteractionType</code>.</p>
      *
      * <p>If isAjaxRequest, and interactionType is null or "output", take no
      * action.</p>
@@ -163,16 +167,16 @@ public class AjaxZoneRenderer extends Renderer {
 
         String 
                 clientId = null,
-                interactionType = getAttr(context, comp, "interactionType"),
                 getCallbackData = null,
                 collectPostData = null,
                 eventType = null,
 	        inspectElement = null,
                 replaceElement = null;
+        InteractionType interactionType = getInteractionType(context, comp);
 	StringBuffer ajaxifyChildren = null;
         MethodExpression action = null;
 	boolean isXhtml = false,
-                typeIsOutput = (null == interactionType || interactionType.equals("output")),
+                typeIsOutput = (interactionType == InteractionType.output),
                 writeZoneAccruer = ((!isAjaxRequest && typeIsOutput) || 
                   (!isAjaxRequest && !typeIsOutput)),
                 writeAjaxifyChildren = ((!isAjaxRequest && !typeIsOutput) ||
@@ -231,6 +235,32 @@ public class AjaxZoneRenderer extends Renderer {
 	    writer.endElement("script");
 	}
 
+    }
+    
+    private enum InteractionType { input, output }
+    
+    /**
+     * <p>Return input if this component has one or more children that are 
+     * <code>EditableValueHolder</code> instances.  Return output otherwise.</p>
+     */ 
+    
+    private InteractionType getInteractionType(FacesContext context, AjaxZone component) {
+        Util.TreeTraversalCallback findEditableValueHolder = 
+                new Util.TreeTraversalCallback() {
+            public boolean takeActionOnNode(FacesContext context, UIComponent curNode) throws FacesException {
+                boolean keepGoing = true;
+                if (curNode instanceof EditableValueHolder) {
+                    keepGoing = false;
+                }
+                return keepGoing;
+            }
+        };
+        // the view traversal will return false iff there is one or more 
+        // EditableValueHolder in this zone.
+        InteractionType result = 
+         Util.prefixViewTraversal(context, component, findEditableValueHolder) ?
+         InteractionType.output : InteractionType.input;
+        return result;
     }
     
     private String getAttr(FacesContext context, UIComponent comp, String name) {

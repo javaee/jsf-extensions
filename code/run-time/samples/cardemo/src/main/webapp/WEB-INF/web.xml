@@ -49,6 +49,15 @@
         <param-value>true</param-value>
     </context-param>
 
+    <context-param>
+        <description>
+            Advise the Sun impl not to externalize any javascript files.
+        </description>
+        <param-name>com.sun.faces.externalizeJavaScript</param-name>
+        <param-value>false</param-value>
+    </context-param>
+
+
     <!--
          PENDING: set to false because demo-components.jar has
          components that can only be created in the context of

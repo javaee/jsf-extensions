@@ -141,8 +141,7 @@ function inspectElement(element);
          should be instrumented for AJAX behavior.  Example:</p>
 
 <pre><code>
-&lt;jsfExt:ajaxZone interactionType="input" <br /> 
-&nbsp;&nbsp;&nbsp;eventType="onmousedown" <br /> 
+&lt;jsfExt:ajaxZone eventType="onmousedown" <br /> 
 &nbsp;&nbsp;&nbsp;inspectElement="inspectElement" <br /> 
 &nbsp;&nbsp;&nbsp;collectPostData="replaceOnMouseDown"&gt;<br /> 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  &lt;d:scroller&gt;<br /> 
@@ -178,49 +177,6 @@ function inspectElement(element) {<br />
 	    <type>java.lang.String</type>
         </deferred-value>
     </attribute>
-    <attribute>
-        <description>
-          <![CDATA[
-
-          <p>This optional attribute indicates what kind of components
-          are contained within this zone.  Valid values are "input" and
-          "output".  If not present the default is "output".  A value of
-          "input" will cause the DOM children of this component to have
-          the event handler specified as the value of the "eventType"
-          attribute replaced with the user supplied function given as
-          the value of the "collectPostData" attribute.  For example, if the
-          components inside this zone did a form submit on the
-          "onmousedown" event, we would indicate our desire to replace
-          this "onmousedown" with our own user supplied function like
-          this:
-          </p>
-
-<pre><code>
-&lt;jsfExt:ajaxZone interactionType="input" <br /> 
-&nbsp;&nbsp;&nbsp;eventType="onmousedown" <br /> 
-&nbsp;&nbsp;&nbsp;collectPostData="replaceOnMouseDown"&gt;<br /> 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  &lt;d:scroller&gt;<br /> 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    &lt;!-- nested components  --&gt;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  &lt;/d:scroller&gt;<br /> 
-&lt;/jsfExt:ajaxZone&gt;<br /> 
-</code></pre>
-
-          <p>The details of the <code>replaceOnMouseDown</code> function
-          are described in the docs for the <code>collectPostData</code>
-          attribute.</p>
-
-          <p>If "output" is specified as the value, none of the child
-          elements are modified.</p>
-
-          ]]>
-
-        </description>
-        <name>interactionType</name>
-        <required>false</required>
-        <deferred-value>
-	    <type>java.lang.String</type>
-        </deferred-value>
-    </attribute>
 
     <attribute>
         <description>
@@ -232,7 +188,7 @@ function inspectElement(element) {<br />
           </p>
 
 <pre><code>
-&lt;jsfExt:ajaxZone interactionType="input" eventType="onmousedown" <br /> 
+&lt;jsfExt:ajaxZone eventType="onmousedown" <br /> 
 &nbsp;&nbsp;&nbsp;collectPostData="replaceOnMouseDown"&gt;<br /> 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  &lt;d:scroller&gt;<br /> 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    &lt;!-- nested components  --&gt;<br /> 
@@ -284,7 +240,7 @@ function handler(ajaxZone, element, originalScript, outProps, invocation);
           function named "replaceOnMouseDown".</p>
 
 <pre><code>
-&lt;jsfExt:ajaxZone interactionType="input" eventType="onmousedown" <br /> 
+&lt;jsfExt:ajaxZone eventType="onmousedown" <br /> 
           collectPostData="handler"&gt;<br /> 
   &lt;d:scroller&gt;<br /> 
     &lt;!-- nested components  --&gt;<br /> 

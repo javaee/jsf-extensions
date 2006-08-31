@@ -59,8 +59,7 @@
        <h4>Usage</h4>
 
 <source><code>
-&lt;jsfExt:ajaxZone id="zone2" interactionType="input" 
-                inspectElement="inspectElement"
+&lt;jsfExt:ajaxZone id="zone2" inspectElement="inspectElement"
                 eventType="click" collectPostData="extractParams"
                 action="#{carstore.currentModel.updatePricing}"&gt;
   &lt;!-- JSF and HTML content goes here. --&gt;

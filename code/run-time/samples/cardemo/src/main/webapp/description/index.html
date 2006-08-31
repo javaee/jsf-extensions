@@ -96,15 +96,11 @@ declaration of Zone 2 is represented like this in JSP:
 </p>
 
 <pre><code>
-&lt;jsfExt:ajaxZone id="zone2" interactionType="input" 
-                inspectElement="inspectElement"
+&lt;jsfExt:ajaxZone id="zone2" inspectElement="inspectElement"
                 eventType="onclick" collectPostData="extractParams"
                 action="#{carstore.currentModel.updatePricing}"&gt;
 
 </code></pre>
-
-<p><code>interactionType</code> element states that this zone contains
-input components.</p>
 
 <p><code>inspectElement</code> names a developer supplied JavaScript
 function that will be called by the JSF-Extensions Dynamic Updating

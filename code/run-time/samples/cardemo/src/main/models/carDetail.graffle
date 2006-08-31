@@ -21,58 +21,7 @@
 	<array>
 		<dict>
 			<key>Bounds</key>
-			<string>{{316.5, 265.5}, {188, 84}}</string>
-			<key>Class</key>
-			<string>ShapedGraphic</string>
-			<key>FitText</key>
-			<string>YES</string>
-			<key>Flow</key>
-			<string>Resize</string>
-			<key>ID</key>
-			<integer>6</integer>
-			<key>Shape</key>
-			<string>Rectangle</string>
-			<key>Style</key>
-			<dict>
-				<key>fill</key>
-				<dict>
-					<key>Draws</key>
-					<string>NO</string>
-				</dict>
-				<key>shadow</key>
-				<dict>
-					<key>Draws</key>
-					<string>NO</string>
-				</dict>
-				<key>stroke</key>
-				<dict>
-					<key>Draws</key>
-					<string>NO</string>
-				</dict>
-			</dict>
-			<key>Text</key>
-			<dict>
-				<key>Align</key>
-				<integer>0</integer>
-				<key>Text</key>
-				<string>{\rtf1\mac\ansicpg10000\cocoartf824\cocoasubrtf330
-{\fonttbl\f0\fswiss\fcharset77 Helvetica;}
-{\colortbl;\red255\green255\blue255;\red255\green15\blue36;}
-\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
-
-\f0\fs24 \cf2 Zone 2\
-interactionType: input\
-eventType: onclick\
-eventHook: extractParams\
-action:  #\{carstore.updatePricing\}\
-}</string>
-			</dict>
-			<key>Wrap</key>
-			<string>NO</string>
-		</dict>
-		<dict>
-			<key>Bounds</key>
-			<string>{{146.5, 196.5}, {49, 14}}</string>
+			<string>{{316.5, 265.5}, {188, 70}}</string>
 			<key>Class</key>
 			<string>ShapedGraphic</string>
 			<key>FitText</key>
@@ -103,8 +52,58 @@ action:  #\{carstore.updatePricing\}\
 			</dict>
 			<key>Text</key>
 			<dict>
+				<key>Align</key>
+				<integer>0</integer>
 				<key>Text</key>
-				<string>{\rtf1\mac\ansicpg10000\cocoartf824\cocoasubrtf330
+				<string>{\rtf1\mac\ansicpg10000\cocoartf824\cocoasubrtf410
+{\fonttbl\f0\fswiss\fcharset77 Helvetica;}
+{\colortbl;\red255\green255\blue255;\red255\green15\blue36;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0\fs24 \cf2 Zone 2\
+eventType: onclick\
+eventHook: extractParams\
+action:  #\{carstore.updatePricing\}\
+}</string>
+			</dict>
+			<key>Wrap</key>
+			<string>NO</string>
+		</dict>
+		<dict>
+			<key>Bounds</key>
+			<string>{{146.5, 196.5}, {49, 14}}</string>
+			<key>Class</key>
+			<string>ShapedGraphic</string>
+			<key>FitText</key>
+			<string>YES</string>
+			<key>Flow</key>
+			<string>Resize</string>
+			<key>ID</key>
+			<integer>4</integer>
+			<key>Shape</key>
+			<string>Rectangle</string>
+			<key>Style</key>
+			<dict>
+				<key>fill</key>
+				<dict>
+					<key>Draws</key>
+					<string>NO</string>
+				</dict>
+				<key>shadow</key>
+				<dict>
+					<key>Draws</key>
+					<string>NO</string>
+				</dict>
+				<key>stroke</key>
+				<dict>
+					<key>Draws</key>
+					<string>NO</string>
+				</dict>
+			</dict>
+			<key>Text</key>
+			<dict>
+				<key>Text</key>
+				<string>{\rtf1\mac\ansicpg10000\cocoartf824\cocoasubrtf410
 {\fonttbl\f0\fswiss\fcharset77 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red255\green15\blue36;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc\pardirnatural
@@ -120,7 +119,7 @@ action:  #\{carstore.updatePricing\}\
 			<key>Class</key>
 			<string>ShapedGraphic</string>
 			<key>ID</key>
-			<integer>4</integer>
+			<integer>3</integer>
 			<key>Shape</key>
 			<string>RoundedRectangle</string>
 			<key>Style</key>
@@ -143,7 +142,7 @@ action:  #\{carstore.updatePricing\}\
 			<key>Class</key>
 			<string>ShapedGraphic</string>
 			<key>ID</key>
-			<integer>3</integer>
+			<integer>2</integer>
 			<key>Shape</key>
 			<string>Circle</string>
 			<key>Style</key>
@@ -166,7 +165,7 @@ action:  #\{carstore.updatePricing\}\
 			<key>Class</key>
 			<string>ShapedGraphic</string>
 			<key>ID</key>
-			<integer>2</integer>
+			<integer>1</integer>
 			<key>ImageID</key>
 			<integer>1</integer>
 			<key>Shape</key>
@@ -2733,13 +2732,16 @@ action:  #\{carstore.updatePricing\}\
 		</dict>
 	</array>
 	<key>LayoutInfo</key>
-	<dict/>
+	<dict>
+		<key>ChildOrdering</key>
+		<integer>0</integer>
+	</dict>
 	<key>LinksVisible</key>
 	<string>NO</string>
 	<key>MagnetsVisible</key>
 	<string>NO</string>
 	<key>ModificationDate</key>
-	<string>2006-05-05 16:46:42 -0400</string>
+	<string>2006-08-31 14:50:30 -0400</string>
 	<key>Modifier</key>
 	<string>Edward Burns</string>
 	<key>Orientation</key>
@@ -2826,7 +2828,7 @@ action:  #\{carstore.updatePricing\}\
 	CQkJCTwvYXJyYXk+CgkJCQkJPGtleT5jb20uYXBwbGUucHJpbnQudGlja2V0LmNsaWVu
 	dDwva2V5PgoJCQkJCTxzdHJpbmc+Y29tLmFwcGxlLnByaW50aW5nbWFuYWdlcjwvc3Ry
 	aW5nPgoJCQkJCTxrZXk+Y29tLmFwcGxlLnByaW50LnRpY2tldC5tb2REYXRlPC9rZXk+
-	CgkJCQkJPGRhdGU+MjAwNi0wNS0wNVQyMDozMzozNVo8L2RhdGU+CgkJCQkJPGtleT5j
+	CgkJCQkJPGRhdGU+MjAwNi0wOC0zMVQxODo0ODozNlo8L2RhdGU+CgkJCQkJPGtleT5j
 	b20uYXBwbGUucHJpbnQudGlja2V0LnN0YXRlRmxhZzwva2V5PgoJCQkJCTxpbnRlZ2Vy
 	PjA8L2ludGVnZXI+CgkJCQk8L2RpY3Q+CgkJCTwvYXJyYXk+CgkJPC9kaWN0PgoJCTxr
 	ZXk+Y29tLmFwcGxlLnByaW50LlBhZ2VGb3JtYXQuUE1BZGp1c3RlZFBhcGVyUmVjdDwv
@@ -2840,7 +2842,7 @@ action:  #\{carstore.updatePricing\}\
 	CQkJCTxrZXk+Y29tLmFwcGxlLnByaW50LnRpY2tldC5jbGllbnQ8L2tleT4KCQkJCQk8
 	c3RyaW5nPmNvbS5hcHBsZS5wcmludGluZ21hbmFnZXI8L3N0cmluZz4KCQkJCQk8a2V5
 	PmNvbS5hcHBsZS5wcmludC50aWNrZXQubW9kRGF0ZTwva2V5PgoJCQkJCTxkYXRlPjIw
-	MDYtMDUtMDVUMjA6MzM6MzVaPC9kYXRlPgoJCQkJCTxrZXk+Y29tLmFwcGxlLnByaW50
+	MDYtMDgtMzFUMTg6NDg6MzZaPC9kYXRlPgoJCQkJCTxrZXk+Y29tLmFwcGxlLnByaW50
 	LnRpY2tldC5zdGF0ZUZsYWc8L2tleT4KCQkJCQk8aW50ZWdlcj4wPC9pbnRlZ2VyPgoJ
 	CQkJPC9kaWN0PgoJCQk8L2FycmF5PgoJCTwvZGljdD4KCQk8a2V5PmNvbS5hcHBsZS5w
 	cmludC5QYXBlckluZm8uUE1QYXBlck5hbWU8L2tleT4KCQk8ZGljdD4KCQkJPGtleT5j

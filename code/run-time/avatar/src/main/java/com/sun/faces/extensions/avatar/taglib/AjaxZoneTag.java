@@ -60,14 +60,6 @@ public class AjaxZoneTag extends UIComponentELTag {
                 component.setValueExpression("eventType", eventType);
             }
         }
-        if (null != interactionType) {
-            if (interactionType.isLiteralText()) {
-                component.getAttributes().put("interactionType", interactionType.getValue(getFacesContext().getELContext()));
-            }
-            else {
-                component.setValueExpression("interactionType", interactionType);
-            }
-        }
         if (null != inspectElement) {
             if (inspectElement.isLiteralText()) {
                 component.getAttributes().put("inspectElement", inspectElement.getValue(getFacesContext().getELContext()));
@@ -113,19 +105,6 @@ public class AjaxZoneTag extends UIComponentELTag {
         
         
         
-    }
-
-    /**
-     * Holds value of property interactionType.
-     */
-    private ValueExpression interactionType;
-
-    /**
-     * Setter for property interactionType.
-     * @param interactionType New value of property interactionType.
-     */
-    public void setInteractionType(ValueExpression interactionType) {
-        this.interactionType = interactionType;
     }
 
     /**

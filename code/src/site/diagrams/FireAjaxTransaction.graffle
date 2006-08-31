@@ -12,7 +12,7 @@
 	<key>ColumnSpacing</key>
 	<real>36</real>
 	<key>CreationDate</key>
-	<string>2006-07-19 09:00:06 -0700</string>
+	<string>2006-07-19 12:00:06 -0400</string>
 	<key>Creator</key>
 	<string>Edward Burns</string>
 	<key>GraphDocumentVersion</key>
@@ -56,7 +56,7 @@
 			<array>
 				<string>{341, 230}</string>
 				<string>{394.5, 268.5}</string>
-				<string>{432.741, 234}</string>
+				<string>{487.608, 234}</string>
 			</array>
 			<key>Style</key>
 			<dict>
@@ -156,7 +156,7 @@
 			<array>
 				<string>{341, 166}</string>
 				<string>{362, 183}</string>
-				<string>{409.972, 172}</string>
+				<string>{444.806, 172}</string>
 			</array>
 			<key>Style</key>
 			<dict>
@@ -208,7 +208,7 @@
 			<array>
 				<string>{339, 138}</string>
 				<string>{378, 123}</string>
-				<string>{416.194, 134}</string>
+				<string>{442.778, 134}</string>
 			</array>
 			<key>Style</key>
 			<dict>
@@ -260,7 +260,7 @@
 			<array>
 				<string>{340, 109}</string>
 				<string>{408, 84}</string>
-				<string>{432.074, 104}</string>
+				<string>{462.074, 104}</string>
 			</array>
 			<key>Style</key>
 			<dict>
@@ -277,11 +277,11 @@
 		</dict>
 		<dict>
 			<key>Bounds</key>
-			<string>{{364, 220}, {153, 14}}</string>
+			<string>{{364, 220}, {285, 14}}</string>
 			<key>Class</key>
 			<string>ShapedGraphic</string>
 			<key>FitText</key>
-			<string>YES</string>
+			<string>Vertical</string>
 			<key>Flow</key>
 			<string>Resize</string>
 			<key>ID</key>
@@ -316,16 +316,14 @@
 
 \f0\fs24 \cf0 DynaFaces.fireAjaxTransaction(this);}</string>
 			</dict>
-			<key>Wrap</key>
-			<string>NO</string>
 		</dict>
 		<dict>
 			<key>Bounds</key>
-			<string>{{364, 189}, {153, 14}}</string>
+			<string>{{364, 189}, {240, 14}}</string>
 			<key>Class</key>
 			<string>ShapedGraphic</string>
 			<key>FitText</key>
-			<string>YES</string>
+			<string>Vertical</string>
 			<key>Flow</key>
 			<string>Resize</string>
 			<key>ID</key>
@@ -360,16 +358,14 @@
 
 \f0\fs24 \cf0 DynaFaces.fireAjaxTransaction(this);}</string>
 			</dict>
-			<key>Wrap</key>
-			<string>NO</string>
 		</dict>
 		<dict>
 			<key>Bounds</key>
-			<string>{{364, 158}, {153, 14}}</string>
+			<string>{{364, 158}, {267, 14}}</string>
 			<key>Class</key>
 			<string>ShapedGraphic</string>
 			<key>FitText</key>
-			<string>YES</string>
+			<string>Vertical</string>
 			<key>Flow</key>
 			<string>Resize</string>
 			<key>ID</key>
@@ -404,16 +400,14 @@
 
 \f0\fs24 \cf0 DynaFaces.fireAjaxTransaction(this);}</string>
 			</dict>
-			<key>Wrap</key>
-			<string>NO</string>
 		</dict>
 		<dict>
 			<key>Bounds</key>
-			<string>{{364, 134}, {153, 14}}</string>
+			<string>{{364, 134}, {240, 14}}</string>
 			<key>Class</key>
 			<string>ShapedGraphic</string>
 			<key>FitText</key>
-			<string>YES</string>
+			<string>Vertical</string>
 			<key>Flow</key>
 			<string>Resize</string>
 			<key>ID</key>
@@ -448,16 +442,14 @@
 
 \f0\fs24 \cf0 DynaFaces.fireAjaxTransaction(this);}</string>
 			</dict>
-			<key>Wrap</key>
-			<string>NO</string>
 		</dict>
 		<dict>
 			<key>Bounds</key>
-			<string>{{364, 104}, {153, 14}}</string>
+			<string>{{364, 104}, {234, 14}}</string>
 			<key>Class</key>
 			<string>ShapedGraphic</string>
 			<key>FitText</key>
-			<string>YES</string>
+			<string>Vertical</string>
 			<key>Flow</key>
 			<string>Resize</string>
 			<key>ID</key>
@@ -492,8 +484,6 @@
 
 \f0\fs24 \cf0 DynaFaces.fireAjaxTransaction(this);}</string>
 			</dict>
-			<key>Wrap</key>
-			<string>NO</string>
 		</dict>
 		<dict>
 			<key>Bounds</key>
@@ -1643,7 +1633,7 @@
 	<key>MagnetsVisible</key>
 	<string>NO</string>
 	<key>ModificationDate</key>
-	<string>2006-07-27 12:42:00 -0700</string>
+	<string>2006-08-30 20:45:27 -0400</string>
 	<key>Modifier</key>
 	<string>Edward Burns</string>
 	<key>Orientation</key>
@@ -1730,7 +1720,7 @@
 	CQkJCTwvYXJyYXk+CgkJCQkJPGtleT5jb20uYXBwbGUucHJpbnQudGlja2V0LmNsaWVu
 	dDwva2V5PgoJCQkJCTxzdHJpbmc+Y29tLmFwcGxlLnByaW50aW5nbWFuYWdlcjwvc3Ry
 	aW5nPgoJCQkJCTxrZXk+Y29tLmFwcGxlLnByaW50LnRpY2tldC5tb2REYXRlPC9rZXk+
-	CgkJCQkJPGRhdGU+MjAwNi0wNy0yN1QxOTo0MDo0OFo8L2RhdGU+CgkJCQkJPGtleT5j
+	CgkJCQkJPGRhdGU+MjAwNi0wOC0zMVQwMDo0NDo0OVo8L2RhdGU+CgkJCQkJPGtleT5j
 	b20uYXBwbGUucHJpbnQudGlja2V0LnN0YXRlRmxhZzwva2V5PgoJCQkJCTxpbnRlZ2Vy
 	PjA8L2ludGVnZXI+CgkJCQk8L2RpY3Q+CgkJCTwvYXJyYXk+CgkJPC9kaWN0PgoJCTxr
 	ZXk+Y29tLmFwcGxlLnByaW50LlBhZ2VGb3JtYXQuUE1BZGp1c3RlZFBhcGVyUmVjdDwv
@@ -1744,7 +1734,7 @@
 	CQkJCTxrZXk+Y29tLmFwcGxlLnByaW50LnRpY2tldC5jbGllbnQ8L2tleT4KCQkJCQk8
 	c3RyaW5nPmNvbS5hcHBsZS5wcmludGluZ21hbmFnZXI8L3N0cmluZz4KCQkJCQk8a2V5
 	PmNvbS5hcHBsZS5wcmludC50aWNrZXQubW9kRGF0ZTwva2V5PgoJCQkJCTxkYXRlPjIw
-	MDYtMDctMjdUMTk6NDA6NDhaPC9kYXRlPgoJCQkJCTxrZXk+Y29tLmFwcGxlLnByaW50
+	MDYtMDgtMzFUMDA6NDQ6NDlaPC9kYXRlPgoJCQkJCTxrZXk+Y29tLmFwcGxlLnByaW50
 	LnRpY2tldC5zdGF0ZUZsYWc8L2tleT4KCQkJCQk8aW50ZWdlcj4wPC9pbnRlZ2VyPgoJ
 	CQkJPC9kaWN0PgoJCQk8L2FycmF5PgoJCTwvZGljdD4KCQk8a2V5PmNvbS5hcHBsZS5w
 	cmludC5QYXBlckluZm8uUE1QYXBlck5hbWU8L2tleT4KCQk8ZGljdD4KCQkJPGtleT5j
@@ -1845,7 +1835,7 @@
 		<key>ShowStatusBar</key>
 		<true/>
 		<key>VisibleRegion</key>
-		<string>{{-29, 0}, {634, 729}}</string>
+		<string>{{0, 0}, {634, 729}}</string>
 		<key>Zoom</key>
 		<string>1</string>
 	</dict>

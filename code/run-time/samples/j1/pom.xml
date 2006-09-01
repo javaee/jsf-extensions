@@ -86,22 +86,6 @@
       <artifactId>jsf-facelets</artifactId>
       <version>1.1.10a</version>
     </dependency>
-    <dependency>
-      <groupId>org.apache.struts.shale</groupId>
-      <artifactId>shale-remoting</artifactId>
-      <version>1.0.3-SNAPSHOT</version>
-      <exclusions>
-        <exclusion>
-          <groupId>myfaces</groupId>
-          <artifactId>myfaces-api</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>myfaces</groupId>
-          <artifactId>myfaces-impl</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-
   </dependencies>
   <reporting>
     <plugins>

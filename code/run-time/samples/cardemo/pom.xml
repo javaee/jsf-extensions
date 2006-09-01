@@ -102,18 +102,6 @@
       <artifactId>bp-ui-simple</artifactId>
       <version>5</version>
     </dependency>
-    <dependency>
-      <groupId>org.apache.struts.shale</groupId>
-      <artifactId>shale-remoting</artifactId>
-      <version>1.0.3-SNAPSHOT</version>
-      <exclusions>
-        <exclusion>
-          <groupId>myfaces</groupId>
-          <artifactId>myfaces-api</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-
   </dependencies>
   <reporting>
     <plugins>

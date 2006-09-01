@@ -178,9 +178,9 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.apache.struts.shale</groupId>
+      <groupId>org.apache.shale</groupId>
       <artifactId>shale-remoting</artifactId>
-      <version>1.0.3-SNAPSHOT</version>
+      <version>1.0.3</version>
       <exclusions>
         <exclusion>
           <groupId>myfaces</groupId>
@@ -191,7 +191,6 @@
           <artifactId>myfaces-impl</artifactId>
         </exclusion>
       </exclusions>
-      <scope>provided</scope>
     </dependency>
   </dependencies>
   <reporting> 

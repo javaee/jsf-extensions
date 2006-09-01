@@ -4,13 +4,13 @@ new Ajax.InPlaceEditor(widget.uuid, widget.service,
         widget: widget,
         callback: function(form, value) {
 	  var result = null;
-	  if (typeof _globalScope.gPartial == 'undefined') {
+	  if (typeof _globalScope.DynaFaces == 'undefined') {
 	      result = Form.serialize(form);
 	  } else {
 	      this.ajaxOptions.requestHeaders = 
 		  this.ajaxOptions.requestHeaders || [];
 	      this.ajaxOptions.requestHeaders.push(gPartial);
-	      this.ajaxOptions.requestHeaders.push("values");
+	      this.ajaxOptions.requestHeaders.push(true);
 	      this.ajaxOptions.requestHeaders.push(gRender);
 	      this.ajaxOptions.requestHeaders.push(this.widget.uuid);
 	      this.ajaxOptions.requestHeaders.push(gExecute);

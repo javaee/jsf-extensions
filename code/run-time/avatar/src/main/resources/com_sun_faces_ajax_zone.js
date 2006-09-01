@@ -37,6 +37,9 @@ DynaFacesZones.g_zones = [];
 
 DynaFacesZones.ajaxifyChildren = 
 function ajaxifyChildren(target, options, getCallbackData) {
+    if (!options.collectPostData) {
+	options.collectPostData = DynaFacesZones.collectPostData;
+    }
     if (null == target.isAjaxified && 
         target.hasChildNodes()) {
 	for (var i = 0; i < target.childNodes.length; i++) {
@@ -114,7 +117,7 @@ function takeActionAndTraverseTree(target, element, action, options,
 }
 
 DynaFacesZones.inspectElement = 
-function inspectElement(element) {
+    function inspectElement(element) {
     var result = false;
     if (null != element) {
 	var nodeName = element.nodeName;
@@ -134,3 +137,177 @@ function inspectElement(element) {
     return result;
 }
 
+DynaFacesZones.collectPostData = 
+    function collectPostData(ajaxZone, element, outArray) {
+
+    props = new Object();
+    // Start at the top of the zone, collect all the params, except for
+    // command components.
+    if (ajaxZone.hasChildNodes()) {
+	for (var i = 0; i < ajaxZone.childNodes.length; i++) {
+	    DynaFacesZones.takeActionAndTraverseTree(ajaxZone, 
+                                      ajaxZone.childNodes[i], 
+				      DynaFacesZones.extractParamFromElement, 
+				      props, null);
+	}
+    }
+    // Get the name and value of this selected component.  If this is a
+    // command component, this step is necessary otherwise no value will
+    // be submitted for the button.
+    var name = null;
+    var value = null;
+    var elementNodeName = element.nodeName.toLowerCase();
+    var elementType = element.type;
+
+    name = DynaFacesZones.getParamNameFromElement(element, 
+						  elementNodeName, 
+						  elementType);
+    value = DynaFacesZones.getParamValueFromElement(element, 
+						    elementNodeName, 
+						    elementType);
+    props[name] = value;
+    for (prop in props) {
+	outArray.push(prop+'='+props[prop]);
+    }
+
+    
+}
+
+DynaFacesZones.extractParamFromElement = 
+    function extractParamFromElement(ajaxZone, element, outProps, 
+				     getCallbackData) {
+    var name = null;
+    var value = null;
+    var elementNodeName = element.nodeName.toLowerCase();
+    var elementType = element.type;
+    var i = 0;
+    var doCollect = DynaFacesZones.isCollectParams(element);
+
+    if (null != elementType) {
+	elementType = elementType.toLowerCase();
+    }
+
+    if (doCollect) {
+	name = DynaFacesZones.getParamNameFromElement(element, elementNodeName,
+						      elementType);
+	value = DynaFacesZones.getParamValueFromElement(element, 
+							elementNodeName, 
+							elementType);
+	outProps[name]=value;
+    }
+   
+}
+
+DynaFacesZones.getParamValueFromElement = 
+    function getParamValueFromElement(element, elementNodeName, elementType) {
+    var result = null;
+
+    if (DynaFacesZones.isCheckbox(elementNodeName, elementType)) {
+	result = element.checked;
+    }
+    else {
+	result = element.value;
+    }
+    return result;
+}
+
+DynaFacesZones.getParamNameFromElement =
+    function getParamNameFromElement(element, elementNodeName, elementType) {
+    var name = null;
+    
+    if (-1 != elementNodeName.indexOf("option")) {
+	// the name comes from the parent <select> element
+	while (null != (element = element.parentNode) &&
+	       -1 == element.nodeName.toLowerCase().indexOf("select"));
+    }	
+    if (null != element) {
+	if (null == (name = element.name)) {
+	    name = element.id;
+	}
+    }
+    return name;
+}
+
+DynaFacesZones.isCheckbox =
+    function isCheckbox(elementNodeName, elementType) {
+    var result = false;
+
+    // If the element is an input element...
+    if (-1 != elementNodeName.indexOf("input")) {
+	if (null != elementType) {
+	    if (-1 != elementType.indexOf("checkbox")) {
+		result = true;
+	    }
+	}
+    }
+    return result;
+}
+
+/**
+ * return false if the element is <input type="radio">,
+ * <input type="submit">, <input type="button">, <option> or <button>.  
+ *
+ * otherwise, if the element is any other kind of <input> element return true.
+ */
+
+DynaFacesZones.isCollectParams =
+    function isCollectParams(element) {
+    var elementNodeName = element.nodeName.toLowerCase();
+    var elementType = element.type;
+    var doCollect = false;
+
+    if (null != elementType) {
+	elementType = elementType.toLowerCase();
+    }
+
+    if (!DynaFacesZones.isCommand(elementNodeName, elementType)) {
+	// What sort of element is it?
+	if (-1 != elementNodeName.indexOf("input")) {
+	    // It is an input element, but is it a radio?
+	    if (-1 != elementType.indexOf("radio")) {
+		// Yes.  Only return true if it is selected.
+		if (element.checked) {
+		    doCollect = true;
+		}
+
+	    }
+	    else {
+		// Other kinds of input elements are submitted
+		doCollect = true;
+	    }
+	}
+	else if (-1 != elementNodeName.indexOf("option")) {
+	    // It is an option element, but is it selected?
+	    if (element.selected) {
+		doCollect = true;
+	    }
+	}
+    }
+
+    return doCollect;
+}
+
+DynaFacesZones.isCommand =
+    function isCommand(elementNodeName, elementType) {
+    var result = false;
+
+    // If the element is an input element...
+    if (-1 != elementNodeName.indexOf("input")) {
+	if (null != elementType) {
+	    //  whose type is "button" or "submit" 
+	    if (-1 != elementType.indexOf("submit") ||
+		-1 != elementType.indexOf("button")) {
+		// collect its params.
+		result = true;
+	    }
+	}
+    }
+    else if (-1 != elementNodeName.indexOf("button")) {
+	result = true;
+    }
+    else if (elementNodeName === "a") {
+	result = true;
+    }
+
+    return result;
+}

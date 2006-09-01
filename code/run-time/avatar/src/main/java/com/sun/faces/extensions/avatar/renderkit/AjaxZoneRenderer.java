@@ -197,31 +197,47 @@ public class AjaxZoneRenderer extends Renderer {
             }
             
             if (writeAjaxifyChildren) {
+                boolean wroteAttribute = false;
                 collectPostData = getAttr(context, comp, "collectPostData");
                 eventType = getAttr(context, comp, "eventType");
                 getCallbackData = getAttr(context, comp, "getCallbackData");
                 inspectElement = getAttr(context, comp, "inspectElement");
                 replaceElement = getAttr(context, comp, "replaceElement");
 
-                if (null == collectPostData) {
-                    // PENDING: I18N
-                    throw new IOException("If \"interactionType\" is specified, both \"collectPostData\" and \"eventType\" must be specified");
-                }
-                
                 ajaxifyChildren = new StringBuffer();
                 ajaxifyChildren.append("\nDynaFacesZones.ajaxifyChildren($(\'" + clientId + "\'), ");
-                ajaxifyChildren.append("{ collectPostData: \'" + collectPostData + "\'");
+                ajaxifyChildren.append("{ ");
+                if (null != collectPostData) {
+                    wroteAttribute = true;
+                    ajaxifyChildren.append(" collectPostData: \'" + collectPostData + "\'");
+                }
                 if (null != eventType) {
-                    ajaxifyChildren.append(", eventType: \'" + eventType + "\'");
+                    if (wroteAttribute) {
+                        ajaxifyChildren.append(", ");
+                    }
+                    wroteAttribute = true;
+                    ajaxifyChildren.append("eventType: \'" + eventType + "\'");
                 }
                 if (null != inspectElement) {
-                    ajaxifyChildren.append(", inspectElement: \'" + inspectElement + "\'");
+                    if (wroteAttribute) {
+                        ajaxifyChildren.append(", ");
+                    }
+                    wroteAttribute = true;
+                    ajaxifyChildren.append("inspectElement: \'" + inspectElement + "\'");
                 }
                 if (null != replaceElement) {
-                    ajaxifyChildren.append(", replaceElement: \'" + replaceElement + "\'");
+                    if (wroteAttribute) {
+                        ajaxifyChildren.append(", ");
+                    }
+                    wroteAttribute = true;
+                    ajaxifyChildren.append("replaceElement: \'" + replaceElement + "\'");
                 }
                 if (null != (action = comp.getActionExpression())) {
-                    ajaxifyChildren.append(", action: \'" + action.getExpressionString() + "\'");
+                    if (wroteAttribute) {
+                        ajaxifyChildren.append(", ");
+                    }
+                    wroteAttribute = true;
+                    ajaxifyChildren.append("action: \'" + action.getExpressionString() + "\'");
                 }
                 ajaxifyChildren.append(" }");
                 if (null != getCallbackData) {

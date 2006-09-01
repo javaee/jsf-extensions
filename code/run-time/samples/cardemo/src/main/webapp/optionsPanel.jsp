@@ -27,9 +27,6 @@ Copyright 2005 Sun Microsystems Inc. All Rights Reserved
 <%@ taglib prefix="h" uri="http://java.sun.com/jsf/html" %>
 <%@ taglib prefix="jsfExt" uri="http://java.sun.com/jsf/extensions/dynafaces" %>
 
-<script type="text/javascript" 
-        src='<%= request.getContextPath() + "/devtime.js" %>'></script>
-
 <jsfExt:ajaxZone id="zone2" action="#{carstore.currentModel.updatePricing}">
 <h:panelGrid>
 

@@ -225,28 +225,20 @@ function inspectElement(element) {<br />
           </p>
 
 <pre><code>
-function handler(ajaxZone, element, originalScript, outProps, invocation);
+function handler(ajaxZone, element, outArray);
 </code></pre>
 
-          <p><code>ajaxZone</code> is the ajaxZone element that is
-          the parent of the element that is receiving the event.  
-          <element> is the element receiving the event.
-          <code>originalScript</code> is the value of the event as
-          specified in the original rendered code.
-          <code>invocation</code> is an associative array with two
-          properties: <code>invocation.args</code> is an array of the arguments
-          passed to the target event handler from the browser.
-          note that <code>invocation.args[0]</code> is the JavaScript event.
-          <code>invocation.proceed</code> is a function you can call that will
-          call the target event handler.  The return value from the
-          <code>proceed</code> function can be acted on in the handler
-          as appropriate.  <code>"outProps"</code> is a pre-allocated
-          associative array whose contents will be submitted with the
-          ajax request to the server in response to this zone receiving
-          the JavaScript event specified in the <code>eventType</code>
-          attribute.  For example the following <code>ajaxZone</code>
-          tag will intercept the <code>onmousedown</code> event call the
-          function named "replaceOnMouseDown".</p>
+          <p><code>ajaxZone</code> is the ajaxZone element that is the
+          parent of the element that is receiving the event.
+          <code>element</code> is the element receiving the event.
+          <code>outArray</code> is a pre-allocated array whose contents
+          will be submitted with the ajax request to the server in
+          response to this zone receiving the JavaScript event specified
+          in the <code>eventType</code> attribute.  Each element of the
+          array must be in the form <code>name=value</code>.  For
+          example the following <code>ajaxZone</code> tag will intercept
+          the <code>onmousedown</code> event call the function named
+          "replaceOnMouseDown".</p>
 
 <pre><code>
 &lt;jsfExt:ajaxZone collectPostData="handler"&gt;<br /> 

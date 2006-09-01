@@ -108,10 +108,12 @@
     </attribute>
     <attribute>
         <description>
-            <![CDATA[Flag indicating that, if this component is activated by the user,
-            notifications should be delivered to interested listeners and actions
-            immediately (that is, during Apply Request Values phase) rather than
-            waiting until Invoke Application phase.]]>
+            <![CDATA[<p>This optional attribute is a flag indicating
+            that, if this component is activated by the user,
+            notifications should be delivered to interested listeners
+            and actions immediately (that is, during Apply Request
+            Values phase) rather than waiting until Invoke Application
+            phase.</p>]]>
         </description>
         <name>
             immediate
@@ -220,8 +222,33 @@ function inspectElement(element) {<br />
 
           <p>This optional attribute names a function to be called when
           the JavaScript event specified by the value of the
-          <code>eventType</code> occurs.  The function must conform to
-          the following signature:
+          <code>eventType</code> occurs.  This callback is the
+          application's opportunity to contribute name=value pairs that
+          will be sent with the AJAX request.  If no
+          <code>collectPostData</code> attribute is specified, the
+          following name=value pairs are sent with the AJAX request.</p>
+
+          <ul>
+
+            <li><p>The name=value pair of any input field within the
+            zone.</p></li>
+
+	  <li><p>For any radio button or menu, the name=value pair of
+	  the currently selected choice.</p></li>
+
+	  <li><p>If the activated component that resulted in this
+	  callback being called is a button, the name=value pair for
+	  that button only.  Any other buttons within the zone do not
+	  have their name=value pairs contributed to the AJAX
+	  request.</p></li>
+
+          </ul>
+
+          <p>
+          If the application desires a different set of name=value pairs
+          to be added to the AJAX request, they can use this attribute
+          to name a function that must conform to the following
+          signature:
           </p>
 
 <pre><code>
@@ -230,89 +257,51 @@ function handler(ajaxZone, element, outArray);
 
           <p><code>ajaxZone</code> is the ajaxZone element that is the
           parent of the element that is receiving the event.
-          <code>element</code> is the element receiving the event.
-          <code>outArray</code> is a pre-allocated array whose contents
-          will be submitted with the ajax request to the server in
-          response to this zone receiving the JavaScript event specified
-          in the <code>eventType</code> attribute.  Each element of the
-          array must be in the form <code>name=value</code>.  For
-          example the following <code>ajaxZone</code> tag will intercept
-          the <code>onmousedown</code> event call the function named
-          "replaceOnMouseDown".</p>
+          <code>element</code> is the element receiving the event within
+          the zone.  <code>outArray</code> is a pre-allocated array
+          whose contents will be submitted with the ajax request to the
+          server in response to this zone receiving the JavaScript event
+          specified in the <code>eventType</code> attribute.  Each
+          element of the array must be in the form
+          <code>name=value</code>.  For example, the following
+          <code>ajaxZone</code> tag will submit only the name=value pair
+          of the element with id "<code>toSend</code>".</p>
 
 <pre><code>
-&lt;jsfExt:ajaxZone collectPostData="handler"&gt;<br /> 
-  &lt;d:scroller&gt;<br /> 
-    &lt;!-- nested components  --&gt;<br /> 
-  &lt;/d:scroller&gt;<br /> 
-&lt;/jsfExt:ajaxZone&gt;<br /> 
+&lt;h:form prependId="false"&gt;<br />
+&nbsp;&nbsp;&lt;jsfExt:ajaxZone collectPostData="handler"&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;h:selectBooleanCheckbox id="toSend"<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;valueChangeListener="#{user.adminCheckboxChecked}" /&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value="#{user.isAdministrator}" /&gt;<br />
+&nbsp;&nbsp;&lt;/jsfExt:ajaxZone&gt;<br />
+&lt;/h:form&gt;
 <br /> 
 &lt;script type="text/JavaScript"&gt;<br /> 
 &lt;!--<br /> 
-// Take the original script, extract any name/value pairs<br /> 
-// found within the script, place them into the outProps <br /> 
-// associative array.  DO NOT call the invocation argument<br /> 
-function handler(element, originalScript, outProps, invocation) {<br /> 
+function handler(ajaxZone, element, outArray) {<br /> 
 <br /> 
-&nbsp;&nbsp;var allHandlerStatements = null;<br /> 
-&nbsp;&nbsp;var prunedHandlerStatements = null;<br /> 
-&nbsp;&nbsp;var expI = 0, i = 0, j = 0;<br /> 
-&nbsp;&nbsp;var pattern = null;<br /> 
-&nbsp;&nbsp;var curStatement = null;<br /> 
 &nbsp;&nbsp;var name = null, value = null;<br /> 
 <br /> 
-&nbsp;&nbsp;// Remove any form submit statements<br /> 
-&nbsp;&nbsp;allHandlerStatements = originalScript.split(";");<br /> 
-&nbsp;&nbsp;if (0 >= allHandlerStatements.length) {<br /> 
-&nbsp;&nbsp;&nbsp;&nbsp;return;<br /> 
-&nbsp;&nbsp;}<br /> 
-&nbsp;&nbsp;prunedHandlerStatements = new Array();<br /> 
-&nbsp;&nbsp;for (i = 0; i < allHandlerStatements.length; i++) {<br /> 
-&nbsp;&nbsp;&nbsp;&nbsp;// If the current statement does not contain the submit...<br /> 
-&nbsp;&nbsp;&nbsp;&nbsp;if (-1 == allHandlerStatements[i].search(".*submit[ ]*\([ ]*\)")) {<br /> 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// copy it to the prunedHandlerStatements.<br /> 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;prunedHandlerStatements[j++] = allHandlerStatements[i];<br /> 
-&nbsp;&nbsp;&nbsp;&nbsp;}<br /> 
-&nbsp;&nbsp;}<br /> 
-<br /> 
-&nbsp;&nbsp;// Copy any name/value pair statements to the outProps associative array<br /> 
-&nbsp;&nbsp;if (null == prunedHandlerStatements) {<br /> 
-&nbsp;&nbsp;&nbsp;&nbsp;return;<br /> 
-&nbsp;&nbsp;}<br /> 
-&nbsp;&nbsp;for (i = 0; i < prunedHandlerStatements.length; i++) {<br /> 
-&nbsp;&nbsp;&nbsp;&nbsp;// Hack: assume we're using the [''] syntax.  A more general<br /> 
-&nbsp;&nbsp;&nbsp;&nbsp;// solution would discover this dynamically.<br /> 
-&nbsp;&nbsp;&nbsp;&nbsp;if (-1 != (expI = prunedHandlerStatements[i].lastIndexOf("[\'"))) {<br /> 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;curStatement = prunedHandlerStatements[i].substring(expI + 2);<br /> 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name = null;<br /> 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value = null;<br /> 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// Extract the parameter name.<br /> 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (-1 != (expI = curStatement.indexOf("\']"))) {<br /> 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name = curStatement.substring(0, expI);<br /> 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// Extract the parameter value<br /> 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (-1 != (expI = <br /> 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;prunedHandlerStatements[i].lastIndexOf("\.value"))){<br /> 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (-1 != (expI = <br /> 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;prunedHandlerStatements[i].indexOf("=", expI))) {<br /> 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value = prunedHandlerStatements[i].substring(expI + 1);<br /> 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// strip off the leading and trailing ' if necessary<br /> 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (null != value && "\'" == value.charAt(0)) {<br /> 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ("\'" == value.charAt(value.length - 1)) {<br /> 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value = value.substring(1, value.length - 1);<br /> 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br /> 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br /> 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br /> 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br /> 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (null != name && null != value) {<br /> 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;outProps[name] = value;<br /> 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br /> 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br /> 
-&nbsp;&nbsp;&nbsp;&nbsp;}<br /> 
-&nbsp;&nbsp;}    <br /> 
+&nbsp;&nbsp;var toSend = Document.getElementById('toSend');<br />
+&nbsp;&nbsp;var elementNodeName = toSend.nodeName.toLowerCase();<br />
+&nbsp;&nbsp;var elementType = toSend.type;<br />
+&nbsp;&nbsp;name = DynaFacesZones.getParamNameFromElement(toSend,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;elementNodeName, <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;elementType);<br />
+&nbsp;&nbsp;value = DynaFacesZones.getParamValueFromElement(toSend,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;elementNodeName, <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;elementType);<br />
+&nbsp;&nbsp;outArray.push(name+'='+value);
 }<br /> 
 --&gt;<br /> 
 &lt;/script&gt;<br /> 
 </code></pre>
+
+<p>This will cause an AJAX transaction to be initiated when the user
+clicks the checkbox.  Any other zones in the page will be update via
+AJAX, and they can take advantage of the resultant
+<code>ValueChangeEvent</code>.  This sort of thing is handy for a
+"show/hide" feature in the UI.</p>
 
 ]]>
 
@@ -392,11 +381,12 @@ function replaceElement(id, content, [closure]);
         <description>
           <![CDATA[
 
-          <p>This function is called to provide a closure argument that
-          will be passed to the ajax request and made available to the
-          ajax response in the <code>replaceElement</code> or
-          <code>postReplace </code> functions.  The function must
-          conform to the following signature.
+          <p>This optional attribute names a function to be called to
+          provide a closure argument that will be passed to the ajax
+          request and made available to the ajax response in the
+          <code>replaceElement</code> or <code>postReplace </code>
+          functions.  The function must conform to the following
+          signature.
           </p>
 
 <pre><code>

@@ -27,17 +27,23 @@
  * Copyright 2005 Sun Microsystems Inc. All Rights Reserved
  */
 
-var gFacesPrefix = "com.sun.faces.avatar.";
-var gPartial = gFacesPrefix + "Partial";
-var gExecute = gFacesPrefix + "Execute";
-var gRender = gFacesPrefix + "Render";
-var gViewRoot = gFacesPrefix + "ViewRoot";
-var gFacesEvent = gFacesPrefix + "FacesEvent";
-var gMethodName = gFacesPrefix + "MethodName";
-var gViewState = "javax.faces.ViewState";
-var gGlobalScope = this;
+if (typeof DynaFaces != 'undefined') {
+    alert("DynaFaces already defined!"); 
+}
 
-var gSpecialChars = {
+var DynaFaces = new Object();
+
+DynaFaces.gFacesPrefix = "com.sun.faces.avatar.";
+DynaFaces.gPartial = DynaFaces.gFacesPrefix + "Partial";
+DynaFaces.gExecute = DynaFaces.gFacesPrefix + "Execute";
+DynaFaces.gRender = DynaFaces.gFacesPrefix + "Render";
+DynaFaces.gViewRoot = DynaFaces.gFacesPrefix + "ViewRoot";
+DynaFaces.gFacesEvent = DynaFaces.gFacesPrefix + "FacesEvent";
+DynaFaces.gMethodName = DynaFaces.gFacesPrefix + "MethodName";
+DynaFaces.gViewState = "javax.faces.ViewState";
+DynaFaces.gGlobalScope = this;
+
+DynaFaces.gSpecialChars = {
             '\b': '\\b',
             '\t': '\\t',
             '\n': '\\n',
@@ -47,12 +53,12 @@ var gSpecialChars = {
             '\\': '\\\\'
 };
 
-var gJSON = {
+DynaFaces.gJSON = {
     array: function (x) {
 	var a = ['['], b, f, i, l = x.length, v;
 	for (i = 0; i < l; i += 1) {
 	    v = x[i];
-	    f = gJSON[typeof v];
+	    f = DynaFaces.gJSON[typeof v];
 	    if (f) {
 		v = f(v);
 		if (typeof v == 'string') {
@@ -79,19 +85,19 @@ var gJSON = {
     object: function (x) {
 	if (x) {
 	    if (x instanceof Array) {
-		return gJSON.array(x);
+		return DynaFaces.gJSON.array(x);
 	    }
 	    var a = ['{'], b, f, i, v;
 	    for (i in x) {
 		v = x[i];
-		f = gJSON[typeof v];
+		f = DynaFaces.gJSON[typeof v];
 		if (f) {
 		    v = f(v);
 		    if (typeof v == 'string') {
 			if (b) {
 			    a[a.length] = ',';
 			}
-			a.push(gJSON.string(i), ':', v);
+			a.push(DynaFaces.gJSON.string(i), ':', v);
 			b = true;
                             }
                         }
@@ -104,7 +110,7 @@ var gJSON = {
     string: function (x) {
 	if (/[\"\\\x00-\x1f]/.test(x)) {
 	    x = x.replace(/([\x00-\x1f\\\"])/g, function(a, b) {
-			      var c = gSpecialChars[b];
+			      var c = DynaFaces.gSpecialChars[b];
 			      if (c) {
 				  return c;
 			      }
@@ -193,7 +199,7 @@ Object.extend(Element, {
   replace: function(dest, src)  {
 
     // If this partial response is the entire view...
-    if (-1 != dest.indexOf(gViewRoot)) {
+    if (-1 != dest.indexOf(DynaFaces.gViewRoot)) {
 	// if src contains <html>, trim the <html> and </html>, if present.
 	//   if src contains <head>
 	//      extract the contents of <head> and replace current document's
@@ -368,7 +374,7 @@ Faces.ViewState.prototype = {
 	if (('void' != collectPostDataType && 'undefined' != collectPostDataType) ||
 	    ('void' != inputsType && 'undefined' != collectPostDataType)) {
 	    // Just get the state data.
-	    var viewState = $(gViewState);
+	    var viewState = $(DynaFaces.gViewState);
 	    t = viewState.tagName.toLowerCase();
 	    p = Form.Element.Serializers[t](viewState);
 	    if (p && p[0].length != 0) {
@@ -398,7 +404,7 @@ Faces.ViewState.prototype = {
 			p[1] = [p[1]];
 		    }
 		    // Don't concatenate the viewState.
-		    if (this[p[0]] && -1 == gViewState.indexOf(p[0])) { 
+		    if (this[p[0]] && -1 == DynaFaces.gViewState.indexOf(p[0])) { 
 			this[p[0]] = this[p[0]].concat(p[1]); 
 		    }
 		    else {
@@ -424,9 +430,9 @@ Faces.ViewState.prototype = {
 	var i,j,p,v;
 
 	if (this.options.inputs) {
-	    if (this[gViewState]) {
-		p = encodeURIComponent(gViewState);
-		v = encodeURIComponent(this[gViewState]);
+	    if (this[DynaFaces.gViewState]) {
+		p = encodeURIComponent(DynaFaces.gViewState);
+		v = encodeURIComponent(this[DynaFaces.gViewState]);
 		q.push(p+'='+v);
 	    }
 	    var inputs = this.options.inputs.split(",");
@@ -477,8 +483,8 @@ Faces.ViewState.prototype = {
 	    this.options.collectPostData(this.options.ajaxZone, this.options.source,
 				   q);
 	}
-	else if (typeof gGlobalScope[this.options.collectPostData] == 'function') {
-	    gGlobalScope[this.options.collectPostData](this.options.ajaxZone, 
+	else if (typeof DynaFaces.gGlobalScope[this.options.collectPostData] == 'function') {
+	    DynaFaces.gGlobalScope[this.options.collectPostData](this.options.ajaxZone, 
 						 this.options.source, q);
 	}
 
@@ -531,7 +537,7 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
 	this.options.requestHeaders = this.options.requestHeaders || [];
 	
 	// guarantee our header
-	this.options.requestHeaders.push(gPartial);
+	this.options.requestHeaders.push(DynaFaces.gPartial);
 	if (this.options.immediate) {
 	    this.options.requestHeaders.push('immediate');
 	}
@@ -546,29 +552,29 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
 		if (this.options.phaseId) {
 			sourceId += "," + this.options.phaseId;
 		}
-		this.options.requestHeaders.push(gMethodName);
+		this.options.requestHeaders.push(DynaFaces.gMethodName);
 		this.options.requestHeaders.push(sourceId);
 	}
 
 	if (this.options.execute) {
-		this.options.requestHeaders.push(gExecute);
+		this.options.requestHeaders.push(DynaFaces.gExecute);
 		this.options.requestHeaders.push(Faces.toArray(this.options.execute,',').join(','));
 	}
 	
 	if (this.options.render) {
-		this.options.requestHeaders.push(gRender);
+		this.options.requestHeaders.push(DynaFaces.gRender);
 		this.options.requestHeaders.push(Faces.toArray(this.options.render,',').join(','));
 	}
 
 	if (this.options.xjson) {
-	    var xjson = gJSON.object(this.options.xjson);
+	    var xjson = DynaFaces.gJSON.object(this.options.xjson);
 	    this.options.requestHeaders.push("X-JSON");
 	    this.options.requestHeaders.push(xjson);
 	}
 	
 	if (typeof DynaFaces != 'undefined') {
 	    if (0 < DynaFaces._eventQueue.length) {
-		this.options.requestHeaders.push(gFacesEvent);
+		this.options.requestHeaders.push(DynaFaces.gFacesEvent);
 		var arr = new Array();
 		for (i = 0; i < DynaFaces._eventQueue.length; i++) {
 		    arr.push(DynaFaces._eventQueue[i].toString());
@@ -634,10 +640,10 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
 		 }
 		 // Otherwise, if there is a globally scoped function
 		 // named as the value of the replaceElement...
-		 else if (typeof gGlobalScope[this.options.replaceElement] ==
+		 else if (typeof DynaFaces.gGlobalScope[this.options.replaceElement] ==
 			  'function') {
 		     // invoke it.
-		     gGlobalScope[this.options.replaceElement](id, markup,
+		     DynaFaces.gGlobalScope[this.options.replaceElement](id, markup,
 								   this.options.closure, 
 								   xjson);
 		 }
@@ -662,10 +668,10 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
 		 }
 		 // Otherwise, if there is a globally scoped function
 		 // named as the value of the postReplace...
-		 else if (typeof gGlobalScope[this.options.postReplace] ==
+		 else if (typeof DynaFaces.gGlobalScope[this.options.postReplace] ==
 			  'function') {
 		     // invoke it.
-		     gGlobalScope[this.options.postReplace]($(id), markup,
+		     DynaFaces.gGlobalScope[this.options.postReplace]($(id), markup,
 								this.options.closure,
 								xjson);
 		 }
@@ -681,7 +687,7 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
      // not just the zeroth.
      var state = state || xml.getElementsByTagName('state')[0].firstChild;
      if (state) {
-	 var hf = $(gViewState);
+	 var hf = $(DynaFaces.gViewState);
 	 if (hf) {
 	     hf.value = state.text || state.data;
 	 }
@@ -755,12 +761,6 @@ Faces.Observer.prototype = {
 };
 
 
-
-if (typeof DynaFaces != 'undefined') {
-    alert("DynaFaces already defined!"); 
-}
-
-var DynaFaces = new Object();
 
 DynaFaces._eventQueue = new Array();
 

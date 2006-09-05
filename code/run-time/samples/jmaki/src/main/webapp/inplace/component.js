@@ -9,26 +9,29 @@ new Ajax.InPlaceEditor(widget.uuid, widget.service,
 	  } else {
 	      this.ajaxOptions.requestHeaders = 
 		  this.ajaxOptions.requestHeaders || [];
-	      this.ajaxOptions.requestHeaders.push(gPartial);
+	      this.ajaxOptions.requestHeaders.push(DynaFaces.gPartial);
 	      this.ajaxOptions.requestHeaders.push(true);
-	      this.ajaxOptions.requestHeaders.push(gRender);
+	      this.ajaxOptions.requestHeaders.push(DynaFaces.gRender);
 	      this.ajaxOptions.requestHeaders.push(this.widget.uuid);
-	      this.ajaxOptions.requestHeaders.push(gExecute);
+	      this.ajaxOptions.requestHeaders.push(DynaFaces.gExecute);
 	      this.ajaxOptions.requestHeaders.push(this.widget.uuid);
 	      
-	      var stateElements = window.document.getElementsByName(gViewState);
+	      var stateElements = window.document.getElementsByName(DynaFaces.gViewState);
 	      var stateValue = encodeURIComponent(stateElements[0].value);
 	      var formName = encodeURIComponent(form.id);
 	      var uuid = encodeURIComponent(this.widget.uuid);
 		  
 	      result = uuid + "=" + value + "&" + 
 		  formName + "=" + formName + "&" + 
-		  gViewState + "=" + stateValue;
+		  DynaFaces.gViewState + "=" + stateValue;
 	  }
 	  return result;
       }, 
       onComplete: function(transport, element) {
 	    if (null == transport || null == element) {
+		return;
+	    }
+	    if (typeof _globalScope.DynaFaces == 'undefined') {
 		return;
 	    }
 
@@ -42,9 +45,11 @@ new Ajax.InPlaceEditor(widget.uuid, widget.service,
 
 	    var state = state || xml.getElementsByTagName('state')[0].firstChild;
 	    if (state) {
-		var hf = $(gViewState);
-		if (hf) {
-		    hf.value = state.text || state.data;
+		var stateFields = 
+		    Document.getElementsByName(DynaFaces.gViewState);
+		var i;
+		for (i = 0; i < stateFields.length; i++) {
+		    stateFields[i].value = state.text || state.data;
 		}
 	    }
 

@@ -70,8 +70,8 @@ function moveAsideEventType(ajaxZone, element, options, getCallbackData) {
 	if (typeof getCallbackData == 'function') {
 	    options.closure = getCallbackData(ajaxZone, element);
 	}
-	else if (typeof gGlobalScope[getCallbackData] == 'function') {
-	    options.closure = gGlobalScope[getCallbackData](ajaxZone, element);
+	else if (typeof DynaFaces.gGlobalScope[getCallbackData] == 'function') {
+	    options.closure = DynaFaces.gGlobalScope[getCallbackData](ajaxZone, element);
 	}
     }
     var c = new Faces.DeferredEvent(element, options.eventType, options);
@@ -85,8 +85,8 @@ function takeActionAndTraverseTree(target, element, action, options,
 
     // If the user defined an "inspectElement" function, call it.
     if (!(typeof options.inspectElement == 'function')) {
-	if (typeof gGlobalScope[options.inspectElement] == 'function') {
-	    options.inspectElement = gGlobalScope[options.inspectElement];
+	if (typeof DynaFaces.gGlobalScope[options.inspectElement] == 'function') {
+	    options.inspectElement = DynaFaces.gGlobalScope[options.inspectElement];
 	}
     }
     if (null != options.inspectElement) {

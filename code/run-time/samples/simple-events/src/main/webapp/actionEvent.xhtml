@@ -82,7 +82,7 @@ function queueEvent() {
 
 <td>
 
-  <h:commandButton id="ajax" value="submit via ajax" onclick="DynaFaces.fireAjaxTransaction(this, { execute: 'input', render: 'label,input', inputs: 'input' }); return false;" actionListener="#{bean.processAction}" />
+  <h:commandButton id="ajax" value="submit via ajax" onclick="DynaFaces.fireAjaxTransaction(this, { render: 'label'}); return false;" actionListener="#{bean.processAction}" />
 
 </td>
 

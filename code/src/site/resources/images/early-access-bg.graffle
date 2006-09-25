@@ -12,7 +12,7 @@
 	<key>ColumnSpacing</key>
 	<real>36</real>
 	<key>CreationDate</key>
-	<string>2006-07-19 12:53:09 -0700</string>
+	<string>2006-07-19 15:53:09 -0400</string>
 	<key>Creator</key>
 	<string>Edward Burns</string>
 	<key>GraphDocumentVersion</key>
@@ -29,7 +29,7 @@
 			<key>Flow</key>
 			<string>Resize</string>
 			<key>ID</key>
-			<integer>4</integer>
+			<integer>1</integer>
 			<key>Rotation</key>
 			<real>66</real>
 			<key>Shape</key>
@@ -54,23 +54,13 @@
 			</dict>
 			<key>Text</key>
 			<dict>
-				<key>RTFD</key>
-				<data>
-				BAt0eXBlZHN0cmVhbYED6IQBQISEhA1PT1RleHRTdG9y
-				YWdlAISEDU5TVGV4dFN0b3JhZ2UAhIQZTlNNdXRhYmxl
-				QXR0cmlidXRlZFN0cmluZwCEhBJOU0F0dHJpYnV0ZWRT
-				dHJpbmcAhIQITlNPYmplY3QAhZKEhIQPTlNNdXRhYmxl
-				U3RyaW5nAYSECE5TU3RyaW5nAZeEASsURWFybHkgQWNj
-				ZXNzIFZlcnNpb26GhAJpSQEUkoSEhAxOU0RpY3Rpb25h
-				cnkAl4QBaQOShJqaB05TQ29sb3KGkoSEhAdOU0NvbG9y
-				AJeEAWMBhARmZmZmgz8AAACDPWRNn4M9IZ3Ygz7HrhSG
-				koSamhBOU1BhcmFncmFwaFN0eWxlhpKEhIQXTlNNdXRh
-				YmxlUGFyYWdyYXBoU3R5bGUAhIQQTlNQYXJhZ3JhcGhT
-				dHlsZQCXhARDQ0BTAgCFAIaShJqaBk5TRm9udIaShISE
-				Bk5TRm9udB6XnTCEBVs0OGNdBgAAACYAAAD+/wBBAG0A
-				ZQByAGkAYwBhAG4AVAB5AHAAZQB3AHIAaQB0AGUAcgAA
-				hAFmCZ8AnwGfAJ8AhoaG
-				</data>
+				<key>Text</key>
+				<string>{\rtf1\mac\ansicpg10000\cocoartf824\cocoasubrtf410
+{\fonttbl\f0\fnil\fcharset77 AmericanTypewriter;}
+{\colortbl;\red255\green255\blue255;\red238\green238\blue238;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc\pardirnatural
+
+\f0\fs18 \cf2 Early Access Version}</string>
 			</dict>
 			<key>Wrap</key>
 			<string>NO</string>
@@ -102,13 +92,16 @@
 		</dict>
 	</array>
 	<key>LayoutInfo</key>
-	<dict/>
+	<dict>
+		<key>ChildOrdering</key>
+		<integer>0</integer>
+	</dict>
 	<key>LinksVisible</key>
 	<string>NO</string>
 	<key>MagnetsVisible</key>
 	<string>NO</string>
 	<key>ModificationDate</key>
-	<string>2006-07-19 13:17:50 -0700</string>
+	<string>2006-09-08 15:07:25 -0400</string>
 	<key>Modifier</key>
 	<string>Edward Burns</string>
 	<key>Orientation</key>
@@ -195,7 +188,7 @@
 	CQkJCTwvYXJyYXk+CgkJCQkJPGtleT5jb20uYXBwbGUucHJpbnQudGlja2V0LmNsaWVu
 	dDwva2V5PgoJCQkJCTxzdHJpbmc+Y29tLmFwcGxlLnByaW50aW5nbWFuYWdlcjwvc3Ry
 	aW5nPgoJCQkJCTxrZXk+Y29tLmFwcGxlLnByaW50LnRpY2tldC5tb2REYXRlPC9rZXk+
-	CgkJCQkJPGRhdGU+MjAwNi0wNy0xOVQxOTo1MzowOVo8L2RhdGU+CgkJCQkJPGtleT5j
+	CgkJCQkJPGRhdGU+MjAwNi0wOS0wOFQxOTowMzowNFo8L2RhdGU+CgkJCQkJPGtleT5j
 	b20uYXBwbGUucHJpbnQudGlja2V0LnN0YXRlRmxhZzwva2V5PgoJCQkJCTxpbnRlZ2Vy
 	PjA8L2ludGVnZXI+CgkJCQk8L2RpY3Q+CgkJCTwvYXJyYXk+CgkJPC9kaWN0PgoJCTxr
 	ZXk+Y29tLmFwcGxlLnByaW50LlBhZ2VGb3JtYXQuUE1BZGp1c3RlZFBhcGVyUmVjdDwv
@@ -209,7 +202,7 @@
 	CQkJCTxrZXk+Y29tLmFwcGxlLnByaW50LnRpY2tldC5jbGllbnQ8L2tleT4KCQkJCQk8
 	c3RyaW5nPmNvbS5hcHBsZS5wcmludGluZ21hbmFnZXI8L3N0cmluZz4KCQkJCQk8a2V5
 	PmNvbS5hcHBsZS5wcmludC50aWNrZXQubW9kRGF0ZTwva2V5PgoJCQkJCTxkYXRlPjIw
-	MDYtMDctMTlUMTk6NTM6MDlaPC9kYXRlPgoJCQkJCTxrZXk+Y29tLmFwcGxlLnByaW50
+	MDYtMDktMDhUMTk6MDM6MDRaPC9kYXRlPgoJCQkJCTxrZXk+Y29tLmFwcGxlLnByaW50
 	LnRpY2tldC5zdGF0ZUZsYWc8L2tleT4KCQkJCQk8aW50ZWdlcj4wPC9pbnRlZ2VyPgoJ
 	CQkJPC9kaWN0PgoJCQk8L2FycmF5PgoJCTwvZGljdD4KCQk8a2V5PmNvbS5hcHBsZS5w
 	cmludC5QYXBlckluZm8uUE1QYXBlck5hbWU8L2tleT4KCQk8ZGljdD4KCQkJPGtleT5j
@@ -304,15 +297,15 @@
 		<key>CurrentSheet</key>
 		<string>0</string>
 		<key>Frame</key>
-		<string>{{344, 4}, {591, 828}}</string>
+		<string>{{-1059, -65}, {591, 828}}</string>
 		<key>ShowRuler</key>
 		<false/>
 		<key>ShowStatusBar</key>
 		<true/>
 		<key>VisibleRegion</key>
-		<string>{{0, 1}, {576, 730}}</string>
+		<string>{{0, 0}, {288, 365}}</string>
 		<key>Zoom</key>
-		<string>1</string>
+		<string>2</string>
 	</dict>
 </dict>
 </plist>

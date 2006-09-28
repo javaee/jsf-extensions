@@ -198,6 +198,16 @@
       </modules>
     </profile>
 
+    <profile>
+      <id>flash</id>
+      <modules>
+	<module>maven/master-pom</module>
+	<module>test-time</module>
+	<module>run-time/common</module>
+	<module>run-time/flash</module>
+	<module>run-time/samples/flash</module>
+      </modules>
+    </profile>
 
   </profiles>
 </project>

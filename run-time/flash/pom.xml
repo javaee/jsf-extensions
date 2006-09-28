@@ -74,14 +74,6 @@
 
   </build>
 
-  <dependencies>
-    <dependency>
-      <groupId>javax.portlet</groupId>
-      <artifactId>portlet-api</artifactId>
-      <version>1.0</version>
-    </dependency>
-  </dependencies>
-
   <reporting>
     <plugins>
       <excludeDefaults>true</excludeDefaults>

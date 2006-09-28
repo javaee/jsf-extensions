@@ -39,16 +39,29 @@ public class Constants {
     
     private Constants() {
     }
+    
+    // PENDING(edburns): consider making this an enum.
 
     public static final String PREFIX = "com.sun.faces.extensions.flash";
 
-    public static final String FLASH_ATTRIBUTE_NAME = PREFIX + "FLASH";
+    public static final String FLASH_ATTRIBUTE_NAME = PREFIX + ".FLASH";
 
-    public static final String FLASH_THIS_REQUEST_ATTRIBUTE_NAME = PREFIX + "ThisRequest";
+    public static final String FLASH_THIS_REQUEST_ATTRIBUTE_NAME = PREFIX + ".ThisRequest";
 
-    public static final String FLASH_POSTBACK_REQUEST_ATTRIBUTE_NAME = PREFIX + "PostbackRequest";
+    public static final String FLASH_POSTBACK_REQUEST_ATTRIBUTE_NAME = PREFIX + ".PostbackRequest";
 
-    public static final String CURRENT_PHASE_ID_ATTRIBUTE_NAME = PREFIX + "CurrentPhaseId";
-
+    public static final String CURRENT_PHASE_ID_ATTRIBUTE_NAME = PREFIX + ".CurrentPhaseId";
     
+    static final String FLASH_KEEP_ALL_REQUEST_SCOPED_DATA_ATTRIBUTE = 
+            PREFIX + ".KeepAllRequestScopedData";
+    
+    static final String FACES_MESSAGES_ATTRIBUTE_NAME = 
+            PREFIX + ".FacesMessages";
+
+    static final String REDIRECT_AFTER_POST_ATTRIBUTE_NAME = 
+            PREFIX + ".RedirectAfterPost";
+    
+    static final String THIS_REQUEST_IS_GET_AFTER_REDIRECT_AFTER_POST_ATTRIBUTE_NAME = 
+            PREFIX + ".ThisRequestIsGetAfterRedirectAfterPost";
+
 }

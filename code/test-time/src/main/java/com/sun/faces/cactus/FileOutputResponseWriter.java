@@ -114,36 +114,38 @@ public class FileOutputResponseWriter extends ResponseWriter {
 //
 
     public void write(int c) throws IOException {
-        out.write(c);
+        writer.write(c);
     }
 
 
     public void write(char[] cbuf) throws IOException {
-        out.write(cbuf);
+        writer.write(cbuf);
     }
 
 
     public void write(char[] cbuf, int off, int len) throws IOException {
-        out.write(cbuf, off, len);
+        writer.write(cbuf, off, len);
     }
 
 
     public void write(String str) throws IOException {
-        out.write(str);
+        writer.write(str);
     }
 
 
     public void write(String str, int off, int len) throws IOException {
-        out.write(str, off, len);
+        writer.write(str, off, len);
     }
 
 
     public void flush() throws IOException {
+        writer.flush();
         out.flush();
     }
 
 
     public void close() throws IOException {
+        writer.close();
         out.close();
     }
 

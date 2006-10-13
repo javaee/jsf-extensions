@@ -79,7 +79,10 @@ public class PartialTraversalLifecycle extends Lifecycle {
             parent.execute(context);
         }
         finally {
-            ((PartialTraversalViewRoot)context.getViewRoot()).postExecuteCleanup(context);
+            PartialTraversalViewRoot root = (PartialTraversalViewRoot)context.getViewRoot();
+            if (null != root) {
+                root.postExecuteCleanup(context);
+            }
         }
     }
     

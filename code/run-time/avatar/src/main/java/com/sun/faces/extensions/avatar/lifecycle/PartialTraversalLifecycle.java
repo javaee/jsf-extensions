@@ -132,15 +132,33 @@ public class PartialTraversalLifecycle extends Lifecycle {
     
 
     public void removePhaseListener(PhaseListener phaseListener) {
-        parent.removePhaseListener(phaseListener);
+        if (!parentHasListenerOfClass(phaseListener)) {
+            parent.removePhaseListener(phaseListener);
+        }
     }
 
     public void addPhaseListener(PhaseListener phaseListener) {
-        parent.addPhaseListener(phaseListener);
+        if (!parentHasListenerOfClass(phaseListener)) {
+            parent.addPhaseListener(phaseListener);
+        }
     }
 
     public PhaseListener[] getPhaseListeners() {
         PhaseListener [] result = parent.getPhaseListeners();
+        return result;
+    }
+    
+    private boolean parentHasListenerOfClass(PhaseListener listener) {
+        boolean result = false;
+        PhaseListener [] listeners = getPhaseListeners();
+        
+        for (PhaseListener cur : listeners) {
+            if (cur.getClass().getName().equals(listener.getClass().getName())){
+                result = true;
+                break;
+            }
+        }
+        
         return result;
     }
     

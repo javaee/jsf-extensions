@@ -1,4 +1,10 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<?xml version="1.0" encoding="UTF-8"?>
+<jsp:root version="1.2" 
+          xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:h="http://java.sun.com/jsf/html"
+          xmlns:jsp="http://java.sun.com/JSP/Page"
+          xmlns:jsfExt="http://java.sun.com/jsf/extensions/dynafaces">
+    <jsp:directive.page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"/>
 
 <!--
 The contents of this file are subject to the terms
@@ -28,15 +34,11 @@ Copyright 2005 Sun Microsystems Inc. All Rights Reserved
 <html>
 
 <head>
-    <meta http-equiv="Content-Type" content="text/html;CHARSET=iso-8859-1">
+    <meta http-equiv="Content-Type" content="text/html;CHARSET=UTF-8" />
     <title>CarStore</title>
     <link rel="stylesheet" type="text/css"
-          href="${pageContext.request.contextPath}/stylesheet.css">
+          href="${pageContext.request.contextPath}/stylesheet.css" />
 </head>
-
-<%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
-<%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
-<%@ taglib prefix="jsfExt" uri="http://java.sun.com/jsf/extensions/dynafaces" %>
 
 <f:loadBundle basename="carstore.bundles.Resources" var="bundle"/>
 
@@ -101,3 +103,4 @@ Copyright 2005 Sun Microsystems Inc. All Rights Reserved
 </body>
 
 </html>
+</jsp:root>

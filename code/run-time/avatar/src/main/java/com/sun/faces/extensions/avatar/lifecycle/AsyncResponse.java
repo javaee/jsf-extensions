@@ -454,8 +454,7 @@ public class AsyncResponse {
             String buf = null;
             int i,j;
             if (null == this.state && null != (buf = fw.toString())) {
-                buf = buf.toLowerCase(Locale.US);
-                if (-1 != (i = buf.indexOf(ResponseStateManager.VIEW_STATE_PARAM.toLowerCase()))) {
+                if (-1 != (i = buf.indexOf(ResponseStateManager.VIEW_STATE_PARAM))) {
                     if (-1 != (i = buf.lastIndexOf("<", i))) {
                         if (-1 != (i = buf.indexOf("value", i))) {
                             if (-1 != (i = buf.indexOf("\"",i))) {

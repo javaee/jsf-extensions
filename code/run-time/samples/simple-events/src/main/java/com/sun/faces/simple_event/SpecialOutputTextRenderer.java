@@ -29,14 +29,14 @@
 
 package com.sun.faces.simple_event;
 
-import com.sun.faces.extensions.common.util.Util;
 import java.io.IOException;
 import javax.faces.component.UIComponent;
+import javax.faces.component.ValueHolder;
 import javax.faces.render.Renderer;
 
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
-import javax.faces.render.RenderKitFactory;
+
  
 /**
  *
@@ -48,44 +48,47 @@ public class SpecialOutputTextRenderer extends Renderer {
     public SpecialOutputTextRenderer() {
     }
  
-    private Renderer textRenderer = null;
- 
-    private Renderer getStandardTextRenderer(FacesContext context) {
-       if (null != textRenderer) {
-           return textRenderer;
-       }
- 
-       textRenderer = Util.getRenderKit(context, 
-               RenderKitFactory.HTML_BASIC_RENDER_KIT).
-                getRenderer("javax.faces.Output", "javax.faces.Text");
-       assert(null != textRenderer);
- 
-       return textRenderer;
-    }
- 
     public void encodeBegin(FacesContext context, UIComponent component) throws IOException {
-        ResponseWriter writer = context.getResponseWriter();
-        writer.startElement("i", component);
-        writer.startElement("blink", component);
-        writer.startElement("font", component);
-        writer.writeAttribute("color", "red", "color");
-        getStandardTextRenderer(context).encodeBegin(context,component);
     }
  
     public void encodeChildren(FacesContext context, UIComponent component) throws IOException {
-        getStandardTextRenderer(context).encodeChildren(context,component);
     }
  
     public void encodeEnd(FacesContext context, UIComponent component) throws IOException {
         ResponseWriter writer = context.getResponseWriter();
-        getStandardTextRenderer(context).encodeEnd(context,component);
+        writer.startElement("span", component);
+        writer.writeAttribute("id", component.getClientId(context), "id");
+        writer.write("<![CDATA[ Character data in the span, before the <i> ( ]]>");
+        writer.startElement("i", component);
+        writer.startElement("blink", component);
+        writer.startElement("font", component);
+        writer.writeAttribute("color", "red", "color");
+        writer.writeText(" ", "blank");
+        writer.write("<![CDATA[ Character data before the message ( ]]>");
+        writer.writeText(getValue(context, component), component, "value");
+        writer.write("<![CDATA[ ) character data after the message. ]]>");        
         writer.endElement("font");
         writer.endElement("blink");
         writer.endElement("i");
+        writer.write("<![CDATA[ ) Character data in the span, after the </i> ]]>");
+        writer.endElement("span");
     }
     
     public void addToRequestScope(FacesContext context, UIComponent component) {
         context.getExternalContext().getRequestMap().put("addedFromRenderer", 
                 "This message added from renderer at " + System.currentTimeMillis());
+    }
+    
+    protected String getValue(FacesContext context, UIComponent component) {
+        String result = "";
+        
+        if (component instanceof ValueHolder) {
+            Object value = ((ValueHolder) component).getValue();
+            if (null != value) {
+                result = value.toString();
+            }
+        }
+
+        return result;
     }
 } 

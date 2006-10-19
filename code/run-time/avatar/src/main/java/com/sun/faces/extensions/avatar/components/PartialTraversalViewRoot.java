@@ -35,19 +35,17 @@ import com.sun.faces.extensions.common.util.Util;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import javax.faces.FacesException;
-import javax.faces.application.FacesMessage;
 import javax.faces.component.ActionSource;
 import javax.faces.component.ContextCallback;
 import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
 import javax.faces.component.UIViewRootCopy;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
+import javax.faces.context.ResponseWriterWrapper;
 import javax.faces.convert.ConverterException;
 import javax.faces.event.PhaseId;
 import javax.servlet.http.HttpServletResponse;
@@ -277,8 +275,15 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
                 writer.writeAttribute("id", AsyncResponse.VIEW_ROOT_ID, "id");
                 writer.startElement("markup", this);
                 writer.write("<![CDATA[");
+                
+                // setup up a writer which will escape any CDATA sections
+                context.setResponseWriter(new EscapeCDATAWriter(writer));
+                
                 // do the default behavior...
                 super.encodeAll(context);
+                
+                // revert the write and finish up
+                context.setResponseWriter(writer);
                 writer.write("]]>");
                 writer.endElement("markup");
                 writer.endElement("render");
@@ -436,7 +441,15 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
                     try {
                         writer.startElement("markup", comp);
                         writer.write("<![CDATA[");
+                        
+                        // setup up a writer which will escape any CDATA sections
+                        facesContext.setResponseWriter(new EscapeCDATAWriter(writer));
+                
+                        // do the default behavior...
                         comp.encodeAll(facesContext);
+                
+                        // revert the write and finish up
+                        facesContext.setResponseWriter(writer);
                         writer.write("]]>");
                         writer.endElement("markup");
                     }
@@ -455,6 +468,21 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
             }
         }
         
+    }
+    
+    private class EscapeCDATAWriter extends ResponseWriterWrapper {
+
+        private ResponseWriter toWrap = null;
+        public EscapeCDATAWriter(ResponseWriter toWrap) {
+            this.toWrap = toWrap;
+        }
+        protected ResponseWriter getWrapped() { 
+            return toWrap; 
+        }
+
+        public void write(String string) throws IOException {
+            super.write(string.replace("]]>", "]]]]><![CDATA[>"));
+        }
     }
     
 }

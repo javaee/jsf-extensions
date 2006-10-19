@@ -621,8 +621,14 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
      var render = components.getElementsByTagName('render');
      for (var i = 0; i < render.length; i++) {
 	 id = render[i].getAttribute('id');
-	 content = render[i].firstChild.firstChild;
-	 markup = content.text || content.data;
+
+         // join the CDATA sections in the markup
+         markup = '';
+         for (var j = 0; j < render[i].firstChild.childNodes.length; j++) {
+	     content = render[i].firstChild.childNodes[j];
+	     markup += content.text || content.data;
+         }
+
 	 str = markup.stripScripts();
 	 this.doEvalResponse = false;
 	 // If the user passed a replaceElement...

@@ -32,4 +32,33 @@
     <managed-bean-scope>application</managed-bean-scope>
   </managed-bean>
 
+  <managed-bean>
+    <managed-bean-name>fishEyeBean</managed-bean-name>
+    <managed-bean-class>com.sun.faces.run_time_test.model.FishEyeBean</managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+    <managed-property>
+      <property-name>personMessages</property-name>
+      <list-entries>
+        <value>Ben Galbraith</value>
+        <value>Dion Almaer</value>
+        <value>Aza Raskin</value>
+        <value>Howard Lewis-Ship</value>
+      </list-entries>
+    </managed-property>
+  </managed-bean>
+  
+
+  <managed-bean>
+    <managed-bean-name>fishEyeData</managed-bean-name>
+    <managed-bean-class>java.util.ArrayList</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+    <list-entries>
+      <value-class>javax.faces.model.SelectItem</value-class>
+      <value>images/3_Galbraith_small.jpg,Ben,1</value>
+      <value>images/2_Almaer_small.jpg,Dion,2</value>
+      <value>images/1255_Raskin_small.jpg,Aza,3</value>
+      <value>images/1254_Lewis_Ship_small.jpg,Howard,4</value>
+    </list-entries>
+  </managed-bean>
+
 </faces-config>

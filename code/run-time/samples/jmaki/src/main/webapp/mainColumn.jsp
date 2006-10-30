@@ -42,7 +42,7 @@
       <f:facet           name="header">
         <h:outputText  value="Customer Name"/>
       </f:facet>
-      <a:ajax type="scriptaculous" name="inplace" value="#{customer.name}"/>
+      <a:ajax name="scriptaculous.inplace" value="#{customer.name}"/>
     </h:column>
 
     <h:column>

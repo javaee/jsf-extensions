@@ -7,7 +7,7 @@
 <div class="bluearrows"><a href="ShowSource.jsp?filename=/com/sun/faces/run_time_test/model/CustomerBean.java">CustomerBean.java</a></div>
 <div class="bluearrows"><a href="ShowSource.jsp?filename=/com/sun/faces/run_time_test/model/ResultSetBean.java">ResultSetBean.java</a></div>
 <div class="bluearrows"><a href="ShowSource.jsp?filename=/devtime.js">devtime.js</a></div>
-<div class="bluearrows"><a href="ShowSource.jsp?filename=/jmaki.js">jmaki.js</a></div>
-<div class="bluearrows"><a href="ShowSource.jsp?filename=/inplace/component.css">inplace/component.css</a></div>
-<div class="bluearrows"><a href="ShowSource.jsp?filename=/inplace/component.htm">inplace/component.htm</a></div>
-<div class="bluearrows"><a href="ShowSource.jsp?filename=/inplace/component.js">inplace/component.js</a></div>
+<div class="bluearrows"><a href="ShowSource.jsp?filename=/resources/jmaki.js">jmaki.js</a></div>
+<div class="bluearrows"><a href="ShowSource.jsp?filename=/resources/scriptaculous/inplace/component.js">inplace/component.js</a></div>
+<div class="bluearrows"><a href="http://localhost:8080/jsf-jmaki/resources/scriptaculous/inplace/component.css">inplace/component.css</a></div>
+<div class="bluearrows"><a href="ShowSource.jsp?filename=/resources/scriptaculous/inplace/component.htm">inplace/component.htm</a></div>

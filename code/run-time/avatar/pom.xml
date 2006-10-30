@@ -32,7 +32,7 @@
         <directory>src/main/resources</directory>
         <includes>
             <include>*.xml</include>
-            <include>*.js</include>
+            <include>**/*.js</include>
             <include>*.tld</include>
         </includes>
      </resource>

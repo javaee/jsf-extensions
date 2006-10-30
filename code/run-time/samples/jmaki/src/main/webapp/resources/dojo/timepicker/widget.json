@@ -1,0 +1,7 @@
+ {
+    "name": "Time Picker",
+    "type": "dojo",
+    "image": "images/dojo-timepicker.jpg",
+    "description": "This widget is time picker."
+    "value": {"required":"false", "type": "String", "description" :"A date formated in MM/DD/YYYY format."}
+  }

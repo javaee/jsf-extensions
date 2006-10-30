@@ -49,10 +49,7 @@ public class ScriptsRenderer extends Renderer {
     // take care of it.
     
     private static final String scriptIds[] = {
-        "/META-INF/prototype.js",
-        "/META-INF/effects.js",
-        "/META-INF/dragdrop.js",
-        "/META-INF/controls.js",
+        "/META-INF/libs/scriptaculous/version1.6.4/prototype.js",
         "/META-INF/com_sun_faces_ajax.js"
     };    
 

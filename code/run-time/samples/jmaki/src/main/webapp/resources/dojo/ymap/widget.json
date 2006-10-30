@@ -1,0 +1,6 @@
+{
+    "name": "Map",
+    "type": "dojo",
+    "image": "images/dojo-yahoo-map.jpg",
+    "description": "This widget wrapper for the yahoo map."
+}

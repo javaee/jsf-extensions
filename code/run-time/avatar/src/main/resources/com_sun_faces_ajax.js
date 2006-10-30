@@ -453,6 +453,14 @@ Faces.ViewState.prototype = {
 			    q.push(p+'='+v);
 			}
 		    }
+		    else {
+			var input = document.getElementById(inputs[i]);
+			if (input) {
+			    p = inputs[i];
+			    v = encodeURIComponent(input.value || "");
+			    q.push(p+'='+v);
+			}
+		    }
 		}
 	    }
 	}

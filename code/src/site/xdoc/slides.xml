@@ -15,7 +15,7 @@
 
      	<ul>
 
-	  <li><p>Introduction to JSF Extensions Dynamic Faces (DynaFaces)</p>
+	  <li><p>Introduction to JSF Extensions Dynamic Faces</p>
 
           <p><a href="/slides/dynafaces-intro.odp">OpenOffice 2.0</a></p>
           <p><a href="/slides/dynafaces-intro.pdf">PDF</a></p>
@@ -24,7 +24,7 @@
 
           </li>
 
-	  <li><p>Using DynaFaces</p>
+	  <li><p>Using Dynamic Faces</p>
 
           <p><a href="/slides/dynafaces-usage-patterns.odp">OpenOffice 2.0</a></p>
           <p><a href="/slides/dynafaces-usage-patterns.pdf">PDF</a></p>
@@ -37,8 +37,23 @@
           gives you an opportunity to save the slides for later use.
           They are not needed to enjoy the screencast.</p>
 
+          </li>
+
+	  <li><p>Dynamic Faces at JAOO 2006</p>
+
+          <p><a href="/slides/jaoo2006/enterprise-grade-ajax-and-jsf.odp">OpenOffice 2.0</a></p>
+
+          <p><a href="/slides/jaoo2006/enterprise-grade-ajax-and-jsf.pdf">PDF</a></p>
 
           </li>
+
+	  <li><p>Dynamic Faces at The Ajax Experience Boston 2006</p>
+
+          <p><a href="/slides/AjaxExperienceBoston2006/enterprise-grade-ajax-and-jsf.odp">OpenOffice 2.0</a></p>
+         
+          </li>
+
+
 
 	</ul>
 

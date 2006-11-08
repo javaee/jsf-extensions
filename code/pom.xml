@@ -142,6 +142,15 @@
       </modules>
     </profile>
     <profile>
+      <id>flash</id>
+      <modules>
+	<module>maven/master-pom</module>
+	<module>run-time/common</module>
+	<module>run-time/flash</module>
+	<module>run-time/samples/flash</module>
+      </modules>
+    </profile>
+    <profile>
       <id>jsf-j1</id>
       <modules>
 	<module>run-time/avatar</module>

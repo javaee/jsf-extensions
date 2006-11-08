@@ -1,0 +1,111 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.sun.jsf-extensions</groupId>
+  <artifactId>jsf-extensions-flash-test</artifactId>
+  <packaging>war</packaging>
+  <name>jsf-flash</name>
+  <url>https://jsf-extensions.dev.java.net/</url>
+  <description>
+    Run time jsf-extensions: flash
+  </description>
+
+  <parent>
+    <groupId>com.sun.faces.extensions.maven</groupId>
+    <artifactId>jsf-extensions-master</artifactId>
+    <version>0.1-SNAPSHOT</version>
+  </parent>
+
+  <scm>
+    <connection>scm:svn:http://jsf-extensions.dev.java.net/svn/jsf-extensions/trunk</connection>
+    <developerConnection>scm:svn:https://jsf-extensions.dev.java.net/svn/jsf-extensions/trunk</developerConnection>
+    <url>https://jsf-extensions.dev.java.net/source/browse/jsf-extensions/</url>
+  </scm>
+
+  <build>
+    <defaultGoal>install</defaultGoal>
+    <sourceDirectory>src/main/java</sourceDirectory>
+    <finalName>jsf-flash</finalName>
+   <plugins>
+    <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-war-plugin</artifactId>
+      <version>2.0</version>
+      <configuration>
+        <webResources>
+          <resource>
+            <directory>${project.basedir}/src/main/java</directory>
+            <targetPath>WEB-INF</targetPath>
+          </resource>
+          <resource>
+            <directory>${project.basedir}/../sunbrand/src/main/webapp</directory>
+          </resource>
+
+        </webResources>
+       </configuration>
+     </plugin>
+
+       <plugin>
+	 <artifactId>maven-antrun-plugin</artifactId>
+	 <executions>
+	   <execution>
+             <id>source</id>
+	     <phase>generate-resources</phase>
+	     <configuration>
+	       <tasks>
+                 <echo message="Copying sources jar to WEB-INF/lib" />
+                 <copy todir="target/${project.build.finalName}/WEB-INF/lib">
+                   <fileset dir="../..">
+                     <include name="*-sources.jar" />
+                   </fileset>
+                 </copy>
+	       </tasks>
+	     </configuration>
+	     <goals>
+	       <goal>run</goal>
+	     </goals>
+	   </execution>
+	 </executions>
+       </plugin>
+    </plugins>
+
+  </build>
+
+
+  <dependencies>
+     <dependency>
+      <groupId>javax.faces</groupId>
+      <artifactId>jsf-impl</artifactId>
+      <version>1.2</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.faces.extensions</groupId>
+      <artifactId>jsf-extensions-common</artifactId>
+      <version>0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.faces.extensions</groupId>
+      <artifactId>jsf-extensions-flash</artifactId>
+      <version>0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.faces.extensions</groupId>
+      <artifactId>jsf-extensions-test-time</artifactId>
+      <version>0.1-SNAPSHOT</version>
+    </dependency>
+  </dependencies>
+  <reporting>
+    <plugins>
+      <excludeDefaults>true</excludeDefaults>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <reportSets><reportSet><reports/></reportSet></reportSets>
+      </plugin>
+    </plugins>
+  </reporting>
+
+</project>
+

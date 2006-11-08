@@ -31,14 +31,15 @@
 
 package com.sun.faces.extensions.flash;
 
+import java.util.Map;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
 import javax.faces.render.ResponseStateManager;
-import javax.portlet.PortletRequest;
-import javax.portlet.PortletSession;
+//import javax.portlet.PortletRequest;
+//import javax.portlet.PortletSession;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Cookie;
 
@@ -54,12 +55,66 @@ public class FlashPhaseListener extends Object implements PhaseListener {
     public FlashPhaseListener() {
     }
 
-    private double sequenceNumber = 0;
-    private synchronized Double getSequenceNumber() {
-        if (Double.MAX_VALUE == ++sequenceNumber) {
+    private long sequenceNumber = 0;
+    private synchronized long getSequenceNumber() {
+        if (Long.MAX_VALUE == ++sequenceNumber) {
             sequenceNumber = 0;
         }
-        return new Double(sequenceNumber);
+        return sequenceNumber;
+    }
+    
+    static String getCookieValue(ExternalContext extContext) {
+        String result = null;
+        Cookie cookie = (Cookie)
+        extContext.getRequestCookieMap().
+                get(Constants.FLASH_POSTBACK_REQUEST_ATTRIBUTE_NAME);
+        if (null != cookie) {
+            result = cookie.getValue();
+        }
+        
+        return result;
+    }
+    
+    private void addCookie(ExternalContext extContext) {
+        String thisRequestSequenceString = null;
+        HttpServletResponse servletResponse = null;
+        //PortletRequest portletRequest = null;
+        Object request = extContext.getRequest(), response = extContext.getResponse();
+
+        thisRequestSequenceString =
+                extContext.getRequestMap().
+                get(Constants.FLASH_THIS_REQUEST_ATTRIBUTE_NAME).toString();
+
+        if (response instanceof HttpServletResponse) {
+            servletResponse = (HttpServletResponse) response;
+            Cookie cookie = new Cookie(Constants.FLASH_POSTBACK_REQUEST_ATTRIBUTE_NAME,
+                    thisRequestSequenceString);
+            cookie.setMaxAge(-1);
+            servletResponse.addCookie(cookie);
+        } else {
+            /*****
+             * portletRequest = (PortletRequest) request;
+             * // You can't add a cookie in portlet.
+             * // http://wiki.java.net/bin/view/Portlet/JSR168FAQ#How_can_I_set_retrieve_a_cookie
+             * portletRequest.getPortletSession().setAttribute(Constants.FLASH_POSTBACK_REQUEST_ATTRIBUTE_NAME,
+             * thisRequestSequenceString, PortletSession.PORTLET_SCOPE);
+             *********/
+        }
+    }
+    
+    private void expireEntries(FacesContext context) {
+        ExternalContext extContext = context.getExternalContext();
+        String postbackSequenceString = null;
+        // Clear out the flash for the postback.
+        if (null != (postbackSequenceString = (String)
+        extContext.getRequestMap().
+                get(Constants.FLASH_POSTBACK_REQUEST_ATTRIBUTE_NAME))) {
+            ELFlash flash = (ELFlash)ELFlash.getFlash(context, false);
+            if (null != flash) {
+                flash.expireEntriesForSequence(postbackSequenceString);
+            }
+        }
+
     }
 
     /**
@@ -77,54 +132,70 @@ public class FlashPhaseListener extends Object implements PhaseListener {
     public void afterPhase(PhaseEvent e) {
         FacesContext context = e.getFacesContext();
         ExternalContext extContext = context.getExternalContext();
+        Map<String, Object> requestMap = extContext.getRequestMap();
         Object request = extContext.getRequest(), response = extContext.getResponse();
         String postbackSequenceString = null;
+        ELFlash elFlash = ELFlash.getELFlash();
         
         // If we're on after-restore-view...
         if (e.getPhaseId().equals(PhaseId.RESTORE_VIEW)) {
             // It is ok to read from the request parameters because the locale
             // and character encoding will have already been set.
             
-            // If this is a postback...
-            if (extContext.getRequestParameterMap().containsKey(ResponseStateManager.VIEW_STATE_PARAM)) {
-                // to a servlet JSF app...
+            if (extContext.getRequestParameterMap().
+                        containsKey(ResponseStateManager.VIEW_STATE_PARAM)) {
+                    // to a servlet JSF app...
                 if (response instanceof HttpServletResponse) {
                     // extract the sequence number from the cookie or portletSession
                     // for the request/response pair for which this request is a postback.
-                    Cookie cookie = (Cookie)
-                    extContext.getRequestCookieMap().
-                            get(Constants.FLASH_POSTBACK_REQUEST_ATTRIBUTE_NAME);
-                    if (null != cookie) {
-                        postbackSequenceString = cookie.getValue();
-                    }
+                    postbackSequenceString = getCookieValue(extContext);
                 } else {
-                    PortletRequest portletRequest = null;
-                    portletRequest = (PortletRequest) request;
-                    // You can't retrieve a cookie in portlet.
-                    // http://wiki.java.net/bin/view/Portlet/JSR168FAQ#How_can_I_set_retrieve_a_cookie
-                    postbackSequenceString = (String)
-                    portletRequest.getPortletSession().
-                            getAttribute(Constants.FLASH_POSTBACK_REQUEST_ATTRIBUTE_NAME,
-                            PortletSession.PORTLET_SCOPE);
-                }
-                
-                if (null != postbackSequenceString) {
-                    // Store the sequenceNumber in the request so the
-                    // after-render-response event can flush the flash
-                    // of entries from that sequence
-                    extContext.getRequestMap().put(Constants.FLASH_POSTBACK_REQUEST_ATTRIBUTE_NAME,
-                            postbackSequenceString);
+                    /******
+                     * PortletRequest portletRequest = null;
+                     * portletRequest = (PortletRequest) request;
+                     * // You can't retrieve a cookie in portlet.
+                     * // http://wiki.java.net/bin/view/Portlet/JSR168FAQ#How_can_I_set_retrieve_a_cookie
+                     * postbackSequenceString = (String)
+                     * portletRequest.getPortletSession().
+                     * getAttribute(Constants.FLASH_POSTBACK_REQUEST_ATTRIBUTE_NAME,
+                     * PortletSession.PORTLET_SCOPE);
+                     *******/
                 }
             }
+
+            if (null != postbackSequenceString) {
+                // Store the sequenceNumber in the request so the
+                // after-render-response event can flush the flash
+                // of entries from that sequence
+                requestMap.put(Constants.FLASH_POSTBACK_REQUEST_ATTRIBUTE_NAME,
+                        postbackSequenceString);
+            }
+
         } else if (e.getPhaseId().equals(PhaseId.RENDER_RESPONSE)) {
-            // Clear out the flash for the postback.
-            if (null != (postbackSequenceString = (String)
-            extContext.getRequestMap().
-                    get(Constants.FLASH_POSTBACK_REQUEST_ATTRIBUTE_NAME))) {
-                ELFlash flash = (ELFlash)ELFlash.getFlash(context, false);
-                if (null != flash) {
-                    flash.expireEntriesForSequence(postbackSequenceString);
-                }
+            expireEntries(context);
+        }
+        
+/*******        
+        
+        // If this requset is ending normally...
+        if (e.getPhaseId().equals(PhaseId.RENDER_RESPONSE)) {
+            // and the user requested we save all request scoped data...
+            if (null != elFlash && elFlash.isKeepAllRequestScopedData()) {
+                // save it all.
+                elFlash.saveAllRequestScopedData(context);
+            }
+        }
+        // Otherwise, if this request is ending early...
+        else 
+ * 
+ */ 
+        if ((context.getResponseComplete() || context.getRenderResponse()) &&
+                elFlash.isRedirectAfterPost()) {
+            // and the user requested we save all request scoped data...
+            if (null != elFlash && elFlash.isKeepAllRequestScopedData()) {
+                // save it all.
+                addCookie(extContext);
+                elFlash.saveAllRequestScopedData(context);
             }
         }
     }
@@ -146,11 +217,8 @@ public class FlashPhaseListener extends Object implements PhaseListener {
     public void beforePhase(PhaseEvent e) {
         FacesContext context = e.getFacesContext();
         ExternalContext extContext = context.getExternalContext();
-        Double sequenceNumber = null;
+        Map<String, Object> requestMap = extContext.getRequestMap();
         String thisRequestSequenceString = null;
-        HttpServletResponse servletResponse = null;
-        PortletRequest portletRequest = null;
-        Object request = extContext.getRequest(), response = extContext.getResponse();
         
 	extContext.getRequestMap().put(Constants.CURRENT_PHASE_ID_ATTRIBUTE_NAME,
                 e.getPhaseId());
@@ -158,38 +226,28 @@ public class FlashPhaseListener extends Object implements PhaseListener {
         
         // If we're on before-restore-view...
         if (e.getPhaseId().equals(PhaseId.RESTORE_VIEW)) {
-            sequenceNumber = getSequenceNumber();
-            thisRequestSequenceString = sequenceNumber.toString();
+            thisRequestSequenceString = Long.toString(getSequenceNumber());
             // Put the sequence number for the request/response pair 
             // that is starting with *this particular request* in the request scope 
             // so the ELFlash can access it.
-            extContext.getRequestMap().put(Constants.FLASH_THIS_REQUEST_ATTRIBUTE_NAME, 
-                    thisRequestSequenceString);            
+            requestMap.put(Constants.FLASH_THIS_REQUEST_ATTRIBUTE_NAME, 
+                    thisRequestSequenceString);   
+
+            // Make sure to restore all request scoped data
+            ELFlash elFlash = ELFlash.getELFlash();
+            if (null != elFlash && elFlash.isKeepAllRequestScopedData()) {
+                elFlash.restoreAllRequestScopedData(context);
+            }
         }
         // If we're on before-render-response
         else if (e.getPhaseId().equals(PhaseId.RENDER_RESPONSE)) {
             
-            thisRequestSequenceString = 
-                    extContext.getRequestMap().
-                        get(Constants.FLASH_THIS_REQUEST_ATTRIBUTE_NAME).toString();            
             // Set the REQUEST_ID cookie to be the sequence number
-            if (response instanceof HttpServletResponse) {
-                servletResponse = (HttpServletResponse) response;
-                Cookie cookie = new Cookie(Constants.FLASH_POSTBACK_REQUEST_ATTRIBUTE_NAME,
-                        thisRequestSequenceString);
-                cookie.setMaxAge(-1);
-                servletResponse.addCookie(cookie);
-            } else {
-                portletRequest = (PortletRequest) request;
-                // You can't add a cookie in portlet.
-                // http://wiki.java.net/bin/view/Portlet/JSR168FAQ#How_can_I_set_retrieve_a_cookie
-                portletRequest.getPortletSession().setAttribute(Constants.FLASH_POSTBACK_REQUEST_ATTRIBUTE_NAME,
-                        thisRequestSequenceString, PortletSession.PORTLET_SCOPE);
-            }
+            addCookie(extContext);
         }
         
     }
-
+    
     /**
      * <p>We need to be notified of all phases.</p>
      */

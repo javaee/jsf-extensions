@@ -31,8 +31,15 @@
 
 package com.sun.faces.extensions.flash;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import javax.faces.application.FacesMessage;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseId;
 
@@ -65,7 +72,7 @@ public class ELFlash implements Map<String,Object> {
     /** Creates a new instance of ELFlash */
     private ELFlash() {
         // We only need exactly two entries.
-        innerMap = new HashMap<String,Map<String, Object>>(2);
+        innerMap = new ConcurrentHashMap<String,Map<String, Object>>(2);
     }
 
     /**
@@ -95,13 +102,167 @@ public class ELFlash implements Map<String,Object> {
      */
     
     public static Map<String,Object> getFlash(FacesContext context, boolean create) {
+        Map<String, Object> appMap = context.getExternalContext().
+                getApplicationMap();
         ELFlash flash = (ELFlash) 
-            context.getExternalContext().
-                getSessionMap().get(Constants.FLASH_ATTRIBUTE_NAME);
+            appMap.get(Constants.FLASH_ATTRIBUTE_NAME);
         if (null == flash && create) {
-            flash = new ELFlash();
+            synchronized (appMap) {
+                if (null == (flash = (ELFlash)
+                    appMap.get(Constants.FLASH_ATTRIBUTE_NAME))) {
+                    flash = new ELFlash();
+                    appMap.put(Constants.FLASH_ATTRIBUTE_NAME, flash);
+                }
+            }
         }
         return flash;
+    }
+    
+    public static ELFlash getELFlash() {
+        ELFlash result = (ELFlash) getFlash();
+        
+        return result;
+    }
+
+    public boolean isKeepAllRequestScopedData() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        Boolean value = (Boolean)
+        context.getExternalContext().getRequestMap().
+                get(Constants.FLASH_KEEP_ALL_REQUEST_SCOPED_DATA_ATTRIBUTE);
+        return (null != value && value.booleanValue());
+    }
+    
+    public void setKeepAllRequestScopedData(boolean newValue) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getExternalContext().getRequestMap().
+                put(Constants.FLASH_KEEP_ALL_REQUEST_SCOPED_DATA_ATTRIBUTE,
+                newValue ? Boolean.TRUE : Boolean.FALSE);
+    }
+    
+    public boolean isRedirectAfterPost() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        Boolean value = (Boolean)
+        context.getExternalContext().getRequestMap().
+                get(Constants.REDIRECT_AFTER_POST_ATTRIBUTE_NAME);
+        return (null != value && value.booleanValue());
+    }
+    
+    public void setRedirectAfterPost(boolean newValue) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getExternalContext().getRequestMap().
+                put(Constants.REDIRECT_AFTER_POST_ATTRIBUTE_NAME,
+                newValue ? Boolean.TRUE : Boolean.FALSE);
+    }
+    
+    
+    /**
+     *
+     * <p>The following datum are moved from request scope into the flash
+     * to be made available on a subsequent call to 
+     * {@link #restoreAllRequestScopedData}.</p>
+     *
+     * <ul>
+     *
+     *  <li><p>All request scoped attributes</p></li>
+     *
+     *  <li><p>All <code>FacesMessage</code> instances queued on the
+     *   <code>FacesContext</code></p></li>
+     *
+     * </ul>
+     */
+    
+    void saveAllRequestScopedData(FacesContext context) {
+        ExternalContext extContext = context.getExternalContext();
+        Map<String, Object> requestMap = extContext.getRequestMap();
+        Boolean thisRequestIsGetAfterRedirectAfterPost = Boolean.FALSE;
+
+        if (null != (thisRequestIsGetAfterRedirectAfterPost = (Boolean)
+                     requestMap.get(Constants.THIS_REQUEST_IS_GET_AFTER_REDIRECT_AFTER_POST_ATTRIBUTE_NAME))
+            && thisRequestIsGetAfterRedirectAfterPost.booleanValue()) {
+            return;
+        }
+                
+        Iterator<String> messageClientIds = context.getClientIdsWithMessages();
+        List<FacesMessage> facesMessages = null;
+        Map<String, List<FacesMessage>> allFacesMessages = null;
+        Iterator<FacesMessage> messageIter = null;
+        String curMessageId;
+        
+        // Save all the FacesMessages into a Map, which we store in the flash.
+        
+        // Step 1, go through the FacesMessage instances for each clientId
+        // in the messageClientIds list.
+        while (messageClientIds.hasNext()) {
+            curMessageId = messageClientIds.next();
+            // Get the messages for this clientId
+            messageIter = context.getMessages(curMessageId);
+            facesMessages = new ArrayList<FacesMessage>();
+            while (messageIter.hasNext()) {
+                facesMessages.add(messageIter.next());
+            }
+            // Add the list to the map
+            allFacesMessages = new HashMap<String, List<FacesMessage>>();             
+            allFacesMessages.put(curMessageId, facesMessages);
+        }
+        facesMessages = null;
+        
+        // Step 2, go through the FacesMessages that do not have a client
+        // id associated with them.
+        messageIter = context.getMessages(null);
+        while (messageIter.hasNext()) {
+            // Make sure to overwrite the previous facesMessages list
+            facesMessages = new ArrayList<FacesMessage>();
+            facesMessages.add(messageIter.next());
+        }
+        if (null != facesMessages) {
+            // Add the list to the map
+            if (null == allFacesMessages) {
+                allFacesMessages = new HashMap<String, List<FacesMessage>>();
+            }
+            allFacesMessages.put(null, facesMessages);
+        }
+        
+        if (null != allFacesMessages) {
+            this.putNext(Constants.FACES_MESSAGES_ATTRIBUTE_NAME, 
+                    allFacesMessages);
+        }
+        
+        // PENDING put request attrs in
+        
+        this.putNext(Constants.UIVIEWROOT_ATTRIBUTE_NAME,
+                context.getViewRoot());
+        
+    }
+    
+    void restoreAllRequestScopedData(FacesContext context) {
+        Map<String, Object> requestMap = context.getExternalContext().getRequestMap();
+        
+        Map<String, List<FacesMessage>> allFacesMessages = null;
+        List<FacesMessage> facesMessages = null;
+        UIViewRoot savedRoot = null;
+        
+        Map<String,Object> map = null;
+        if (null != (map = getMapForCookie(context))) {
+            if (null != (savedRoot = (UIViewRoot)map.
+                    get(Constants.UIVIEWROOT_ATTRIBUTE_NAME))) {
+                context.setViewRoot(savedRoot);
+                map.remove(Constants.UIVIEWROOT_ATTRIBUTE_NAME);
+            }
+        
+            if (null != (allFacesMessages = (Map<String, List<FacesMessage>>)
+                         map.get(Constants.FACES_MESSAGES_ATTRIBUTE_NAME))) {
+                for (Map.Entry<String, List<FacesMessage>> cur : allFacesMessages.entrySet()) {
+                    if (null != (facesMessages = allFacesMessages.get(cur.getKey()))) {
+                        for (FacesMessage curMessage : facesMessages) {
+                            context.addMessage(cur.getKey(), curMessage);
+                        }
+                    }
+                }
+                requestMap.put(Constants.THIS_REQUEST_IS_GET_AFTER_REDIRECT_AFTER_POST_ATTRIBUTE_NAME,
+                        Boolean.TRUE);
+            }
+            map.remove(Constants.FACES_MESSAGES_ATTRIBUTE_NAME);
+        }
     }
     
     /**
@@ -178,6 +339,19 @@ public class ELFlash implements Map<String,Object> {
         assert(null != result);
         return result;
     }
+    
+    private Map<String,Object> getMapForCookie(FacesContext context) {
+        String cookieName = 
+                FlashPhaseListener.getCookieValue(context.getExternalContext());
+        Map<String,Object> result = null;
+        
+        if (null != cookieName) {
+            result = innerMap.get(cookieName);
+        }
+        
+        return result;
+    }
+    
     
     /**
      * <p>Called by the {@link FlashPhaseListener#afterPhase} for the 
@@ -268,7 +442,7 @@ public class ELFlash implements Map<String,Object> {
         }
         return result;
     }
-
+    
     /**
      * <p>Get the correct map as descibed above and perform this operation on
      * it.</p>
@@ -286,7 +460,17 @@ public class ELFlash implements Map<String,Object> {
     public Object put(String key, Object value) {
         return getPhaseMap().put(key, value);
     }
+    
+    /**
+     * <p>Get the correct map as descibed above and perform this operation on
+     * it.</p>
+     */
 
+    public Object putNext(String key, Object value) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        return getNextRequestMap(context).put(key, value);
+    }
+    
     /**
      * <p>Get the correct map as descibed above and perform this operation on
      * it.</p>

@@ -51,7 +51,7 @@
 
         <dl>
 
-          <dt><p><a name="_" href="http://sunapp1.whardy.com:8090/jsf-jmaki/">jMaki, JSF, Standard Components, and AJAX</a></p></dt>
+          <dt><p><a target="_" href="http://sunapp1.whardy.com:8090/jsf-jmaki/">jMaki, JSF, Standard Components, and AJAX</a></p></dt>
 
 <dd><p>Demo showing the jMaki Scriptaculous In Place Editor component,
 Blueprints Scroller Component and several standard JSF components all
@@ -61,7 +61,7 @@ href="http://sunapp1.whardy.com:8090/jsf-jmaki/ShowSource.jsp?filename=/mainColu
 JSP Source</a>.</p>
 </dd>
 
-          <dt><p><a name="_" href="http://sunapp1.whardy.com:8090/jsf-j12/">Jacob Hookom's JavaOne 2006 Demo</a></p></dt>
+          <dt><p><a target="_" href="http://sunapp1.whardy.com:8090/jsf-j12/">Jacob Hookom's JavaOne 2006 Demo</a></p></dt>
 
           <dd><p>Here is Jacob's famous JavaOne demo, ported to use the
           jsf-extensions mechanism.  This example shows how easy it is
@@ -71,32 +71,33 @@ JSP Source</a>.</p>
           components you already have and know</i>.</p>
 </dd>
 
-          <dt><p><a name="_" href="http://sunapp1.whardy.com:8090/jsf-ajax-cardemo2/">The Classic JSF Cardemo, AJAXified</a></p></dt>
+          <dt><p><a target="_" href="http://sunapp1.whardy.com:8090/jsf-ajax-cardemo2/">The Classic JSF Cardemo, AJAXified</a></p></dt>
 
 <dd><p>This demo shows the use of the <code>ajaxZone</code> component to limit the amount and complexity of JavaScript that a page author must write to ajaxify an existing application.</p>
 </dd>
 
 
-          <dt><p><a name="_" href="http://sunapp1.whardy.com:8090/jsf-dynafaces-getting-started/">The Classic Guess Number App, AJAXified</a></p></dt>
+          <dt><p><a target="_" href="http://sunapp1.whardy.com:8090/jsf-dynafaces-getting-started/">The Classic Guess Number App, AJAXified</a></p></dt>
 
 <dd><p>This demo, part of the upcoming "getting started" tutorial, shows
 what can be done by modifying one JSP file in the guessNumber app.</p>
 </dd>
 
 
-          <dt><p><a name="_" href="http://sunapp1.whardy.com:8090/jsf-simple-partial-update">Simple Partial Update</a></p></dt>
+          <dt><p><a target="_" href="http://sunapp1.whardy.com:8090/jsf-simple-partial-update">Simple Partial Update</a></p></dt>
 
 <dd><p>Simple demonstration of DynaFaces partial update capability.</p>
 </dd>
 
 
-          <dt><p><a name="_" href="http://javaserver.org/jsf-simple-events">Leverage the JSF event system from AJAX.</a></p></dt>
+          <dt><p><a target="_" href="http://javaserver.org/jsf-simple-events">Leverage the JSF event system from AJAX.</a></p></dt>
 
 <dd><p>This demo shows some of the things you can do when you expose the
 power of the JSF event system to AJAX.</p>
 </dd>
 
-
+<dt><p><a target="_" href="http://javaserver.org/jsf-flash/">An implementation of Ruby on Rails style Flash concept in JSF</a></p>
+</dt>
 
         </dl>
 

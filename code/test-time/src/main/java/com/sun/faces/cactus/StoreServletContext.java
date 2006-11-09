@@ -55,8 +55,8 @@ public class StoreServletContext extends Object {
     public void setServletContext(ServletContext sc) {
         ec = new ServletContextAdapter(sc);
 
-        ThreadLocal<ServletContextAdapter> threadLocal =
-            (ThreadLocal<ServletContextAdapter>)
+        ThreadLocal threadLocal =
+            (ThreadLocal)
                 TestingUtil.invokePrivateMethod("getThreadLocalExternalContext",
                                                 Constants.EMPTY_CLASS_ARGS,
                                                 Constants.EMPTY_METH_ARGS,

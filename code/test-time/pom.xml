@@ -36,6 +36,15 @@
      </resource>
    </resources>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.4</source>
+          <target>1.4</target>
+        </configuration>
+      </plugin>
+
        <plugin>
          <artifactId>maven-source-plugin</artifactId>
 	 <executions>
@@ -66,9 +75,15 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>cactus</groupId>
-      <artifactId>cactus-ant</artifactId>
-      <version>13-1.7.1</version>
+      <groupId>htmlunit</groupId>
+      <artifactId>htmlunit</artifactId>
+      <version>1.8</version>
+      <exclusions>
+        <exclusion>
+          <groupId>dom4j</groupId>
+          <artifactId>dom4j</artifactId>
+        </exclusion>
+      </exclusions>
       <scope>provided</scope>
     </dependency>
     <dependency>

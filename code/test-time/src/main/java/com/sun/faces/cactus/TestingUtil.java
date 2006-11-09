@@ -80,10 +80,12 @@ public class TestingUtil {
             // look up Switch class.
             Class switchClass = Class.forName("com.sun.faces.util.Util");
             // look up getSwitch method.
+	    Class paramTypes[] = new Class[] { Boolean.TYPE };
             Method switchMethod = switchClass.getMethod("setUnitTestModeEnabled", 
-                                                        Boolean.TYPE);
+                                                        paramTypes);
             // invoke the method and get an instance of Switch
-            Object switchObj = switchMethod.invoke(null, newState);
+	    Object params[] = new Object[] {  newState ? Boolean.TRUE : Boolean.FALSE };
+            Object switchObj = switchMethod.invoke(null, params);
             
         } catch (Exception e) {            
         }	

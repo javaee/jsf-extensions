@@ -31,6 +31,8 @@ package com.sun.faces.extensions.avatar.components;
 
 import com.sun.faces.extensions.avatar.event.EventParser;
 import com.sun.faces.extensions.avatar.lifecycle.AsyncResponse;
+import com.sun.faces.extensions.avatar.lifecycle.ComponentEncoder;
+import com.sun.faces.extensions.avatar.lifecycle.EncoderHandler;
 import com.sun.faces.extensions.common.util.Util;
 import java.io.IOException;
 import java.io.Serializable;
@@ -93,46 +95,46 @@ import javax.servlet.http.HttpServletResponse;
  * the rendered output from the components in the list as in the
  * following example.</p>
  *
-<pre><code>
-&lt;partial-response&gt;
-  &lt;components&gt;
-    &lt;render id="form:table"/&gt;
-      &lt;markup&gt;&lt;![CDATA[
-        Rendered content from component
-      ]]&gt;&lt;/markup&gt;
-      &lt;messages&gt;
-        &lt;message&gt;The messages element is optional.  If present,
-                 it is a list of FacesMessage.getSummary() output
-        &lt;/message&gt;
-      &lt;/messages&gt;
-    &lt;/render&gt;
-    &lt;!-- repeat for the appropriate number of components --&gt;
-  &lt;/components&gt;
-  &lt;state&gt;&lt;![CDATA[state information for this view ]]&gt;&lt;/state&gt;
-&lt;/partial-response&gt;
-</code></pre>
-  *
-  * if the <code>isRenderXML</code> value is <code>false</code>, assume
-  * the renderers are handling the content-type, header, and component
-  * encapsulation details and write nothing to the response.</p>
-  *
-  * <p>See {@link
-  * com.sun.faces.extensions.avatar.lifecycle.PartialTraversalLifecycle} for
-  * additional information about how this class helps
-  * <code>PartialTraversalViewRoot</code> get its job done.</p>
+ * <pre><code>
+ * &lt;partial-response&gt;
+ * &lt;components&gt;
+ * &lt;render id="form:table"/&gt;
+ * &lt;markup&gt;&lt;![CDATA[
+ * Rendered content from component
+ * ]]&gt;&lt;/markup&gt;
+ * &lt;messages&gt;
+ * &lt;message&gt;The messages element is optional.  If present,
+ * it is a list of FacesMessage.getSummary() output
+ * &lt;/message&gt;
+ * &lt;/messages&gt;
+ * &lt;/render&gt;
+ * &lt;!-- repeat for the appropriate number of components --&gt;
+ * &lt;/components&gt;
+ * &lt;state&gt;&lt;![CDATA[state information for this view ]]&gt;&lt;/state&gt;
+ * &lt;/partial-response&gt;
+ * </code></pre>
+ *
+ * if the <code>isRenderXML</code> value is <code>false</code>, assume
+ * the renderers are handling the content-type, header, and component
+ * encapsulation details and write nothing to the response.</p>
+ *
+ * <p>See {@link
+ * com.sun.faces.extensions.avatar.lifecycle.PartialTraversalLifecycle} for
+ * additional information about how this class helps
+ * <code>PartialTraversalViewRoot</code> get its job done.</p>
  *
  * <p>This class extends <code>UIViewRootCopy</code>, which is a local copy
  * of <code>UIViewRoot</code> that makes the <code>broadcastEvents</code> method
- * public.  This is necessary to allow easily broadcasting events during the 
+ * public.  This is necessary to allow easily broadcasting events during the
  * AJAX lifecycle.</p>
-  *
-  * @author edburns
-  */
+ *
+ * @author edburns
+ */
 public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializable {
     
     public PartialTraversalViewRoot() {
         modifiedComponents = new ArrayList<UIComponent>();
-
+        
         markImmediate = new Util.TreeTraversalCallback() {
             public boolean takeActionOnNode(FacesContext context, UIComponent comp) throws FacesException {
                 if (comp instanceof ActionSource) {
@@ -148,16 +150,18 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
                         modifiedComponents.add(comp);
                     }
                 }
-
+                
                 return true;
             }
-
+            
         };
     }
     
     private transient List<UIComponent> modifiedComponents;
     
     private transient Util.TreeTraversalCallback markImmediate;
+    
+    
     
     public void postExecuteCleanup(FacesContext context) {
         for (UIComponent comp : modifiedComponents) {
@@ -187,8 +191,8 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
         // no explicit execute subtrees and the user didn't request
         // execute: none...
         if (async.isImmediateAjaxRequest() && async.isRenderAll() &&
-            async.getExecuteSubtrees().isEmpty() &&
-            !async.isExecuteNone()) {
+                async.getExecuteSubtrees().isEmpty() &&
+                !async.isExecuteNone()) {
             // Traverse the entire view and mark every ActionSource or
             // EditableValueHolder as immediate.
             Util.prefixViewTraversal(context, this, markImmediate);
@@ -215,27 +219,31 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
         this.broadcastEvents(context, PhaseId.APPLY_REQUEST_VALUES);
         
     }
-
+    
     public void processValidators(FacesContext context) {
         if (!AsyncResponse.isAjaxRequest() ||
-            !invokeContextCallbackOnSubtrees(context, 
+                !invokeContextCallbackOnSubtrees(context,
                 new PhaseAwareContextCallback(PhaseId.PROCESS_VALIDATIONS))) {
             super.processValidators(context);
             return;
         }
         this.broadcastEvents(context, PhaseId.PROCESS_VALIDATIONS);
+        
+        if (AsyncResponse.isSkipUpdate()) {
+            context.renderResponse();
+        }
     }
-
+    
     public void processUpdates(FacesContext context) {
         if (!AsyncResponse.isAjaxRequest() ||
-            !invokeContextCallbackOnSubtrees(context, 
+                !invokeContextCallbackOnSubtrees(context,
                 new PhaseAwareContextCallback(PhaseId.UPDATE_MODEL_VALUES))) {
             super.processUpdates(context);
             return;
         }
         this.broadcastEvents(context, PhaseId.UPDATE_MODEL_VALUES);
     }
-
+    
     public void encodeAll(FacesContext context) throws IOException {
         AsyncResponse async = AsyncResponse.getInstance();
         // If this is not an ajax request...
@@ -252,7 +260,7 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
             // Turn on the response that has been embedded in the ViewHandler.
             async.setOnOffResponseEnabled(true);
             // If this is an ajax request, and it is a partial render request...
-
+            
             if (!renderAll) {
                 // replace the context's responseWriter with the AjaxResponseWriter
                 // Get (and maybe create) the AjaxResponseWriter
@@ -263,13 +271,13 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
             }
             
             this.encodePartialResponseBegin(context);
-
+            
             if (renderAll) {
                 writer = context.getResponseWriter();
                 // If this is a "render all via ajax" request,
                 // make sure to wrap the entire page in a <render> elemnt
                 // with the special id of VIEW_ROOT_ID.  This is how the client
-                // JavaScript knows how to replace the entire document with 
+                // JavaScript knows how to replace the entire document with
                 // this response.
                 writer.startElement("render", this);
                 writer.writeAttribute("id", AsyncResponse.VIEW_ROOT_ID, "id");
@@ -287,13 +295,13 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
                 writer.write("]]>");
                 writer.endElement("markup");
                 writer.endElement("render");
-                // then bail out.  
+                // then bail out.
                 return;
             }
             
             // If the context callback was not invoked on any subtrees
             // and the client did not explicitly request that no subtrees be rendered...
-            if (!invokeContextCallbackOnSubtrees(context, 
+            if (!invokeContextCallbackOnSubtrees(context,
                     new PhaseAwareContextCallback(PhaseId.RENDER_RESPONSE)) &&
                     !renderNone) {
                 assert(false);
@@ -375,9 +383,9 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
             AsyncResponse.getInstance().setRenderAll(true);
         }
         
-    }    
+    }
     
-    private boolean invokeContextCallbackOnSubtrees(FacesContext context, 
+    private boolean invokeContextCallbackOnSubtrees(FacesContext context,
             PhaseAwareContextCallback cb) {
         AsyncResponse async = AsyncResponse.getInstance();
         List<String> subtrees = null;
@@ -388,8 +396,7 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
         
         if (cb.getPhaseId() == PhaseId.RENDER_RESPONSE) {
             subtrees = async.getRenderSubtrees();
-        }
-        else {
+        } else {
             subtrees = async.getExecuteSubtrees();
             if (subtrees.isEmpty()) {
                 subtrees = async.getRenderSubtrees();
@@ -407,7 +414,7 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
     }
     
     private class PhaseAwareContextCallback implements ContextCallback {
-
+        
         private PhaseId curPhase = null;
         private PhaseAwareContextCallback(PhaseId curPhase) {
             this.curPhase = curPhase;
@@ -427,43 +434,53 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
                     if (AsyncResponse.isImmediateAjaxRequest()) {
                         PartialTraversalViewRoot.this.markImmediate.takeActionOnNode(facesContext, comp);
                     }
-
+                    
                     comp.processDecodes(facesContext);
                 } else if (curPhase == PhaseId.PROCESS_VALIDATIONS) {
                     comp.processValidators(facesContext);
                 } else if (curPhase == PhaseId.UPDATE_MODEL_VALUES) {
                     comp.processUpdates(facesContext);
                 } else if (curPhase == PhaseId.RENDER_RESPONSE) {
-                    ResponseWriter writer = AsyncResponse.getInstance().getResponseWriter();
-
-                    writer.startElement("render", comp);
-                    writer.writeAttribute("id", comp.getClientId(facesContext), "id");
                     try {
+                        AsyncResponse async = AsyncResponse.getInstance();
+                        ResponseWriter writer = async.getResponseWriter();
+                        EncoderHandler encoderHandler = async.getEncodeHandlerInstance();
+                        ComponentEncoder encoder = encoderHandler.getEncoder(comp.getClientId(facesContext));
+                        encoder.init(facesContext, comp);
+                        
+                        writer.startElement("render", comp);
+                        
+                        writer.writeAttribute("id", encoder.getClientId(), "id");
+                        
+                        String clientHandler = encoder.getClientHandler();
+                        if (null != clientHandler) {
+                            writer.writeAttribute("type", clientHandler, "type");
+                        }
+                        
                         writer.startElement("markup", comp);
                         writer.write("<![CDATA[");
                         
                         // setup up a writer which will escape any CDATA sections
                         facesContext.setResponseWriter(new EscapeCDATAWriter(writer));
-                
-                        // do the default behavior...
-                        comp.encodeAll(facesContext);
-                
+                        
+                        encoder.encodeMarkup();
+                        
                         // revert the write and finish up
                         facesContext.setResponseWriter(writer);
                         writer.write("]]>");
                         writer.endElement("markup");
-                    }
-                    catch (ConverterException ce) {
+                        
+                        encoder.encodeExtra();
+                        
+                        writer.endElement("render");
+                    } catch (ConverterException ce) {
                         converterException = ce;
                     }
-                    writer.endElement("render");
-                }
-                else {
+                } else {
                     throw new IllegalStateException("I18N: Unexpected PhaseId passed to PhaseAwareContextCallback: " + curPhase.toString());
                 }
-                    
-            }
-            catch (IOException ex) {
+                
+            } catch (IOException ex) {
                 ex.printStackTrace();
             }
         }
@@ -471,18 +488,20 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
     }
     
     private class EscapeCDATAWriter extends ResponseWriterWrapper {
-
+        
         private ResponseWriter toWrap = null;
         public EscapeCDATAWriter(ResponseWriter toWrap) {
             this.toWrap = toWrap;
         }
-        protected ResponseWriter getWrapped() { 
-            return toWrap; 
+        protected ResponseWriter getWrapped() {
+            return toWrap;
         }
-
+        
         public void write(String string) throws IOException {
-            super.write(string.replace("]]>", "]]]]><![CDATA[>"));
+            System.out.println("escaping");
+            super.write(string.replace("]]>", "]]]]><![CDATA["));
         }
     }
+    
     
 }

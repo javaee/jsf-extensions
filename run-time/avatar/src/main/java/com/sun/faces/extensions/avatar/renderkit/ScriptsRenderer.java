@@ -48,7 +48,7 @@ public class ScriptsRenderer extends Renderer {
     // the business of maintaining all this JavaScript myself and let Shale 
     // take care of it.
     
-    private static final String scriptIds[] = {
+    public static String scriptIds[] = {
         "/META-INF/libs/scriptaculous/version1.6.4/prototype.js",
         "/META-INF/com_sun_faces_ajax.js"
     };    

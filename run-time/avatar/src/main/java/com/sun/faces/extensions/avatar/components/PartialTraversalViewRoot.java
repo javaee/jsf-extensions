@@ -445,8 +445,7 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
                         AsyncResponse async = AsyncResponse.getInstance();
                         ResponseWriter writer = async.getResponseWriter();
                         EncoderHandler encoderHandler = async.getEncodeHandlerInstance();
-                        ComponentEncoder encoder = encoderHandler.getEncoder(comp.getClientId(facesContext));
-                        encoder.init(facesContext, comp);
+                        ComponentEncoder encoder = encoderHandler.getEncoder(comp);
                         
                         writer.startElement("render", comp);
                         

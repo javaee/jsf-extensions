@@ -5,7 +5,7 @@
 
 package com.sun.faces.extensions.avatar.lifecycle;
 
-import java.util.Map;
+import javax.faces.component.UIComponent;
 
 /**
  *
@@ -13,6 +13,6 @@ import java.util.Map;
  */
 public interface EncoderHandler {
     
-    public ComponentEncoder getEncoder(String id);
+    public ComponentEncoder getEncoder(UIComponent component);
    
 }

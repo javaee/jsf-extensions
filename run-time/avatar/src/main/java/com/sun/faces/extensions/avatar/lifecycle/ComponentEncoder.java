@@ -19,8 +19,6 @@ import javax.faces.context.FacesContext;
  */
 public interface ComponentEncoder {
     
-    public void init(FacesContext context, UIComponent comp);
-    
     public void encodeMarkup() throws IOException;
     
     public void encodeExtra() throws IOException;

@@ -22,9 +22,7 @@ import org.asyncfaces.InitializerBean;
  */
 public class AsyncFacesPhaseListener implements PhaseListener {
     
-    public static final String SKIP_UPDATE_HEADER = AsyncResponse.FACES_PREFIX + "SkipUpdate";
-    
-    
+
     
     public void afterPhase(PhaseEvent event) {
        

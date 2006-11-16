@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
+              version="1.2">
+    
+    
+    <component>
+        <component-type>org.asyncfaces.Ajax</component-type>
+        <component-class>org.asyncfaces.component.UIAjaxAction</component-class>
+    </component>
+    
+    <component>
+        <component-type>org.asyncfaces.Target</component-type>
+        <component-class>org.asyncfaces.component.UITarget</component-class>
+    </component>
+    
+    <render-kit>
+        
+        <renderer>
+            <component-family>org.asyncfaces.Ajax</component-family>
+            <renderer-type>org.asyncfaces.FunctionRenderer</renderer-type>
+            <renderer-class>org.asyncfaces.renderkit.FunctionRenderer</renderer-class>
+        </renderer>
+        
+        <renderer>
+            <component-family>org.asyncfaces.Ajax</component-family>
+            <renderer-type>org.asyncfaces.SupportRenderer</renderer-type>
+            <renderer-class>org.asyncfaces.renderkit.SupportRenderer</renderer-class>
+        </renderer>
+        
+    </render-kit>
+    
+    
+    <lifecycle>
+        <phase-listener>org.asyncfaces.lifecycle.AsyncFacesPhaseListener</phase-listener>
+    </lifecycle>
+    
+    <managed-bean> 
+        <managed-bean-name>asyncfacesInitializerBean</managed-bean-name>
+        <managed-bean-class>org.asyncfaces.InitializerBean</managed-bean-class>
+        <managed-bean-scope>application</managed-bean-scope>
+    </managed-bean>
+    
+    
+</faces-config>

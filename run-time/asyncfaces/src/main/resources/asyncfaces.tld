@@ -1,0 +1,503 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+
+<taglib xmlns="http://java.sun.com/xml/ns/javaee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd"
+        version="2.1">
+    
+    
+    <description>
+        Tags for components in the asyncfaces library
+    </description>
+    
+    <tlib-version>0.01</tlib-version>
+    <short-name>af</short-name>
+    <uri>http://sourceforge.net/projects/asyncfaces</uri>
+    
+    <tag>
+        <description>
+            <![CDATA[<p>Component for defining a render extended item
+       . Place this inside the asyncfaces engine component.</p>]]>
+        </description>
+        
+        <name>target</name>
+        <tag-class>org.asyncfaces.taglib.TargetTag</tag-class>
+        <body-content>JSP</body-content>
+        <attribute>
+            <description>
+                <![CDATA[
+
+          <p>JSF Component Id</p>
+
+          ]]>
+
+            </description>
+            <name>id</name>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[<p>This mandatory attribute indicated the 
+            client-id of the component re-rendered in the ajaxified lifecycle.</p>]]>
+            </description>
+            <name>
+                for
+            </name>
+            <required>
+                true
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[<p>This mandatory attribute indicated how 
+            the component re-rendered in the ajaxified lifecycle.</p>]]>
+            </description>
+            <name>
+                method
+            </name>
+            <required>
+                true
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        
+    </tag>
+    
+    
+    <tag>
+        <description>
+            <![CDATA[<p>Component for defining a render extended item
+       . Place this inside the asyncfaces engine component.</p>]]>
+        </description>
+        
+        <name>function</name>
+        <tag-class>org.asyncfaces.taglib.FunctionTag</tag-class>
+        <body-content>JSP</body-content>
+        <attribute>
+            <description>
+                <![CDATA[
+
+          <p>JSF Component Id</p>
+
+          ]]>
+
+            </description>
+            <name>id</name>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[
+
+          <p>This optional attribute is a <code>MethodExpression</code> to
+          invoke when the request processing lifecycle in which this zone
+          is being processed encounters its invokeApplication phase.</p>
+
+          ]]>
+
+            </description>
+            <name>action</name>
+            <required>false</required>
+            <deferred-method>
+                <method-signature>
+                    java.lang.Object action()
+                </method-signature>
+            </deferred-method>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[
+
+          <p>This optional attribute is a <code>MethodExpression</code> to
+          invoke when the request processing lifecycle in which this zone
+          is being processed encounters its invokeApplication phase.</p>
+
+          ]]>
+
+            </description>
+            <name>actionListener</name>
+            <required>false</required>
+            <deferred-method>
+                <method-signature>
+                    void actionListener(javax.faces.event.ActionEvent)
+                </method-signature>
+            </deferred-method>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[<p>This optional attribute is a flag indicating
+            that, if this component is activated by the user,
+            notifications should be delivered to interested listeners
+            and actions immediately (that is, during Apply Request
+            Values phase) rather than waiting until Invoke Application
+            phase.</p>]]>
+            </description>
+            <name>
+                immediate
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    boolean
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[<p>This optional attribute indicated the 
+            a comma-separated list of client-id of the components re-rendered in the ajaxified lifecycle.</p>]]>
+            </description>
+            <name>
+                render
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[<p>This optional attribute indicated the 
+            a comma-separated list of client-id of the components executed in the ajaxified lifecycle.</p>]]>
+            </description>
+            <name>
+                execute
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[<p>This optional attribute indicated the 
+            a comma-separated list of id of the client elements sent with the ajax request.</p>]]>
+            </description>
+            <name>
+                inputs
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[<p>This optional attribute indicated  
+            an extra parameter list.</p>]]>
+            </description>
+            <name>
+                parameters
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[<p>This optional attribute indicated if the ajaxified lifecycle will stop after the 
+                UPDATE_MODEL_VALUES phase. It's very usefull for validation on the fly.</p>]]>
+            </description>
+            <name>
+                skipUpdate
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    boolean
+                </type>
+            </deferred-value>
+        </attribute>
+        
+        <attribute>
+            <description>
+                <![CDATA[<p>This optional attribute indicated the submitted form identifier. 
+                Usefull when no source and inputs are declared, otherwise the submitting form can't be
+                detected on the client side.
+                </p>]]>
+            </description>
+            <name>
+                form
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        
+        <attribute>
+            <description>
+                <![CDATA[<p>This mandatory attribute indicated the name of the client function 
+                that when invoked causes the ajax request.                
+                </p>]]>
+            </description>
+            <name>
+                name
+            </name>
+            <required>
+                true
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+    </tag>
+    
+     <tag>
+        <description>
+            <![CDATA[<p>Component for defining a render extended item
+       . Place this inside the asyncfaces engine component.</p>]]>
+        </description>
+        
+        <name>support</name>
+        <tag-class>org.asyncfaces.taglib.SupportTag</tag-class>
+        <body-content>JSP</body-content>
+        <attribute>
+            <description>
+                <![CDATA[
+
+          <p>JSF Component Id</p>
+
+          ]]>
+
+            </description>
+            <name>id</name>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[
+
+          <p>This optional attribute is a <code>MethodExpression</code> to
+          invoke when the request processing lifecycle in which this zone
+          is being processed encounters its invokeApplication phase.</p>
+
+          ]]>
+
+            </description>
+            <name>action</name>
+            <required>false</required>
+            <deferred-method>
+                <method-signature>
+                    java.lang.Object action()
+                </method-signature>
+            </deferred-method>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[
+
+          <p>This optional attribute is a <code>MethodExpression</code> to
+          invoke when the request processing lifecycle in which this zone
+          is being processed encounters its invokeApplication phase.</p>
+
+          ]]>
+
+            </description>
+            <name>actionListener</name>
+            <required>false</required>
+            <deferred-method>
+                <method-signature>
+                    void actionListener(javax.faces.event.ActionEvent)
+                </method-signature>
+            </deferred-method>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[<p>This optional attribute is a flag indicating
+            that, if this component is activated by the user,
+            notifications should be delivered to interested listeners
+            and actions immediately (that is, during Apply Request
+            Values phase) rather than waiting until Invoke Application
+            phase.</p>]]>
+            </description>
+            <name>
+                immediate
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    boolean
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[<p>Because the component insert the parent client id in the inputs array, 
+                if we want to tell to DynaFaces to submit the whole for we should switch this flag to true.</p>]]>
+            </description>
+            <name>
+                submitForm
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    boolean
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[<p>This optional attribute indicated the 
+            a comma-separated list of client-id of the components re-rendered in the ajaxified lifecycle.</p>]]>
+            </description>
+            <name>
+                render
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[<p>This optional attribute indicated the 
+            a comma-separated list of client-id of the components executed in the ajaxified lifecycle.</p>]]>
+            </description>
+            <name>
+                execute
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[<p>This optional attribute indicated the 
+            a comma-separated list of id of the client elements sent with the ajax request.</p>]]>
+            </description>
+            <name>
+                inputs
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[<p>This optional attribute indicated  
+            an extra parameter list.</p>]]>
+            </description>
+            <name>
+                parameters
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[<p>This optional attribute indicated if the ajaxified lifecycle will stop after the 
+                UPDATE_MODEL_VALUES phase. It's very usefull for validation on the fly.</p>]]>
+            </description>
+            <name>
+                skipUpdate
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    boolean
+                </type>
+            </deferred-value>
+        </attribute>
+        
+        <attribute>
+            <description>
+                <![CDATA[<p>This optional attribute indicated the submitted form identifier. 
+                Usefull when no source and inputs are declared, otherwise the submitting form can't be
+                detected on the client side.
+                </p>]]>
+            </description>
+            <name>
+                form
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        
+        <attribute>
+            <description>
+                <![CDATA[<p>This mandatory attribute indicated the name of the client event 
+                of the parent component. When fired the ajax request is performed.                
+                </p>]]>
+            </description>
+            <name>
+                event
+            </name>
+            <required>
+                true
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+    </tag>
+    
+</taglib>

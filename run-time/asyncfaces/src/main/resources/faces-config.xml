@@ -16,6 +16,11 @@
         <component-class>org.asyncfaces.component.UITarget</component-class>
     </component>
     
+    <component>
+        <component-type>org.asyncfaces.TooltipMessage</component-type>
+        <component-class>org.asyncfaces.component.UITooltipMessage</component-class>
+    </component>
+    
     <render-kit>
         
         <renderer>
@@ -28,6 +33,18 @@
             <component-family>org.asyncfaces.Ajax</component-family>
             <renderer-type>org.asyncfaces.SupportRenderer</renderer-type>
             <renderer-class>org.asyncfaces.renderkit.SupportRenderer</renderer-class>
+        </renderer>
+        
+        <renderer>
+            <component-family>org.asyncfaces.Ajax</component-family>
+            <renderer-type>org.asyncfaces.ValidateRenderer</renderer-type>
+            <renderer-class>org.asyncfaces.renderkit.ValidateRenderer</renderer-class>
+        </renderer>
+        
+        <renderer>
+            <component-family>org.asyncfaces.TooltipMessage</component-family>
+            <renderer-type>org.asyncfaces.TooltipMessageRenderer</renderer-type>
+            <renderer-class>org.asyncfaces.renderkit.TooltipMessageRenderer</renderer-class>
         </renderer>
         
     </render-kit>

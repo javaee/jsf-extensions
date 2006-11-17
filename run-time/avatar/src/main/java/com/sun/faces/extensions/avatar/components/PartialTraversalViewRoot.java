@@ -36,6 +36,7 @@ import com.sun.faces.extensions.avatar.lifecycle.EncoderHandler;
 import com.sun.faces.extensions.common.util.Util;
 import java.io.IOException;
 import java.io.Serializable;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.FacesException;
@@ -292,6 +293,7 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
                 
                 // revert the write and finish up
                 context.setResponseWriter(writer);
+                
                 writer.write("]]>");
                 writer.endElement("markup");
                 writer.endElement("render");
@@ -460,12 +462,17 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
                         writer.write("<![CDATA[");
                         
                         // setup up a writer which will escape any CDATA sections
-                        facesContext.setResponseWriter(new EscapeCDATAWriter(writer));
+                        //facesContext.setResponseWriter(new EscapeCDATAWriter(writer));
+                        StringWriter w = new StringWriter();
+                        facesContext.setResponseWriter(writer.cloneWithWriter(w));
                         
+                        // do the default behavior...
                         encoder.encodeMarkup();
                         
                         // revert the write and finish up
                         facesContext.setResponseWriter(writer);
+                        writer.write(w.toString().replaceAll("]]>", "]]]]><![CDATA["));
+                        
                         writer.write("]]>");
                         writer.endElement("markup");
                         
@@ -497,9 +504,9 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
         }
         
         public void write(String string) throws IOException {
-            System.out.println("escaping");
             super.write(string.replace("]]>", "]]]]><![CDATA["));
         }
+        
     }
     
     

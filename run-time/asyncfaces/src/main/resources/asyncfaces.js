@@ -36,10 +36,28 @@ AsyncFaces.getParameters = function(node) {
     return parameters;
 };
 
+AsyncFaces.AddClassName = {
+    
+    handle: function(id, markup, n) {
+        var parameters = AsyncFaces.getParameters(n);
+        var node = document.getElementById(id);
+        var classes = new Element.ClassNames(node);
+        var className = parameters.ok;
+        if (className) {
+            //valid
+            classes.remove(className);
+        } else {
+            //invalid
+            classes.add(parameters.ko);
+        }
+    }
+    
+};
+
 AsyncFaces.SetClassName = {
     
-    handle: function(id, markup, node) {
-        var parameters = AsyncFaces.getParameters(node);
+    handle: function(id, markup, n) {
+        var parameters = AsyncFaces.getParameters(n);
         var node = document.getElementById(id);
         node.className = parameters.className;
     }
@@ -66,5 +84,4 @@ AsyncFaces.HtmlDataTableRowRender = {
             cols[i].innerHTML = div.innerHTML;
         }
     }
-    
 };

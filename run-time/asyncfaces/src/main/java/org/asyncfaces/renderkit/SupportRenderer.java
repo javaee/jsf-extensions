@@ -21,6 +21,10 @@ public class SupportRenderer extends Renderer {
     }
     
     public void encodeBegin(FacesContext context, UIComponent component) throws IOException {
+        if (!component.isRendered()) {
+            return;
+        }
+        
         UIComponent parent = component.getParent();
         String parentId = parent.getClientId(context);
         

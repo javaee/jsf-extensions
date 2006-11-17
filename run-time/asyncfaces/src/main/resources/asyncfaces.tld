@@ -278,7 +278,120 @@
         </attribute>
     </tag>
     
-     <tag>
+    <tag>
+        <description>
+            <![CDATA[<p>Component for defining a render extended item
+       . Place this inside the asyncfaces engine component.</p>]]>
+        </description>
+        
+        <name>validate</name>
+        <tag-class>org.asyncfaces.taglib.ValidateTag</tag-class>
+        <body-content>JSP</body-content>
+        <attribute>
+            <description>
+                <![CDATA[
+
+          <p>JSF Component Id</p>
+
+          ]]>
+
+            </description>
+            <name>id</name>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[<p>This optional attribute is a flag indicating
+            that, if this component is activated by the user,
+            notifications should be delivered to interested listeners
+            and actions immediately (that is, during Apply Request
+            Values phase) rather than waiting until Invoke Application
+            phase.</p>]]>
+            </description>
+            <name>
+                immediate
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    boolean
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[<p>This optional attribute indicated the 
+            a comma-separated list of client-id of the components re-rendered in the ajaxified lifecycle.</p>]]>
+            </description>
+            <name>
+                render
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[<p>This optional attribute indicated  
+            an extra parameter list.</p>]]>
+            </description>
+            <name>
+                parameters
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        
+        <attribute>
+            <description>
+                <![CDATA[<p>This mandatory attribute indicated the name of the client event 
+                of the parent component. When fired the ajax request is performed.                
+                </p>]]>
+            </description>
+            <name>
+                event
+            </name>
+            <required>
+                true
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[<p>This optional attribute indicated  
+            an extra parameter list.</p>]]>
+            </description>
+            <name>
+                addClassOnError
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+    </tag>
+    
+    <tag>
         <description>
             <![CDATA[<p>Component for defining a render extended item
        . Place this inside the asyncfaces engine component.</p>]]>
@@ -495,6 +608,120 @@
             <deferred-value>
                 <type>
                     java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+    </tag>
+    
+    <tag>
+        <name>tooltipMessage</name>
+        <tag-class>org.asyncfaces.taglib.TooltipMessageTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <description>
+                <![CDATA[<p>JSF Component Id</p>]]>
+            </description>
+            <name>id</name>
+            <required>false</required>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[<p>This mandatory attribute indicated the id of the component</p>]]>
+            </description>
+            
+            <name>for</name>
+            <required>false</required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <name>rendered</name>
+            <required>false</required>
+            <deferred-value>
+                <type>
+                    boolean
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <name>style</name>
+            <required>false</required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <name>lang</name>
+            <required>false</required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <name>dir</name>
+            <required>false</required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <name>styleClass</name>
+            <required>false</required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <name>renderOnlyIfAjax</name>
+            <required>false</required>
+            <deferred-value>
+                <type>
+                    java.lang.Boolean
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <name>showSummary</name>
+            <required>false</required>
+            <deferred-value>
+                <type>
+                    boolean
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <name>showDetail</name>
+            <required>false</required>
+            <deferred-value>
+                <type>
+                    boolean
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                The ValueExpression linking this component to a property in a backing bean
+            </description>
+            <name>
+                binding
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    javax.faces.component.UIComponent
                 </type>
             </deferred-value>
         </attribute>

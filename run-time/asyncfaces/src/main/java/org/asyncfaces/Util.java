@@ -7,6 +7,7 @@ package org.asyncfaces;
 
 import com.sun.faces.extensions.avatar.lifecycle.AsyncResponse;
 import java.util.List;
+import javax.el.ValueExpression;
 import javax.faces.component.ContextCallback;
 import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
@@ -46,6 +47,56 @@ public class Util {
         }
         return true;
     }
+    
+     static public String getPropertyString(UIComponent component,
+            String propertyValue, String valueExpressionName) {
+        
+        ValueExpression ve = component.getValueExpression(valueExpressionName);
+        if (ve != null) {
+            FacesContext context = FacesContext.getCurrentInstance();
+            return (String) ve.getValue(context.getELContext());
+        } else {
+            return propertyValue;
+        }
+    }
+    
+    static public Boolean getPropertyBoolean(UIComponent component,
+            Boolean propertyValue, String valueExpressionName) {
+   
+        ValueExpression ve = component.getValueExpression(valueExpressionName);
+        if (ve != null) {
+            FacesContext context = FacesContext.getCurrentInstance();
+            return (Boolean.TRUE.equals(ve.getValue(
+                    context.getELContext())));
+        } else {
+            return propertyValue;
+        }
+    }
+    
+    static public Object getPropertyObject(UIComponent component,
+            Object propertyValue, String valueExpressionName) {
+        
+        ValueExpression ve = component.getValueExpression(valueExpressionName);
+        if (ve != null) {
+            FacesContext context = FacesContext.getCurrentInstance();
+            return ve.getValue(context.getELContext());
+        } else {
+            return propertyValue;
+        }
+    }
+    
+    static public Integer getPropertyInteger(UIComponent component,
+            Integer propertyValue, String valueExpressionName) {
+        
+        ValueExpression ve = component.getValueExpression(valueExpressionName);
+        if (ve != null) {
+            FacesContext context = FacesContext.getCurrentInstance();
+            return (Integer) ve.getValue(context.getELContext());
+        } else {
+            return propertyValue;
+        }
+    }
+    
     
     static public class AsyncFacesContextCallback implements ContextCallback {
         

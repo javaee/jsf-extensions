@@ -23,6 +23,10 @@ public class FunctionRenderer extends Renderer {
     }
     
     public void encodeBegin(FacesContext context, UIComponent comp) throws IOException {
+        if (!comp.isRendered()) {
+            return;
+        }
+        
         ResponseWriter writer = context.getResponseWriter();
         UIAjaxAction ajax = (UIAjaxAction) comp;
         

@@ -5,10 +5,12 @@
 
 package org.asyncfaces.renderkit;
 
+import java.io.IOException;
 import java.util.List;
 import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
 import javax.faces.event.ActionEvent;
 import org.asyncfaces.Parser;
 import org.asyncfaces.Target;
@@ -19,6 +21,14 @@ import org.asyncfaces.component.UIAjaxAction;
  * @author agori
  */
 public class RenderUtils {
+    
+    static public String encodeStringForJavaScript(String s) {
+        if (null == s) {
+            return "null";
+        } else {
+            return "'" + s + "'";
+        }
+    }
     
     static public String getAttr(FacesContext context, UIComponent comp, String name) {
         String result = null;
@@ -160,6 +170,17 @@ public class RenderUtils {
         sb.append("});");
         
         return sb;
+    }
+    
+    static void writeScriptInline(FacesContext context, String code) throws IOException {
+        ResponseWriter writer = context.getResponseWriter();
+        
+        writer.write("\n");
+        writer.startElement("script", null);
+        writer.writeAttribute("type", "text/javascript", null);
+        writer.writeText(code, null);
+        writer.endElement("script");
+        writer.write("\n");
     }
     
     

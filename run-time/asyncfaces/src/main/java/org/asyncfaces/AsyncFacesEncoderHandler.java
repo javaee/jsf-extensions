@@ -51,7 +51,7 @@ public class AsyncFacesEncoderHandler implements EncoderHandler {
         FacesContext context = FacesContext.getCurrentInstance();
         ComponentEncoder encoder = encoders.get(component.getClientId(context));
         if (null == encoder) {
-            encoder = new DefaultEncoderHandler.DefaultComponentEncoder(component);
+            return new DefaultEncoderHandler.DefaultComponentEncoder(component);
         }
         BaseEncoder base = (BaseEncoder) encoder;
         base.setComponent(component);

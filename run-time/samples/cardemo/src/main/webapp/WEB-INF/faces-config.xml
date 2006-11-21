@@ -265,6 +265,25 @@
 
     <!-- =================== Business Logic Beans ============== -->
 
+  <managed-bean>
+    <managed-bean-name>fishEyeBean</managed-bean-name>
+    <managed-bean-class>carstore.FishEyeBean</managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+  </managed-bean>
+  
+
+  <managed-bean>
+    <managed-bean-name>fishEyeData</managed-bean-name>
+    <managed-bean-class>java.util.ArrayList</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+    <list-entries>
+      <value-class>javax.faces.model.SelectItem</value-class>
+      <value>images/150x126_jalopy.jpg,Jalopy,0</value>
+      <value>images/150x126_luxury.jpg,Luxury,1</value>
+      <value>images/150x126_roadster.jpg,Roadster,2</value>
+      <value>images/150x126_suv.jpg,SUV,3</value>
+    </list-entries>
+  </managed-bean>
     <managed-bean>
         <description>
             Causes the default VariableResolver implementation to instantiate

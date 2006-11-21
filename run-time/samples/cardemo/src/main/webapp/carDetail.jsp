@@ -3,6 +3,7 @@
           xmlns:f="http://java.sun.com/jsf/core"
           xmlns:h="http://java.sun.com/jsf/html"
           xmlns:jsp="http://java.sun.com/JSP/Page"
+	    xmlns:a="http://java.sun.com/jmaki-jsf"
           xmlns:jsfExt="http://java.sun.com/jsf/extensions/dynafaces">
     <jsp:directive.page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"/>
 
@@ -48,10 +49,21 @@ Copyright 2005 Sun Microsystems Inc. All Rights Reserved
 
     <h:form>
 
+    <a:ajax name="dojo.fisheye"
+            value="#{fishEyeBean.selectedIndex}"
+            valueChangeListener="#{fishEyeBean.valueChanged}"
+            args="{items:[
+                  {iconSrc:'/images/150x126_jalopy.jpg',caption:'Jalopy',index:0},
+                  {iconSrc:'/images/150x126_luxury.jpg',caption:'Luxury',index:1},
+                  {iconSrc:'/images/150x126_roadster.jpg',caption:'Roadster',index:2},
+                  {iconSrc:'/images/150x126_suv.jpg',caption:'SUV',index:3}
+            ]}"
+
+    />
 
         <!-- non-option details -->
 
-        <h:panelGrid columns="1"
+        <h:panelGrid id="cardetails" columns="1"
                      summary="#{bundle.carDetails}"
                      title="#{bundle.carDetails}">
 
@@ -68,7 +80,7 @@ Copyright 2005 Sun Microsystems Inc. All Rights Reserved
 
 <jsfExt:ajaxZone id="zone1">
 
-            <h:panelGrid columns="2">
+            <h:panelGrid id="pricing" columns="2">
 
                 <h:outputText styleClass="subtitle"
                               value="#{bundle.basePriceLabel}"/>

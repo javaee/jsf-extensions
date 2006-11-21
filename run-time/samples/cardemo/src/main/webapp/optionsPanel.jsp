@@ -56,7 +56,7 @@ Copyright 2005 Sun Microsystems Inc. All Rights Reserved
 
 </h:panelGrid>
 
-<h:panelGrid columns="2">
+<h:panelGrid id="options" columns="2">
 
     <h:outputText value="#{bundle.Engine}"
                   styleClass="optionLabel"/>
@@ -99,7 +99,7 @@ Copyright 2005 Sun Microsystems Inc. All Rights Reserved
 <h:outputText value="#{bundle.OtherOptions}"
               styleClass="optionLabel"/>
 
-<h:panelGrid columns="6">
+<h:panelGrid id="otheroptions" columns="6">
 
     <h:selectBooleanCheckbox title="#{bundle.sunroofLabel}"
                              binding="#{carstore.currentModel.components.sunroof}">

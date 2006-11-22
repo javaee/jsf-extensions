@@ -187,7 +187,6 @@ public class AjaxZoneRenderer extends Renderer {
 	    writer.startElement("script", comp);
 	    writer.writeAttribute("language", "javascript", "language");
 	    writer.writeAttribute("type", "text/javascript", "language");
-            writer.write("\n<!--\n");
             clientId = comp.getClientId(context);
             if (writeZoneAccruer) {
                 writer.write("\nDynaFacesZones.g_zones.push(\"" + clientId + "\");");
@@ -246,7 +245,6 @@ public class AjaxZoneRenderer extends Renderer {
             }
 	}
 	finally {
-            writer.write("\n//-->\n");
 	    writer.endElement("script");
 	}
 

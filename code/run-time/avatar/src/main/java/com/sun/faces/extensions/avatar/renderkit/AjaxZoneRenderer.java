@@ -34,6 +34,7 @@ import com.sun.faces.extensions.avatar.lifecycle.AsyncResponse;
 import com.sun.faces.extensions.common.util.Util;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import javax.el.MethodExpression;
 import javax.el.ValueExpression;
@@ -159,89 +160,117 @@ public class AjaxZoneRenderer extends Renderer {
      * <p>
      */
     
-    private void writeAjaxifyScript(FacesContext context, ResponseWriter writer, AjaxZone comp,
+    private void writeAjaxifyScripts(FacesContext context, ResponseWriter writer, AjaxZone comp,
             boolean isAjaxRequest) throws IOException {
-
-        String 
+        String
                 clientId = null,
                 getCallbackData = null,
                 collectPostData = null,
                 eventType = null,
-	        inspectElement = null,
+                inspectElement = null,
                 replaceElement = null;
-        InteractionType interactionType = getInteractionType(context, comp);
-	StringBuffer ajaxifyChildren = null;
+        StringBuffer ajaxifyChildren = null;
         MethodExpression action = null;
-	boolean isXhtml = false,
-                typeIsOutput = (interactionType == InteractionType.output),
-                writeZoneAccruer = ((!isAjaxRequest && typeIsOutput) || 
-                  (!isAjaxRequest && !typeIsOutput)),
-                writeAjaxifyChildren = ((!isAjaxRequest && !typeIsOutput) ||
-                  (isAjaxRequest && !typeIsOutput));
-        
-        if (isAjaxRequest && typeIsOutput) {
-            return;
-        }
-	    
+        boolean typeIsOutput, writeZoneAccruer, writeAjaxifyChildren;
+        InteractionType interactionType;
         try {
 	    writer.startElement("script", comp);
 	    writer.writeAttribute("language", "javascript", "language");
 	    writer.writeAttribute("type", "text/javascript", "language");
-            clientId = comp.getClientId(context);
-            if (writeZoneAccruer) {
-                writer.write("\nDynaFacesZones.g_zones.push(\"" + clientId + "\");");
+            List<AjaxZone> zoneList = comp.getZoneList();
+            
+            // Write the zone accruer
+            for (AjaxZone currentZone : zoneList) {
+
+                interactionType = getInteractionType(context, currentZone);
+                typeIsOutput = (interactionType == InteractionType.output);
+                writeZoneAccruer = ((!isAjaxRequest && typeIsOutput) ||
+                        (!isAjaxRequest && !typeIsOutput));
+
+                if (!currentZone.isRendered()) {
+                    continue;
+                }
+                
+                if (isAjaxRequest && typeIsOutput) {
+                    continue;
+                }
+	    
+                clientId = currentZone.getClientId(context);
+                if (writeZoneAccruer) {
+                    writer.write("\nDynaFacesZones.g_zones.push(\"" + clientId + "\");");
+                }
             }
             
-            if (writeAjaxifyChildren) {
-                boolean wroteAttribute = false;
-                collectPostData = getAttr(context, comp, "collectPostData");
-                eventType = getAttr(context, comp, "eventType");
-                getCallbackData = getAttr(context, comp, "getCallbackData");
-                inspectElement = getAttr(context, comp, "inspectElement");
-                replaceElement = getAttr(context, comp, "replaceElement");
+            // Write the ajaxifyChildren
+            for (AjaxZone currentZone : zoneList) {
 
-                ajaxifyChildren = new StringBuffer();
-                ajaxifyChildren.append("\nDynaFacesZones.ajaxifyChildren($(\'" + clientId + "\'), ");
-                ajaxifyChildren.append("{ ");
-                if (null != collectPostData) {
-                    wroteAttribute = true;
-                    ajaxifyChildren.append(" collectPostData: \'" + collectPostData + "\'");
-                }
-                if (null != eventType) {
-                    if (wroteAttribute) {
-                        ajaxifyChildren.append(", ");
-                    }
-                    wroteAttribute = true;
-                    ajaxifyChildren.append("eventType: \'" + eventType + "\'");
-                }
-                if (null != inspectElement) {
-                    if (wroteAttribute) {
-                        ajaxifyChildren.append(", ");
-                    }
-                    wroteAttribute = true;
-                    ajaxifyChildren.append("inspectElement: \'" + inspectElement + "\'");
-                }
-                if (null != replaceElement) {
-                    if (wroteAttribute) {
-                        ajaxifyChildren.append(", ");
-                    }
-                    wroteAttribute = true;
-                    ajaxifyChildren.append("replaceElement: \'" + replaceElement + "\'");
-                }
-                if (null != (action = comp.getActionExpression())) {
-                    if (wroteAttribute) {
-                        ajaxifyChildren.append(", ");
-                    }
-                    wroteAttribute = true;
-                    ajaxifyChildren.append("action: \'" + action.getExpressionString() + "\'");
-                }
-                ajaxifyChildren.append(" }");
-                if (null != getCallbackData) {
-                    ajaxifyChildren.append(", \'" + getCallbackData + "\'");
-                }
-                ajaxifyChildren.append(");");
+                interactionType = getInteractionType(context, currentZone);
+                typeIsOutput = (interactionType == InteractionType.output);
+                writeAjaxifyChildren = ((!isAjaxRequest && !typeIsOutput) ||
+                        (isAjaxRequest && !typeIsOutput));
 
-                writer.write(ajaxifyChildren.toString());
+                if (!currentZone.isRendered()) {
+                    continue;
+                }
+                
+                if (isAjaxRequest && typeIsOutput) {
+                    continue;
+                }
+	    
+                clientId = currentZone.getClientId(context);
+
+                if (writeAjaxifyChildren) {
+                    boolean wroteAttribute = false;
+                    collectPostData = getAttr(context, currentZone, "collectPostData");
+                    eventType = getAttr(context, currentZone, "eventType");
+                    getCallbackData = getAttr(context, currentZone, "getCallbackData");
+                    inspectElement = getAttr(context, currentZone, "inspectElement");
+                    replaceElement = getAttr(context, currentZone, "replaceElement");
+
+                    ajaxifyChildren = new StringBuffer();
+                    ajaxifyChildren.append("\nDynaFacesZones.ajaxifyChildren($(\'" + clientId + "\'), ");
+                    ajaxifyChildren.append("{ ");
+                    if (null != collectPostData) {
+                        wroteAttribute = true;
+                        ajaxifyChildren.append(" collectPostData: \'" + collectPostData + "\'");
+                    }
+                    if (null != eventType) {
+                        if (wroteAttribute) {
+                            ajaxifyChildren.append(", ");
+                        }
+                        wroteAttribute = true;
+                        ajaxifyChildren.append("eventType: \'" + eventType + "\'");
+                    }
+                    if (null != inspectElement) {
+                        if (wroteAttribute) {
+                            ajaxifyChildren.append(", ");
+                        }
+                        wroteAttribute = true;
+                        ajaxifyChildren.append("inspectElement: \'" + inspectElement + "\'");
+                    }
+                    if (null != replaceElement) {
+                        if (wroteAttribute) {
+                            ajaxifyChildren.append(", ");
+                        }
+                        wroteAttribute = true;
+                        ajaxifyChildren.append("replaceElement: \'" + replaceElement + "\'");
+                    }
+                    if (null != (action = currentZone.getActionExpression())) {
+                        if (wroteAttribute) {
+                            ajaxifyChildren.append(", ");
+                        }
+                        wroteAttribute = true;
+                        ajaxifyChildren.append("action: \'" + action.getExpressionString() + "\'");
+                    }
+                    ajaxifyChildren.append(" }");
+                    if (null != getCallbackData) {
+                        ajaxifyChildren.append(", \'" + getCallbackData + "\'");
+                    }
+                    ajaxifyChildren.append(");");
+
+                    writer.write(ajaxifyChildren.toString());
+                }
+
             }
 	}
 	finally {
@@ -341,14 +370,17 @@ public class AjaxZoneRenderer extends Renderer {
         }
 
         ResponseWriter writer = context.getResponseWriter();
-        boolean isAjaxRequest = false;
-        if (!(isAjaxRequest = AsyncResponse.isAjaxRequest())) {
-            for (int i = 0; i < scriptIds.length; i++) {
-                getXhtmlHelper().linkJavascript(context, component, writer,
-                        Mechanism.CLASS_RESOURCE, scriptIds[i]);
+        AjaxZone zone = (AjaxZone) component;
+        if (zone.isRenderScriptsForAllZonesRightNow()) {
+            boolean isAjaxRequest = false;
+            if (!(isAjaxRequest = AsyncResponse.isAjaxRequest())) {
+                for (int i = 0; i < scriptIds.length; i++) {
+                    getXhtmlHelper().linkJavascript(context, component, writer,
+                            Mechanism.CLASS_RESOURCE, scriptIds[i]);
+                }
             }
+            writeAjaxifyScripts(context, writer, zone, isAjaxRequest);
         }
-        writeAjaxifyScript(context, writer, (AjaxZone) component, isAjaxRequest);
         writer.endElement("div"); //NOI18N
     }
 

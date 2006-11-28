@@ -434,29 +434,32 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
                 } else if (curPhase == PhaseId.UPDATE_MODEL_VALUES) {
                     comp.processUpdates(facesContext);
                 } else if (curPhase == PhaseId.RENDER_RESPONSE) {
-                    ResponseWriter writer = AsyncResponse.getInstance().getResponseWriter();
+                    
+                    if (comp.isRendered()) {
+                        ResponseWriter writer = AsyncResponse.getInstance().getResponseWriter();
 
-                    writer.startElement("render", comp);
-                    writer.writeAttribute("id", comp.getClientId(facesContext), "id");
-                    try {
-                        writer.startElement("markup", comp);
-                        writer.write("<![CDATA[");
-                        
-                        // setup up a writer which will escape any CDATA sections
-                        facesContext.setResponseWriter(new EscapeCDATAWriter(writer));
-                
-                        // do the default behavior...
-                        comp.encodeAll(facesContext);
-                
-                        // revert the write and finish up
-                        facesContext.setResponseWriter(writer);
-                        writer.write("]]>");
-                        writer.endElement("markup");
+                        writer.startElement("render", comp);
+                        writer.writeAttribute("id", comp.getClientId(facesContext), "id");
+                        try {
+                            writer.startElement("markup", comp);
+                            writer.write("<![CDATA[");
+
+                            // setup up a writer which will escape any CDATA sections
+                            facesContext.setResponseWriter(new EscapeCDATAWriter(writer));
+
+                            // do the default behavior...
+                            comp.encodeAll(facesContext);
+
+                            // revert the write and finish up
+                            facesContext.setResponseWriter(writer);
+                            writer.write("]]>");
+                            writer.endElement("markup");
+                        }
+                        catch (ConverterException ce) {
+                            converterException = ce;
+                        }
+                        writer.endElement("render");
                     }
-                    catch (ConverterException ce) {
-                        converterException = ce;
-                    }
-                    writer.endElement("render");
                 }
                 else {
                     throw new IllegalStateException("I18N: Unexpected PhaseId passed to PhaseAwareContextCallback: " + curPhase.toString());

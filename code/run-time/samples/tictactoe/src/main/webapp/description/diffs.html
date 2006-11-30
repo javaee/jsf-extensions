@@ -1,0 +1,304 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Diffs between pre-AJAX Cardemo and AJAX Cardemo</title>
+  </head>
+
+  <body>
+    <h1>Diffs between pre-AJAX Cardemo and AJAX Cardemo</h1>
+
+<code><pre>
+--- /Users/edburns/Projects/J2EE/workareas/jsf-trunk/jsf-demo/carstore/src/java/carstore/CustomerBean.java	2006-03-09 11:18:57.000000000 -0800
++++ ./src/main/java/carstore/CustomerBean.java	2006-05-04 13:30:15.000000000 -0700
+@@ -34,6 +34,7 @@
+ import java.util.ArrayList;
+ import java.util.Collection;
+ import java.util.ResourceBundle;
++import javax.faces.component.UIViewRoot;
+ 
+ public class CustomerBean {
+ 
+@@ -59,18 +60,24 @@
+ 
+     public Collection getTitleOptions() {
+         titleOptions = new ArrayList&lt;SelectItem&gt;(3);
+-        ResourceBundle rb = ResourceBundle.getBundle(
+-              "carstore.bundles.Resources",
+-              (FacesContext.getCurrentInstance().getViewRoot().getLocale()));
+-        String titleStr = (String) rb.getObject("mrLabel");
+-        titleOptions.add(new SelectItem(titleStr, titleStr,
+-                                        titleStr));
+-        titleStr = (String) rb.getObject("mrsLabel");
+-        titleOptions.add(new SelectItem(titleStr, titleStr,
+-                                        titleStr));
+-        titleStr = (String) rb.getObject("msLabel");
+-        titleOptions.add(new SelectItem(titleStr, titleStr,
+-                                        titleStr));
++        UIViewRoot root = FacesContext.getCurrentInstance().getViewRoot();
++        ResourceBundle rb = null;
++
++        if (null != root) {
++            rb = ResourceBundle.getBundle("carstore.bundles.Resources",
++                    root.getLocale());
++        }
++        if (null != rb) {
++            String titleStr = (String) rb.getObject("mrLabel");
++            titleOptions.add(new SelectItem(titleStr, titleStr,
++                    titleStr));
++            titleStr = (String) rb.getObject("mrsLabel");
++            titleOptions.add(new SelectItem(titleStr, titleStr,
++                    titleStr));
++            titleStr = (String) rb.getObject("msLabel");
++            titleOptions.add(new SelectItem(titleStr, titleStr,
++                    titleStr));
++        }
+ 
+         return titleOptions;
+     }
+--- /Users/edburns/Projects/J2EE/workareas/jsf-trunk/jsf-demo/carstore/src/java/carstore/package.html	2006-03-09 11:18:57.000000000 -0800
++++ ./src/main/java/carstore/package.html	2006-05-08 08:00:09.000000000 -0700
+@@ -21,18 +21,20 @@
+ 
+ &lt;body bgcolor="white"&gt;
+ 
+-&lt;p&gt;CarStore is a moderately complex demonstration of JavaServer Faces
+-    technology. Please consult the tutorial for more detailed information
+-    on the concepts required to build applications with JavaServer Faces
+-    technology. Below we use whiteboard diagrams to illustrate the ease
+-    with which a web application can be designed, and how that design can be
+-    easily cast into a Faces application.&lt;/p&gt;
++&lt;p&gt;Specific documentation for the AJAX enabled carstore may be found &lt;a
++target="_" href="../../description/index.html"&gt;here&lt;/a&gt;. CarStore is a
++moderately complex demonstration of JavaServer Faces technology. Please
++consult the tutorial for more detailed information on the concepts
++required to build applications with JavaServer Faces technology. Below
++we use whiteboard diagrams to illustrate the ease with which a web
++application can be designed, and how that design can be easily cast into
++a Faces application.&lt;/p&gt;
+ 
+ &lt;h3&gt;Page Flow&lt;/h3&gt;
+ 
+ &lt;p&gt;Here's a quick diagram of page flow through the application.&lt;/p&gt;
+ 
+-&lt;p&gt;&lt;img src="@context.path@/javadocs/flow.jpg"/&gt;&lt;/p&gt;
++&lt;p&gt;&lt;img src="../flow.jpg"/&gt;&lt;/p&gt;
+ 
+ &lt;p&gt;Each box corresponds to a JSP page. The arrows correspond to the
+     &lt;b&gt;supported&lt;/b&gt; flow from page to page, either with buttons in the
+@@ -42,7 +44,7 @@
+ 
+ &lt;p&gt;We then overlay the beans required to back the JSP pages.&lt;/p&gt;
+ 
+-&lt;p&gt;&lt;img src="@context.path@/javadocs/beans.jpg"/&gt;&lt;/p&gt;
++&lt;p&gt;&lt;img src="../beans.jpg"/&gt;&lt;/p&gt;
+ 
+ &lt;p&gt;See the JavaDocs for each bean to see what it does.&lt;/p&gt;
+ 
+@@ -52,7 +54,7 @@
+     data is read from &lt;code&gt;java.util.ResourceBundle&lt;/code&gt; instances, but
+     it could just as well come from a database.&lt;/p&gt;
+ 
+-&lt;p&gt;&lt;img src="@context.path@/javadocs/data.jpg"/&gt;&lt;/p&gt;
++&lt;p&gt;&lt;img src="../data.jpg"/&gt;&lt;/p&gt;
+ 
+ &lt;/body&gt;
+ &lt;/html&gt;
+--- /Users/edburns/Projects/J2EE/workareas/jsf-trunk/jsf-demo/carstore/web/bottomMatter.jsp	2006-03-24 10:48:43.000000000 -0800
++++ ./src/main/webapp/bottomMatter.jsp	2006-05-05 11:54:22.000000000 -0700
+@@ -27,7 +27,7 @@
+ &lt;%@ taglib prefix="h" uri="http://java.sun.com/jsf/html" %&gt;
+ 
+ 
+-    &lt;h:outputLink value="javadocs"&gt;
++    &lt;a href='&lt;%= request.getContextPath() + "/javadocs" %&gt;'&gt;
+         Documentation for this demo
+-    &lt;/h:outputLink&gt;
++    &lt;/a&gt;
+ 
+--- /Users/edburns/Projects/J2EE/workareas/jsf-trunk/jsf-demo/carstore/web/carDetail.jsp	2006-03-09 11:18:57.000000000 -0800
++++ ./src/main/webapp/carDetail.jsp	2006-07-12 08:16:40.000000000 -0700
+@@ -36,6 +36,7 @@
+ 
+ &lt;%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %&gt;
+ &lt;%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %&gt;
++&lt;%@ taglib prefix="jsfExt" uri="http://java.sun.com/jsf/extensions/dynafaces" %&gt;
+ 
+ &lt;f:loadBundle basename="carstore.bundles.Resources" var="bundle"/&gt;
+ 
+@@ -63,6 +64,8 @@
+             &lt;h:outputText
+                   binding="#{carstore.currentModel.components.description}"/&gt;
+ 
++&lt;jsfExt:ajaxZone id="zone1"&gt;
++
+             &lt;h:panelGrid columns="2"&gt;
+ 
+                 &lt;h:outputText styleClass="subtitle"
+@@ -78,6 +81,8 @@
+ 
+             &lt;/h:panelGrid&gt;
+ 
++&lt;/jsfExt:ajaxZone&gt;
++
+             &lt;h:commandButton action="#{carstore.buyCurrentCar}"
+                              value="#{bundle.buy}"/&gt;
+ 
+@@ -85,9 +90,6 @@
+ 
+         &lt;jsp:include page="optionsPanel.jsp"/&gt;
+ 
+-        &lt;h:commandButton value="#{bundle.recalculate}"
+-                         action="#{carstore.currentModel.updatePricing}"/&gt;
+-
+         &lt;h:commandButton action="#{carstore.buyCurrentCar}"
+                          value="#{bundle.buy}"/&gt;
+ 
+--- /Users/edburns/Projects/J2EE/workareas/jsf-trunk/jsf-demo/carstore/web/chooseLocale.jsp	2006-03-09 11:18:57.000000000 -0800
++++ ./src/main/webapp/chooseLocale.jsp	2006-05-01 11:48:22.000000000 -0700
+@@ -32,7 +32,7 @@
+ 
+ &lt;%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %&gt;
+ &lt;%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %&gt;
+-&lt;%@ taglib uri="http://java.sun.com/blueprints/ee5/components/ui" prefix="d" %&gt;
++&lt;%@ taglib uri="http://java.sun.com/blueprints/ui" prefix="d" %&gt;
+ 
+ &lt;f:loadBundle basename="carstore.bundles.Resources" var="bundle"/&gt;
+ 
+--- /Users/edburns/Projects/J2EE/workareas/jsf-trunk/jsf-demo/carstore/web/customerInfo.jsp	2006-03-09 11:18:57.000000000 -0800
++++ ./src/main/webapp/customerInfo.jsp	2006-05-04 13:40:45.000000000 -0700
+@@ -42,7 +42,7 @@
+ &lt;f:loadBundle basename="carstore.bundles.Resources" var="bundle"/&gt;
+ 
+ &lt;f:view&gt;
+-&lt;h:form&gt;
++&lt;h:form prependId="false"&gt;
+ 
+ &lt;h:panelGrid id="mainPanel" columns="1" footerClass="subtitle"
+              headerClass="subtitlebig" styleClass="medium"
+--- /Users/edburns/Projects/J2EE/workareas/jsf-trunk/jsf-demo/carstore/web/index.jsp	2006-03-09 11:18:57.000000000 -0800
++++ ./src/main/webapp/index.jsp	2006-05-08 08:52:38.000000000 -0700
+@@ -1,45 +1,10 @@
+ &lt;!doctype html public "-//w3c//dtd html 4.0 transitional//en"&gt;
+-&lt;!--
+-The contents of this file are subject to the terms
+-of the Common Development and Distribution License
+-(the License). You may not use this file except in
+-compliance with the License.
+-
+-You can obtain a copy of the License at
+-https://javaserverfaces.dev.java.net/CDDL.html or
+-legal/CDDLv1.0.txt.
+-See the License for the specific language governing
+-permission and limitations under the License.
+-
+-When distributing Covered Code, include this CDDL
+-Header Notice in each file and include the License file
+-at legal/CDDLv1.0.txt.
+-If applicable, add the following below the CDDL Header,
+-with the fields enclosed by brackets [] replaced by
+-your own identifying information:
+-"Portions Copyrighted [year] [name of copyright owner]"
+-
+-[Name of File] [ver.__] [Date]
+-
+-Copyright 2005 Sun Microsystems Inc. All Rights Reserved
+---&gt;
+ &lt;html&gt;
+ &lt;head&gt;
++&lt;meta http-equiv="refresh" content="2;url=description/index.html"&gt;
+ &lt;/head&gt;
+ 
+ &lt;body&gt;
+ 
+-&lt;!--  
+-
+-This page allows the user to go to the context-path and get redirected
+-to the front page of the app.  For example,
+-http://localhost:8080/jsf-carstore/.  Note that we use "*.faces" as the
+-page mapping.  Doing so allows us to just name our pages as "*.jsp",
+-refer to them as "*.faces" and know that they will be properly picked up
+-by the container.
+-
+---&gt;
+-
+-&lt;jsp:forward page="chooseLocale.faces"/&gt;
+ &lt;/body&gt;
+ &lt;/html&gt;
+--- /Users/edburns/Projects/J2EE/workareas/jsf-trunk/jsf-demo/carstore/web/optionsPanel.jsp	2006-03-24 10:48:43.000000000 -0800
++++ ./src/main/webapp/optionsPanel.jsp	2006-07-12 08:16:40.000000000 -0700
+@@ -25,8 +25,15 @@
+ &lt;%@ page contentType="text/html" language="java" %&gt;
+ &lt;%@ taglib prefix="f" uri="http://java.sun.com/jsf/core" %&gt;
+ &lt;%@ taglib prefix="h" uri="http://java.sun.com/jsf/html" %&gt;
++&lt;%@ taglib prefix="jsfExt" uri="http://java.sun.com/jsf/extensions/dynafaces" %&gt;
+ 
++&lt;script type="text/javascript" 
++        src='&lt;%= request.getContextPath() + "/devtime.js" %&gt;'&gt;&lt;/script&gt;
+ 
++&lt;jsfExt:ajaxZone id="zone2" inspectElement="inspectElement"
++                eventType="click" collectPostData="extractParams"
++                action="#{carstore.currentModel.updatePricing}"&gt;
+ &lt;h:panelGrid&gt;
+ 
+     &lt;h:outputText value="#{bundle.OptionsPackages}"/&gt;
+@@ -145,4 +152,4 @@
+ 
+ &lt;/h:panelGrid&gt;
+ 
+-
++&lt;/jsfExt:ajaxZone&gt;
+--- /Users/edburns/Projects/J2EE/workareas/jsf-trunk/jsf-demo/carstore/web/WEB-INF/faces-config.xml	2006-03-09 11:18:57.000000000 -0800
++++ ./src/main/webapp/WEB-INF/faces-config.xml	2006-05-04 12:20:24.000000000 -0700
+@@ -40,6 +40,10 @@
+             &lt;supported-locale&gt;fr&lt;/supported-locale&gt;
+             &lt;supported-locale&gt;es&lt;/supported-locale&gt;
+         &lt;/locale-config&gt;
++        &lt;resource-bundle&gt;
++          &lt;base-name&gt;carstore.bundles.Resources&lt;/base-name&gt;
++          &lt;var&gt;bundle&lt;/var&gt;
++        &lt;/resource-bundle&gt;
+     &lt;/application&gt;
+ 
+     &lt;!-- Validator --&gt;
+--- /Users/edburns/Projects/J2EE/workareas/jsf-trunk/jsf-demo/carstore/web/WEB-INF/web.xml	2006-03-09 11:18:57.000000000 -0800
++++ ./src/main/webapp/WEB-INF/web.xml	2006-07-12 08:16:40.000000000 -0700
+@@ -35,7 +35,7 @@
+ 
+     &lt;context-param&gt;
+         &lt;param-name&gt;javax.faces.STATE_SAVING_METHOD&lt;/param-name&gt;
+-        &lt;param-value&gt;client&lt;/param-value&gt;
++        &lt;param-value&gt;server&lt;/param-value&gt;
+     &lt;/context-param&gt;
+ 
+     &lt;context-param&gt;
+@@ -70,6 +70,10 @@
+     &lt;servlet&gt;
+         &lt;servlet-name&gt;Faces Servlet&lt;/servlet-name&gt;
+         &lt;servlet-class&gt;javax.faces.webapp.FacesServlet&lt;/servlet-class&gt;
++        &lt;init-param&gt;
++          &lt;param-name&gt;javax.faces.LIFECYCLE_ID&lt;/param-name&gt;
++          &lt;param-value&gt;com.sun.faces.lifecycle.PARTIAL&lt;/param-value&gt;
++        &lt;/init-param&gt;
+         &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;
+     &lt;/servlet&gt;
+ 
+@@ -85,7 +89,7 @@
+     --&gt;
+     &lt;servlet-mapping&gt;
+         &lt;servlet-name&gt;Faces Servlet&lt;/servlet-name&gt;
+-        &lt;url-pattern&gt;*.faces&lt;/url-pattern&gt;
++        &lt;url-pattern&gt;/faces/*&lt;/url-pattern&gt;
+     &lt;/servlet-mapping&gt;
+ 
+     &lt;security-constraint&gt;
+</code></pre>
+
+    <hr>
+    <address><a href="mailto:ed.burns@sun.com">Edward Burns</a></address>
+<!-- Created: Mon May  8 11:31:08 EDT 2006 -->
+<!-- hhmts start -->
+Last modified: Thu Aug 31 14:52:02 EDT 2006
+<!-- hhmts end -->
+  </body>
+</html>
+

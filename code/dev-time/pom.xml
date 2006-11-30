@@ -33,6 +33,7 @@
        <directory>src/main/resources</directory>
        <includes>
            <include>MANIFEST.MF</include>
+           <include>faces-config.xml</include>
        </includes>
     </resource>
 

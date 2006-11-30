@@ -39,6 +39,7 @@ import java.util.Map;
 import javax.el.MethodExpression;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
+import javax.faces.component.ActionSource;
 import javax.faces.component.EditableValueHolder;
 
 import javax.faces.component.UIComponent;
@@ -291,7 +292,8 @@ public class AjaxZoneRenderer extends Renderer {
                 new Util.TreeTraversalCallback() {
             public boolean takeActionOnNode(FacesContext context, UIComponent curNode) throws FacesException {
                 boolean keepGoing = true;
-                if (curNode instanceof EditableValueHolder) {
+                if (curNode instanceof EditableValueHolder || 
+                    curNode instanceof ActionSource) {
                     keepGoing = false;
                 }
                 return keepGoing;

@@ -65,9 +65,9 @@
       <version>1.7</version>
     </dependency>
     <dependency>
-      <groupId>com.sun.facelets</groupId>
+      <groupId>javax.faces</groupId>
       <artifactId>jsf-facelets</artifactId>
-      <version>1.1.10a</version>
+      <version>1.1.11a</version>
     </dependency>
   </dependencies>
   <reporting>

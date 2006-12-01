@@ -30,17 +30,26 @@
 package com.sun.faces.extensions.devtime.zdt;
 
 import javax.faces.component.UIViewRoot;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
-import javax.servlet.http.HttpServletRequest;
 
 /**
  *
  * @author edburns
  */
 public class JmxPhaseListener implements PhaseListener {
+    
+    public static final String RESTART_PASSWORD_PARAM_NAME = 
+            "com.sun.faces.RESTART_PASSWORD";
+    
+    public static final String ADMIN_PASSWORD_PARAM_NAME = 
+            "com.sun.faces.ADMIN_PASSWORD";
+    
+    public static final String ADMIN_PORT_PARAM_NAME = 
+            "com.sun.faces.PORT_PASSWORD";
     
     /** Creates a new instance of JmxPhaseListener */
     public JmxPhaseListener() {
@@ -63,24 +72,42 @@ public class JmxPhaseListener implements PhaseListener {
     public void afterPhase(PhaseEvent phaseEvent) {
         FacesContext context = phaseEvent.getFacesContext();
         UIViewRoot root = context.getViewRoot();
-        String contextRoot = null,
-               viewId = root.getViewId();
+        String viewId = root.getViewId();
         
         if (!viewId.equals("/restart")) {
             return;
         }
         
-        HttpServletRequest request = (HttpServletRequest) 
-          context.getExternalContext().getRequest();
+        doRestart(context);
         
-        contextRoot = request.getContextPath();
+    }
+    
+    private void doRestart(FacesContext context) {
+        ExternalContext extContext = context.getExternalContext();
+        String  restartPasswordParam = extContext.getRequestParameterMap().get("password"),
+                restartPassword = getRestartPassword(extContext);
+        assert(null != restartPassword);
+        
+        // If there is no password param, take no action
+        if (null == restartPasswordParam) {
+            return;
+        }
+        
+        // If the restart password param is not equal to the restart password, 
+        // take no action
+        if (!restartPasswordParam.equals(restartPassword)) {
+            return;
+        }
+        
+        String contextRoot = extContext.getRequestContextPath();
         if (null == contextRoot) {
             return;
         }
         if (contextRoot.startsWith("/")) {
             contextRoot = contextRoot.substring(1);
         }
-        final String [] args = { "--restart", "localhost", contextRoot, "admin", "adminadmin", "4848" };
+        final String [] args = { "--restart", "localhost", contextRoot, "admin", 
+          getAdminPassword(extContext), getAdminPort(extContext) };
         Runnable doRestart = new Runnable() {
             public void run() {
                 try {
@@ -96,5 +123,42 @@ public class JmxPhaseListener implements PhaseListener {
         restartThread.start();
         context.responseComplete();
     }
+    
+    private String getRestartPassword(ExternalContext extContext) {
+        String restartPassword = "adminadmin";
+        
+        String contextRestartPassword = 
+                extContext.getInitParameter(RESTART_PASSWORD_PARAM_NAME);
+        if (null != contextRestartPassword) {
+            restartPassword = contextRestartPassword;
+        }
+        
+        return restartPassword;
+    }
+    
+    private String getAdminPassword(ExternalContext extContext) {
+        String restartPassword = "adminadmin";
+        
+        String contextRestartPassword = 
+                extContext.getInitParameter(ADMIN_PASSWORD_PARAM_NAME);
+        if (null != contextRestartPassword) {
+            restartPassword = contextRestartPassword;
+        }
+        
+        return restartPassword;
+    }
+    
+    private String getAdminPort(ExternalContext extContext) {
+        String restartPassword = "4848";
+        
+        String contextRestartPassword = 
+                extContext.getInitParameter(ADMIN_PORT_PARAM_NAME);
+        if (null != contextRestartPassword) {
+            restartPassword = contextRestartPassword;
+        }
+        
+        return restartPassword;
+    }
+    
     
 }

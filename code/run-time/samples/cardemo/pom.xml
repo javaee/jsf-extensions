@@ -93,6 +93,12 @@
       <scope>runtime</scope>
     </dependency>
     <dependency>
+      <groupId>com.sun.faces.extensions</groupId>
+      <artifactId>jsf-extensions-dev-time</artifactId>
+      <version>0.1-SNAPSHOT</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
       <groupId>commons-logging</groupId>
       <artifactId>commons-logging</artifactId>
       <version>1.0.4</version>

@@ -38,6 +38,9 @@
                    <fileset dir="../run-time/common/target">
                      <include name="*.jar" />
                    </fileset>
+                   <fileset dir="../dev-time/target">
+                     <include name="*.jar" />
+                   </fileset>
                    <fileset dir="../test-time/target">
                      <include name="*.jar" />
                    </fileset>

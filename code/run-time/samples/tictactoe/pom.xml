@@ -52,11 +52,11 @@
        </plugin>
        <plugin>
          <groupId>org.apache.maven.plugins</groupId>
-         <artifactId>install</artifactId>
+         <artifactId>maven-javadoc-plugin</artifactId>
          <executions>
            <execution>
 	     <id>javadoc</id>
-	     <phase>generate-resources</phase>
+	     <phase>install</phase>
 	     <configuration>
 	       <minmemory>128m</minmemory>
 	       <maxmemory>512</maxmemory>

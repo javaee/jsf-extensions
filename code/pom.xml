@@ -128,6 +128,7 @@
       </activation>
       <modules>
 	<module>maven/master-pom</module>
+	<module>test-time</module>
 	<module>dev-time</module>
 	<module>run-time/common</module>
 	<module>run-time/flash</module>
@@ -164,6 +165,7 @@
       <id>samples</id>
       <modules>
 	<module>maven/master-pom</module>
+	<module>test-time</module>
 	<module>dev-time</module>
 	<module>run-time/common</module>
 	<module>run-time/avatar</module>

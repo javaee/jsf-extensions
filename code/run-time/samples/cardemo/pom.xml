@@ -56,7 +56,7 @@
          <executions>
            <execution>
 	     <id>javadoc</id>
-	     <phase>generate-resources</phase>
+	     <phase>verify</phase>
 	     <configuration>
 	       <minmemory>128m</minmemory>
 	       <maxmemory>512</maxmemory>

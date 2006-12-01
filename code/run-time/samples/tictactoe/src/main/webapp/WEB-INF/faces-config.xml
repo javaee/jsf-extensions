@@ -57,7 +57,7 @@
             The main backing file mean
         </description>
         <managed-bean-name>game</managed-bean-name>
-        <managed-bean-class>demo1.Game</managed-bean-class>
+        <managed-bean-class>tictactoe.Game</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
 

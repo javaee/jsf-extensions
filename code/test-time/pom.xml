@@ -93,9 +93,9 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-        <groupId>el-ri</groupId>
-        <artifactId>el-ri</artifactId>
-        <version>1.5</version>
+        <groupId>el-impl</groupId>
+        <artifactId>el-impl</artifactId>
+        <version>1.0</version>
         <scope>provided</scope>
     </dependency>
     <dependency>

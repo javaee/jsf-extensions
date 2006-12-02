@@ -1,0 +1,169 @@
+<?xml version="1.0"?>
+<document>
+
+  <properties>
+    <title>JSF Extensions Zero Deployment Time</title>
+  </properties>
+
+  <body>
+
+    <section name="Warning">
+
+     <p>The presence of the <code>jsf-extensions-dev-time.jar</code> in
+     your <code>WEB-INF/lib</code> directory opens up a big security
+     hole in your application, in the name of ease of development.  Do
+     not deploy your application into production with this jar in your
+     <code>WEB-INF/lib</code>.
+     </p>
+
+    </section>
+
+    <section name="Usage">
+
+     <p>One oft cited complaint about Java Web Applications is the slow
+     and laborious <a
+     href="http://www.theserverside.com/news/thread.tss?thread_id=35538">deployment
+     step</a>.  This step seriously undermines the ability to get into a
+     <a href="http://web.ionsys.com/~remedy/FLOW%20%20.htm">flow
+     state</a> and is generally a major buzz kill.  The absense of a
+     deployment step is one reason why people like Ruby on Rails so
+     much.</p>
+
+     <p>JSF-Extensions Design time brings good news for flow-impaired
+     Java Web application Developers: the JMX PhaseListener.</p>
+
+       <subsection name="HowTo">
+
+         <p>Here's how to use this feature in to iteratively develop a
+         JSF 1.2 application deployed via a "deploydir"-style deployment
+         on a JMX enabled Java EE container, such as <a
+         href="http://java.sun.com/javaee/downloads/">the Java EE
+         SDK</a>.</p>
+
+	<ol>
+
+	  <li><p>Download the <a
+	  href="http://jsf-extensions.dev.java.net/servlets/ProjectDocumentList">jsf-extensions
+	  binary bundle</a> from the "releases" folder.  </p></li>
+
+	  <li><p>Unpack the binary, take the
+	  <code>jsf-extensions-dev-time-&lt;VERSION&gt;.jar</code> </p>
+	  and drop it into your JSF application's
+	  <code>WEB-INF/lib</code> directory.</li>
+
+	  <li><p>Deploy the app to your container using the "deploydir"
+	  feature.  In <a
+	  href="http://java.sun.com/javaee/downloads/">Java EE 5 SDK</a>
+	  or <a href="https://glassfish.dev.java.net/">glassfish</a>
+	  this can be done using the command</p>
+
+          <blockquote>
+           ./asadmin deploydir --user admin --passwordfile &lt;PATH_TO&gt;/.javaee-passwordfile --contextroot &lt;CONTEXT_ROOT&gt; &lt;ABSOLUTE_PATH_TO_EXPLODED_WAR_DIRECTORY&gt;
+          </blockquote>
+
+          <p>For example, this command deploys the cardemo:</p>
+
+          <blockquote>
+           ./asadmin deploydir --user admin --passwordfile /Users/edburns/.javaee-passwordfile --contextroot jsf-ajax-cardemo /Users/edburns/Projects/J2EE/workareas/jsf-extensions-trunk/code/run-time/samples/cardemo/target/jsf-ajax-cardemo
+          </blockquote>
+
+
+           </li>
+
+
+	  <li><p>Look at your <code>WEB-IND/web.xml</code> and note the
+	  <code>url-mapping</code> for the <code>FacesServlet</code> in
+	  your application.  You already have to have such a mapping if
+	  you're using JSF in the first place.</p>
+
+          <p>For prefixed mapped applications, any HTTP request to the
+          following URL will cause your application to be immediately
+          stopped and restarted via JMX.</p>
+
+
+          <blockquote>
+            <code>http://&lt;HOST&gt;[:&lt;PORT&gt;]/&lt;CONTEXT_ROOT&gt;/&lt;FACES_SERVLET_MAPPING&gt;/restart?password=adminadmin</code>
+          </blockquote>
+
+          <p>On extension mapped applications, the following URL is your
+          man.</p>
+
+          <blockquote>
+            <code>http://&lt;HOST&gt;[:&lt;PORT&gt;]/&lt;CONTEXT_ROOT&gt;/restart.&lt;FACES_SERVLET_MAPPING&gt;?password=adminadmin</code>
+          </blockquote>
+
+          <p>With the obvious substitutions, of course, and the password
+          being "adminadmin" by default.  You can change the restart
+          password with a <code>&lt;context-param&gt;</code>.</p>
+
+          <p>For example, with the Cardemo, this command uses wget to
+          restart the application via JMX.</p>
+
+          <blockquote>
+wget --spider http://localhost:8080/jsf-ajax-cardemo/faces/restart?password=adminadmin
+          </blockquote>
+
+
+          </li>
+
+	</ol>
+
+       <p>Upon receipt of a request with this URL, the
+       <code>PhaseListener</code> will use JMX to stop and restart the
+       application.  This takes a fraction of the time that a full
+       redeploy takes, yet all of the java classes in your app, as well
+       as all of the config files, are re-loaded. </p>
+
+<dl>
+<dt>Note, due to a bug in glassfish, the web.xml is not re-loaded when
+this JMX method is used.  A fix for this bug is in progress.
+</dt>
+</dl>
+
+       </subsection>
+
+       <subsection name="Reference">
+
+         <p>The <code>JMXPhaseListener</code> in
+         <code>jsf-extensions-dev-time</code> supports the following
+         options, specified as <code>&lt;context-param&gt;</code>
+         elements in the web.xml.  All of these parameters are optional
+         and have sensible defaults.</p>
+
+<dl>
+
+<dt>com.sun.faces.RESTART_PASSWORD
+</dt>
+
+<dd><p>The password that must be given as the value of the
+<code>password</code> URL query parameter in the restart URL.  If not
+specified the value of "adminadmin" (without the quotes) is assumed.</p>
+</dd>
+
+<dt>com.sun.faces.ADMIN_PASSWORD
+</dt>
+
+<dd><p>The JMX password.  In most cases, this is equal to the admin
+password.  If not specified, the value of "adminadmin" (without the
+quotes) is used.</p>
+</dd>
+
+<dt>com.sun.faces.ADMIN_PORT
+</dt>
+
+<dd><p>The port on which the JMX server is listening.  If not sprcified,
+the value of 4848 is used.</p>
+</dd>
+
+</dl>
+
+       </subsection>
+
+
+    </section>
+
+
+
+  </body>
+
+</document>

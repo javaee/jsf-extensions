@@ -30,13 +30,29 @@
          you can choose to use any combination of them, apart or
          together.  The software is groupd into three areas based on
          when in the software development lifecycle they should be
-         used: run time, test time, and design time.</p>
-         
+         used:</p>
+
+	<ul>
+
+	  <li><p><img src="images/new.gif" /><a href="#Design Time">Design Time</a></p></li>
+
+	  <li><p><a href="#Test Time">Test Time</a></p></li>
+
+	  <li><p><a href="#Run Time">Run Time</a></p></li>
+
+	</ul>
+
+        <p>To get the software and try it out, click on the <a
+        href="https://jsf-extensions.dev.java.net/servlets/ProjectDocumentList">Download</a>
+        link in the left navigation pane, then open the "releases"
+        folder and download the "jsf-extensions&lt;VERSION&gt;.tar.gz"
+        file.  If you'd rather just watch some screencasts, please check
+        out the <a href="slides.html">Slides and Screencasts</a>
+        page.</p>
+
         <subsection name="Run Time">
 
-        <ul>
-
-        <li><p>JSF and AJAX together: it just works.  JSF-Extensions
+        <p>JSF and AJAX together: it just works.  JSF-Extensions
         run-time brings the power of AJAX to existing and future JSF
         developed applications.  Included in this software is an
         implementation of the Avatar concept demonstrated by Jacob
@@ -44,6 +60,10 @@
         href="http://weblogs.java.net/blog/edburns/archive/2006/05/javaone_video_a_1.html">JavaOne
         2006 talk</a>.  JSF-Extensions avatar is also the best way to
         use <a href="http://ajax.dev.java.net/">jMaki</a>.</p>
+
+        <p>JSF-Extensions run-time also provides a Ruby on Rails style
+        flash concept to your web applications.  Very useful for
+        master-detail!</p>
 
         <h4>Live Demo Apps</h4>
 
@@ -101,14 +121,6 @@ power of the JSF event system to AJAX.</p>
 
         </dl>
 
-
-        </li>
-
-        <li><p>Bring the "flash" concept from Ruby on Rails to your JSF
-        applications!</p></li>
-
-        </ul>
-
         </subsection>
         
         <subsection name="Test Time">
@@ -128,6 +140,23 @@ power of the JSF event system to AJAX.</p>
         automatically create the JSP Tag Handlers and TLD files for the
         core jsf components.  We plan to extract this (or similar) code
         and offer it as part of this project.</p>
+
+        <p><img src="images/new.gif" /> For now, JSF-extensions
+        design-time provides a drop-in jar that contains a JSF
+        <code>PhaseListener</code>.  If this jar is present in your
+        <code>WEB-INF/lib</code>, the <code>PhaseListener</code> will
+        listen for requests to a special <code>viewId</code>:
+        "<code>/restart</code>" with a special query parameter,
+        "<code>password</code>".  When such a request is received, <a
+        href="http://java.sun.com/developer/technicalArticles/J2SE/jmx.html">JMX</a>
+        is used to stop and restart the application, without doing a
+        full redeploy.  This causes all app config files, properties
+        files and classes to be re-loaded, which allows for iterative
+        development times approaching the holy grail of <a
+        href="http://www.theserverside.com/news/thread.tss?thread_id=35538">zero
+        deployment time</a>.  <a href="features-zdt.html">Read the
+        documentation</a>, try it out or <a href="slides.html">view the
+        screencast</a>.</p>
 
         </subsection>
 

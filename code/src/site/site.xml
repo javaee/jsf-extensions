@@ -48,6 +48,7 @@
           <item name="TagLibraryDoc"   href="/ajax/tlddocs/index.html"/>
         </item>
         <item name="Flash"     href="/features-flash.html"/>
+        <item name="Zero Deployment Time"     href="/features-zdt.html"/>
     </menu>
 
     <menu name="Test Time Features">

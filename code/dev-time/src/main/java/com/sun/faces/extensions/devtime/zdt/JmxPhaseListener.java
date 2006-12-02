@@ -49,7 +49,7 @@ public class JmxPhaseListener implements PhaseListener {
             "com.sun.faces.ADMIN_PASSWORD";
     
     public static final String ADMIN_PORT_PARAM_NAME = 
-            "com.sun.faces.PORT_PASSWORD";
+            "com.sun.faces.ADMIN_PORT";
     
     /** Creates a new instance of JmxPhaseListener */
     public JmxPhaseListener() {

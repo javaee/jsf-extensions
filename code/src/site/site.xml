@@ -43,6 +43,7 @@
     <menu name="Runtime Features">
         <item name="Ajax" href="/features-ajax.html" collapse="false">
           <item name="Overview"    href="/features-ajax.html"/>
+          <item name="Getting Started" href="/gettingstarted-ajax.html"/>
           <item name="Reference"   href="/reference-ajax.html"/>
           <item name="JavaDoc"     href="/ajax/apidocs/index.html"/>
           <item name="TagLibraryDoc"   href="/ajax/tlddocs/index.html"/>

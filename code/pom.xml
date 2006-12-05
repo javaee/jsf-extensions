@@ -168,6 +168,7 @@
 	<module>test-time</module>
 	<module>dev-time</module>
 	<module>run-time/common</module>
+	<module>run-time/flash</module>
 	<module>run-time/avatar</module>
 	<module>run-time/samples/j1</module>
 	<module>run-time/samples/cardemo</module>

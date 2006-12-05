@@ -61,6 +61,10 @@
         2006 talk</a>.  JSF-Extensions avatar is also the best way to
         use <a href="http://ajax.dev.java.net/">jMaki</a>.</p>
 
+<p><img src="images/new.gif" />To get started, please read the concise
+<a href="gettingstarted-ajax.html">Getting Started With Dynamic
+Faces</a> document.</p>
+
         <p>JSF-Extensions run-time also provides a Ruby on Rails style
         flash concept to your web applications.  Very useful for
         master-detail!</p>

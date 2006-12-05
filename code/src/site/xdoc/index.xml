@@ -110,7 +110,7 @@ what can be done by modifying one JSP file in the guessNumber app.</p>
 
           <dt><p><a target="_" href="http://sunapp1.whardy.com:8090/jsf-simple-partial-update">Simple Partial Update</a></p></dt>
 
-<dd><p>Simple demonstration of DynaFaces partial update capability.</p>
+<dd><p>Simple demonstration of Dynamic Faces partial update capability.</p>
 </dd>
 
 

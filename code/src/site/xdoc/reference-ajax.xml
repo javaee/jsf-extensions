@@ -9,7 +9,7 @@
 
     <p>This document is a reference to the JavaScript and JSP/Facelets
     entry points to JavaServer(TM) Faces Technology Extensions Dynamic
-    Faces (DynaFaces).</p>
+    Faces (Dynamic Faces).</p>
 
     <section name="JSP/Facelets tags">
 
@@ -70,19 +70,19 @@
 
     </section>
     
-    <section name="DynaFaces JavaScript Library Reference">
+    <section name="Dynamic Faces JavaScript Library Reference">
 
 <!-- PENDING(edburns): Add examples for each of these -->
 
       <p>This section lists the JavaScript functions and classes exposed
-      by the DynaFaces JavaScript library.</p>
+      by the Dynamic Faces JavaScript library.</p>
 
       <subsection name="DynaFaces.fireAjaxTransaction">
 
         <p>When invoked, causes an AJAX request with the specified
         options to be sent to the Faces server immediately.  The
         response to this request comes in the form of an XML document
-        that is parsed by the DynaFaces JavaScript library and used to
+        that is parsed by the Dynamic Faces JavaScript library and used to
         update the DOM of the current view.</p>
 
         <h4>Usage</h4>

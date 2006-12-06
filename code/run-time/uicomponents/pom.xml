@@ -1,0 +1,165 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.sun.faces.extensions</groupId>
+  <artifactId>jsf-extensions-dynamic-faces</artifactId>
+  <packaging>jar</packaging>
+  <name>jsf-extensions-dynamic-faces</name>
+  <url>https://jsf-extensions.dev.java.net/</url>
+  <description>
+    Run time jsf-extensions
+  </description>
+
+  <parent>
+    <groupId>com.sun.faces.extensions.maven</groupId>
+    <artifactId>jsf-extensions-master</artifactId>
+    <version>0.1-SNAPSHOT</version>
+  </parent>
+
+  <scm>
+    <connection>scm:svn:http://jsf-extensions.dev.java.net/svn/jsf-extensions/trunk</connection>
+    <developerConnection>scm:svn:https://jsf-extensions.dev.java.net/svn/jsf-extensions/trunk</developerConnection>
+    <url>https://jsf-extensions.dev.java.net/source/browse/jsf-extensions/</url>
+  </scm>
+
+  <build>
+    <sourceDirectory>src/main/java</sourceDirectory>
+    <defaultGoal>install</defaultGoal>
+    <resources>
+      <resource>
+        <targetPath>META-INF</targetPath>
+        <directory>src/main/resources</directory>
+        <includes>
+            <include>*.xml</include>
+            <include>**/*.js</include>
+            <include>*.tld</include>
+        </includes>
+     </resource>
+   </resources>
+    <plugins>
+       <plugin>
+         <artifactId>maven-source-plugin</artifactId>
+	 <executions>
+	   <execution>
+             <id>source</id>
+	     <phase>generate-resources</phase>
+	     <goals>
+	       <goal>jar</goal>
+	     </goals>
+	   </execution>
+	 </executions>
+       </plugin>
+       <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>add-source</id>
+            <phase>process-sources</phase>
+            <goals>
+              <goal>add-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>target/jsf-api</source>
+              </sources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+       <plugin>
+	 <artifactId>maven-antrun-plugin</artifactId>
+	 <executions>
+	   <execution>
+             <id>getViewRootSource</id>
+	     <phase>generate-sources</phase>
+	     <configuration>
+	       <tasks>
+
+                 <!-- 
+
+                   This target gets the latest JSF 1.2 jsf-api source
+                   jar, extracts the UIViewRoot.java source file from it
+                   to a local directory, and performs the following
+                   modifications.
+
+                   Rename the class to UIViewRootCopy
+
+                   Make the class extend UIViewRoot instead of UIComponentBase
+
+                   Make the broadcastEvents method protected instead of
+                   private.
+
+                   Rename the file to UIViewRootCopy.java
+
+                   This file is then compiled to target/classes, so
+                   PartialTraversalViewRoot can extend it.
+
+                 -->
+                 <mkdir dir="${project.basedir}/target/jsf-api" />
+                 <mkdir dir="${project.basedir}/target/classes" />
+                 <unjar dest="${project.basedir}/target/jsf-api" src="${settings.localRepository}/javax/faces/jsf-api/1.2/jsf-api-1.2-sources.jar">
+                   <patternset>
+                     <include name="**/UIViewRoot.java" />
+                   </patternset>
+                 </unjar>
+                 <replace file="target/jsf-api/javax/faces/component/UIViewRoot.java" token="UIViewRoot" value="UIViewRootCopy"/>
+                 <replace file="target/jsf-api/javax/faces/component/UIViewRoot.java" token="extends UIComponentBase" value="extends UIViewRoot"/>
+                 <replace file="target/jsf-api/javax/faces/component/UIViewRoot.java" token="private void broadcastEvents" value="protected void broadcastEvents"/>
+                 <move file="target/jsf-api/javax/faces/component/UIViewRoot.java" 
+                       tofile="target/jsf-api/javax/faces/component/UIViewRootCopy.java" />
+	       </tasks>
+	     </configuration>
+	     <goals>
+	       <goal>run</goal>
+	     </goals>
+	   </execution>
+	 </executions>
+       </plugin>
+    </plugins>
+
+  </build>
+<!--
+  <pluginRepositories>
+    <pluginRepository>
+      <snapshots />
+      <id>mvnrepository</id>
+      <url>http://mvnrepository.com/artifact/</url>
+    </pluginRepository>
+  </pluginRepositories>
+-->
+
+  <dependencies>
+    <dependency>
+      <groupId>javax.faces</groupId>
+      <artifactId>jsf-impl</artifactId>
+      <version>1.2</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.faces</groupId>
+      <artifactId>jsf-api</artifactId>
+      <version>1.2</version>
+      <type>java-source</type>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.faces.extensions</groupId>
+      <artifactId>jsf-extensions-common</artifactId>
+      <version>0.1-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+
+  <reporting>
+    <plugins>
+      <excludeDefaults>true</excludeDefaults>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <reportSets><reportSet><reports/></reportSet></reportSets>
+      </plugin>
+    </plugins>
+  </reporting>
+
+</project>

@@ -58,7 +58,7 @@ DynaFacesZones.moveAsideEventType =
 function moveAsideEventType(ajaxZone, element, options, getCallbackData) {
     if (null != options.eventType) {
 	if('on' == options.eventType.substring(0,2)) {
-	    options.eventType = eventType.substring(2);
+	    options.eventType = options.eventType.substring(2);
 	}
     }
     else {

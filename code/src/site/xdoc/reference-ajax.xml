@@ -137,7 +137,15 @@ quotes, the <code>render</code> portion of the lifecycle will be
 effectively skipped.</p>
 </dd>
 
+<dt><p>postBody</p>
+</dt>
+
+<dd><p>An ampersand ('&amp;') separated list of name=value pairs that
+will be sent along with the POST body of the transaction.</p>
+</dd>
+
 <dt><p>immediate</p>
+</dt>
 
 <dd><p>JavaScript <code>boolean</code> value.  If true, the
 <code>immediate</code> attribute will be set to <code>true</code>, for
@@ -145,7 +153,8 @@ this request only, on any input or command components that are
 encountered during the partial traversal as specified in the
 <code>execute</code>, or <code>render</code> options.</p>
 </dd>
-</dt>
+
+
 
 <dt><p>inputs</p>
 </dt>

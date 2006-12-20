@@ -594,8 +594,13 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
 		DynaFaces._eventQueue = new Array();
 	    }
 	}
-	
-	this.options.postBody = viewState.toQueryString();
+	if (this.options.postBody) {
+	    this.options.postBody = this.options.postBody + '&' + 
+		viewState.toQueryString();
+	}
+	else {
+	    this.options.postBody = viewState.toQueryString();
+	}
 
     var onComplete = this.options.onComplete;
     this.options.onComplete = (function(transport, xjson) {

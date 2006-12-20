@@ -74,7 +74,7 @@ public class JmxPhaseListener implements PhaseListener {
         UIViewRoot root = context.getViewRoot();
         String viewId = root.getViewId();
         
-        if (!viewId.equals("/restart")) {
+        if (!viewId.contains("/restart")) {
             return;
         }
         

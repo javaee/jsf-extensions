@@ -11,11 +11,13 @@ import javax.el.ELContext;
 import javax.el.MethodExpression;
 import javax.el.MethodInfo;
 import javax.faces.context.FacesContext;
+import javax.el.ValueExpression;
+import javax.faces.component.NamingContainer;
 
 /**
  * 
  */
-public class AjaxZone extends UICommand implements Serializable {
+public class AjaxZone extends UICommand implements Serializable, NamingContainer {
     public AjaxZone() {
         super();
         setRendererType("com.sun.faces.AjaxZone");
@@ -129,5 +131,89 @@ public class AjaxZone extends UICommand implements Serializable {
     }
 
     private static final String ZONE_LIST = AsyncResponse.FACES_PREFIX + "AJAX_ZONE_LIST";
+    
+    /* --------------- style and styleClass ------------- */
+    
+    /**
+     * <p>CSS style(s) to be applied to the outermost HTML element when this 
+     * component is rendered.</p>
+     */
+    private String style = null;
+
+    /**
+     * <p>CSS style(s) to be applied to the outermost HTML element when this 
+     * component is rendered.</p>
+     */
+    public String getStyle() {
+        if (this.style != null) {
+            return this.style;
+        }
+        ValueExpression ve = getValueExpression("style");
+        if (ve != null) {
+            return (String) ve.getValue(getFacesContext().getELContext());
+        }
+        return null;
+    }
+
+    /**
+     * <p>CSS style(s) to be applied to the outermost HTML element when this 
+     * component is rendered.</p>
+     * @see #getStyle()
+     */
+    public void setStyle(String style) {
+        this.style = style;
+    }
+
+    /**
+     * <p>CSS style class(es) to be applied to the outermost HTML element when this 
+     * component is rendered.</p>
+     */
+
+    private String styleClass = null;
+
+    /**
+     * <p>CSS style class(es) to be applied to the outermost HTML element when this 
+     * component is rendered.</p>
+     */
+    public String getStyleClass() {
+        if (this.styleClass != null) {
+            return this.styleClass;
+        }
+        ValueExpression ve = getValueExpression("styleClass");
+        if (ve != null) {
+            return (String) ve.getValue(getFacesContext().getELContext());
+        }
+        return null;
+    }
+
+    /**
+     * <p>CSS style class(es) to be applied to the outermost HTML element when this 
+     * component is rendered.</p>
+     * @see #getStyleClass()
+     */
+    public void setStyleClass(String styleClass) {
+        this.styleClass = styleClass;
+    }
+    
+    /**
+     * <p>Restore the state of this component.</p>
+     */
+    public void restoreState(FacesContext context, Object state) {
+        Object values[] = (Object[]) state;
+        super.restoreState(context, values[0]);
+        this.style = (String) values[1];
+        this.styleClass = (String) values[2];
+    }
+
+    /**
+     * <p>Save the state of this component.</p>
+     */
+    public Object saveState(FacesContext context) {
+        Object values[] = new Object[3];
+        values[0] = super.saveState(context);
+        values[1] = this.style;
+        values[2] = this.styleClass;
+        return values;
+    }
     
 }

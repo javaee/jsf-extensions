@@ -72,6 +72,18 @@
         </description>
       <name>id</name>
     </attribute>
+        <attribute>
+            <name>binding</name>
+            <required>false</required>
+            <deferred-value>
+                <type>com.sun.faces.extensions.avatar.components.AjaxZone</type>
+            </deferred-value>
+            <description>
+                A ValueExpression that resolves to the UIComponent that corresponds
+                to this tag. This binding allows the Java bean that contains the UIComponent 
+                to manipulate the UIComponent, its properties, and its children.
+            </description>
+        </attribute>
     <attribute>
         <description>
           <![CDATA[
@@ -82,6 +94,21 @@
 
         </description>
         <name>style</name>
+        <required>false</required>
+        <deferred-value>
+	    <type>java.lang.String</type>
+        </deferred-value>
+    </attribute>
+    <attribute>
+        <description>
+          <![CDATA[
+
+          <p>Convey CSS style information to the renderer</p>
+
+          ]]>
+
+        </description>
+        <name>styleClass</name>
         <required>false</required>
         <deferred-value>
 	    <type>java.lang.String</type>

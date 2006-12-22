@@ -26,9 +26,14 @@ public class AjaxZoneTag extends UIComponentELTag {
     }
     
     private ValueExpression style = null;
+    private ValueExpression styleClass = null;
     
     public void setStyle(ValueExpression ve) {
         style = ve;
+    }
+    
+    public void setStyleClass(ValueExpression ve) {
+        styleClass = ve;
     }
     
     protected void setProperties(UIComponent comp) {
@@ -42,6 +47,14 @@ public class AjaxZoneTag extends UIComponentELTag {
             }
             else {
                 component.setValueExpression("style", style);
+            }
+        }
+        if (null != styleClass) {
+            if (styleClass.isLiteralText()) {
+                component.getAttributes().put("styleClass", styleClass.getValue(getFacesContext().getELContext()));
+            }
+            else {
+                component.setValueExpression("styleClass", styleClass);
             }
         }
         if (null != collectPostData) {

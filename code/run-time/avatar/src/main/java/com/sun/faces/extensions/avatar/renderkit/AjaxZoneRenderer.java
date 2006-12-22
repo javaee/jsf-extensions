@@ -123,21 +123,23 @@ public class AjaxZoneRenderer extends Renderer {
         String id = component.getClientId(FacesContext.getCurrentInstance());
         writer.startElement("div", component);
         writer.writeAttribute("id", id, null);
-        writeStyle(context, writer, component);
+        writeStyle(context, writer, component, false);
+        writeStyle(context, writer, component, true);
     }
     
-    private void writeStyle(FacesContext context, ResponseWriter writer, UIComponent comp) throws IOException {
-        String style = null;
+    private void writeStyle(FacesContext context, ResponseWriter writer, UIComponent comp, boolean isStyleClass) throws IOException {
+        String styleValue = null;
         ValueExpression styleExp = null;
+        String styleProperty = isStyleClass ? "styleClass" : "style";
         
-        if (null == (style = (String) comp.getAttributes().get("style"))) {
-            if (null != (styleExp = comp.getValueExpression("style"))) {
-                style = (String) styleExp.getValue(context.getELContext());
+        if (null == (styleValue = (String) comp.getAttributes().get(styleProperty))) {
+            if (null != (styleExp = comp.getValueExpression(styleProperty))) {
+                styleValue = (String) styleExp.getValue(context.getELContext());
             }
         }
         
-        if (null != style) {
-            writer.writeAttribute("style", style, "style");
+        if (null != styleValue) {
+            writer.writeAttribute(styleProperty, styleValue, styleProperty);
         }
     }
     

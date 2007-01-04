@@ -65,6 +65,8 @@ public class Game {
     private int score1 = 0;
     private int score2 = 0;
     
+    public static final String FORM_ZONE_ID = "form:zone1:";
+    
     //
     // Constructors
     //
@@ -119,7 +121,7 @@ public class Game {
         availableIds = new ArrayList();
         for (int i=0; i<moves.length; i++) {
             if (moves[i] != 0) {
-                String id = "form:" + "_" + Integer.toString(i);
+                String id = FORM_ZONE_ID + "_" + Integer.toString(i);
                 FacesContext context = FacesContext.getCurrentInstance();
                 UIViewRoot viewRoot = context.getViewRoot();
                 UICommand command = (UICommand)viewRoot.findComponent(id);
@@ -178,7 +180,7 @@ public class Game {
         Integer value = (Integer)availableIds.get(randomIndex);
         int intValue = value.intValue();
         moves[intValue] = -1;
-        String id = "form:" + "_" + Integer.toString(intValue);
+        String id = FORM_ZONE_ID + "_" + Integer.toString(intValue);
         FacesContext context = FacesContext.getCurrentInstance();
         UIViewRoot viewRoot = context.getViewRoot();
         UICommand command = (UICommand)viewRoot.findComponent(id);
@@ -217,7 +219,7 @@ public class Game {
             }
             if (sum == 2) {
                 moves[availableId] = -1;
-                String id = "form:" + "_" + Integer.toString(availableId);
+                String id = FORM_ZONE_ID + "_" + Integer.toString(availableId);
                 recordMove(id);
                 return true;
             }
@@ -241,7 +243,7 @@ public class Game {
             }
             if (sum == -2) {
                 moves[availableId] = -1;
-                String id = "form:" + "_" + Integer.toString(availableId);
+                String id = FORM_ZONE_ID + "_" + Integer.toString(availableId);
                 recordMove(id);
                 return true;
             }

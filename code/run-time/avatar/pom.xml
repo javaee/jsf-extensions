@@ -138,12 +138,6 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>javax.faces</groupId>
-      <artifactId>jsf-api</artifactId>
-      <version>1.2</version>
-      <type>java-source</type>
-    </dependency>
-    <dependency>
       <groupId>com.sun.faces.extensions</groupId>
       <artifactId>jsf-extensions-common</artifactId>
       <version>0.1-SNAPSHOT</version>

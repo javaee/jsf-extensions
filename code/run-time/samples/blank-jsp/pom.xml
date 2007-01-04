@@ -32,8 +32,6 @@
      </resource>
    </resources>
     <finalName>dynafaces-jsp-blank</finalName>
-   <plugins>
-   </plugins>
   </build>
 
   <dependencies>

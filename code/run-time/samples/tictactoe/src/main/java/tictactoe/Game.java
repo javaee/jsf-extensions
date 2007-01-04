@@ -26,8 +26,6 @@
 
 package tictactoe;
 
-import com.sun.faces.extensions.avatar.lifecycle.AsyncResponse;
-
 import javax.faces.component.UICommand;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
@@ -186,9 +184,6 @@ public class Game {
         UICommand command = (UICommand)viewRoot.findComponent(id);
         command.setValue("O");
         command.getAttributes().put("styleClass","o-button-border");
-        AsyncResponse async = AsyncResponse.getInstance();
-        List<String> renderSubtrees = async.getRenderSubtrees();
-        renderSubtrees.add(id);
     }
     
     /**
@@ -263,9 +258,6 @@ public class Game {
         UICommand command = (UICommand)viewRoot.findComponent(id);
         command.setValue("O");
         command.getAttributes().put("styleClass","o-button-border");
-        AsyncResponse async = AsyncResponse.getInstance();
-        List<String> renderSubtrees = async.getRenderSubtrees();
-        renderSubtrees.add(id);
     }
     
     /**

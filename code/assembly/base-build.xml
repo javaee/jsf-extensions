@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project name="jsf-extensions-samples-base-buildfile" basedir=".">
+
+    <property file="../build.properties"/>    
+
+    <property name="appname" value="jsf-ajax-cardemo"/>
+
+    <property name="build.dir" value="${basedir}/build"/>
+    <property name="exploded.war.dir" value="${build.dir}/${appname}"/>
+    <property name="war.classes.dir" value="${build.dir}/${appname}/WEB-INF/classes"/>
+
+    <path id="base.classpath">
+        <pathelement location="${javaee.jar}"/>
+        <pathelement location="${war.classes.dir}" />
+    </path>
+
+    <path id="per-app.classpath">
+        <pathelement location="../lib/bp-ui-simple-5.jar" />
+    </path>
+
+    <target name="prepare">
+     <mkdir dir="${exploded.war.dir}" />
+     <mkdir dir="${exploded.war.dir}/WEB-INF" />
+     <mkdir dir="${war.classes.dir}" />
+    </target>
+
+    <target name="clean">
+      <delete dir="${build.dir}" />
+    </target>
+
+    <target name="compile">
+      <javac debug="true"
+             srcdir="${basedir}/src/main/java"
+             destdir="${war.classes.dir}">
+        <classpath>
+          <path refid="base.classpath" />
+          <path refid="per-app.classpath" />
+        </classpath>
+      </javac>
+    </target>
+
+    <target name="copy.properties">
+      <copy todir="${war.classes.dir}">
+        <fileset dir="src/main/java">
+          <include name="**/*.properties" />
+        </fileset>
+       </copy>
+    </target>
+
+    <target name="copy.static.files">
+      <copy todir="${exploded.war.dir}">
+        <fileset dir="src/main/webapp" />
+      </copy>
+    </target>
+
+    <target name="copy.dependent.libs">
+      <copy todir="${exploded.war.dir}/WEB-INF/lib">
+        <fileset dir="../lib" />
+        <fileset dir="../..">
+          <exclude name="*sources*" />
+          <include name="jsf-extensions-*.jar" />
+        </fileset>
+      </copy>
+
+    </target>
+
+    <target name="assemble.exploded.war">
+      <antcall target="prepare" />
+      <antcall target="compile" />
+      <antcall target="copy.properties" />
+      <antcall target="copy.static.files" />
+      <antcall target="copy.dependent.libs" />
+    </target>
+
+
+
+</project>

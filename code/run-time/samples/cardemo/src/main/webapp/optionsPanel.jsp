@@ -40,7 +40,7 @@ Copyright 2005 Sun Microsystems Inc. All Rights Reserved
                          styleClass="#{carstore.customizers.Custom.buttonStyle}"
                          actionListener="#{carstore.choosePackage}"/>
 
-        <h:commandButton id="Standard" value="#{bundle.Standard}"
+        <h:commandLink id="Standard" value="#{bundle.Standard}"
                          styleClass="#{carstore.customizers.Standard.buttonStyle}"
                          actionListener="#{carstore.choosePackage}"/>
 

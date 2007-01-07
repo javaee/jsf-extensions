@@ -74,6 +74,9 @@ function moveAsideEventType(ajaxZone, element, options, getCallbackData) {
 	    options.closure = DynaFaces.gGlobalScope[getCallbackData](ajaxZone, element);
 	}
     }
+    if (DynaFaces.isJsfCommandLink(element) && 'click' === options.eventType) {
+	element["onclick"] = null;
+    }
     var c = new Faces.DeferredEvent(element, options.eventType, options);
 }
 
@@ -123,14 +126,45 @@ DynaFacesZones.inspectElement =
 	var nodeName = element.nodeName;
 	if (null != nodeName) {
 	    nodeName = nodeName.toLowerCase();
-	    if (-1 != nodeName.indexOf("input")) {
+	    if (0 == nodeName.indexOf("input")) {
 		result = true;
 	    }
-	    else if (-1 != nodeName.indexOf("option")) {
+	    else if (0 == nodeName.indexOf("option")) {
 		result = true;
 	    }
-	    else if (-1 != nodeName.indexOf("button")) {
+	    else if (0 == nodeName.indexOf("button")) {
 		result = true;
+	    }
+	    else if (DynaFaces.isJsfCommandLink(element)) {
+		result = true;
+	    }
+	}
+    }
+    return result;
+}
+
+DynaFaces.isJsfCommandLink = 
+    function isJsfCommandLink(element) {
+    var result = false;
+
+    if (null == element) {
+	return result;
+    }
+
+    var nodeName = element.nodeName;
+    if (null != nodeName) {
+	nodeName = nodeName.toLowerCase();
+	// if this an a href...
+	if (0 == nodeName.indexOf("a") && 1 == nodeName.length
+	    && element.hasAttribute('href')) {
+	    // Use a heuristic to test if this is a JSF generated commandlink.
+	    
+	    // If it has an "onclick" attribute, the tostring of which contains
+	    // "jsfcljs", return true.
+	    var onclick = element["onclick"];
+	    if (null != onclick) {
+		onclick = onclick.toString();
+		result = (-1 != onclick.indexOf("jsfcljs"));
 	    }
 	}
     }
@@ -142,7 +176,7 @@ DynaFacesZones.collectPostData =
 
     props = new Object();
     // Start at the top of the zone, collect all the params, except for
-    // command components.
+    // command (anchor and button) components.
     if (ajaxZone.hasChildNodes()) {
 	for (var i = 0; i < ajaxZone.childNodes.length; i++) {
 	    DynaFacesZones.takeActionAndTraverseTree(ajaxZone, 

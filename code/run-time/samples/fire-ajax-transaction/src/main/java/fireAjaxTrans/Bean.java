@@ -48,9 +48,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * <p>This bean encapsulates the mechanics of a three dimensional
- *  tic tac toe game.  It keeps track of individual scores,
- *  determines moves and records moves.
+ * <p>This bean has the methods that are used to illustrate
+ *  the <code>DynaFaces.fireAjaxTransaction</code> event.
  * <p/>
  *
  */
@@ -75,8 +74,6 @@ public class Bean {
     
     private String fireOptions = null;
     
-    private String instructions = null;
-    
     public void setFireOptions(String fireOptions) {
         this.fireOptions = fireOptions;
     }
@@ -99,16 +96,6 @@ public class Bean {
             setInitialRender(component);
         }
         fireOptions = null;
-    }
-    
-    public String getInstructions() {
-        instructions = "The <i>View</i> area is a view of components (panelGrids and commandButtons).  ";
-        instructions += "Initially, each of the panelGrid and commandButton components have a green border, ";
-        instructions += "meaning that all these components have gone through initial render phase of the lifecycle.  ";
-        instructions += "Each of the 'fireAjaxTransaction' buttons causes a different 'DynaFaces.fireAjaxTransaction' event to occur, ";
-        instructions += "affecting one or more components in the view.  The color of a component may change color depending on what ";
-        instructions += "lifecycle phase the component was processed.";
-        return instructions;
     }
     
     private void loadOptions() {

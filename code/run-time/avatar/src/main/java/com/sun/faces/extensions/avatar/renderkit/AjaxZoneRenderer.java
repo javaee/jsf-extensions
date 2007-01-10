@@ -289,13 +289,16 @@ public class AjaxZoneRenderer extends Renderer {
      * <code>EditableValueHolder</code> instances.  Return output otherwise.</p>
      */ 
     
-    private InteractionType getInteractionType(FacesContext context, AjaxZone component) {
+    private InteractionType getInteractionType(FacesContext context, final AjaxZone component) {
         Util.TreeTraversalCallback findEditableValueHolder = 
                 new Util.TreeTraversalCallback() {
             public boolean takeActionOnNode(FacesContext context, UIComponent curNode) throws FacesException {
                 boolean keepGoing = true;
-                if (curNode instanceof EditableValueHolder || 
-                    curNode instanceof ActionSource) {
+                // Skipping the zone itself, return false if the curNode
+                // is an EditableValueHolder or ActionSource
+                if ((curNode != component) && 
+                    (curNode instanceof EditableValueHolder || 
+                    curNode instanceof ActionSource)) {
                     keepGoing = false;
                 }
                 return keepGoing;

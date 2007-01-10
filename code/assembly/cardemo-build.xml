@@ -1,12 +1,22 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<project name="cardemo" basedir="." default="assemble.war">
+<project name="cardemo" basedir="." 
+         default="copy.per-app.libs.and.assemble.war">
 
     <property name="appname" value="jsf-ajax-cardemo"/>
 
-    <import file="../base-build.xml"/>
+    <import file="../build.xml"/>
 
     <path id="per-app.classpath">
         <pathelement location="../lib/bp-ui-simple-5.jar" />
     </path>
+
+    <target name="copy.per-app.dependent.libs">
+      <copy todir="${exploded.war.dir}/WEB-INF/lib">
+        <fileset dir="../lib">
+          <include name="*bp-ui-simple*" />
+        </fileset>
+      </copy>
+    </target>
+
 
 </project>

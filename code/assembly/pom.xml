@@ -23,7 +23,7 @@
 	 <executions>
 	   <execution>
              <id>dist</id>
-	     <phase>package</phase>
+	     <phase>validate</phase>
 	     <configuration>
 	       <tasks>
                  <echo message="Building distribution" />
@@ -60,21 +60,10 @@
                  <copy todir="target/dist/samples/lib" 
                        file="${settings.localRepository}/com/sun/javaee/blueprints/bp-ui-simple/5/bp-ui-simple-5.jar" />
 
-                 <copy flatten="true" todir="target/dist/samples">
-                   <fileset dir="../run-time/samples">
-                     <include name="**/*.war" />
-                     <exclude name="blank*/**" />
-                   </fileset>
-                 </copy>
                  <copy todir="target/dist/samples">
                    <fileset dir="../run-time/samples">
                      <include name="blank*/**" />
                      <exclude name="blank*/target/**" />
-                   </fileset>
-                 </copy>
-                 <copy todir="target/dist/samples">
-                   <fileset dir="../run-time/samples">
-                     <include name="blank*/**/*.war" />
                    </fileset>
                  </copy>
 
@@ -86,8 +75,11 @@
                    <fileset dir="../run-time/samples">
                      <include name="cardemo/**/*.*"/>
                      <exclude name="cardemo/target/**/*.*"/>
+                     <exclude name="**/pom.xml"/>
                    </fileset>
                  </copy>
+                 <copy tofile="target/dist/samples/cardemo/build.xml"
+                       file="cardemo-build.xml" />
 
                  <tar destfile="target/jsf-extensions-${pom.version}.tar"
                       basedir="target/dist" />

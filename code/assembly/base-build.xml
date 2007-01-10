@@ -3,8 +3,6 @@
 
     <property file="../build.properties"/>    
 
-    <property name="appname" value="jsf-ajax-cardemo"/>
-
     <property name="build.dir" value="${basedir}/build"/>
     <property name="exploded.war.dir" value="${build.dir}/${appname}"/>
     <property name="war.classes.dir" value="${build.dir}/${appname}/WEB-INF/classes"/>
@@ -12,10 +10,6 @@
     <path id="base.classpath">
         <pathelement location="${javaee.jar}"/>
         <pathelement location="${war.classes.dir}" />
-    </path>
-
-    <path id="per-app.classpath">
-        <pathelement location="../lib/bp-ui-simple-5.jar" />
     </path>
 
     <target name="prepare">
@@ -70,6 +64,12 @@
       <antcall target="copy.properties" />
       <antcall target="copy.static.files" />
       <antcall target="copy.dependent.libs" />
+    </target>
+
+    <target name="assemble.war">
+      <antcall target="assemble.exploded.war" />
+      <jar destfile="${basedir}/build/${appname}.war"
+           basedir="${basedir}/build/${appname}" />
     </target>
 
 

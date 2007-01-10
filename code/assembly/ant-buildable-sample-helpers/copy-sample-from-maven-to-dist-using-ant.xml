@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project name="copy-sample-from-maven-to-dist-using-ant" default="default" 
+         basedir="." >
+
+  <target name="default">
+
+                     <mkdir dir="${basedir}/../target/dist/samples/${appname}/src/main/java" />
+
+		     <copy overwrite="true" todir="${basedir}/../target/dist/samples">
+		       <fileset dir="${basedir}/../../run-time/samples">
+			 <include name="${appname}/**/*.*"/>
+			 <exclude name="${appname}/target/**/*.*"/>
+			 <exclude name="**/pom.xml"/>
+		       </fileset>
+		     </copy>
+		     <copy tofile="${basedir}/../target/dist/samples/${appname}/build.xml"
+			   file="${basedir}/${appname}-build.xml" />
+
+
+  </target>
+
+
+</project>

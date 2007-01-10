@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project name="flash" basedir="." 
+         default="copy.per-app.libs.and.assemble.war">
+
+    <property name="appname" value="jsf-flash"/>
+
+    <import file="../build.xml"/>
+
+    <path id="per-app.classpath">
+    </path>
+
+    <target name="copy.per-app.dependent.libs">
+      <copy todir="${exploded.war.dir}/WEB-INF/lib">
+        <fileset dir="../../">
+          <include name="*flash*" />
+          <exclude name="*flash*sources*" />
+        </fileset>
+      </copy>
+    </target>
+
+
+</project>

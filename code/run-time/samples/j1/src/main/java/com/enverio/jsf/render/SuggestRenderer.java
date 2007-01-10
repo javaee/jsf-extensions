@@ -12,7 +12,6 @@ import javax.faces.convert.Converter;
 import javax.faces.render.Renderer;
 
 import com.enverio.jsf.UISuggest;
-import com.sun.faces.renderkit.RenderKitUtils;
 
 public class SuggestRenderer extends Renderer {
     
@@ -47,8 +46,6 @@ public class SuggestRenderer extends Renderer {
         rw.writeAttribute("type", "text", null);
         rw.writeAttribute("autocomplete", "off", null);
         rw.writeAttribute("name", id, "clientId");
-        
-        RenderKitUtils.renderPassThruAttributes(faces, rw, s);
         
         rw.writeAttribute("value", this.getRenderedValue(faces, s), "value");
     }

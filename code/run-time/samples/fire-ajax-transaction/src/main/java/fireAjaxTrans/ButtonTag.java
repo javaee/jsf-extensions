@@ -26,7 +26,6 @@
 package fireAjaxTrans;
 
 
-import com.sun.faces.util.Util;
 import java.io.IOException;
 import javax.el.*;
 import javax.faces.*;

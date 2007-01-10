@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project name="blank-facelets" basedir="." 
+         default="copy.per-app.libs.and.assemble.war">
+
+    <property name="appname" value="jsf-blank-facelets"/>
+
+    <import file="../build.xml"/>
+
+    <target name="copy.per-app.dependent.libs">
+      <copy todir="${exploded.war.dir}/WEB-INF/lib">
+        <fileset dir="../lib">
+          <include name="*facelet*" />
+        </fileset>
+      </copy>
+    </target>
+
+
+</project>

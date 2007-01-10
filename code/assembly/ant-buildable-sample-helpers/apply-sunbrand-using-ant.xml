@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project name="apply-sunbrand-using-ant" default="default" 
+         basedir="." >
+
+  <target name="default">
+
+                     <copy todir="${basedir}/../target/dist/samples/${appname}/src/main/webapp">
+                       <fileset dir="${basedir}/../../run-time/samples/sunbrand/src/main/webapp" />
+                     </copy>
+
+  </target>
+
+
+</project>

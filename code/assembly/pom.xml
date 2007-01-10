@@ -68,57 +68,59 @@
                  <copy todir="target/dist/samples/lib" 
                        file="${settings.localRepository}/commons-digester/commons-digester/1.7/commons-digester-1.7.jar" />
 
+                 <property name="antbuild.dir" 
+                           value="${basedir}/ant-buildable-sample-helpers" />
 
                  <!-- copy the source file of each sample to the distro -->
-                 <copy tofile="target/dist/samples/build.properties" file="${basedir}/samples.properties"/>
-                 <copy tofile="target/dist/samples/build.xml" file="${basedir}/base-build.xml"/>
+                 <copy tofile="target/dist/samples/build.properties" file="${antbuild.dir}/samples.properties"/>
+                 <copy tofile="target/dist/samples/build.xml" file="${antbuild.dir}/base-build.xml"/>
 
 
-                 <ant antfile="copy-sample-from-maven-to-dist-using-ant.xml">
+                 <ant inheritAll="false" dir="${antbuild.dir}" antfile="${antbuild.dir}/copy-sample-from-maven-to-dist-using-ant.xml">
                    <property name="appname" value="blank-facelets" />
                  </ant>
 
-                 <ant antfile="copy-sample-from-maven-to-dist-using-ant.xml">
+                 <ant inheritAll="false" dir="${antbuild.dir}" antfile="${antbuild.dir}/copy-sample-from-maven-to-dist-using-ant.xml">
                    <property name="appname" value="blank-jsp" />
                  </ant>
 
-                 <ant antfile="copy-sample-from-maven-to-dist-using-ant.xml">
+                 <ant inheritAll="false" dir="${antbuild.dir}" antfile="${antbuild.dir}/copy-sample-from-maven-to-dist-using-ant.xml">
                    <property name="appname" value="cardemo" />
                  </ant>
 
-                 <ant antfile="copy-sample-from-maven-to-dist-using-ant.xml">
+                 <ant inheritAll="false" dir="${antbuild.dir}" antfile="${antbuild.dir}/copy-sample-from-maven-to-dist-using-ant.xml">
                    <property name="appname" value="fire-ajax-transaction" />
                  </ant>
 
-                 <ant antfile="apply-sunbrand-using-ant.xml">
+                 <ant inheritAll="false" dir="${antbuild.dir}" antfile="${antbuild.dir}/apply-sunbrand-using-ant.xml">
                    <property name="appname" value="flash" />
                  </ant>
 
-                 <ant antfile="copy-sample-from-maven-to-dist-using-ant.xml">
+                 <ant inheritAll="false" dir="${antbuild.dir}" antfile="${antbuild.dir}/copy-sample-from-maven-to-dist-using-ant.xml">
                    <property name="appname" value="flash" />
                  </ant>
 
-                 <ant antfile="copy-sample-from-maven-to-dist-using-ant.xml">
+                 <ant inheritAll="false" dir="${antbuild.dir}" antfile="${antbuild.dir}/copy-sample-from-maven-to-dist-using-ant.xml">
                    <property name="appname" value="j1" />
                  </ant>
 
-                 <ant antfile="apply-sunbrand-using-ant.xml">
+                 <ant inheritAll="false" dir="${antbuild.dir}" antfile="${antbuild.dir}/apply-sunbrand-using-ant.xml">
                    <property name="appname" value="simple-events" />
                  </ant>
 
-                 <ant antfile="copy-sample-from-maven-to-dist-using-ant.xml">
+                 <ant inheritAll="false" dir="${antbuild.dir}" antfile="${antbuild.dir}/copy-sample-from-maven-to-dist-using-ant.xml">
                    <property name="appname" value="simple-events" />
                  </ant>
 
-                 <ant antfile="apply-sunbrand-using-ant.xml">
+                 <ant inheritAll="false" dir="${antbuild.dir}" antfile="${antbuild.dir}/apply-sunbrand-using-ant.xml">
                    <property name="appname" value="simple-partial-update" />
                  </ant>
 
-                 <ant antfile="copy-sample-from-maven-to-dist-using-ant.xml">
+                 <ant inheritAll="false" dir="${antbuild.dir}" antfile="${antbuild.dir}/copy-sample-from-maven-to-dist-using-ant.xml">
                    <property name="appname" value="simple-partial-update" />
                  </ant>
 
-                 <ant antfile="copy-sample-from-maven-to-dist-using-ant.xml">
+                 <ant inheritAll="false" dir="${antbuild.dir}" antfile="${antbuild.dir}/copy-sample-from-maven-to-dist-using-ant.xml">
                    <property name="appname" value="tictactoe" />
                  </ant>
 

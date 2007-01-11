@@ -60,7 +60,7 @@
                  <copy todir="target/dist/samples/lib" 
                        file="${settings.localRepository}/com/sun/javaee/blueprints/bp-ui-simple/5/bp-ui-simple-5.jar" />
                  <copy todir="target/dist/samples/lib" 
-                       file="${settings.localRepository}/com/sun/facelets/jsf-facelets/1.1.11a/jsf-facelets-1.1.11a.jar" />
+                       file="${settings.localRepository}/javax/faces/jsf-facelets/1.1.11a/jsf-facelets-1.1.11a.jar"/>
                  <copy todir="target/dist/samples/lib" 
                        file="${settings.localRepository}/commons-beanutils/commons-beanutils/1.6/commons-beanutils-1.6.jar" />
                  <copy todir="target/dist/samples/lib" 

@@ -453,11 +453,12 @@ function getClosure(ajaxZone, element);
     
     <attribute>
         <description>
-            <![CDATA[Comma separated list of client ids for which the "execute" 
-            portion of the request processing lifecycle will be run via Ajax.  
-            If not specified, the value of the "render" attribute is taken as
-            the value of this attribute.  If "render" is not specified, only 
-            components within this zone will update via Ajax.]]>
+            <![CDATA[Comma separated list of client ids for which the
+            "execute" portion of the request processing lifecycle will
+            be run when an Ajax transaction originates from within this
+            zone.  If not specified, the "execute" portion of the
+            request processing lifecycle will be run on this zone
+            only.]]>
         </description>
         <name>
             execute
@@ -472,10 +473,11 @@ function getClosure(ajaxZone, element);
 
     <attribute>
         <description>
-            <![CDATA[Comma separated list of client ids for which the "render" 
-            portion of the request processing lifecycle will be run via Ajax.
-            If not specified, only components
-            within this zone will update via Ajax.]]>
+            <![CDATA[Comma separated list of client ids for which the
+            "render" portion of the request processing lifecycle will be
+            run when an Ajax transaction originates from within this
+            zone.  If not specified, the "render" portion of the request
+            processing lifecycle will be run on this zone only.]]>
         </description>
         <name>
             render

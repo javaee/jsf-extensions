@@ -450,7 +450,44 @@ function getClosure(ajaxZone, element);
             </type>
         </deferred-value>
     </attribute>
+    
+    <attribute>
+        <description>
+            <![CDATA[Comma separated list of client ids for which the "execute" 
+            portion of the request processing lifecycle will be run via Ajax.  
+            If not specified, the value of the "render" attribute is taken as
+            the value of this attribute.  If "render" is not specified, only 
+            components within this zone will update via Ajax.]]>
+        </description>
+        <name>
+            execute
+        </name>
+        <required>
+            false
+        </required>
+        <deferred-value>
+	    <type>java.lang.String</type>
+        </deferred-value>
+    </attribute>
 
+    <attribute>
+        <description>
+            <![CDATA[Comma separated list of client ids for which the "render" 
+            portion of the request processing lifecycle will be run via Ajax.
+            If not specified, only components
+            within this zone will update via Ajax.]]>
+        </description>
+        <name>
+            render
+        </name>
+        <required>
+            false
+        </required>
+        <deferred-value>
+	    <type>java.lang.String</type>
+        </deferred-value>
+    </attribute>
+    
 </tag>
 
 </taglib>

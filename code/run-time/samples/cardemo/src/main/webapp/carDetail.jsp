@@ -46,7 +46,7 @@ Copyright 2005 Sun Microsystems Inc. All Rights Reserved
 
 <f:view>
 
-    <h:form>
+    <h:form prependId="false">
 
 
         <!-- non-option details -->

@@ -64,7 +64,24 @@ function moveAsideEventType(ajaxZone, element, options, getCallbackData) {
     else {
 	options.eventType = 'click';
     }
-    options.render = DynaFacesZones.g_zones.join(',');
+    // If the user specified an execute attribute...
+    if (null != ajaxZone["execute"]) {
+      // copy it to the DynaFaces options.
+      options.execute = ajaxZone["execute"];
+    }
+    else {
+      // Otherwise, just execute this zone.
+      options.execute = ajaxZone.id;
+    }
+    // If the user specified a render attribute...
+    if (null != ajaxZone["render"]) {
+      // copy it to the DynaFaces options.
+      options.render = ajaxZone["render"];
+    }
+    else {
+      // Otherwise, just render this zone.
+      options.render = ajaxZone.id;
+    }
     options.ajaxZone = ajaxZone;
     if (getCallbackData) {
 	if (typeof getCallbackData == 'function') {

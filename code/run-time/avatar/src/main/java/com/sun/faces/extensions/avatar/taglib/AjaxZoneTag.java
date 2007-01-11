@@ -105,6 +105,22 @@ public class AjaxZoneTag extends UIComponentELTag {
                 component.setValueExpression("getCallbackData", getCallbackData);
             }
         }
+        if (null != execute) {
+            if (execute.isLiteralText()) {
+                component.getAttributes().put("execute", execute.getValue(getFacesContext().getELContext()));
+            }
+            else {
+                component.setValueExpression("execute", execute);
+            }
+        }
+        if (null != render) {
+            if (render.isLiteralText()) {
+                component.getAttributes().put("render", render.getValue(getFacesContext().getELContext()));
+            }
+            else {
+                component.setValueExpression("render", render);
+            }
+        }
         if (action != null) {
             component.setActionExpression(action);
         }
@@ -222,6 +238,48 @@ public class AjaxZoneTag extends UIComponentELTag {
      */
     public void setGetCallbackData(ValueExpression getCallbackData) {
         this.getCallbackData = getCallbackData;
+    }
+
+    /**
+     * Holds value of property execute.
+     */
+    private ValueExpression execute;
+
+    /**
+     * Getter for property execute.
+     * @return Value of property execute.
+     */
+    public ValueExpression getExecute() {
+        return this.execute;
+    }
+
+    /**
+     * Setter for property execute.
+     * @param execute New value of property execute.
+     */
+    public void setExecute(ValueExpression execute) {
+        this.execute = execute;
+    }
+
+    /**
+     * Holds value of property render.
+     */
+    private ValueExpression render;
+
+    /**
+     * Getter for property render.
+     * @return Value of property render.
+     */
+    public ValueExpression getRender() {
+        return this.render;
+    }
+
+    /**
+     * Setter for property render.
+     * @param render New value of property render.
+     */
+    public void setRender(ValueExpression render) {
+        this.render = render;
     }
     
     

@@ -27,7 +27,8 @@ Copyright 2005 Sun Microsystems Inc. All Rights Reserved
 <%@ taglib prefix="h" uri="http://java.sun.com/jsf/html" %>
 <%@ taglib prefix="jsfExt" uri="http://java.sun.com/jsf/extensions/dynafaces" %>
 
-<jsfExt:ajaxZone id="zone2" action="#{carstore.currentModel.updatePricing}">
+<jsfExt:ajaxZone id="zone2" render="zone1,zone2" execute="zone2"
+                 action="#{carstore.currentModel.updatePricing}">
 <h:panelGrid>
 
     <h:outputText value="#{bundle.OptionsPackages}"/>

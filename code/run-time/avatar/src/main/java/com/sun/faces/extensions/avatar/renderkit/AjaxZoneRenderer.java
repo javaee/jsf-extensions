@@ -171,7 +171,9 @@ public class AjaxZoneRenderer extends Renderer {
                 collectPostData = null,
                 eventType = null,
                 inspectElement = null,
-                replaceElement = null;
+                replaceElement = null,
+                execute = null,
+                render = null;
         StringBuffer ajaxifyChildren = null;
         MethodExpression action = null;
         boolean typeIsOutput, writeZoneAccruer, writeAjaxifyChildren;
@@ -182,6 +184,8 @@ public class AjaxZoneRenderer extends Renderer {
 	    writer.writeAttribute("type", "text/javascript", "language");
             List<AjaxZone> zoneList = comp.getZoneList();
             
+
+            writer.write("\nvar curZone = null;\n");
             // Write the zone accruer
             for (AjaxZone currentZone : zoneList) {
 
@@ -201,6 +205,18 @@ public class AjaxZoneRenderer extends Renderer {
                 clientId = currentZone.getClientId(context);
                 if (writeZoneAccruer) {
                     writer.write("\nDynaFacesZones.g_zones.push(\"" + clientId + "\");");
+                }
+                execute = getAttr(context, currentZone, "execute");
+                render = getAttr(context, currentZone, "render");
+                if (null != execute || null != render) {
+                    writer.write("\ncurZone = document.getElementById(\"" +
+                            clientId + "\");");
+                }
+                if (null != execute) {
+                    writer.write("\ncurZone[\"execute\"] = \"" + execute + "\";");
+                }
+                if (null != render) {
+                    writer.write("\ncurZone[\"render\"] = \"" + render + "\";");
                 }
             }
             

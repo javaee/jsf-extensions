@@ -27,8 +27,8 @@
 	     <configuration>
 	       <tasks>
                  <echo message="Building distribution" />
-                 <mkdir dir="target/dist" />
-                 <copy todir="target/dist">
+                 <mkdir dir="target/dist/lib" />
+                 <copy todir="target/dist/lib">
                    <fileset dir="../run-time/avatar/target">
                      <include name="*.jar" />
                    </fileset>
@@ -44,11 +44,13 @@
                    <fileset dir="../test-time/target">
                      <include name="*.jar" />
                    </fileset>
+                 </copy>
+                 <copy todir="target/dist/">
                    <fileset dir=".">
                      <include name="*.txt" />
                      <include name="COPYRIGHT" />
                    </fileset>
-                 </copy>
+		 </copy>
 
                  <!-- copy dependent jars, so people can build the samples -->
                  <mkdir dir="target/dist/samples/lib" />

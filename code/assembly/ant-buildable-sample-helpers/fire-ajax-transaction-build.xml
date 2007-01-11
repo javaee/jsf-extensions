@@ -5,7 +5,7 @@
     <property name="appname" value="jsf-fire-ajax-transaction"/>
 
     <path id="per-app.classpath">
-      <fileset dir="../..">
+      <fileset dir="../../lib">
         <include name="jsf-extensions-dynamic-faces*.jar" />
         <include name="jsf-extensions-common*.jar" />
       </fileset>

@@ -11,7 +11,7 @@
 
     <target name="copy.per-app.dependent.libs">
       <copy todir="${exploded.war.dir}/WEB-INF/lib">
-        <fileset dir="../../">
+        <fileset dir="../../lib">
           <include name="*flash*" />
           <exclude name="*flash*sources*" />
         </fileset>

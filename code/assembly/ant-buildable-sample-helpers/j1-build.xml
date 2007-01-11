@@ -7,7 +7,7 @@
     <import file="../build.xml"/>
 
     <path id="per-app.classpath">
-      <fileset dir="../..">
+      <fileset dir="../../lib">
         <include name="jsf-extensions-dynamic-faces*.jar" />
       </fileset>
       <fileset dir="../lib">

@@ -54,7 +54,7 @@
           <include name="*commons-logging*" />
           <include name="*shale-remoting*" />
         </fileset>
-        <fileset dir="${basedir}/../..">
+        <fileset dir="${basedir}/../../lib">
           <exclude name="*sources*" />
           <include name="jsf-extensions-common*.jar" />
           <include name="jsf-extensions-dynamic-faces*.jar" />

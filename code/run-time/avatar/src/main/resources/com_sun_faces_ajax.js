@@ -124,18 +124,33 @@ DynaFaces.gJSON = {
     }
 };
 
+DynaFaces.trim = function trim(toTrim) {
+    var result = null;
+    if (null != toTrim) {
+	var s = toTrim.replace( /^\s+/g, "" );
+	result = s.replace( /\s+$/g, "" );
+    }
+    return result;
+};
 
+DynaFaces.reduce = function reduce(toReduce) {
+    return toReduce.length > 1 ? toReduce : toReduce[0];    
+};
 
-/* Object Extensions
- ***********************************************************/
-Object.extend(String.prototype, {
-	trim: function() {
-		var s = this.replace( /^\s+/g, "" );
-  		return s.replace( /\s+$/g, "" );
+DynaFaces.$ = function () {
+    var results = [], element;
+    for (var i = 0; i < arguments.length; i++) {
+	element = arguments[i];
+	if (typeof element == 'string') {
+	    element = document.getElementById(element);
 	}
-});
-Object.extend(Element, {
-    elementReplace: function elementReplace(d, tempTagName, src) {
+	results.push(element);
+    }
+    return DynaFaces.reduce(results);
+    
+};
+
+DynaFaces.elementReplace = function elementReplace(d, tempTagName, src) {
     var parent = d.parentNode;
     var temp = document.createElement(tempTagName);
     var result = null;
@@ -195,8 +210,9 @@ Object.extend(Element, {
     result = temp
     parent.replaceChild(temp, d);
     return result;
-  },
-  replace: function(dest, src)  {
+};
+
+DynaFaces.replace = function replace(dest, src)  {
 
     // If this partial response is the entire view...
     if (-1 != dest.indexOf(DynaFaces.gViewRoot)) {
@@ -267,7 +283,7 @@ Object.extend(Element, {
 	
     }
     else {
-	var d = $(dest);
+	var d = DynaFaces.$(dest);
 	if (!d) { 
 	    alert(dest + " not found");
 	}
@@ -282,46 +298,47 @@ Object.extend(Element, {
     }
     return result;
     
-  },
-  serialize: function(e) {
-	  var str = (e.xml) ? this.serializeIE(e) : this.serializeMozilla(e);
-	  return str;
-  },
-  serializeIE: function(e) {
-	  return e.xml;
-  },
-  serializeMozilla: function(e) {
-	  return new XMLSerializer().serializeToString(e);
-  },
-  firstElement: function(e) {
-	  var first = e.firstChild;
-	  while (first && first.nodeType != 1) {
-		  first = first.nextSibling;
-	  }
-	  return first;
-  }
-});
-function $Error(e) {
-	if (e.message) {
-		return '['+e.lineNumber+'] ' + e.message;
-	} else {
-		return e.toString();
-	}
 };
-function $Form(src) {
-	if (src) {
-		var form = $(src);
-		while (form && form.tagName && form.tagName.toLowerCase() != 'form') {
-			if (form.form) return form.form;
-			if (form.parentNode) {
-				form = form.parentNode;
-			} else {
-				form = null;
-			}
-		}
-		if (form) return form;
+
+DynaFaces.serialize = function serialize(e) {
+    var str = (e.xml) ? this.serializeIE(e) : this.serializeMozilla(e);
+    return str;
+};
+
+DynaFaces.serializeIE = function serializeIE(e) {
+    return e.xml;
+};
+
+DynaFaces.serializeMozilla = function serializeMozilla(e) {
+    return new XMLSerializer().serializeToString(e);
+};
+
+DynaFaces.firstElement = function firstElement(e) {
+    var first = e.firstChild;
+    while (first && first.nodeType != 1) {
+	first = first.nextSibling;
+    }
+    return first;
+};
+
+
+
+/* Object Extensions
+ ***********************************************************/
+DynaFaces.getForm = function getForm(src) {
+    if (src) {
+	var form = DynaFaces.$(src);
+	while (form && form.tagName && form.tagName.toLowerCase() != 'form') {
+	    if (form.form) return form.form;
+	    if (form.parentNode) {
+		form = form.parentNode;
+	    } else {
+		form = null;
+	    }
 	}
-	return document.forms[0];
+	if (form) return form;
+    }
+    return document.forms[0];
 };
 
 /* Facelet Utility Class
@@ -344,7 +361,7 @@ var Faces = {
 	},
 	toArray: function(s,e) {
 		if (typeof s == 'string') {
-			return s.split((e)?e:' ').map(function(p) { return p.trim(); });
+			return s.split((e)?e:' ').map(function(p) { return DynaFaces.trim(p); });
 		}
 		return s;
 	},
@@ -353,16 +370,12 @@ var Faces = {
 	}
 };
 
-/* ViewState Hash over a given Form
- ***********************************************************/
-Faces.ViewState = Class.create();
-Faces.ViewState.CommandType = ['button','submit','reset'];
-// concat?
-Faces.ViewState.Ignore = ['button','submit','reset','image'];
-Faces.ViewState.prototype = {
+DynaFaces.ViewState = {
     setOptions: function(options) {
 	this.options= {};
-	Object.extend(this.options, options || {});
+	for (prop in options) {
+	    this.options[prop] = prop;
+	}
     },
     initialize: function(form, options) {
 	this.setOptions(options);
@@ -374,7 +387,7 @@ Faces.ViewState.prototype = {
 	if (('void' != collectPostDataType && 'undefined' != collectPostDataType) ||
 	    ('void' != inputsType && 'undefined' != collectPostDataType)) {
 	    // Just get the state data.
-	    var viewState = $(DynaFaces.gViewState);
+	    var viewState = DynaFaces.$(DynaFaces.gViewState);
 	    t = viewState.tagName.toLowerCase();
 	    p = Form.Element.Serializers[t](viewState);
 	    if (p && p[0].length != 0) {
@@ -391,7 +404,7 @@ Faces.ViewState.prototype = {
 	    
 	    return;
 	}
-	var e = Form.getElements($(form));
+	var e = Form.getElements(DynaFaces.$(form));
 	var t,p;
 	// Traverse the elements of the form and slam all of them into this 
 	// element's property set.
@@ -416,7 +429,163 @@ Faces.ViewState.prototype = {
 	// For good measure,
 	var source = this.options.source;
 	// add source
-	var action = $(source);
+	var action = DynaFaces.$(source);
+	if (action && action.form) {
+	    this[action.name] = action.value || 'x';
+	}
+	else {
+	    this[source] = source;
+	}
+	
+    },
+    toQueryString: function() {
+	var q = new Array();
+	var i,j,p,v;
+
+	if (this.options.inputs) {
+	    if (this[DynaFaces.gViewState]) {
+		p = encodeURIComponent(DynaFaces.gViewState);
+		v = encodeURIComponent(this[DynaFaces.gViewState]);
+		q.push(p+'='+v);
+	    }
+	    var inputs = this.options.inputs.split(",");
+	    if (inputs) {
+		for (i = 0; i < inputs.length; i++) {
+		    if (this[inputs[i]]) {
+			p = encodeURIComponent(inputs[i]);
+			if (this[inputs[i]].constructor == Array) {
+			    for (j = 0; j < this[inputs[i]].length; j++){
+				v = this[inputs[i]][j];
+				if (null != v) {
+				    v = encodeURIComponent(v);
+				    q.push(p+'='+v);
+				}
+			    }
+			} else {
+			    v = encodeURIComponent(this[inputs[i]]);
+			    q.push(p+'='+v);
+			}
+		    }
+		    else {
+			var input = document.getElementById(inputs[i]);
+			if (input) {
+			    p = inputs[i];
+			    v = encodeURIComponent(input.value || "");
+			    q.push(p+'='+v);
+			}
+		    }
+		}
+	    }
+	}
+	else {
+	    for (property in this) {
+		if (this[property]) {
+		    if (typeof this[property] == 'function') continue;
+		    p = encodeURIComponent(property);
+		    if (this[property].constructor == Array) {
+			for (j = 0; j < this[property].length; j++) {
+			    v = this[property][j];
+			    if (null != v) {
+				v = encodeURIComponent(v);
+				q.push(p+'='+v);
+			    }
+			}
+		    } else {
+			v = encodeURIComponent(this[property]);
+			q.push(p+'='+v);
+		    }
+		}
+	    }
+	}
+	if (this.options.parameters) {
+	    q.push(this.options.parameters);
+	}
+	if (typeof this.options.collectPostData == 'function') {
+	    this.options.collectPostData(this.options.ajaxZone, this.options.source,
+				   q);
+	}
+	else if (typeof DynaFaces.gGlobalScope[this.options.collectPostData] == 'function') {
+	    DynaFaces.gGlobalScope[this.options.collectPostData](this.options.ajaxZone, 
+						 this.options.source, q);
+	}
+
+	if (this.options.action) {
+	    p = (this.options.ajaxZone) ? this.options.ajaxZone.id :
+	      this.options.source.id || this.options.source.name;
+	    q.push(encodeURIComponent(p)+'='+
+		   encodeURIComponent(this.options.action));
+	}
+	    
+	return q.join('&');
+    }
+};
+DynaFaces.ViewState.CommandType = ['button','submit','reset'];
+DynaFaces.ViewState.Ignore = ['button','submit','reset','image'];
+
+/* ViewState Hash over a given Form
+ ***********************************************************/
+Faces.ViewState = Class.create();
+Faces.ViewState.CommandType = ['button','submit','reset'];
+// concat?
+Faces.ViewState.Ignore = ['button','submit','reset','image'];
+Faces.ViewState.prototype = {
+    setOptions: function(options) {
+	this.options= {};
+	Object.extend(this.options, options || {});
+    },
+    initialize: function(form, options) {
+	this.setOptions(options);
+
+	// Skip the traversal if the user elected to have more control over
+	// the post data.
+	var collectPostDataType = typeof this.options.collectPostData;
+	var inputsType = typeof this.options.inputs;
+	if (('void' != collectPostDataType && 'undefined' != collectPostDataType) ||
+	    ('void' != inputsType && 'undefined' != collectPostDataType)) {
+	    // Just get the state data.
+	    var viewState = DynaFaces.$(DynaFaces.gViewState);
+	    t = viewState.tagName.toLowerCase();
+	    p = Form.Element.Serializers[t](viewState);
+	    if (p && p[0].length != 0) {
+		if (p[1].constructor != Array) { 
+		    p[1] = [p[1]];
+		}
+		if (this[p[0]]) { 
+		    this[p[0]] = this[p[0]].concat(p[1]); 
+		}
+		else { 
+		    this[p[0]] = p[1];
+		}
+	    }
+	    
+	    return;
+	}
+	var e = Form.getElements(DynaFaces.$(form));
+	var t,p;
+	// Traverse the elements of the form and slam all of them into this 
+	// element's property set.
+	for (var i = 0; i < e.length; i++) {
+	    if (Faces.ViewState.Ignore.indexOf(e[i].type) == -1) {
+		t = e[i].tagName.toLowerCase();
+		p = Form.Element.Serializers[t](e[i]);
+		if (p && p[0].length != 0) {
+		    if (p[1].constructor != Array) {
+			p[1] = [p[1]];
+		    }
+		    // Don't concatenate the viewState.
+		    if (this[p[0]] && -1 == DynaFaces.gViewState.indexOf(p[0])) { 
+			this[p[0]] = this[p[0]].concat(p[1]); 
+		    }
+		    else {
+			this[p[0]] = p[1];
+		    }
+		}
+	    }
+	};
+	// For good measure,
+	var source = this.options.source;
+	// add source
+	var action = DynaFaces.$(source);
 	if (action && action.form) {
 	    this[action.name] = action.value || 'x';
 	}
@@ -519,7 +688,7 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
 	this.options.method = 'post';
 	
 	// get form
-	this.form = $Form(source);
+	this.form = DynaFaces.getForm(source);
 	this.url = this.form.action;
 	
 	// create viewState
@@ -555,7 +724,7 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
 	
 	// add methodName
 	if (this.options.methodName) {
-	    var sourceId = $(source).id || $(source).name;
+	    var sourceId = DynaFaces.$(source).id || DynaFaces.$(source).name;
 		sourceId += "," + this.options.methodName;
 		if (this.options.phaseId) {
 			sourceId += "," + this.options.phaseId;
@@ -670,7 +839,7 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
 	 }
 	 else {
 	     // Otherwise, just do our element replacement.
-	     Element.replace(id, str);
+	     DynaFaces.replace(id, str);
 	 }
 	 
 	 // If the user specified a postReplace...
@@ -681,7 +850,7 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
 		 // If its type is already a function...
 		 if (optionType == 'function') {
 		     // invoke it.
-		     this.options.postReplace($(id), markup, 
+		     this.options.postReplace(DynaFaces.$(id), markup, 
 						  this.options.closure,
 						  xjson);
 		 }
@@ -690,7 +859,7 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
 		 else if (typeof DynaFaces.gGlobalScope[this.options.postReplace] ==
 			  'function') {
 		     // invoke it.
-		     DynaFaces.gGlobalScope[this.options.postReplace]($(id), markup,
+		     DynaFaces.gGlobalScope[this.options.postReplace](DynaFaces.$(id), markup,
 								this.options.closure,
 								xjson);
 		 }
@@ -706,7 +875,7 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
      // not just the zeroth.
      var state = state || xml.getElementsByTagName('state')[0].firstChild;
      if (state) {
-	 var hf = $(DynaFaces.gViewState);
+	 var hf = DynaFaces.$(DynaFaces.gViewState);
 	 if (hf) {
 	     hf.value = state.text || state.data;
 	 }
@@ -773,7 +942,7 @@ Faces.Observer.prototype = {
 		var ea = Faces.toArray(events);
 		for (var i = 0; i < ta.length; i++) {
 			for (var j = 0; j < ea.length; j++) {
-				Event.observe($(ta[i]),ea[j],fn,true);
+				Event.observe(DynaFaces.$(ta[i]),ea[j],fn,true);
 			}
 		}
 	}

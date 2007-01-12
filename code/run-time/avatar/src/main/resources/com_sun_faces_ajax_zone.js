@@ -94,7 +94,8 @@ function moveAsideEventType(ajaxZone, element, options, getCallbackData) {
     if (DynaFaces.isJsfCommandLink(element) && 'click' === options.eventType) {
 	element["onclick"] = null;
     }
-    var c = new Faces.DeferredEvent(element, options.eventType, options);
+    DynaFaces.installDeferredAjaxTransaction(element, options.eventType, 
+					     options);
 }
 
 DynaFacesZones.takeActionAndTraverseTree = 

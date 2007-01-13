@@ -1,5 +1,12 @@
-dojo.require("dojo.widget.*");
 dojo.require("dojo.widget.YahooMap");
-var container = document.getElementById(widget.uuid);
-var w = dojo.widget.createWidget(container);
-jmaki.attributes.put(widget.uuid, w);
+
+// define the namespaces
+if (!jmaki.widgets.dojo) {
+	jmaki.widgets.dojo = {};
+}
+jmaki.widgets.dojo.ymap = {};
+
+jmaki.widgets.dojo.ymap.Widget = function(wargs) {
+    var container = document.getElementById(wargs.uuid);
+    var w = dojo.widget.createWidget(container);
+}

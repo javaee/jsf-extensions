@@ -69,6 +69,8 @@
                        file="${settings.localRepository}/commons-collections/commons-collections/3.1/commons-collections-3.1.jar" />
                  <copy todir="target/dist/samples/lib" 
                        file="${settings.localRepository}/commons-digester/commons-digester/1.7/commons-digester-1.7.jar" />
+                 <copy todir="target/dist/samples/lib" 
+                       file="${settings.localRepository}/com/sun/jmaki/ajax-wrapper-comp/v.8.2-SNAPSHOT/ajax-wrapper-comp-v.8.2-SNAPSHOT.jar" />
 
                  <property name="antbuild.dir" 
                            value="${basedir}/ant-buildable-sample-helpers" />
@@ -125,6 +127,15 @@
                  <ant inheritAll="false" dir="${antbuild.dir}" antfile="${antbuild.dir}/copy-sample-from-maven-to-dist-using-ant.xml">
                    <property name="appname" value="tictactoe" />
                  </ant>
+
+                 <ant inheritAll="false" dir="${antbuild.dir}" antfile="${antbuild.dir}/apply-sunbrand-using-ant.xml">
+                   <property name="appname" value="jmaki" />
+                 </ant>
+
+                 <ant inheritAll="false" dir="${antbuild.dir}" antfile="${antbuild.dir}/copy-sample-from-maven-to-dist-using-ant.xml">
+                   <property name="appname" value="jmaki" />
+                 </ant>
+
 
                  <tar destfile="target/jsf-extensions-${pom.version}.tar"
                       basedir="target/dist" />

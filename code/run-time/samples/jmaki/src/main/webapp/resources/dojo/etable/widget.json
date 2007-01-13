@@ -1,0 +1,18 @@
+{"name": "Editable Filtering Table",
+         "type": "dojo",
+         "image" : "images/dojo-sorting-table.jpg",
+         "description": "This widget is storing table which you filter data for and add items. You can edit items by double clicking on the cell. Add a table.onCellUpdate(row, column, value) handler to detect cell updates.",
+         "args": [
+         {"auto":{"type":"BOOLEAN", "defaultValue": "true", "description": "Whether to create programmatically or from a template."}},
+         {"topic":{"type":"STRING", "defaultValue": "/dojo/table", "description": "The topic published to"}}
+         ],
+         "value": {"required":"false", "type": "ARRAY", "defaultValue":{
+	
+"columns": { "title" : "Title", "author":"Author", "isbn": "ISBN #", "description":"Description"},
+"rows":[
+ ['JavaScript 101', 'Lu Sckrepter','4412', 'Some long description'],
+ ['Ajax with Java', 'Jean Bean','4413', 'Some long description']
+ ]
+},
+        "description":"An object containing a object of colums and array of row arrays to be added to the table."}
+ }

@@ -1,0 +1,15 @@
+ {
+    "name": "Drawer",
+    "type": "dojo",
+    "image": "images/dojo-drawer.jpg",
+    "description": "This widget allows you to hide or show content to save space on the screen. The drawer opens using animation.",
+    'args': [       
+        {'open': {'type':'BOOLEAN', 'defaultValue' : false, 'description' : 'Where or not to have the widget open on initialization.'}},
+        {'url': {'type':'STRING', 'description' : 'The url to load for the contents of this container.'}},
+        {'content': {'type':'STRING', 'description' : 'The html content to display when the drawer opens.'}},
+        {'lazyLoad': {'type':'BOOLEAN', 'defaultValue' : false, 'description' : 'Specify whether you want to load the content dynamically when it is opened the first time.'}},
+        {"color":{"type":"STRING", "defaultValue": 'gray', 'values': [['Blue','blue'],['Gray','gray']], "description": "The drawer icon color."}},
+        {"rate":{"type":"NUMBER", "defaultValue": 250, 'values': [250,500,750], "description": "The animation speed."}},
+        {'topic': {'type':'STRING', 'defaultValue': '/dojo/drawer', 'description':'The topic to which this component publishes events to.'}}
+       ]
+  }

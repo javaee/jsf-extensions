@@ -79,7 +79,7 @@
     <dependency>
       <groupId>com.sun.jmaki</groupId>
       <artifactId>ajax-wrapper-comp</artifactId>
-      <version>0.6-SNAPSHOT</version>
+      <version>v.8.2-SNAPSHOT</version>
       <scope>runtime</scope>
     </dependency>
   </dependencies>

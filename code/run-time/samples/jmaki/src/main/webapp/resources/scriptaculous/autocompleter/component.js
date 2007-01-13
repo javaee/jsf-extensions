@@ -1,2 +1,15 @@
+ // define the namespaces
+if (!jmaki.widgets.scriptaculous) {
+    jmaki.widgets.scriptaculous = {};
+}
+jmaki.widgets.scriptaculous = {};
 
-  new Ajax.Autocompleter(widget.uuid,widget.uuid + '_target','_autocomplete_result.html',{select:'selectme'});
+jmaki.widgets.scriptaculous.autocompleter = {};
+
+jmaki.widgets.scriptaculous.autocompleter.Widget = function(wargs) {
+	this.wrapper = new Ajax.Autocompleter(wargs.uuid,
+									  wargs.uuid + '_target',
+									  wargs.service,
+									  {method:'get', select:'selectme'}
+									  );
+}

@@ -1,7 +1,12 @@
-dojo.require("dojo.widget.*");
 dojo.require("dojo.widget.Tree");
 
-jmaki.DojoTreeWrapper = function(widget) {
+// define the namespaces
+if (!jmaki.widgets.dojo ) {
+	jmaki.widgets.dojo = {};
+}
+jmaki.widgets.dojo.tree = {};
+
+jmaki.widgets.dojo.tree.Widget = function(widget) {
     var _widget = widget;
     var topic = "/dojo/tree";
 
@@ -27,6 +32,7 @@ jmaki.DojoTreeWrapper = function(widget) {
         } else {
            callback = function(req) {
                 if (req.readyState == 4) {
+                alert("eavl");
                     var jTree = eval("(" + req.responseText + ")");
                     var root = jTree.root;
                     buildTree(root);
@@ -88,5 +94,3 @@ jmaki.DojoTreeWrapper = function(widget) {
 
    }
 }
-var w = new jmaki.DojoTreeWrapper(widget);
-jmaki.attributes.put(widget.uuid,w);

@@ -1,10 +1,10 @@
 {
     "name": "Clock",
-    "type": "dojo",
+    "type": "Dojo",
     "image": "images/dojo-clock.jpg",
     "description": "This widget is a clock.",
     "args": [
-        {"clockType":{"type":"STRING", "defaultValue": 'plain', values: [['Plain','plain'],['Black','black'],['Black Texture','blackTexture'],['Gray','gray'],['Gray Plastic','grayPlastic']], "description": "The clock type."}},
+        {"clockType":{"type":"STRING", "defaultValue": 'plain', 'values': [['Plain','plain'],['Black','black'],['Black Texture','blackTexture'],['Gray','gray'],['Gray Plastic','grayPlastic']], "description": "The clock type."}},
     	{"timeZoneOffset":{"type":"NUMBER", "defaultValue": 0, "description": "The time Offset."}},
     	{"label":{"type":"STRING", "defaultValue": "", "description":"The label at the top of the clock."}},
         {"labelColor":{"type":"STRING", "defaultValue": "#fff", "description":"The color of the label."}},

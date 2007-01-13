@@ -1,52 +1,60 @@
 dojo.require("dojo.widget.ComboBox");
+dojo.require("dojo.io.*");
 
-var container = document.getElementById(widget.uuid);
-var cb = dojo.widget.createWidget(container);
-
-var data = cb.baseDir + "/assets/data.js";
-var topic = "/dojo/combobox";
-
-
-if (typeof widget.value != 'undefined') {
-    // populate the dataProvider for the combobox
-    // with an array of arrays (as dojo likes it)
-    if (typeof widget.value == 'object') {
-        var props = [];
-        for (var l in widget.value ) {
-            var items = [];
-            items.push(widget.value[l][0]);
-            items.push(widget.value[l][1]);
-            props.push(items);
-        }
-        cb.dataProvider.addData(props);
-    } else {
-        cb.setValue(widget.value);
-    }
+// define the namespaces
+if (!jmaki.widgets.dojo) {
+	jmaki.widgets.dojo = {};
 }
+jmaki.widgets.dojo.combobox = {};
 
-if (typeof widget.args != "undefined") {
-    if (typeof widget.args.topic != "undefined") {
-        topic = widget.args.topic;
-    }
-}
-
-cb.onChange = function(value){
-   jmaki.publish(topic, value);
-} 
-dojo.event.connect(cb, "setSelectedValue", cb, "onChange"); 
-// add a saveState function
-if (typeof widget.valueCallback != 'undefined') {
-    cb.saveState = function() {
-        // we need to be able to adjust this
-        var url = widget.valueCallback;
+jmaki.widgets.dojo.combobox.Widget = function(wargs) {
+    
+    var _this = this;
+	var container = document.getElementById(wargs.uuid);
+	this.wrapper = dojo.widget.createWidget("ComboBox", {autocomplete:true}, container);
+    if (wargs.service) {
         dojo.io.bind({
-                url: url + "?cmd=update",
-                method: "post",
-            content: { "value" : this.getValue() },
-            load: function (type,data,evt) {
-                // do something if there is an error
+                url: wargs.service,
+                method: "get",
+                mimetype: "text/json",
+                load: function (type,data,evt) {
+	                _this.wrapper.dataProvider.setData(data);
             }
         });
+       	
+    this.saveState = function() {
+	        // we need to be able to adjust this
+	        var url = wargs.service;
+	        dojo.io.bind({
+	                url: url + "?cmd=setCountry",
+	                method: "post",
+	                content: { "value" : this.getValue()}
+	                // we need an error handler
+	        });
+	    }
+	}
+
+	var topic = "/dojo/combobox";
+
+	if (wargs.value) {
+	    this.wrapper.dataProvider.setData(wargs.value);
     }
+
+	if (wargs.args && wargs.args.topic) {
+	    topic = wargs.args.topic;
+	}
+
+	if (wargs.selected) {
+	    this.wrapper.setValue(wargs.selected);
+	}
+	
+	this.getValue = function() {
+        return this.wrapper.getValue();
+    }
+		
+	this.onChange = function(value){
+	   jmaki.publish(topic, value);
+	}
+	
+	dojo.event.connect(this.wrapper, "setSelectedValue", _this, "onChange");	
 }
-jmaki.attributes.put(widget.uuid, cb);

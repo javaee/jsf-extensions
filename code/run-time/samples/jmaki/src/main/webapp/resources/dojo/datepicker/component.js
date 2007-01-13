@@ -1,27 +1,38 @@
-dojo.require("dojo.widget.*");
 dojo.require("dojo.widget.DatePicker");
 
-var container = document.getElementById(widget.uuid);
-var dw = dojo.widget.createWidget(container);
-jmaki.attributes.put(widget.uuid, dw);
-
-if (typeof widget.value != 'undefined') {
-    var date = new Date(widget.value);
-    dw.setDate(date);
+// define the namespaces
+if (!jmaki.widgets.dojo) {
+	jmaki.widgets.dojo = {};
 }
+jmaki.widgets.dojo.datepicker = {};
 
-// add a saveState function
-if (typeof widget.valueCallback != 'undefined') {
-    dw.saveState = function() {
-        // we need to be able to adjust this
-        var url = widget.valueCallback;
-        dojo.io.bind({
-                url: url + "?cmd=update",
-                method: "post",
-            content: { "value" : dw.getValue().replace(/-/g, '/') },
-            load: function (type,data,evt) {
-                // do something if there is an error
-            }
-        });
+jmaki.widgets.dojo.datepicker.Widget = function(wargs) {
+    var _this = this;
+	var container = document.getElementById(wargs.uuid);
+	this.wrapper = dojo.widget.createWidget("DatePicker", null, container);
+	
+	if (wargs.value) {
+	    var date = new Date(wargs.value);
+	    this.wrapper.setDate(date);
+	}
+    
+    this.getValue = function() {
+        return  _this.wrapper.getValue().replace(/-/g, '/');
+    }
+	
+	// add a saveState function
+	if (wargs.service) {
+	    this.saveState = function() {
+	        // we need to be able to adjust this
+	        var url = wargs.service;
+	        dojo.io.bind({
+	                url: url + "?cmd=update",
+	                method: "post",
+	                content: { "value" : _this.wrapper.getValue().replace(/-/g, '/') },
+	                load: function (type,data,evt) {
+	                    // do something if there is an error
+	                }
+	        });
+        }
     }
 }

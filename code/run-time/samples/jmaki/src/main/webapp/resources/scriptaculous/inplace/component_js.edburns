@@ -1,0 +1,34 @@
+// define the namespaces
+if (!jmaki.widgets.scriptaculous) {
+	jmaki.widgets.scriptaculous = {};
+}
+jmaki.widgets.scriptaculous.inplace = {};
+
+jmaki.widgets.scriptaculous.inplace.Widget = function(wargs) {
+    var wInstance = this;
+    var topic = "/scriptaculous/inplace";
+	
+  this.wrapper = new Ajax.InPlaceEditor(wargs.uuid, wargs.service, 
+  { ajaxOptions: 
+        {method: 'post'}, 
+        widget: wargs,
+        callback: function(form, value) {
+	    var publishResult = null, result = null;
+	  wInstance.wrapper.value = value;
+	  publishResult = jmaki.publish(topic, {target:wInstance, wargs:wargs});
+	  if (null != publishResult) {
+	      result = publishResult;
+	  }
+	  else {
+	      result = Form.serialize(form);
+	  }
+	  return result;
+      }, 
+      onComplete: function(transport, element) {
+	    if (null == transport || null == element) {
+		return;
+	    }
+      }
+
+  });
+}

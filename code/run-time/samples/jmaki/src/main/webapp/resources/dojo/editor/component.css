@@ -1,7 +1,5 @@
 .dojoEditor{
+    height:100%;
     position:relative;
     overflow:auto;
-    width:800px;
-    height: 450px;
-    border: 1px solid #000000;
 }

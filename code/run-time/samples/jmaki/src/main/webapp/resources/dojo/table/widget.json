@@ -1,9 +1,9 @@
 {"name": "Filtering Table",
          "type": "dojo",
          "image" : "images/dojo-sorting-table.jpg",
-         "description": "This widget is sotring table which you filter data for and add items.",
+         "description": "This widget is storing table which you filter data for and add items.",
          "args": [
-         {"auto":{"type":"BOOLEAN", "defaultValue": "true", "description": "Whether to create programtically or from a template."}},
+         {"auto":{"type":"BOOLEAN", "defaultValue": "true", "description": "Whether to create programmatically or from a template."}},
          {"topic":{"type":"STRING", "defaultValue": "/dojo/table", "description": "The topic published to"}}
          ],
          "value": {"required":"false", "type": "ARRAY", "defaultValue":{

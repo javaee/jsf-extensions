@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!DOCTYPE faces-config PUBLIC
+  "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN"
+  "http://java.sun.com/dtd/web-facesconfig_1_1.dtd">
+
+<!--
+ The contents of this file are subject to the terms 
+ of the Common Development and Distribution License 
+ (the "License").  You may not use this file except 
+ in compliance with the License.
+ 
+ You can obtain a copy of the license at 
+ glassfish/bootstrap/legal/CDDLv1.0.txt or 
+ https://glassfish.dev.java.net/public/CDDLv1.0.html. 
+ See the License for the specific language governing 
+ permissions and limitations under the License.
+ 
+ When distributing Covered Code, include this CDDL 
+ HEADER in each file and include the License file at 
+ glassfish/bootstrap/legal/CDDLv1.0.txt.  If applicable, 
+ add the following below this CDDL HEADER, with the 
+ fields enclosed by brackets "[]" replaced with your 
+ own identifying information: Portions Copyright [yyyy] 
+ [name of copyright owner]
+-->
+
+<faces-config>
+
+  <managed-bean>
+    <managed-bean-name>fishEyeBean</managed-bean-name>
+    <managed-bean-class>com.sun.jmaki.dojo.FishEyeBean</managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+    <managed-property>
+      <property-name>personMessages</property-name>
+      <list-entries>
+        <value><![CDATA[<img src="images/JayashriVisvanathan.jpg"/><p>I am Jayashri Visvanathan and I work on Java Studio Creator. My area of interest/expertise is JSF components. Before I joined Creator team, I used to work on the JSF Reference Implementation (RI). I have been part of JSF team since its inception and have contributed to various releases including the current release JSF 1.2. I was also managing the JSF project on java.net since its launch. Prior to joining the JSF team, I worked on various client and server side web products/technologies within Sun including Mozilla, WebTop Registry Server and HotJava Browser.</p>]]></value>
+        <value><![CDATA[<img src="images/chinnici.jpg"/><p>Roberto Chinnici is a senior staff engineer at Sun Microsystems, Inc. where he works on the Java� Platform, Enterprise Edition, with particular focus on Web Services and Ease of Development. He is the specification lead for the JAX-RPC 1.1 and JAX-WS 2.0 technologies, both developed under the Java Community Process. He is also Sun\'s principal representative in the Web Services Description Working Group at W3C and has been a member of the WS-I Basic Profile Working Group. Mr. Chinnici holds an M.S. in Computer Science from the University of Milan, Italy.</p>]]></value>
+        <value><![CDATA[<img src="images/blog_murray.jpg"/><p>Appointed as AJAX Architect for Sun Microsystems, Greg Murray is deeply involved in the AJAX movement through his participation in the OpenAJAX Alliance and contributions to the Dojo Foundation\'s open-source JavaScript toolkit. Within Sun, Greg lead a grass roots effort advancing the integration of client-side scripting with Java technologies and is the creator and principal architect of Project jMaki. jMaki uses the best parts of Java and the best parts of JavaScript to deliver rich AJAX style widgets through a singe, easy-to-use interface that accesses components from popular widget libraries such as Dojo, Script.aculo.us, Yahoo\'s UI Library, Spry, DHTML Goodies, and Google\'s Web Toolkit. Greg recently contributed to the design and development of the AJAX-based Java Pet Store 2.0 Demo and helped create Java BluePrints solutions for using AJAX with Java technologies.</p>]]></value>
+        <value><![CDATA[<img src="images/edburns.jpg"/><p>Ed Burns is a senior staff engineer at Sun Microsystems. Ed has worked on a wide variety of client and server side web technologies since 1994, including NCSA Mosaic, Mozilla, the Sun Java Plugin, Jakarta Tomcat and, most recently JavaServer Faces. Ed is currently the co-spec lead for JavaServer Faces.  Ed has contributed JSF support to jMaki in the form of bug-fixes, nags, and tersely worded emails.</p>]]></value>
+      </list-entries>
+    </managed-property>
+  </managed-bean>
+  
+
+  <managed-bean>
+    <managed-bean-name>fishEyeData</managed-bean-name>
+    <managed-bean-class>java.util.ArrayList</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+    <list-entries>
+      <value-class>javax.faces.model.SelectItem</value-class>
+      <value>images/3_Galbraith_small.jpg,Ben,1</value>
+      <value>images/2_Almaer_small.jpg,Dion,2</value>
+      <value>images/1255_Raskin_small.jpg,Aza,3</value>
+      <value>images/1254_Lewis_Ship_small.jpg,Howard,4</value>
+    </list-entries>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>ResultSetBean</managed-bean-name>
+    <managed-bean-class>com.sun.jmaki.dojo.ResultSetBean</managed-bean-class>
+    <managed-bean-scope>application</managed-bean-scope>
+  </managed-bean>
+
+
+
+</faces-config>

@@ -1,28 +1,43 @@
-dojo.require("dojo.widget.*");
 dojo.require("dojo.widget.InlineEditBox");
 dojo.require("dojo.event.*");
 
-var container = document.getElementById(widget.uuid);
-var w = dojo.widget.createWidget(container);
+jmaki.namespace("jmaki.widgets.dojo.inlineedit");
 
-w.getValue = function() {
-    return w.textValue;
-}
+jmaki.widgets.dojo.inlineedit.Widget = function(wargs) {
 
-// add a saveState function
-if (typeof widget.valueCallback != 'undefined') {
-    w.onSave = function(newValue, oldValue) {   
-        // we need to be able to adjust this
-        var url = widget.valueCallback;
-        dojo.io.bind({
-                url: url + "?cmd=update",
-                method: "post",
-            content: { "value" : newValue  },
-            load: function (type,data,evt) {
-                // do something if there is an error
-            }
-        });
+    var self = this;
+    var topic = "/dojo/inlineedit/";
+    var container = document.getElementById(wargs.uuid);
+    self.wrapper = dojo.widget.createWidget("InlineEditBox",null, container);
+
+    if (wargs.args) {
+        if (wargs.args.topic) {
+            topic = wargs.args.topic;
+        }
     }
+
+    this.getValue = function() {
+        return self.wrapper.value;
+    }
+
+    // add a saveState function
+    if (wargs.service) {
+        self.wrapper.onSave = function(newValue, oldValue) {   
+            // we need to be able to adjust this
+            var url = wargs.service;
+            dojo.io.bind({
+                    url: url + "?cmd=update",
+                    method: "post",
+                content: { "value" : newValue  },
+                load: function (type,data,evt) {
+                    // do something if there is an error
+                }
+            });
+        }
+    } else {
+        self.wrapper.onSave = function(newValue, oldValue) {
+            jmaki.publish(topic + "onSave", {id: wargs.uuid, wargs: wargs, value: self.getValue()});
+        }
+    }
+    this.saveState = this.wrapper.onSave;
 }
-w.saveState = w.onSave;
-jmaki.attributes.put(widget.uuid, w);

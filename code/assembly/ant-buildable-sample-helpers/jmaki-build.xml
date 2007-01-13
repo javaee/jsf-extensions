@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project name="jmaki" basedir="." 
+         default="copy.per-app.libs.and.assemble.war">
+
+    <property name="appname" value="jsf-jmaki"/>
+
+    <import file="../build.xml"/>
+
+    <path id="per-app.classpath">
+      <fileset dir="../../lib">
+        <include name="jsf-extensions-dynamic-faces*.jar" />
+      </fileset>
+      <fileset dir="../lib">
+        <include name="*ajax-wrapper-comp*.jar" />
+      </fileset>
+    </path>
+
+    <target name="copy.per-app.dependent.libs">
+      <copy todir="${exploded.war.dir}/WEB-INF/lib">
+        <fileset dir="../lib">
+          <include name="*bp-ui-simple*" />
+          <include name="*ajax-wrapper-comp*" />
+        </fileset>
+      </copy>
+    </target>
+
+</project>

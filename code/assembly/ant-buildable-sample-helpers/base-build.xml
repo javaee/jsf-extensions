@@ -7,6 +7,7 @@
     <property name="build.dir" value="${basedir}/build"/>
     <property name="exploded.war.dir" value="${build.dir}/${appname}"/>
     <property name="war.classes.dir" value="${build.dir}/${appname}/WEB-INF/classes"/>
+    <property name="default.src.path" value="src/main/java" />
 
     <path id="base.classpath">
         <pathelement location="${javaee.jar}"/>
@@ -25,18 +26,20 @@
 
     <target name="compile">
       <javac debug="true"
-             srcdir="${basedir}/src/main/java"
              destdir="${war.classes.dir}">
         <classpath>
           <path refid="base.classpath" />
           <path refid="per-app.classpath" />
         </classpath>
+        <src>
+          <pathelement path="${default.src.path}" />
+        </src>
       </javac>
     </target>
 
     <target name="copy.properties">
       <copy todir="${war.classes.dir}">
-        <fileset dir="src/main/java">
+        <fileset dir="${default.src.path}">
           <include name="**/*.properties" />
         </fileset>
        </copy>

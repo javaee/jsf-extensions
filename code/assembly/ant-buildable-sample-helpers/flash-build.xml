@@ -4,6 +4,8 @@
 
     <property name="appname" value="jsf-flash"/>
 
+    <property name="default.src.path" value="${basedir}/src/main/webapp" />
+
     <import file="../build.xml"/>
 
     <path id="per-app.classpath">

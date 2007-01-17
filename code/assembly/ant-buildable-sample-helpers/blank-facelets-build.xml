@@ -4,6 +4,8 @@
 
     <property name="appname" value="jsf-blank-facelets"/>
 
+    <property name="default.src.path" value="${basedir}/src/main/webapp" />
+
     <import file="../build.xml"/>
 
     <target name="copy.per-app.dependent.libs">

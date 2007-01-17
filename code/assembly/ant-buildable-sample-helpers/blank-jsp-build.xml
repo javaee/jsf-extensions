@@ -4,6 +4,8 @@
 
     <property name="appname" value="jsf-blank-jsp"/>
 
+    <property name="default.src.path" value="${basedir}/src/main/webapp" />
+
     <import file="../build.xml"/>
 
 </project>

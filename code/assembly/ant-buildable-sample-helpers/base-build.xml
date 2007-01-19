@@ -93,6 +93,7 @@
       <ant dir="${basedir}/fire-ajax-transaction" inheritAll="false" />
       <ant dir="${basedir}/flash" inheritAll="false" />
       <ant dir="${basedir}/j1" inheritAll="false" />
+      <ant dir="${basedir}/jmaki" inheritAll="false" />
       <ant dir="${basedir}/simple-events" inheritAll="false" />
       <ant dir="${basedir}/simple-partial-update" inheritAll="false" />
       <ant dir="${basedir}/tictactoe" inheritAll="false" />

@@ -53,12 +53,10 @@
 
     <target name="copy.dependent.libs">
       <copy todir="${exploded.war.dir}/WEB-INF/lib">
-        <fileset dir="${basedir}/../lib">
-          <include name="*commons-logging*" />
-          <include name="*shale-remoting*" />
-        </fileset>
         <fileset dir="${basedir}/../../lib">
           <exclude name="*sources*" />
+          <include name="*commons-logging*" />
+          <include name="*shale-remoting*" />
           <include name="jsf-extensions-common*.jar" />
           <include name="jsf-extensions-dynamic-faces*.jar" />
         </fileset>

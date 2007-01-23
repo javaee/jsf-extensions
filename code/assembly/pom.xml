@@ -55,9 +55,9 @@
                  <!-- copy dependent jars, so people can build the samples -->
                  <mkdir dir="target/dist/samples/lib" />
 
-                 <copy todir="target/dist/samples/lib" 
+                 <copy todir="target/dist/lib" 
                        file="${settings.localRepository}/commons-logging/commons-logging/1.1/commons-logging-1.1.jar" />
-                 <copy todir="target/dist/samples/lib" 
+                 <copy todir="target/dist/lib" 
                        file="${settings.localRepository}/org/apache/shale/shale-remoting/1.0.3/shale-remoting-1.0.3.jar" />
                  <copy todir="target/dist/samples/lib" 
                        file="${settings.localRepository}/com/sun/javaee/blueprints/bp-ui-simple/5/bp-ui-simple-5.jar" />

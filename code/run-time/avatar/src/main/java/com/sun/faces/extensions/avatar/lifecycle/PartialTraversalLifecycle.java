@@ -102,7 +102,7 @@ public class PartialTraversalLifecycle extends Lifecycle {
         try {
 
             // Don't allow any content between now and the call
-            // to PartialTraversalViewRoot.encodeAll() to be written to the response.
+            // to PartialTraversalViewRoot.encodeBegin() to be written to the response.
             async.setOnOffResponseEnabled(false);
             parent.render(context);
             

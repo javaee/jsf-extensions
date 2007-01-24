@@ -75,19 +75,20 @@ import javax.servlet.http.HttpServletResponse;
  * current phase, reflectively call <code>broadcastEvents()</code> on
  * the superclass passing the current <code>PhaseId</code>.</p>
  *
- * <p>On postback, the {@link #encodeAll} method has special behavior.
+ * <p>On postback, the {@link #encodeBegin}, {@link #encodeChildren} and
+ * {@link #encodeEnd} methods have special behavior.
  * If {@link
  * com.sun.faces.extensions.avatar.lifecycle.AsyncResponse#isAjaxRequest}
- * returns <code>false</code>, the superclass <code>encodeAll</code> is
+ * returns <code>false</code>, the superclass <code>encode*</code> methods are
  * called.  Otherwise, {@link
  * com.sun.faces.extensions.avatar.lifecycle.AsyncResponse#getRenderSubtrees}
  * is called.  This returns a list of client ids suitable for the {@link
  * javax.faces.lifecycle.Lifecycle#render} portion of the request
  * processing lifecycle.  If the list is empty, call through to the
- * superclass implementation of <code>encodeAll</code>.  Otherwise, for
+ * superclass implementation of <code>encode*</code>.  Otherwise, for
  * each client id in the list, using {@link
  * javax.faces.component.UIComponent#invokeOnComponent}, call the
- * <code>encodeAll</code> method on the component with that clientId.
+ * <code>encode*</code> methods on the component with that clientId.
  * If the list of subtrees to render for this request is non-empty, set
  * the response content-type and headers approriately for XML, and wrap
  * the rendered output from the components in the list as in the
@@ -235,13 +236,31 @@ public class PartialTraversalViewRootImpl extends UIViewRootCopy implements Seri
         }
         this.broadcastEvents(context, PhaseId.UPDATE_MODEL_VALUES);
     }
+    
+    public boolean getRendersChildren() {
+        AsyncResponse async = AsyncResponse.getInstance();
+        boolean result = true;
+        // If this is not an ajax request...
+        if (!async.isAjaxRequest() || async.isRenderAll()) {
+            // do default behavior
+            result = super.getRendersChildren();
+        }
+        return result;
+    }
+    
+    /**
+     *	<p> Request scoped key to hold the original ResponseWriter between
+     *	    encodeBegin and encodeEnd during Ajax requests.</p>
+     */
+    private static final String ORIGINAL_WRITER = AsyncResponse.FACES_PREFIX + 
+            "origWriter";    
 
-    public void encodeAll(FacesContext context) throws IOException {
+    public void encodeBegin(FacesContext context) throws IOException {
         AsyncResponse async = AsyncResponse.getInstance();
         // If this is not an ajax request...
         if (!async.isAjaxRequest()) {
             // do default behavior
-            super.encodeAll(context);
+            super.encodeBegin(context);
             return;
         }
         boolean renderAll = async.isRenderAll(),
@@ -258,6 +277,11 @@ public class PartialTraversalViewRootImpl extends UIViewRootCopy implements Seri
                 // Get (and maybe create) the AjaxResponseWriter
                 writer = async.getResponseWriter();
                 orig = context.getResponseWriter();
+
+		// Save the new writer for encodeEnd
+		context.getExternalContext().getRequestMap().
+                    put(ORIGINAL_WRITER, orig);
+
                 // Install the AjaxResponseWriter
                 context.setResponseWriter(writer);
             }
@@ -278,11 +302,54 @@ public class PartialTraversalViewRootImpl extends UIViewRootCopy implements Seri
                 
                 // setup up a writer which will escape any CDATA sections
                 context.setResponseWriter(new EscapeCDATAWriter(writer));
-                
-                // do the default behavior...
-                super.encodeAll(context);
-                
-                // revert the write and finish up
+            }
+        } catch (IOException ex) {
+	    cleanupAfterView(context);
+        } catch (RuntimeException ex) {
+	    cleanupAfterView(context);
+	    
+	    // Throw the exception
+	    throw ex;
+        }
+    }       
+
+    public void encodeChildren(FacesContext context) throws IOException {
+        AsyncResponse async = AsyncResponse.getInstance(false);
+        // If this is not an ajax request...
+        if ((async == null) || !async.isAjaxRequest() || async.isRenderAll()) {
+            // Full request or ajax encode All request, operate normally
+            super.encodeChildren(context);
+        }
+	else {
+            // If the context callback was not invoked on any subtrees
+            // and the client did not explicitly request that no
+            // subtrees be rendered...
+            if (!invokeContextCallbackOnSubtrees(context, 
+                    new PhaseAwareContextCallback(PhaseId.RENDER_RESPONSE)) &&
+		!async.isRenderNone()) {
+                assert(false);
+            }
+	}
+    }
+    
+
+    public void encodeEnd(FacesContext context) throws IOException {
+        AsyncResponse async = AsyncResponse.getInstance(false);
+        // If this is not an ajax request...
+        if ((async == null) || !async.isAjaxRequest()) {
+            // do default behavior
+            super.encodeEnd(context);
+            return;
+        }
+
+
+        try {
+            if (async.isRenderAll()) {
+		EscapeCDATAWriter cdataWriter = (EscapeCDATAWriter)
+		    context.getResponseWriter();
+		ResponseWriter writer = cdataWriter.getWrapped();
+
+                // revert the writer and finish up
                 context.setResponseWriter(writer);
                 writer.write("]]>");
                 writer.endElement("markup");
@@ -291,32 +358,17 @@ public class PartialTraversalViewRootImpl extends UIViewRootCopy implements Seri
                 return;
             }
             
-            // If the context callback was not invoked on any subtrees
-            // and the client did not explicitly request that no subtrees be rendered...
-            if (!invokeContextCallbackOnSubtrees(context, 
-                    new PhaseAwareContextCallback(PhaseId.RENDER_RESPONSE)) &&
-                    !renderNone) {
-                assert(false);
-            }
-            
+	    
             this.encodePartialResponseEnd(context);
             
         } catch (IOException ioe) {
             
         } finally {
-            // PENDING(edburns): this is a big hack to get around the
-            // way the JSP based faces implementation handles the
-            // after view content.
-            // We will have to do something different for other implementations.
-            // This is not a problem for Facelets.
-            context.getExternalContext().getRequestMap().remove("com.sun.faces.AFTER_VIEW_CONTENT");
-            
-            // move aside the AjaxResponseWriter
-            if (null != orig) {
-                context.setResponseWriter(orig);
-            }
+            cleanupAfterView(context);
         }
     }
+
+
     
     public void encodePartialResponseBegin(FacesContext context) throws IOException {
         ResponseWriter writer = context.getResponseWriter();
@@ -375,7 +427,30 @@ public class PartialTraversalViewRootImpl extends UIViewRootCopy implements Seri
             AsyncResponse.getInstance().setRenderAll(true);
         }
         
-    }    
+    }   
+    
+    
+    /**
+     *
+     */
+    private void cleanupAfterView(FacesContext context) {
+	ResponseWriter orig = (ResponseWriter) context.getExternalContext().
+	    getRequestMap().get(ORIGINAL_WRITER);
+	assert(null != orig);
+	
+        // PENDING(edburns): this is a big hack to get around the
+        // way the JSP based faces implementation handles the
+        // after view content.
+        // We will have to do something different for other implementations.
+        // This is not a problem for Facelets.
+        context.getExternalContext().getRequestMap().remove("com.sun.faces.AFTER_VIEW_CONTENT");
+
+        // move aside the AjaxResponseWriter
+        if (null != orig) {
+            context.setResponseWriter(orig);
+        }
+    }
+
     
     private boolean invokeContextCallbackOnSubtrees(FacesContext context, 
             PhaseAwareContextCallback cb) {

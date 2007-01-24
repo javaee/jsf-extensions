@@ -127,6 +127,7 @@
 	<module>run-time/samples/cardemo</module>
 	<module>run-time/samples/flash</module>
 	<module>run-time/samples/tictactoe</module>
+	<module>run-time/samples/fire-ajax-transaction</module>
 	<module>run-time/samples/j1</module>
 	<module>run-time/samples/simple-events</module>
 	<module>run-time/samples/simple-partial-update</module>

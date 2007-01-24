@@ -33,6 +33,7 @@ import com.sun.faces.extensions.avatar.components.AjaxZone;
 import com.sun.faces.extensions.avatar.lifecycle.AsyncResponse;
 import com.sun.faces.extensions.common.util.Util;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -182,7 +183,7 @@ public class AjaxZoneRenderer extends Renderer {
 	    writer.startElement("script", comp);
 	    writer.writeAttribute("language", "javascript", "language");
 	    writer.writeAttribute("type", "text/javascript", "language");
-            List<AjaxZone> zoneList = comp.getZoneList();
+            List<AjaxZone> zoneList = comp.getAllZoneList();
             
 
             writer.write("\nvar curZone = null;\n");
@@ -394,9 +395,10 @@ public class AjaxZoneRenderer extends Renderer {
 
         ResponseWriter writer = context.getResponseWriter();
         AjaxZone zone = (AjaxZone) component;
-        if (zone.isRenderScriptsForAllZonesRightNow()) {
-            boolean isAjaxRequest = false;
-            if (!(isAjaxRequest = AsyncResponse.isAjaxRequest())) {
+        boolean isAjaxRequest = AsyncResponse.isAjaxRequest();
+        if (this.isRenderScriptsForAllZonesRightNow(context, zone, isAjaxRequest)) {
+            
+            if (!isAjaxRequest) {
                 for (int i = 0; i < scriptIds.length; i++) {
                     getXhtmlHelper().linkJavascript(context, component, writer,
                             Mechanism.CLASS_RESOURCE, scriptIds[i]);
@@ -428,4 +430,38 @@ public class AjaxZoneRenderer extends Renderer {
         }
         return xHtmlHelper;
     }
+    
+    
+    /**
+     * @return true if the scripts for all zones in this view should
+     * be rendered right now.
+     *
+     * <p>Returns true if this AjaxZone instance is the last rendered zone 
+     * in the view.
+     */
+    
+    private boolean isRenderScriptsForAllZonesRightNow(FacesContext context,
+            AjaxZone currentZone, boolean isAjaxRequest) {
+        boolean result = false;
+        List<AjaxZone> zoneList = isAjaxRequest ? currentZone.getRenderedZoneList()
+         : currentZone.getAllZoneList();
+        if (null != zoneList && !zoneList.isEmpty()) {
+            AjaxZone lastRenderedZone = null;
+            // Find the last entry in the zoneList
+            // that has its rendered property set to true
+            for (int i = zoneList.size() - 1; i >= 0; i--) {
+                lastRenderedZone = zoneList.get(i);
+                if (lastRenderedZone.isRendered()) {
+                    break;
+                }
+                lastRenderedZone = null;
+            }
+            if (null != lastRenderedZone) {
+                result = (currentZone == lastRenderedZone);
+            }
+        }
+
+        return result;
+    }
+
 }

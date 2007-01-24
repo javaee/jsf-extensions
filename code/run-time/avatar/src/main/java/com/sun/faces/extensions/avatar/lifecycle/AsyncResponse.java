@@ -16,6 +16,7 @@ import java.util.Map;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.component.ContextCallback;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
@@ -175,6 +176,66 @@ public class AsyncResponse {
         renderSubtrees = populateListFromHeader(RENDER_HEADER);
         return this.renderSubtrees;
     }
+    
+    private static final String RENDERED_ZONE_LIST = AsyncResponse.FACES_PREFIX + 
+            "RENDERED_AJAX_COMPONENT_LIST";
+    private static final String EXECUTED_ZONE_LIST = AsyncResponse.FACES_PREFIX + 
+            "EXECUTED_AJAX_COMPONENT_LIST";
+    
+    public List<UIComponent> getRenderedComponentSubtrees() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        Map<String,Object> requestMap = context.getExternalContext().getRequestMap();
+        List<UIComponent> zoneList = (List<UIComponent>) requestMap.get(RENDERED_ZONE_LIST);
+        if (null == zoneList) {
+            zoneList = getComponentSubtrees(this.getRenderSubtrees());
+            requestMap.put(RENDERED_ZONE_LIST, zoneList);
+        }
+    
+        return zoneList;
+    }
+    
+    public List<UIComponent> getExecutedComponentSubtrees() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        Map<String,Object> requestMap = context.getExternalContext().getRequestMap();
+        List<UIComponent> zoneList = (List<UIComponent>) requestMap.get(EXECUTED_ZONE_LIST);
+        if (null == zoneList) {
+            zoneList = getComponentSubtrees(this.getExecuteSubtrees());
+            requestMap.put(EXECUTED_ZONE_LIST, zoneList);
+        }
+    
+        return zoneList;
+    }
+    
+    
+    private List<UIComponent> getComponentSubtrees(List<String> subtrees) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        Map<String,Object> requestMap = context.getExternalContext().getRequestMap();
+        List<UIComponent> zoneList = (List<UIComponent>) requestMap.get(RENDERED_ZONE_LIST);
+        if (null == zoneList) {
+            zoneList = new ArrayList<UIComponent>();
+            requestMap.put(RENDERED_ZONE_LIST, zoneList);
+            final UIComponent curZone[] = new UIComponent[1];
+            UIViewRoot viewRoot = context.getViewRoot();
+            for (String cur : subtrees) {
+                // If the current view has a component with a clientId of cur...
+                if (viewRoot.invokeOnComponent(context, cur, new ContextCallback() {
+                    public void invokeContextCallback(FacesContext facesContext,
+                            UIComponent uIComponent) {
+                        curZone[0] = uIComponent;
+                    }
+
+                })) {
+                    // add it to the zone list.
+                    zoneList.add(curZone[0]);
+                }
+            }
+        }
+    
+        return zoneList;
+    }
+    
+
+
     
     public boolean isRenderNone() {
         boolean result = false;

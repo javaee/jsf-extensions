@@ -5,11 +5,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import javax.faces.component.ContextCallback;
 import javax.faces.component.UICommand;
 
 import javax.el.ELContext;
 import javax.el.MethodExpression;
 import javax.el.MethodInfo;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.el.ValueExpression;
 import javax.faces.component.NamingContainer;
@@ -76,61 +79,48 @@ public class AjaxZone extends UICommand implements Serializable, NamingContainer
     }
     
     private void addThisToZoneList() {
-        List<AjaxZone> zoneList = getZoneList();
-        if (null == zoneList) {
-            setZoneList(zoneList = new ArrayList<AjaxZone>());
-            zoneList.add(this);
-        }
-        else if (!zoneList.contains(this)) {
+        List<AjaxZone> zoneList = getAllZoneList();
+        if (!zoneList.contains(this)) {
             zoneList.add(this);
         }
     }
     
-    public List<AjaxZone> getZoneList() {
+    public List<AjaxZone> getAllZoneList() {
         Map<String,Object> requestMap = FacesContext.getCurrentInstance().getExternalContext().getRequestMap();
-        List<AjaxZone> zoneList = (List<AjaxZone>) requestMap.get(ZONE_LIST);
+        List<AjaxZone> zoneList = (List<AjaxZone>) requestMap.get(ALL_ZONE_LIST);
+        if (null == zoneList) {
+            zoneList = new ArrayList<AjaxZone>();
+            requestMap.put(ALL_ZONE_LIST, zoneList);
+        }
 
         return zoneList;
     }
-    
-    public void setZoneList(List<AjaxZone> list) {
-        Map<String,Object> requestMap = FacesContext.getCurrentInstance().getExternalContext().getRequestMap();
-        requestMap.put(ZONE_LIST, list);
-    }
-    
 
-    /**
-     * @return true if the scripts for all zones in this view should
-     * be rendered right now.
-     *
-     * <p>Returns true if this AjaxZone instance is the last rendered zone 
-     * in the view.
-     */
-    
-    public boolean isRenderScriptsForAllZonesRightNow() {
-        boolean result = false;
-        List<AjaxZone> zoneList = getZoneList();
-        
-        if (null != zoneList && !zoneList.isEmpty()) {
-            AjaxZone lastRenderedZone = null;
-            // Find the last entry in the zoneList
-            // that has its rendered property set to true
-            for (int i = zoneList.size() - 1; i >= 0; i--) {
-                lastRenderedZone = zoneList.get(i);
-                if (lastRenderedZone.isRendered()) {
-                    break;
-                }
-                lastRenderedZone = null;
-            }
-            if (null != lastRenderedZone) {
-                result = (this == lastRenderedZone);
-            }
+    public List<AjaxZone> getRenderedZoneList() {
+        Map<String,Object> requestMap = FacesContext.getCurrentInstance().getExternalContext().getRequestMap();
+        List<AjaxZone> zoneList = (List<AjaxZone>) requestMap.get(RENDERED_ZONE_LIST);
+        // If this is an AjaxRequest, the effective zoneList is
+        // (allZoneList - (allZoneList - renderedZoneList))
+        // where renderedZoneList is the list of zones specified
+        // in the render request parameter for this request
+        if (null == zoneList) {
+            zoneList = new ArrayList<AjaxZone>();
+            requestMap.put(RENDERED_ZONE_LIST, zoneList);
+            List<AjaxZone> allZoneList = getAllZoneList();
+            List<AjaxZone> allZonesMinusRenderedComponents = new ArrayList<AjaxZone>();
+
+            zoneList.addAll(allZoneList);
+            allZonesMinusRenderedComponents.addAll(allZoneList);
+            allZonesMinusRenderedComponents.removeAll(AsyncResponse.getInstance().getRenderedComponentSubtrees());
+            zoneList.removeAll(allZonesMinusRenderedComponents);
         }
 
-        return result;
-    }
+        return zoneList;
+    }    
 
-    private static final String ZONE_LIST = AsyncResponse.FACES_PREFIX + "AJAX_ZONE_LIST";
+    private static final String ALL_ZONE_LIST = AsyncResponse.FACES_PREFIX + "ALL_AJAX_ZONE_LIST";
+    private static final String RENDERED_ZONE_LIST = AsyncResponse.FACES_PREFIX + "RENDERED_AJAX_ZONE_LIST";
+
     
     /* --------------- style and styleClass ------------- */
     

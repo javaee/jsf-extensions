@@ -12,11 +12,11 @@
         </head>
         <body  bgcolor="white">
             
-            <h:form id="form">  
+            <h:form id="form" prependId="false">  
                 
                 <h1>3D Tic Tac Toe</h1>
                 
-                <jsfExt:ajaxZone id="zone0">
+                <jsfExt:ajaxZone id="zone0" render="zone0,zone1">
                     <h:panelGrid id="controls" columns="3" styleClass="control-panel-border">
                         <h:commandButton value="New Game" 
                                          actionListener="#{game.start}"/>
@@ -31,7 +31,7 @@
                 
                 <br>
                 
-                <jsfExt:ajaxZone id="zone1">
+                <jsfExt:ajaxZone id="zone1" render="zone0,zone1" execute="zone1">
                     <h:panelGrid id="board" columns="3" styleClass="panel-border">
                         <h:panelGrid id="board1" columns="3">
                             <h:commandButton id="_0" style="height:45px;width:45px;"

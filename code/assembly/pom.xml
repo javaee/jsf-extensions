@@ -38,9 +38,6 @@
                    <fileset dir="../run-time/common/target">
                      <include name="*.jar" />
                    </fileset>
-                   <fileset dir="../dev-time/target">
-                     <include name="*.jar" />
-                   </fileset>
                    <fileset dir="../test-time/target">
                      <include name="*.jar" />
                    </fileset>
@@ -54,6 +51,12 @@
 
                  <!-- copy dependent jars, so people can build the samples -->
                  <mkdir dir="target/dist/samples/lib" />
+
+                 <copy todir="target/dist/samples/lib">
+                   <fileset dir="../dev-time/target">
+                     <include name="*.jar" />
+                   </fileset>
+                 </copy>
 
                  <copy todir="target/dist/lib" 
                        file="${settings.localRepository}/commons-logging/commons-logging/1.1/commons-logging-1.1.jar" />

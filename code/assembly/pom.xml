@@ -104,9 +104,11 @@
                    <property name="appname" value="flash" />
                  </ant>
 
+<!-- PENDING(edburns): 20070124 jsf-extensions issue 50
                  <ant inheritAll="false" dir="${antbuild.dir}" antfile="${antbuild.dir}/copy-sample-from-maven-to-dist-using-ant.xml">
                    <property name="appname" value="j1" />
                  </ant>
+-->
 
                  <ant inheritAll="false" dir="${antbuild.dir}" antfile="${antbuild.dir}/apply-sunbrand-using-ant.xml">
                    <property name="appname" value="simple-events" />

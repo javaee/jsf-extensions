@@ -31,7 +31,7 @@
                 
                 <br>
                 
-                <jsfExt:ajaxZone id="zone1" render="zone0,zone1" execute="zone1">
+                <jsfExt:ajaxZone id="zone1" render="zone0,zone1" >
                     <h:panelGrid id="board" columns="3" styleClass="panel-border">
                         <h:panelGrid id="board1" columns="3">
                             <h:commandButton id="_0" style="height:45px;width:45px;"

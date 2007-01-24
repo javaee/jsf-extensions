@@ -491,6 +491,7 @@ public class AsyncResponse {
         protected final ResponseWriter orig;
         private Object state;
         private FastWriter fw;
+        private boolean writeState;
         
         public StateCapture(ResponseWriter orig, FastWriter fw) {
             this.orig = orig;
@@ -502,8 +503,14 @@ public class AsyncResponse {
         }
 
         public void writeAttribute(String name, Object value, String property) throws IOException {
-            if ("value".equals(name)) {
+            // if we don't do this, we are ending with the
+            // DefaultRenderkitId-value in the state hidden-input field
+            if (ResponseStateManager.VIEW_STATE_PARAM.equals(name)) {
+                writeState = true;
+            }
+            if ("value".equals(name) && writeState) {
                 this.state = value;
+                writeState = false;
             }
         }
         

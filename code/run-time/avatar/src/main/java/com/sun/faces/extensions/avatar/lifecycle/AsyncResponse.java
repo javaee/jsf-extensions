@@ -1,17 +1,15 @@
 package com.sun.faces.extensions.avatar.lifecycle;
 
 import com.sun.faces.extensions.avatar.application.DeferredStateManager;
+import com.sun.faces.extensions.avatar.components.PartialTraversalViewRoot;
 import com.sun.faces.extensions.common.util.FastWriter;
-import com.sun.faces.extensions.common.util.Util;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
@@ -21,13 +19,11 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.context.ResponseWriterWrapper;
-import javax.faces.convert.Converter;
 
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.FactoryFinder;
 import javax.faces.component.UIComponent;
-import javax.faces.event.FacesEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.render.ResponseStateManager;
 import javax.servlet.ServletOutputStream;
@@ -811,6 +807,27 @@ public class AsyncResponse {
             }
         }
         
+    }
+
+    /**
+     * Holds value of property partialTraversalViewRoot.
+     */
+    private PartialTraversalViewRoot partialTraversalViewRoot;
+
+    /**
+     * Getter for property partialTraversalViewRoot.
+     * @return Value of property partialTraversalViewRoot.
+     */
+    public PartialTraversalViewRoot getPartialTraversalViewRoot() {
+        return this.partialTraversalViewRoot;
+    }
+
+    /**
+     * Setter for property partialTraversalViewRoot.
+     * @param partialTraversalViewRoot New value of property partialTraversalViewRoot.
+     */
+    public void setPartialTraversalViewRoot(PartialTraversalViewRoot partialTraversalViewRoot) {
+        this.partialTraversalViewRoot = partialTraversalViewRoot;
     }
     
     

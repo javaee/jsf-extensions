@@ -12,6 +12,7 @@ package com.sun.faces.extensions.avatar.lifecycle;
 import com.sun.faces.extensions.avatar.components.PartialTraversalViewRoot;
 import java.io.IOException;
 import javax.faces.FacesException;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseListener;
 import javax.faces.lifecycle.Lifecycle;
@@ -68,8 +69,8 @@ public class PartialTraversalLifecycle extends Lifecycle {
 
 
     public void execute(FacesContext context) throws FacesException {
+        AsyncResponse async = AsyncResponse.getInstance();
         if (AsyncResponse.isAjaxRequest()) {
-            AsyncResponse async = AsyncResponse.getInstance();
             async.installOnOffResponse(context);
             // Allow writing to the response during the "execute"
             // portion of the lifecycle.
@@ -79,7 +80,7 @@ public class PartialTraversalLifecycle extends Lifecycle {
             parent.execute(context);
         }
         finally {
-            PartialTraversalViewRoot root = (PartialTraversalViewRoot)context.getViewRoot();
+            PartialTraversalViewRoot root = async.getPartialTraversalViewRoot();
             if (null != root) {
                 root.postExecuteCleanup(context);
             }
@@ -93,7 +94,7 @@ public class PartialTraversalLifecycle extends Lifecycle {
         }
         AsyncResponse async = AsyncResponse.getInstance();
         PartialTraversalViewRoot root =
-                (PartialTraversalViewRoot) context.getViewRoot();
+                async.getPartialTraversalViewRoot();
         ResponseWriter writer = null;
         String state = null;
         boolean isRenderAll = async.isRenderAll();
@@ -112,7 +113,10 @@ public class PartialTraversalLifecycle extends Lifecycle {
             // If we rendered some content
             if (!async.isRenderNone()) {
                 writer = async.getResponseWriter();
-                writer.startElement("state", root);
+                if (!(root instanceof UIComponent)) {
+                    throw new IllegalStateException("Class returned from AsyncResponse.getPartialTraversalViewRoot must be a UIComponent");
+                }
+                writer.startElement("state", (UIComponent) root);
                 state = async.getViewState(context);
                 writer.write("<![CDATA[" + state + "]]>");
                 writer.endElement("state");

@@ -819,7 +819,14 @@ public class AsyncResponse {
      * @return Value of property partialTraversalViewRoot.
      */
     public PartialTraversalViewRoot getPartialTraversalViewRoot() {
-        return this.partialTraversalViewRoot;
+        PartialTraversalViewRoot result = this.partialTraversalViewRoot;
+        if (null == result) {
+            UIViewRoot root = FacesContext.getCurrentInstance().getViewRoot();
+            if (root instanceof PartialTraversalViewRoot) {
+                result = (PartialTraversalViewRoot) root;
+            }
+        }
+        return result;
     }
 
     /**

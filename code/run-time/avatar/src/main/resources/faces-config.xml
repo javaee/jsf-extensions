@@ -36,7 +36,7 @@
 
     <component>
         <component-type>javax.faces.ViewRoot</component-type>
-        <component-class>com.sun.faces.extensions.avatar.components.PartialTraversalViewRootImpl</component-class>
+        <component-class>com.sun.faces.extensions.avatar.components.PartialTraversalViewRoot</component-class>
         <component-extension>
             <component-family>javax.faces.ViewRoot</component-family>
         </component-extension>

@@ -4,7 +4,7 @@
   <artifactId>jsf-extensions-master</artifactId>
   <packaging>pom</packaging>
   <name>Master POM</name>
-  <version>0.1-SNAPSHOT</version>
+  <version>0.1</version>
   <description>This is a master POM that is meant to be used by the various jsf-extensions modules.  It contains information that is 
      common to all projects.</description>
   <url>https://jsf-extensions.dev.java.net/</url>

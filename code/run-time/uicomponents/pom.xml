@@ -14,7 +14,7 @@
   <parent>
     <groupId>com.sun.faces.extensions.maven</groupId>
     <artifactId>jsf-extensions-master</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>0.1</version>
   </parent>
 
   <scm>
@@ -146,7 +146,7 @@
     <dependency>
       <groupId>com.sun.faces.extensions</groupId>
       <artifactId>jsf-extensions-common</artifactId>
-      <version>0.1-SNAPSHOT</version>
+      <version>0.1</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>

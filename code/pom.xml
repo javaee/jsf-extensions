@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.sun.faces.extensions</groupId>
   <artifactId>jsf-extensions</artifactId>
-  <version>0.1-SNAPSHOT</version>
+  <version>0.1</version>
   <packaging>pom</packaging>
   <description>
 
@@ -88,7 +88,7 @@
     <dependency>
       <groupId>com.sun.faces.extensions</groupId>
       <artifactId>jsf-extensions-dynamic-faces</artifactId>
-      <version>0.1-SNAPSHOT</version>
+      <version>0.1</version>
     </dependency>
   </dependencies>
   <reporting>
@@ -162,6 +162,21 @@
 	<module>run-time/samples/j1</module>
 	<module>run-time/samples/cardemo</module>
 	<module>run-time/samples/tictactoe</module>
+	<module>run-time/samples/fire-ajax-transaction</module>
+	<module>run-time/samples/jmaki</module>
+	<module>run-time/samples/simple-events</module>
+	<module>run-time/samples/simple-partial-update</module>
+	<module>run-time/samples/dynafaces-getting-started</module>
+	<module>run-time/samples/flash</module>
+      </modules>
+    </profile>
+    <profile>
+      <id>samples-only</id>
+      <modules>
+	<module>run-time/samples/j1</module>
+	<module>run-time/samples/cardemo</module>
+	<module>run-time/samples/tictactoe</module>
+	<module>run-time/samples/fire-ajax-transaction</module>
 	<module>run-time/samples/jmaki</module>
 	<module>run-time/samples/simple-events</module>
 	<module>run-time/samples/simple-partial-update</module>

@@ -4,7 +4,7 @@
   <artifactId>jsf-extensions</artifactId>
   <packaging>pom</packaging>
   <name>Build the distribution</name>
-  <version>0.1-SNAPSHOT</version>
+  <version>0.1</version>
   <description>Build the distribution</description>
   <url>https://jsf-extensions.dev.java.net/</url>
 

@@ -22,6 +22,12 @@
           <include name="*ajax-wrapper-comp*" />
         </fileset>
       </copy>
+      <copy failonerror="false" todir="${exploded.war.dir}/WEB-INF/lib">
+        <fileset dir="../../../jmaki/lib">
+          <include name="*ajax-wrapper-comp*" />
+        </fileset>
+      </copy>
+
     </target>
 
 </project>

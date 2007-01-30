@@ -3,12 +3,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.sun.faces.extensions</groupId>
-  <artifactId>dynafaces-jsp-blank</artifactId>
-  <packaging>war</packaging>
-  <name>dynafaces-jsp-blank</name>
+  <artifactId>jsf-extensions-run-time</artifactId>
+  <packaging>jar</packaging>
+  <name>jsf-extensions-run-time</name>
   <url>https://jsf-extensions.dev.java.net/</url>
   <description>
-    Blank DynaFaces JSP App
+    Run time jsf-extensions
   </description>
 
   <parent>
@@ -18,36 +18,58 @@
   </parent>
 
   <build>
-    <defaultGoal>install</defaultGoal>
-    <sourceDirectory>src/main/java</sourceDirectory>
-    <resources>
-      <resource>
-        <directory>src/main/resources</directory>
-        <targetPath>META-INF</targetPath>
-        <includes>
-            <include>*.tld</include>
-            <include>faces-config.xml</include>
-            <include>*.js</include>
-        </includes>
-     </resource>
-   </resources>
-    <finalName>dynafaces-jsp-blank</finalName>
+    <defaultGoal>minijar:ueberjar</defaultGoal>
+    <plugins>
+       <plugin>
+         <artifactId>minijar-maven-plugin</artifactId>
+         <groupId>org.codehaus.mojo</groupId>
+       </plugin>
+    </plugins>
+
   </build>
+<!--
+  <pluginRepositories>
+    <pluginRepository>
+      <snapshots />
+      <id>mvnrepository</id>
+      <url>http://mvnrepository.com/artifact/</url>
+    </pluginRepository>
+  </pluginRepositories>
+-->
 
   <dependencies>
     <dependency>
       <groupId>com.sun.faces.extensions</groupId>
-      <artifactId>jsf-extensions-dynamic-faces</artifactId>
+      <artifactId>jsf-extensions-common</artifactId>
       <version>0.1</version>
-      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>com.sun.faces.extensions</groupId>
-      <artifactId>jsf-extensions-common</artifactId>
+      <artifactId>jsf-extensions-dynamic-faces</artifactId>
       <version>0.1</version>
-      <scope>runtime</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>commons-logging</groupId>
+          <artifactId>commons-logging</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>ant</groupId>
+          <artifactId>ant</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>javaee</groupId>
+          <artifactId>javaee-api</artifactId>
+        </exclusion>
+      </exclusions>
+
+    </dependency>
+    <dependency>
+      <groupId>com.sun.faces.extensions</groupId>
+      <artifactId>jsf-extensions-flash</artifactId>
+      <version>0.1</version>
     </dependency>
   </dependencies>
+
   <reporting>
     <plugins>
       <excludeDefaults>true</excludeDefaults>
@@ -59,6 +81,4 @@
     </plugins>
   </reporting>
 
-
 </project>
-

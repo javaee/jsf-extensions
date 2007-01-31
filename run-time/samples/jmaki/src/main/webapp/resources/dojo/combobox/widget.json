@@ -1,7 +1,0 @@
-{"name": "Combobox",
-         "type": "dojo",
-         "image" : "images/dojo-combobox.jpg",
-         "description": "This widget is dynamic combobox where the options that you can select are narrowed down as you type.",
-         "args": [{"topic":{"type":"STRING", "defaultValue": "/dojo/combobox", "description": "The topic published to"}}],
-         "value": {"required":"true", "type": "ARRAY", "defaultValue":[['Item 1','I1'],['Item 2','I2'],['Item 3','I3']],"description":"An array item arrays that are added to the widget."}
- }

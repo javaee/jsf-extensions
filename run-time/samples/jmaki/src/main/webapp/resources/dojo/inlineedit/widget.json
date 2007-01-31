@@ -1,7 +1,0 @@
-{
-    "name": "In Line Edit",
-    "type": "dojo",
-    "image": "images/dojo-inline-edit.jpg",
-    "description": "This widget is in line edit component.",
-    "value": {"required":"false", "type": "STRING", "defaultValue": "Edit Me Please"}
-}

@@ -19,7 +19,7 @@
   <uri>http://java.sun.com/jsf/extensions/dynafaces</uri>
 
   <listener>
-    <listener-class>com.sun.faces.extensions.avatar.event.DynaFacesContextListener</listener-class>
+    <listener-class>admingui.avatar.event.DynaFacesContextListener</listener-class>
   </listener>
 
   <tag>
@@ -32,7 +32,7 @@
     </description>
             
     <name>scripts</name>
-    <tag-class>com.sun.faces.extensions.avatar.taglib.ScriptsTag</tag-class>
+    <tag-class>admingui.avatar.taglib.ScriptsTag</tag-class>
     <body-content>JSP</body-content>
     <attribute>
         <description>
@@ -59,7 +59,7 @@
        customized with the <code>inspectElement</code> attribute.</p>]]>
     </description>
     <name>ajaxZone</name>
-    <tag-class>com.sun.faces.extensions.avatar.taglib.AjaxZoneTag</tag-class>
+    <tag-class>admingui.avatar.taglib.AjaxZoneTag</tag-class>
     <body-content>JSP</body-content>
     <attribute>
         <description>
@@ -76,7 +76,7 @@
             <name>binding</name>
             <required>false</required>
             <deferred-value>
-                <type>com.sun.faces.extensions.avatar.components.AjaxZone</type>
+                <type>admingui.avatar.components.AjaxZone</type>
             </deferred-value>
             <description>
                 A ValueExpression that resolves to the UIComponent that corresponds

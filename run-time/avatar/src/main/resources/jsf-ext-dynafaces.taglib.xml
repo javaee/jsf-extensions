@@ -7,8 +7,8 @@
   <tag>
     <tag-name>scripts</tag-name>
     <component>
-      <component-type>com.sun.faces.extensions.avatar.Scripts</component-type>
-      <renderer-type>com.sun.faces.extensions.avatar.Scripts</renderer-type>
+      <component-type>admingui.avatar.Scripts</component-type>
+      <renderer-type>admingui.avatar.Scripts</renderer-type>
     </component>
   </tag>
 

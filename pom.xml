@@ -116,22 +116,8 @@
       </activation>
       <modules>
 	<module>maven/master-pom</module>
-	<module>test-time</module>
-	<module>dev-time</module>
 	<module>run-time/common</module>
-	<module>run-time/flash</module>
 	<module>run-time/avatar</module>
-	<module>run-time/samples/blank-facelets</module>
-	<module>run-time/samples/blank-jsp</module>
-	<module>run-time/samples/jmaki</module>
-	<module>run-time/samples/cardemo</module>
-	<module>run-time/samples/flash</module>
-	<module>run-time/samples/tictactoe</module>
-	<module>run-time/samples/fire-ajax-transaction</module>
-	<module>run-time/samples/j1</module>
-	<module>run-time/samples/simple-events</module>
-	<module>run-time/samples/simple-partial-update</module>
-	<module>run-time/samples/dynafaces-getting-started</module>
       </modules>
     </profile>
     <profile>
@@ -140,83 +126,17 @@
 	<module>maven/master-pom</module>
 	<module>run-time/common</module>
 	<module>run-time/flash</module>
-	<module>run-time/samples/flash</module>
       </modules>
     </profile>
     <profile>
       <id>jsf-j1</id>
       <modules>
 	<module>run-time/avatar</module>
-	<module>run-time/samples/j1</module>
-      </modules>
-    </profile>
-    <profile>
-      <id>samples</id>
-      <modules>
-	<module>maven/master-pom</module>
-	<module>test-time</module>
-	<module>dev-time</module>
-	<module>run-time/common</module>
-	<module>run-time/flash</module>
-	<module>run-time/avatar</module>
-	<module>run-time/samples/j1</module>
-	<module>run-time/samples/cardemo</module>
-	<module>run-time/samples/tictactoe</module>
-	<module>run-time/samples/fire-ajax-transaction</module>
-	<module>run-time/samples/jmaki</module>
-	<module>run-time/samples/simple-events</module>
-	<module>run-time/samples/simple-partial-update</module>
-	<module>run-time/samples/dynafaces-getting-started</module>
-	<module>run-time/samples/flash</module>
-      </modules>
-    </profile>
-    <profile>
-      <id>samples-only</id>
-      <modules>
-	<module>run-time/samples/j1</module>
-	<module>run-time/samples/cardemo</module>
-	<module>run-time/samples/tictactoe</module>
-	<module>run-time/samples/fire-ajax-transaction</module>
-	<module>run-time/samples/jmaki</module>
-	<module>run-time/samples/simple-events</module>
-	<module>run-time/samples/simple-partial-update</module>
-	<module>run-time/samples/dynafaces-getting-started</module>
-	<module>run-time/samples/flash</module>
       </modules>
     </profile>
     <profile>
       <id>site</id>
       <modules>
-      </modules>
-    </profile>
-
-    <profile>
-      <id>simple-events</id>
-      <modules>
-	<module>maven/master-pom</module>
-	<module>run-time/common</module>
-	<module>run-time/avatar</module>
-	<module>run-time/samples/simple-events</module>
-      </modules>
-    </profile>
-
-    <profile>
-      <id>jmaki</id>
-      <modules>
-	<module>maven/master-pom</module>
-	<module>run-time/common</module>
-	<module>run-time/avatar</module>
-	<module>run-time/samples/jmaki</module>
-      </modules>
-    </profile>
-
-    <profile>
-      <id>cardemo</id>
-      <modules>
-	<module>maven/master-pom</module>
-	<module>run-time/common</module>
-	<module>run-time/avatar</module>
-	<module>run-time/samples/cardemo</module>
       </modules>
     </profile>
 

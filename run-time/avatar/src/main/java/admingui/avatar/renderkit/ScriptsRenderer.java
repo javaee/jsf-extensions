@@ -31,12 +31,14 @@ package admingui.avatar.renderkit;
 
 import admingui.avatar.lifecycle.AsyncResponse;
 import java.io.IOException;
+import java.util.Map;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
-import org.apache.shale.remoting.Mechanism;
-import org.apache.shale.remoting.XhtmlHelper;
+//import org.apache.shale.remoting.Mechanism;
+//import org.apache.shale.remoting.XhtmlHelper;
 
 /**
  * This class renderers TextField components.
@@ -70,13 +72,57 @@ public class ScriptsRenderer extends Renderer {
     public void encodeBegin(FacesContext context, UIComponent component)
             throws IOException {
         if (!AsyncResponse.isAjaxRequest()) {
+	    ResponseWriter writer = context.getResponseWriter();
             for (int i = 0; i < scriptIds.length; i++) {
-                getXhtmlHelper().linkJavascript(context, component, context.getResponseWriter(),
-                        Mechanism.CLASS_RESOURCE, scriptIds[i]);
+                linkJavascript(context, component, writer, scriptIds[i]);
             }
         }
     }
     
+    /**
+     *	<p> Directory scoped to share w/ the ScriptsRenderer.  This is a
+     *	    work-a-round method to do what I need to get done to get rid of
+     *	    shale.</p>
+     */
+    static void linkJavascript(FacesContext ctx, UIComponent comp, ResponseWriter writer, String script) throws IOException {
+	// Find the UIViewRoot (don't rely on it being set in the FacesContext)
+	UIComponent root = comp;
+	while (root.getParent() != null) {
+	    root = root.getParent();
+	}
+
+	// Generate a view specific id to mark this script as rendered
+	String resId = "" + comp.getAttributes().get("viewId") + script;
+	Map requestMap = ctx.getExternalContext().getRequestMap();
+	if (requestMap.get(resId) != null) {
+	    // Script already written, don't do it again
+	    return;
+	}
+
+	// Write the script
+	writer.startElement("script", comp);
+	writer.writeAttribute("type", "text/javascript", null);
+// FIXME: I am hard-coding "/resource" for now... b/c shale is behaving flakey
+//	  and has too many dependencies, perhaps if shale behaves I can use
+//	  it in the future, or write a more mappable solution.  Ideally Dynamic
+//	  Faces makes resource resolving plugable so that I can do this in a
+//	  clean way.
+	if (!script.startsWith("/")) {
+	    script = "/" + script;
+	}
+	if (script.startsWith("/META-INF/")) {
+	    script = script.substring(9);
+	}
+	writer.writeURIAttribute("src", ctx.getApplication().getViewHandler().
+		getResourceURL(ctx, "/resource" + script), null);
+	writer.endElement("script");
+	writer.write("\n");
+
+	// Mark
+	requestMap.put(resId, Boolean.TRUE);
+    }
+
+    /*
     private transient XhtmlHelper xHtmlHelper = null;
     
     private XhtmlHelper getXhtmlHelper() {
@@ -85,4 +131,5 @@ public class ScriptsRenderer extends Renderer {
         }
         return xHtmlHelper;
     }
+    */
 }

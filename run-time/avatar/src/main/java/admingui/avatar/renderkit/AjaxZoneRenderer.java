@@ -48,8 +48,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.event.ActionEvent;
 import javax.faces.render.Renderer;
-import org.apache.shale.remoting.Mechanism;
-import org.apache.shale.remoting.XhtmlHelper;
+//import org.apache.shale.remoting.Mechanism;
+//import org.apache.shale.remoting.XhtmlHelper;
 
 /**
  * This class renderers TextField components.
@@ -400,8 +400,7 @@ public class AjaxZoneRenderer extends Renderer {
             
             if (!isAjaxRequest) {
                 for (int i = 0; i < scriptIds.length; i++) {
-                    getXhtmlHelper().linkJavascript(context, component, writer,
-                            Mechanism.CLASS_RESOURCE, scriptIds[i]);
+                    ScriptsRenderer.linkJavascript(context, component, writer, scriptIds[i]);
                 }
             }
             writeAjaxifyScripts(context, writer, zone, isAjaxRequest);
@@ -422,6 +421,7 @@ public class AjaxZoneRenderer extends Renderer {
     // Private methods
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+    /*
     private transient XhtmlHelper xHtmlHelper = null;
     
     private XhtmlHelper getXhtmlHelper() {
@@ -430,6 +430,7 @@ public class AjaxZoneRenderer extends Renderer {
         }
         return xHtmlHelper;
     }
+    */
     
     
     /**

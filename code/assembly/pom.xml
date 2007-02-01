@@ -58,32 +58,56 @@
                    </fileset>
                  </copy>
 
-                 <copy todir="target/dist/lib" 
-                       file="${settings.localRepository}/commons-logging/commons-logging/1.1/commons-logging-1.1.jar" />
-                 <copy todir="target/dist/lib" 
-                       file="${settings.localRepository}/org/apache/shale/shale-remoting/1.0.3/shale-remoting-1.0.3.jar" />
-                 <copy todir="target/dist/samples/lib" 
-                       file="${settings.localRepository}/com/sun/javaee/blueprints/bp-ui-simple/5/bp-ui-simple-5.jar" />
-                 <copy todir="target/dist/samples/lib" 
-                       file="${settings.localRepository}/javax/faces/jsf-facelets/1.1.11a/jsf-facelets-1.1.11a.jar"/>
-                 <copy todir="target/dist/samples/lib" 
-                       file="${settings.localRepository}/commons-beanutils/commons-beanutils/1.6/commons-beanutils-1.6.jar" />
-                 <copy todir="target/dist/samples/lib" 
-                       file="${settings.localRepository}/commons-collections/commons-collections/3.1/commons-collections-3.1.jar" />
-                 <copy todir="target/dist/samples/lib" 
-                       file="${settings.localRepository}/commons-digester/commons-digester/1.7/commons-digester-1.7.jar" />
-                 <copy todir="target/dist/samples/lib" 
-                       file="${settings.localRepository}/com/sun/jmaki/ajax-wrapper-comp/v.8.2-SNAPSHOT/ajax-wrapper-comp-v.8.2-SNAPSHOT.jar" />
-
                  <property name="antbuild.dir" 
                            value="${basedir}/ant-buildable-sample-helpers" />
 
-                 <!-- copy the source file of each sample to the distro -->
+                 <condition property="build.standalone.set">
+                   <isset property="build.standalone" />
+                 </condition>
+
+                 <!-- copy libs for both standalone and integrated style -->
+
+                 <ant inheritAll="true" dir="${antbuild.dir}" 
+                      antfile="${antbuild.dir}/copy-libs.xml">
+                   <property name="settings.localRepository" 
+                             value="${settings.localRepository}" />
+                 </ant>
+
+                 <!-- copy the build.xml and README to the distro -->
+
                  <copy tofile="target/dist/samples/build.properties" file="${antbuild.dir}/samples.properties"/>
                  <copy tofile="target/dist/samples/build.xml" file="${antbuild.dir}/base-build.xml"/>
 
                  <copy tofile="target/dist/samples/README.html" file="${antbuild.dir}/README.html"/>
 
+                 <!-- copy the source files of each sample to the distro -->
+
+		 <condition property="extra.excludes" 
+                            value="jmaki/src/main/webapp/resources/**/*.*">
+                   <not>
+                     <isset property="build.standalone" />
+                   </not>
+		 </condition>
+
+		 <condition property="extra.includes" 
+                           value="jmaki/src/main/webapp/resources/config.json">
+                   <not>
+                     <isset property="build.standalone" />
+                   </not>
+		 </condition>
+
+                 <ant inheritAll="false" dir="${antbuild.dir}" antfile="${antbuild.dir}/copy-sample-from-maven-to-dist-using-ant.xml">
+                   <property name="appname" value="jmaki" />
+                   <property name="extra.includes" value="${extra.includes}" />
+                   <property name="extra.excludes" value="${extra.excludes}" />
+                 </ant>
+
+                 <copy overwrite="true" todir="${basedir}/target/dist/samples">
+                   <fileset dir="${basedir}/../run-time/samples">
+                     <include unless="build.standalone" 
+                              name="${extra.includes}"/>
+                   </fileset>
+                 </copy>
 
                  <ant inheritAll="false" dir="${antbuild.dir}" antfile="${antbuild.dir}/copy-sample-from-maven-to-dist-using-ant.xml">
                    <property name="appname" value="blank-facelets" />
@@ -109,12 +133,6 @@
                    <property name="appname" value="flash" />
                  </ant>
 
-<!-- PENDING(edburns): 20070124 jsf-extensions issue 50
-                 <ant inheritAll="false" dir="${antbuild.dir}" antfile="${antbuild.dir}/copy-sample-from-maven-to-dist-using-ant.xml">
-                   <property name="appname" value="j1" />
-                 </ant>
--->
-
                  <ant inheritAll="false" dir="${antbuild.dir}" antfile="${antbuild.dir}/apply-sunbrand-using-ant.xml">
                    <property name="appname" value="simple-events" />
                  </ant>
@@ -139,15 +157,17 @@
                    <property name="appname" value="jmaki" />
                  </ant>
 
+<!-- PENDING(edburns): 20070124 jsf-extensions issue 50
                  <ant inheritAll="false" dir="${antbuild.dir}" antfile="${antbuild.dir}/copy-sample-from-maven-to-dist-using-ant.xml">
-                   <property name="appname" value="jmaki" />
+                   <property name="appname" value="j1" />
                  </ant>
-
+-->
 
                  <tar destfile="target/jsf-extensions-${pom.version}.tar"
                       basedir="target/dist" />
                  <gzip src="target/jsf-extensions-${pom.version}.tar" 
                         destfile="target/jsf-extensions-${pom.version}.tar.gz"/>
+
 	       </tasks>
 	     </configuration>
 	     <goals>

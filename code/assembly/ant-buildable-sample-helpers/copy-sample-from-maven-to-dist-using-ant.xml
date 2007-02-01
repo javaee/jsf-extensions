@@ -2,22 +2,70 @@
 <project name="copy-sample-from-maven-to-dist-using-ant" default="default" 
          basedir="." >
 
+  <condition property="build.standalone">
+    <isset property="build.standalone.set" />
+  </condition>
+
+  <condition property="use.standalone.buildfile">
+    <available file="${basedir}/${appname}-build-standalone.xml" />
+  </condition>
+
+  <condition property="use.integrated.buildfile">
+    <available file="${basedir}/${appname}-build-integrated.xml" />
+  </condition>
+
+  <condition property="use.default.buildfile">
+    <not>
+      <or>
+        <available file="${basedir}/${appname}-build-standalone.xml" />
+        <available file="${basedir}/${appname}-build-integrated.xml" />
+      </or>
+    </not>
+  </condition>
+
+  <property name="extra.includes" value="" />
+  <property name="extra.excludes" value="" />
+  <property name="extra.includes2" value="" />
+  <property name="extra.excludes2" value="" />
+  <property name="extra.includes3" value="" />
+  <property name="extra.excludes3" value="" />
+
   <target name="default">
 
-                     <mkdir dir="${basedir}/../target/dist/samples/${appname}/src/main/java" />
-
-		     <copy overwrite="true" todir="${basedir}/../target/dist/samples">
-		       <fileset dir="${basedir}/../../run-time/samples">
-			 <include name="${appname}/**/*.*"/>
-			 <exclude name="${appname}/target/**/*.*"/>
-			 <exclude name="**/pom.xml"/>
-		       </fileset>
-		     </copy>
-		     <copy tofile="${basedir}/../target/dist/samples/${appname}/build.xml"
-			   file="${basedir}/${appname}-build.xml" />
-
-
+    <mkdir dir="${basedir}/../target/dist/samples/${appname}/src/main/java" />
+      <copy overwrite="true" todir="${basedir}/../target/dist/samples">
+        <fileset dir="${basedir}/../../run-time/samples">
+          <include name="${appname}/**/*.*"/>
+          <include name="${extra.includes}"/>
+          <include name="${extra.includes2}"/>
+          <include name="${extra.includes3}"/>
+          <exclude name="${appname}/target/**/*.*"/>
+          <exclude name="**/pom.xml"/>
+          <exclude name="${extra.excludes}"/>
+          <exclude name="${extra.excludes2}"/>
+          <exclude name="${extra.excludes3}"/>
+        </fileset>
+      </copy>
+      <antcall target="copy.buildfile" />
   </target>
 
+  <target name="copy.buildfile" 
+          depends="copy.standalone.buildfile,copy.integrated.buildfile,copy.default.buildfile"/>
+
+  <target name="copy.standalone.buildfile" if="use.standalone.buildfile">
+    <copy overwrite="true" 
+          tofile="${basedir}/../target/dist/samples/${appname}/build.xml"
+          file="${basedir}/${appname}-build-standalone.xml" />
+  </target>
+  <target name="copy.integrated.buildfile" if="use.integrated.buildfile">
+    <copy overwrite="true" 
+          tofile="${basedir}/../target/dist/samples/${appname}/build.xml"
+          file="${basedir}/${appname}-build-integrated.xml" />
+  </target>
+  <target name="copy.default.buildfile" if="use.default.buildfile">
+    <copy overwrite="true" 
+          tofile="${basedir}/../target/dist/samples/${appname}/build.xml"
+          file="${basedir}/${appname}-build.xml" />
+  </target>
 
 </project>

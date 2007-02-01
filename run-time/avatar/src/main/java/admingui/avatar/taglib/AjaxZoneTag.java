@@ -15,14 +15,14 @@ public class AjaxZoneTag extends UIComponentELTag {
      * <p>Return the requested component type.</p> 
      */ 
     public String getComponentType() { 
-        return "com.sun.faces.AjaxZone"; 
+        return "admingui.AjaxZone"; 
     } 
  
     /** 
      * <p>Return the requested renderer type.</p> 
      */ 
     public String getRendererType() { 
-        return "com.sun.faces.AjaxZone"; 
+        return "admingui.AjaxZone"; 
     }
     
     private ValueExpression style = null;

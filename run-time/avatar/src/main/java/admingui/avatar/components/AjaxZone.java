@@ -23,14 +23,14 @@ import javax.faces.component.NamingContainer;
 public class AjaxZone extends UICommand implements Serializable, NamingContainer {
     public AjaxZone() {
         super();
-        setRendererType("com.sun.faces.AjaxZone");
+        setRendererType("admingui.AjaxZone");
     }
 
     /** 
      * <p>Return the family for this component.</p> 
      */ 
     public String getFamily() { 
-        return "com.sun.faces.AjaxZone"; 
+        return "admingui.AjaxZone"; 
     }
 
     /**

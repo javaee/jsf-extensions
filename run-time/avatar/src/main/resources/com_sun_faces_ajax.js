@@ -33,10 +33,10 @@ if (typeof DynaFaces != 'undefined') {
 
 var DynaFaces = new Object();
 
-DynaFaces.gFacesPrefix = "com.sun.faces.avatar.";
-DynaFaces.gPartial = DynaFaces.gFacesPrefix + "Partial";
-DynaFaces.gExecute = DynaFaces.gFacesPrefix + "Execute";
-DynaFaces.gRender = DynaFaces.gFacesPrefix + "Render";
+DynaFaces.gFacesPrefix = "admingui.avatar.";
+DynaFaces.gPartial = DynaFaces.gFacesPrefix + "partial";
+DynaFaces.gExecute = DynaFaces.gFacesPrefix + "execute";
+DynaFaces.gRender = DynaFaces.gFacesPrefix + "render";
 DynaFaces.gViewRoot = DynaFaces.gFacesPrefix + "ViewRoot";
 DynaFaces.gFacesEvent = DynaFaces.gFacesPrefix + "FacesEvent";
 DynaFaces.gMethodName = DynaFaces.gFacesPrefix + "MethodName";

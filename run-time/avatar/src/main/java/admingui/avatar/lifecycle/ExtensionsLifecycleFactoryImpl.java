@@ -25,10 +25,10 @@ public class ExtensionsLifecycleFactoryImpl extends LifecycleFactory {
     public ExtensionsLifecycleFactoryImpl(LifecycleFactory parent) {
         this.parent = parent;
         //check whether the lifecycleId already exists
-        if (alreadyCreated("com.sun.faces.lifecycle.PARTIAL")) {
+        if (alreadyCreated("admingui.lifecycle.PARTIAL")) {
             return;
         }
-        this.parent.addLifecycle("com.sun.faces.lifecycle.PARTIAL",
+        this.parent.addLifecycle("admingui.lifecycle.PARTIAL",
                 new PartialTraversalLifecycle(this.parent.getLifecycle("DEFAULT")));
     }
 

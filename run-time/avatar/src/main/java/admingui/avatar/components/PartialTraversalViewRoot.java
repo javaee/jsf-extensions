@@ -443,7 +443,7 @@ public class PartialTraversalViewRoot extends UIViewRootCopy implements Serializ
         // after view content.
         // We will have to do something different for other implementations.
         // This is not a problem for Facelets.
-        context.getExternalContext().getRequestMap().remove("com.sun.faces.AFTER_VIEW_CONTENT");
+        context.getExternalContext().getRequestMap().remove("admingui.AFTER_VIEW_CONTENT");
 
         // move aside the AjaxResponseWriter
         if (null != orig) {

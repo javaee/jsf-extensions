@@ -474,7 +474,7 @@ public class AsyncResponse {
         return noOpResponse;
     }
     
-    public static final String FACES_PREFIX = "com.sun.faces.avatar.";
+    public static final String FACES_PREFIX = "admingui.avatar.";
     public static final String VIEW_ROOT_ID = FACES_PREFIX + "ViewRoot";
     public static final String PARTIAL_HEADER= FACES_PREFIX + "partial";
     public static final String EXECUTE_HEADER = FACES_PREFIX + "execute";

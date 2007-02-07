@@ -132,7 +132,8 @@ th {
 }
 
 .win-button-border {
-    border: 3px outset yellow;
+    border: 3px outset blue;
+    background-color: blue;
 }
 
 .panel-border {

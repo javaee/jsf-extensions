@@ -27,9 +27,11 @@
 package tictactoe;
 
 import javax.faces.component.UICommand;
+import javax.faces.component.UISelectOne;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.faces.event.ValueChangeEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,8 +40,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * <p>This bean encapsulates the mechanics of a three dimensional 
- *  tic tac toe game.  It keeps track of individual scores, 
+ * <p>This bean encapsulates the mechanics of a three dimensional
+ *  tic tac toe game.  It keeps track of individual scores,
  *  determines moves and records moves.
  * <p/>
  *
@@ -92,6 +94,25 @@ public class Game {
         command.getAttributes().put("styleClass","x-button-border");
         nextMove();
         determineScores();
+    }
+    
+    /**
+     * <p>ValueChangeEvent method for win pattern selection.</p>
+     */
+    public void showPatterns(ValueChangeEvent e) {
+        initializeGame();
+        UISelectOne select = (UISelectOne)e.getComponent();
+        int index = new Integer((String)select.getValue()).intValue();
+        if (index < 0) return;
+        int[] pattern = patterns[index];
+        for (int i=0; i<pattern.length; i++) {
+            String id = FORM_ZONE_ID + "_" + Integer.toString(pattern[i]);
+            FacesContext context = FacesContext.getCurrentInstance();
+            UIViewRoot viewRoot = context.getViewRoot();
+            UICommand command = (UICommand)viewRoot.findComponent(id);
+            command.getAttributes().put("styleClass","win-button-border");
+            moves[pattern[i]] = 1;
+        }
     }
     
     // Accessor methods for individual score counters
@@ -248,7 +269,7 @@ public class Game {
     }
     
     /**
-     *<p>Find the component that corresponds with the 
+     *<p>Find the component that corresponds with the
      * <code>id</code> argument and set its value and
      * style to indicate the move.</p>
      */

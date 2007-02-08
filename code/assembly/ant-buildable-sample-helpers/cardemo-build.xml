@@ -10,7 +10,7 @@
         <pathelement location="../lib/bp-ui-simple-5.jar" />
     </path>
 
-    <target name="copy.per-app.dependent.libs">
+    <target name="copy.per-app.dependent.libs" if="build.standalone">
       <copy todir="${exploded.war.dir}/WEB-INF/lib">
         <fileset dir="../lib">
           <include name="*bp-ui-simple*" />

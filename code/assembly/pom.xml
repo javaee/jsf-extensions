@@ -65,6 +65,19 @@
                    <isset property="build.standalone" />
                  </condition>
 
+                 <condition property="filter.build.standalone.set" 
+                            value="true">
+                   <isset property="build.standalone" />
+                 </condition>
+
+                 <condition property="filter.build.standalone.set" 
+                            value="false">
+                   <not>
+                     <isset property="build.standalone" />
+                   </not>
+                 </condition>
+
+
                  <!-- copy libs for both standalone and integrated style -->
 
                  <ant inheritAll="true" dir="${antbuild.dir}" 
@@ -76,7 +89,13 @@
                  <!-- copy the build.xml and README to the distro -->
 
                  <copy tofile="target/dist/samples/build.properties" file="${antbuild.dir}/samples.properties"/>
-                 <copy tofile="target/dist/samples/build.xml" file="${antbuild.dir}/base-build.xml"/>
+                 <copy tofile="target/dist/samples/build.xml" 
+                       file="${antbuild.dir}/base-build.xml">
+                   <filterset>
+                     <filter token="BUILD.STANDALONE.SET"
+                             value="${filter.build.standalone.set}" />
+                   </filterset>
+                 </copy>
 
                  <copy tofile="target/dist/samples/README.html" file="${antbuild.dir}/README.html"/>
 

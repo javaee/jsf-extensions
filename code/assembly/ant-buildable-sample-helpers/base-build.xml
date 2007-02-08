@@ -2,7 +2,14 @@
 <project name="jsf-extensions-samples-base-buildfile" default="all" 
          basedir=".">
 
-    <property file="../build.properties"/>    
+    <property file="../build.properties"/> 
+
+    <property name="build.standalone.set" value="@BUILD.STANDALONE.SET@" />   
+
+  <condition property="build.standalone">
+    <equals arg1="${build.standalone.set}" arg2="true" />
+  </condition>
+
 
     <property name="build.dir" value="${basedir}/build"/>
     <property name="exploded.war.dir" value="${build.dir}/${appname}"/>
@@ -51,7 +58,7 @@
       </copy>
     </target>
 
-    <target name="copy.dependent.libs">
+    <target name="copy.dependent.libs" if="build.standalone">
       <copy todir="${exploded.war.dir}/WEB-INF/lib">
         <fileset dir="${basedir}/../../lib">
           <exclude name="*sources*" />

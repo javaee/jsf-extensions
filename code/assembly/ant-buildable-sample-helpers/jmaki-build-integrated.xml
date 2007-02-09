@@ -15,7 +15,18 @@
       </fileset>
     </path>
 
-    <target name="copy.per-app.dependent.libs" if="build.standalone">
+    <target name="copy.per-app.dependent.libs">
+      <antcall target="copy.jars" />
+      <copy todir="${exploded.war.dir}">
+        <fileset dir="../../../shared">
+          <include name="resources/**/*.*" />
+        </fileset>
+      </copy>
+      <copy overwrite="true" file="src/main/webapp/resources/config.json"
+            tofile="${exploded.war.dir}/resources/config.json" />
+    </target>
+
+    <target name="copy.jars" if="build.standalone">
       <copy todir="${exploded.war.dir}/WEB-INF/lib">
         <fileset dir="../lib">
           <include name="*bp-ui-simple*" />
@@ -24,13 +35,6 @@
           <include name="*ajax-wrapper-comp*.jar" />
         </fileset>
       </copy>
-      <copy todir="${exploded.war.dir}">
-        <fileset dir="../../../shared">
-          <include name="resources/**/*.*" />
-        </fileset>
-      </copy>
-      <copy overwrite="true" file="src/main/webapp/resources/config.json"
-            tofile="${exploded.war.dir}/resources/config.json" />
     </target>
 
 </project>

@@ -30,17 +30,12 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 
-    <display-name>Car Store</display-name>
-    <description>Buy a car.</description>
+    <display-name>3D Tic Tac Toe</display-name>
+    <description></description>
 
     <context-param>
         <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
         <param-value>server</param-value>
-    </context-param>
-
-    <context-param>
-        <param-name>com.sun.faces.RESTART_PASSWORD</param-name>
-        <param-value>rogerk</param-value>
     </context-param>
 
     <context-param>

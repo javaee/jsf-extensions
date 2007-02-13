@@ -154,12 +154,6 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-        <groupId>javax.faces</groupId>
-        <artifactId>jsf-api</artifactId>
-        <version>1.2</version>
-        <classifier>sources</classifier>
-    </dependency>
-    <dependency>
       <groupId>commons-logging</groupId>
       <artifactId>commons-logging</artifactId>
       <version>1.1</version>
@@ -183,9 +177,9 @@
       </exclusions>
     </dependency>
     <dependency>
-      <groupId>org.apache.shale</groupId>
+      <groupId>javax.faces</groupId>
       <artifactId>shale-remoting</artifactId>
-      <version>1.0.4</version>
+      <version>1.1.0-swdp-a</version>
       <exclusions>
         <exclusion>
           <groupId>myfaces</groupId>

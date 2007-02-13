@@ -100,7 +100,7 @@
     </dependency>
     <dependency>
       <groupId>com.sun.javaee.blueprints</groupId>
-      <artifactId>bp-ui-simple</artifactId>
+      <artifactId>bp-ui-simple-non-ajax</artifactId>
       <version>5</version>
     </dependency>
   </dependencies>

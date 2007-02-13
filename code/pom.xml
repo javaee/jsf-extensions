@@ -70,9 +70,9 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.apache.shale</groupId>
+      <groupId>javax.faces</groupId>
       <artifactId>shale-remoting</artifactId>
-      <version>1.0.3</version>
+      <version>1.1.0-swdp-a</version>
       <exclusions>
         <exclusion>
           <groupId>myfaces</groupId>

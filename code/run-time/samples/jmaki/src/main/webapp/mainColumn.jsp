@@ -1,4 +1,4 @@
-<%@ taglib uri="http://java.sun.com/blueprints/ui" prefix="d" %>
+<%@ taglib uri="http://java.sun.com/blueprints/ui-non-ajax" prefix="d" %>
 <%@ taglib prefix="a" uri="http://java.sun.com/jmaki-jsf" %>
 
 <h:form id="form">

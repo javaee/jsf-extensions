@@ -4,7 +4,7 @@
   "http://java.sun.com/dtd/facelet-taglib_1_0.dtd">
 
 <facelet-taglib>
-    <namespace>http://java.sun.com/blueprints/ui-non-ajax</namespace>
+    <namespace>http://java.sun.com/blueprints/ui</namespace>
 	<tag>
         <tag-name>scroller</tag-name>
         <component>

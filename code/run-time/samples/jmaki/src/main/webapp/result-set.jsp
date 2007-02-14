@@ -1,7 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsf/core"  prefix="f" %>
 <%@ taglib uri="http://java.sun.com/jsf/html"  prefix="h" %>
 <%@ taglib prefix="jsfExt" uri="http://java.sun.com/jsf/extensions/dynafaces" %>
-<%@ taglib uri="http://java.sun.com/blueprints/ui-non-ajax" prefix="d" %>
+<%@ taglib uri="http://java.sun.com/blueprints/ui" prefix="d" %>
 <%@ taglib prefix="a" uri="http://java.sun.com/jmaki-jsf" %>
 
 <f:view>

@@ -78,7 +78,7 @@
     </dependency>
     <dependency>
       <groupId>com.sun.javaee.blueprints</groupId>
-      <artifactId>bp-ui-simple-non-ajax</artifactId>
+      <artifactId>bp-ui-simple</artifactId>
       <version>5</version>
     </dependency>
     <dependency>

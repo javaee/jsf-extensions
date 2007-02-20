@@ -24,7 +24,7 @@
     <target name="copy-libs-for-standalone-and-integrated">
 
                  <copy todir="../target/dist/lib" 
-                       file="${settings.localRepository}/javax/faces/shale-remoting/1.1.0-swdp-a/shale-remoting-1.1.0-swdp-a.jar" />
+                       file="${settings.localRepository}/javax/faces/shale-remoting/1.1.0-swdp-b/shale-remoting-1.1.0-swdp-b.jar" />
                  <copy todir="../target/dist/samples/lib" 
                        file="${settings.localRepository}/com/sun/javaee/blueprints/bp-ui-simple/5/bp-ui-simple-5.jar" />
                  <copy todir="../target/dist/samples/lib" 

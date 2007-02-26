@@ -41,7 +41,7 @@ import javax.faces.component.ActionSource;
 import javax.faces.component.ContextCallback;
 import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRootCopy;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
@@ -122,445 +122,79 @@ import javax.servlet.http.HttpServletResponse;
   * additional information about how this class helps
   * <code>PartialTraversalViewRoot</code> get its job done.</p>
  *
- * <p>This class extends <code>UIViewRootCopy</code>, which is a local copy
+ * <p>This class extends <code>UIViewRoot</code>, which is a local copy
  * of <code>UIViewRoot</code> that makes the <code>broadcastEvents</code> method
  * public.  This is necessary to allow easily broadcasting events during the 
  * AJAX lifecycle.</p>
   *
   * @author edburns
   */
-public class PartialTraversalViewRootImpl extends UIViewRootCopy implements Serializable, PartialTraversalViewRoot {
+public class PartialTraversalViewRootImpl extends UIViewRoot implements Serializable, PartialTraversalViewRoot {
     
     public PartialTraversalViewRootImpl() {
-        modifiedComponents = new ArrayList<UIComponent>();
-
-        markImmediate = new Util.TreeTraversalCallback() {
-            public boolean takeActionOnNode(FacesContext context, UIComponent comp) throws FacesException {
-                if (comp instanceof ActionSource) {
-                    ActionSource as = (ActionSource)comp;
-                    if (!as.isImmediate()) {
-                        as.setImmediate(true);
-                        modifiedComponents.add(comp);
-                    }
-                } else if (comp instanceof EditableValueHolder) {
-                    EditableValueHolder ev = (EditableValueHolder)comp;
-                    if (!ev.isImmediate()) {
-                        ev.setImmediate(true);
-                        modifiedComponents.add(comp);
-                    }
-                }
-
-                return true;
-            }
-
-        };
+	helper = new PartialTraversalViewRootHelper(this);
     }
     
-    private transient List<UIComponent> modifiedComponents;
-    
-    private transient Util.TreeTraversalCallback markImmediate;
-    
     public void postExecuteCleanup(FacesContext context) {
-        for (UIComponent comp : modifiedComponents) {
-            if (comp instanceof ActionSource) {
-                ActionSource as = (ActionSource)comp;
-                assert(as.isImmediate());
-                as.setImmediate(false);
-            } else if (comp instanceof EditableValueHolder) {
-                EditableValueHolder ev = (EditableValueHolder)comp;
-                assert(ev.isImmediate());
-                ev.setImmediate(false);
-            }
-        }
-        modifiedComponents.clear();
+	helper.postExecuteCleanup(context);
     }
     
     public void processDecodes(FacesContext context) {
-        boolean invokedCallback = false;
-        if (!AsyncResponse.isAjaxRequest()) {
-            super.processDecodes(context);
-            return;
-        }
-        AsyncResponse async = AsyncResponse.getInstance();
-        modifiedComponents.clear();
-        
-        // If this is an immediate "render all" request and there are
-        // no explicit execute subtrees and the user didn't request
-        // execute: none...
-        if (async.isImmediateAjaxRequest() && async.isRenderAll() &&
-            async.getExecuteSubtrees().isEmpty() &&
-            !async.isExecuteNone()) {
-            // Traverse the entire view and mark every ActionSource or
-            // EditableValueHolder as immediate.
-            Util.prefixViewTraversal(context, this, markImmediate);
-        }
-        
-        invokedCallback = invokeContextCallbackOnSubtrees(context,
-                new PhaseAwareContextCallback(PhaseId.APPLY_REQUEST_VALUES));
-        
-        // Queue any events for this request in a context aware manner
-        ResponseWriter writer = null;
-        try {
-            writer = async.getResponseWriter();
-        } catch (IOException ex) {
-            throw new FacesException(ex);
-        }
-        // Install the AjaxResponseWriter
-        context.setResponseWriter(writer);
-        
-        EventParser.queueFacesEvents(context);
-        
-        if (!invokedCallback) {
-            super.processDecodes(context);
-        }
-        this.broadcastEvents(context, PhaseId.APPLY_REQUEST_VALUES);
-        
+	// PartialTraversalViewRootHelper may call us in an attempt to call
+	// super.processDecodes(), detect this...
+	if (new RuntimeException().getStackTrace()[1].getClassName().equals(HELPER_NAME) ||
+		helper.processDecodes(context)) {
+	    super.processDecodes(context);
+	}
     }
 
     public void processValidators(FacesContext context) {
-        if (!AsyncResponse.isAjaxRequest() ||
-            !invokeContextCallbackOnSubtrees(context, 
-                new PhaseAwareContextCallback(PhaseId.PROCESS_VALIDATIONS))) {
+	if (helper.processValidators(context)) {
             super.processValidators(context);
-            return;
-        }
-        this.broadcastEvents(context, PhaseId.PROCESS_VALIDATIONS);
+	}
     }
 
     public void processUpdates(FacesContext context) {
-        if (!AsyncResponse.isAjaxRequest() ||
-            !invokeContextCallbackOnSubtrees(context, 
-                new PhaseAwareContextCallback(PhaseId.UPDATE_MODEL_VALUES))) {
+	if (helper.processUpdates(context)) {
             super.processUpdates(context);
-            return;
-        }
-        this.broadcastEvents(context, PhaseId.UPDATE_MODEL_VALUES);
-    }
-    
-    public boolean getRendersChildren() {
-        AsyncResponse async = AsyncResponse.getInstance();
-        boolean result = true;
-        // If this is not an ajax request...
-        if (!async.isAjaxRequest() || async.isRenderAll()) {
-            // do default behavior
-            result = super.getRendersChildren();
-        }
-        return result;
-    }
-    
-    /**
-     *	<p> Request scoped key to hold the original ResponseWriter between
-     *	    encodeBegin and encodeEnd during Ajax requests.</p>
-     */
-    private static final String ORIGINAL_WRITER = AsyncResponse.FACES_PREFIX + 
-            "origWriter";    
-
-    public void encodeBegin(FacesContext context) throws IOException {
-        AsyncResponse async = AsyncResponse.getInstance();
-        // If this is not an ajax request...
-        if (!async.isAjaxRequest()) {
-            // do default behavior
-            super.encodeBegin(context);
-            return;
-        }
-        boolean renderAll = async.isRenderAll(),
-                renderNone = async.isRenderNone();
-        ResponseWriter orig = null, writer = null;
-        
-        try {
-            // Turn on the response that has been embedded in the ViewHandler.
-            async.setOnOffResponseEnabled(true);
-            // If this is an ajax request, and it is a partial render request...
-
-            if (!renderAll) {
-                // replace the context's responseWriter with the AjaxResponseWriter
-                // Get (and maybe create) the AjaxResponseWriter
-                writer = async.getResponseWriter();
-                orig = context.getResponseWriter();
-
-		// Save the new writer for encodeEnd
-		context.getExternalContext().getRequestMap().
-                    put(ORIGINAL_WRITER, orig);
-
-                // Install the AjaxResponseWriter
-                context.setResponseWriter(writer);
-            }
-            
-            this.encodePartialResponseBegin(context);
-
-            if (renderAll) {
-                writer = context.getResponseWriter();
-                // If this is a "render all via ajax" request,
-                // make sure to wrap the entire page in a <render> elemnt
-                // with the special id of VIEW_ROOT_ID.  This is how the client
-                // JavaScript knows how to replace the entire document with 
-                // this response.
-                writer.startElement("render", this);
-                writer.writeAttribute("id", AsyncResponse.VIEW_ROOT_ID, "id");
-                writer.startElement("markup", this);
-                writer.write("<![CDATA[");
-                
-                // setup up a writer which will escape any CDATA sections
-                context.setResponseWriter(new EscapeCDATAWriter(writer));
-            }
-        } catch (IOException ex) {
-	    cleanupAfterView(context);
-        } catch (RuntimeException ex) {
-	    cleanupAfterView(context);
-	    
-	    // Throw the exception
-	    throw ex;
-        }
-    }       
-
-    public void encodeChildren(FacesContext context) throws IOException {
-        AsyncResponse async = AsyncResponse.getInstance(false);
-        // If this is not an ajax request...
-        if ((async == null) || !async.isAjaxRequest() || async.isRenderAll()) {
-            // Full request or ajax encode All request, operate normally
-            super.encodeChildren(context);
-        }
-	else {
-            // If the context callback was not invoked on any subtrees
-            // and the client did not explicitly request that no
-            // subtrees be rendered...
-            if (!invokeContextCallbackOnSubtrees(context, 
-                    new PhaseAwareContextCallback(PhaseId.RENDER_RESPONSE)) &&
-		!async.isRenderNone()) {
-                assert(false);
-            }
 	}
     }
     
+    public boolean getRendersChildren() {
+	return helper.getRendersChildren(super.getRendersChildren());
+    }
+    
+    public void encodeBegin(FacesContext context) throws IOException {
+	if (helper.encodeBegin(context)) {
+            super.encodeBegin(context);
+	}
+    }       
+
+    public void encodeChildren(FacesContext context) throws IOException {
+	if (helper.encodeChildren(context)) {
+            super.encodeChildren(context);
+	}
+    }
 
     public void encodeEnd(FacesContext context) throws IOException {
-        AsyncResponse async = AsyncResponse.getInstance(false);
-        // If this is not an ajax request...
-        if ((async == null) || !async.isAjaxRequest()) {
-            // do default behavior
+	if (helper.encodeEnd(context)) {
             super.encodeEnd(context);
-            return;
-        }
-
-
-        try {
-            if (async.isRenderAll()) {
-		EscapeCDATAWriter cdataWriter = (EscapeCDATAWriter)
-		    context.getResponseWriter();
-		ResponseWriter writer = cdataWriter.getWrapped();
-
-                // revert the writer and finish up
-                context.setResponseWriter(writer);
-                writer.write("]]>");
-                writer.endElement("markup");
-                writer.endElement("render");
-                // then bail out.  
-                return;
-            }
-            
-	    
-            this.encodePartialResponseEnd(context);
-            
-        } catch (IOException ioe) {
-            
-        } finally {
-            cleanupAfterView(context);
-        }
+	}
     }
 
-
-    
     public void encodePartialResponseBegin(FacesContext context) throws IOException {
-        ResponseWriter writer = context.getResponseWriter();
-        AsyncResponse async = AsyncResponse.getInstance();
-        
-        ExternalContext extContext = context.getExternalContext();
-        // If the client did not explicitly request that no subtrees be rendered...
-        if (!async.isRenderNone()) {
-            // prepare to render the partial response.
-            if (extContext.getResponse() instanceof HttpServletResponse) {
-                HttpServletResponse servletResponse = (HttpServletResponse)
-                extContext.getResponse();
-                servletResponse.setContentType("text/xml");
-                servletResponse.setHeader("Cache-Control", "no-cache");
-                String xjson =
-                        extContext.getRequestHeaderMap().get(AsyncResponse.XJSON_HEADER);
-                if (null != xjson) {
-                    servletResponse.setHeader(AsyncResponse.XJSON_HEADER,
-                            xjson);
-                }
-                
-                writer.startElement("partial-response", this);
-                writer.startElement("components", this);
-            }
-        }
+	helper.encodePartialResponseBegin(context);
     }
-    
+
     public void encodePartialResponseEnd(FacesContext context) throws IOException {
-        ResponseWriter writer = context.getResponseWriter();
-        AsyncResponse async = AsyncResponse.getInstance();
-        
-        // PENDING(edburns): The core JSF spec does not dispatch events for
-        // Render Response.  We need to do it here so that events that require
-        // template text can rely on the tree including template text.
-        this.broadcastEvents(context, PhaseId.RENDER_RESPONSE);
-        
-        // If the client did not explicitly request that no subtrees be rendered...
-        if (!async.isRenderNone()) {
-            writer.endElement("components");
-        }
-        
+	helper.encodePartialResponseEnd(context);
     }
-    
-    
-    protected void broadcastEvents(FacesContext context, PhaseId phaseId) {
-        String postViewId, preViewId = context.getViewRoot().getViewId();
-        // Broadcast the regular FacesEvents
-        super.broadcastEvents(context, phaseId);
-        // Do our extra special MethodExpression invocation
-        EventParser.invokeComponentMethodCallbackForPhase(context, phaseId);
-        postViewId = context.getViewRoot().getViewId();
-        
-        // If the view id changed as result of the broadcastEvents...
-        if (!postViewId.equals(preViewId)) {
-            // Advise the browser to re-render the entire view.
-            AsyncResponse.getInstance().setRenderAll(true);
-        }
-        
-    }   
-    
-    
+
     /**
-     *
+     *	This "helper" object provides most of the implementation of this class.
      */
-    private void cleanupAfterView(FacesContext context) {
-	ResponseWriter orig = (ResponseWriter) context.getExternalContext().
-	    getRequestMap().get(ORIGINAL_WRITER);
-	assert(null != orig);
-	
-        // PENDING(edburns): this is a big hack to get around the
-        // way the JSP based faces implementation handles the
-        // after view content.
-        // We will have to do something different for other implementations.
-        // This is not a problem for Facelets.
-        context.getExternalContext().getRequestMap().remove("com.sun.faces.AFTER_VIEW_CONTENT");
+    private PartialTraversalViewRootHelper helper = null;
 
-        // move aside the AjaxResponseWriter
-        if (null != orig) {
-            context.setResponseWriter(orig);
-        }
-    }
-
-    
-    private boolean invokeContextCallbackOnSubtrees(FacesContext context, 
-            PhaseAwareContextCallback cb) {
-        AsyncResponse async = AsyncResponse.getInstance();
-        List<String> subtrees = null;
-        
-        // If this callback is intended for RENDER_RESPONSE, use
-        // async.getRenderSubtrees().  Otherwise, use async.getExecuteSubtrees().
-        // If async.getExecuteSubtrees() is empty, use async.getRenderSubtrees().
-        
-        if (cb.getPhaseId() == PhaseId.RENDER_RESPONSE) {
-            subtrees = async.getRenderSubtrees();
-        }
-        else {
-            subtrees = async.getExecuteSubtrees();
-            if (subtrees.isEmpty()) {
-                subtrees = async.getRenderSubtrees();
-            }
-        }
-        
-        boolean result = false;
-        
-        for (String cur : subtrees) {
-            if (this.invokeOnComponent(context, cur, cb)) {
-                result = true;
-            }
-        }
-        return result;
-    }
-    
-    private class PhaseAwareContextCallback implements ContextCallback {
-
-        private PhaseId curPhase = null;
-        private PhaseAwareContextCallback(PhaseId curPhase) {
-            this.curPhase = curPhase;
-        }
-        
-        private PhaseId getPhaseId() {
-            return curPhase;
-        }
-        
-        public void invokeContextCallback(FacesContext facesContext, UIComponent comp) {
-            try {
-                ConverterException converterException = null;
-                
-                if (curPhase == PhaseId.APPLY_REQUEST_VALUES) {
-                    // If the user requested an immediate request
-                    // Make sure to set the immediate flag.
-                    if (AsyncResponse.isImmediateAjaxRequest()) {
-                        PartialTraversalViewRootImpl.this.markImmediate.takeActionOnNode(facesContext, comp);
-                    }
-
-                    comp.processDecodes(facesContext);
-                } else if (curPhase == PhaseId.PROCESS_VALIDATIONS) {
-                    comp.processValidators(facesContext);
-                } else if (curPhase == PhaseId.UPDATE_MODEL_VALUES) {
-                    comp.processUpdates(facesContext);
-                } else if (curPhase == PhaseId.RENDER_RESPONSE) {
-                    
-                    if (comp.isRendered()) {
-                        ResponseWriter writer = AsyncResponse.getInstance().getResponseWriter();
-
-                        writer.startElement("render", comp);
-                        writer.writeAttribute("id", comp.getClientId(facesContext), "id");
-                        try {
-                            writer.startElement("markup", comp);
-                            writer.write("<![CDATA[");
-
-                            // setup up a writer which will escape any CDATA sections
-                            facesContext.setResponseWriter(new EscapeCDATAWriter(writer));
-
-                            // do the default behavior...
-                            comp.encodeAll(facesContext);
-
-                            // revert the write and finish up
-                            facesContext.setResponseWriter(writer);
-                            writer.write("]]>");
-                            writer.endElement("markup");
-                        }
-                        catch (ConverterException ce) {
-                            converterException = ce;
-                        }
-                        writer.endElement("render");
-                    }
-                }
-                else {
-                    throw new IllegalStateException("I18N: Unexpected PhaseId passed to PhaseAwareContextCallback: " + curPhase.toString());
-                }
-                    
-            }
-            catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-        
-    }
-    
-    private class EscapeCDATAWriter extends ResponseWriterWrapper {
-
-        private ResponseWriter toWrap = null;
-        public EscapeCDATAWriter(ResponseWriter toWrap) {
-            this.toWrap = toWrap;
-        }
-        protected ResponseWriter getWrapped() { 
-            return toWrap; 
-        }
-
-        public void write(String string) throws IOException {
-            super.write(string.replace("]]>", "]]]]><![CDATA[>"));
-        }
-    }
-    
+    private static final String HELPER_NAME =
+	    PartialTraversalViewRootHelper.class.getName();
 }

@@ -42,6 +42,7 @@ import javax.faces.context.FacesContext;
 /**
  *
  * @author edburns
+ * @author Ken Paulsen (ken.paulsen@sun.com)
  */
 public interface PartialTraversalViewRoot {
     void encodePartialResponseBegin(FacesContext context) throws IOException;
@@ -49,5 +50,16 @@ public interface PartialTraversalViewRoot {
     void encodePartialResponseEnd(FacesContext context) throws IOException;
 
     void postExecuteCleanup(FacesContext context);
-    
+
+    // Adding UIViewRoot / UIComponent methods b/c there is no interface to
+    // extend and I want to avoid casting every time I need one of these
+    // methods.  Casting is still needed for methods expecting a UIViewRoot
+    // or UIComponent, though.
+    void encodeBegin(FacesContext context) throws IOException;
+    void encodeChildren(FacesContext context) throws IOException;
+    void encodeEnd(FacesContext context) throws IOException;
+    boolean getRendersChildren();
+    void processDecodes(FacesContext context);
+    void processUpdates(FacesContext context);
+    void processValidators(FacesContext context);
 }

@@ -845,7 +845,7 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
 	 // If the user specified a postReplace...
 	 if (this.options.postReplace) {
 	     // look at its type.
-	     if ((optionType == typeof this.options.postReplace) !=
+	     if ((optionType = typeof this.options.postReplace) !=
 		 'undefined') {
 		 // If its type is already a function...
 		 if (optionType == 'function') {

@@ -173,6 +173,7 @@ public class AjaxZoneRenderer extends Renderer {
                 eventType = null,
                 inspectElement = null,
                 replaceElement = null,
+                postReplace = null,
                 execute = null,
                 render = null;
         StringBuffer ajaxifyChildren = null;
@@ -246,6 +247,7 @@ public class AjaxZoneRenderer extends Renderer {
                     getCallbackData = getAttr(context, currentZone, "getCallbackData");
                     inspectElement = getAttr(context, currentZone, "inspectElement");
                     replaceElement = getAttr(context, currentZone, "replaceElement");
+                    postReplace = getAttr(context, currentZone, "postReplace");
 
                     ajaxifyChildren = new StringBuffer();
                     ajaxifyChildren.append("\nDynaFacesZones.ajaxifyChildren($(\'" + clientId + "\'), ");
@@ -274,6 +276,13 @@ public class AjaxZoneRenderer extends Renderer {
                         }
                         wroteAttribute = true;
                         ajaxifyChildren.append("replaceElement: \'" + replaceElement + "\'");
+                    }
+                    if (null != postReplace) {
+                        if (wroteAttribute) {
+                            ajaxifyChildren.append(", ");
+                        }
+                        wroteAttribute = true;
+                        ajaxifyChildren.append("postReplace: \'" + postReplace + "\'");
                     }
                     if (null != (action = currentZone.getActionExpression())) {
                         if (wroteAttribute) {
@@ -398,7 +407,7 @@ public class AjaxZoneRenderer extends Renderer {
         boolean isAjaxRequest = AsyncResponse.isAjaxRequest();
         if (this.isRenderScriptsForAllZonesRightNow(context, zone, isAjaxRequest)) {
             
-            if (!isAjaxRequest) {
+            if (!isAjaxRequest && !java.beans.Beans.isDesignTime()) {
                 for (int i = 0; i < scriptIds.length; i++) {
                     getXhtmlHelper().linkJavascript(context, component, writer,
                             Mechanism.CLASS_RESOURCE, scriptIds[i]);

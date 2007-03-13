@@ -35,7 +35,11 @@ var DynaFacesZones = new Object();
 
 DynaFacesZones.g_zones = [];
 
-DynaFacesZones.ajaxifyChildren = 
+//work around ie7 not supporting events on OPTION elements
+//for now, only support onchange for SELECT elements in ie7
+DynaFacesZones.isIE7 = (document.all && window.XMLHttpRequest);
+
+    DynaFacesZones.ajaxifyChildren = 
 function ajaxifyChildren(target, options, getCallbackData) {
     if (!options.collectPostData) {
 	options.collectPostData = DynaFacesZones.collectPostData;
@@ -64,6 +68,12 @@ function moveAsideEventType(ajaxZone, element, options, getCallbackData) {
     else {
 	options.eventType = 'click';
     }
+    var currentEventType = options.eventType;
+
+    if (DynaFacesZones.isIE7 && element != null && element.nodeName != null && 
+        element.nodeName.toLowerCase().indexOf('select') == 0) {
+        currentEventType = 'change';
+    }
     // If the user specified an execute attribute...
     if (null != ajaxZone["execute"]) {
       // copy it to the DynaFaces options.
@@ -91,10 +101,10 @@ function moveAsideEventType(ajaxZone, element, options, getCallbackData) {
 	    options.closure = DynaFaces.gGlobalScope[getCallbackData](ajaxZone, element);
 	}
     }
-    if (DynaFaces.isJsfCommandLink(element) && 'click' === options.eventType) {
+    if (DynaFaces.isJsfCommandLink(element) && 'click' === currentEventType) {
 	element["onclick"] = null;
     }
-    DynaFaces.installDeferredAjaxTransaction(element, options.eventType, 
+    DynaFaces.installDeferredAjaxTransaction(element, currentEventType, 
 					     options);
 }
 
@@ -118,9 +128,13 @@ function takeActionAndTraverseTree(target, element, action, options,
     // If the function returned false or null, or was not defined...
     if (null == takeAction || !takeAction) {
       // if this element has a handler for the eventType
-      if (null != element[options.eventType] &&
-  	  null != element.getAttribute(options.eventType)) {
-        takeAction = true;
+
+      //mbohm: for now, only do this if not ie7
+      if (!DynaFacesZones.isIE7) {
+          if (null != element[options.eventType] &&
+              null != element.getAttribute(options.eventType)) {
+            takeAction = true;
+          }
       }
     }
     if (takeAction) {
@@ -147,7 +161,10 @@ DynaFacesZones.inspectElement =
 	    if (0 == nodeName.indexOf("input")) {
 		result = true;
 	    }
-	    else if (0 == nodeName.indexOf("option")) {
+	    else if (0 == nodeName.indexOf("option") && !DynaFacesZones.isIE7) {
+		result = true;
+	    }
+	    else if (0 == nodeName.indexOf("select") && DynaFacesZones.isIE7) {
 		result = true;
 	    }
 	    else if (0 == nodeName.indexOf("button")) {
@@ -330,10 +347,15 @@ DynaFacesZones.isCollectParams =
 	}
 	else if (-1 != elementNodeName.indexOf("option")) {
 	    // It is an option element, but is it selected?
-	    if (element.selected) {
+	    if (!DynaFacesZones.isIE7 && element.selected) {
 		doCollect = true;
 	    }
 	}
+        else if (-1 != elementNodeName.indexOf("select")) {
+            if (DynaFacesZones.isIE7) {
+                doCollect = true;
+            }
+        }
     }
 
     return doCollect;

@@ -223,7 +223,7 @@ public class AjaxZoneTag extends UIComponentELTag {
      * Setter for property replaceElement.
      * @param replaceElement New value of property replaceElement.
      */
-    public void setReplaceElementHook(ValueExpression replaceElement) {
+    public void setReplaceElement(ValueExpression replaceElement) {
         this.replaceElement = replaceElement;
     }
 

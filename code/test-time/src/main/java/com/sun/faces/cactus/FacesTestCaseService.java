@@ -141,31 +141,6 @@ public class FacesTestCaseService extends Object {
         HttpServletResponse response = null;
         TestingUtil.setUnitTestModeEnabled(true);
 
-	// make sure the ApplicationAssociate is aware of the ServletContext
-	StoreServletContext storeSC = 
-	    new StoreServletContext();
-	storeSC.setServletContext(facesTestCase.getConfig().getServletContext());
-
-        // make sure the default factories are found, even if they have been
-        // cleared before.
-	FactoryFinder.releaseFactories();
-        FactoryFinder.setFactory(FactoryFinder.APPLICATION_FACTORY,
-                                 "com.sun.faces.application.ApplicationFactoryImpl");
-        FactoryFinder.setFactory(FactoryFinder.FACES_CONTEXT_FACTORY,
-                                 "com.sun.faces.context.FacesContextFactoryImpl");
-        FactoryFinder.setFactory(FactoryFinder.LIFECYCLE_FACTORY,
-                                 "com.sun.faces.lifecycle.LifecycleFactoryImpl");
-        FactoryFinder.setFactory(FactoryFinder.RENDER_KIT_FACTORY,
-                                 "com.sun.faces.renderkit.RenderKitFactoryImpl");
-
-	 ApplicationAssociate.clearInstance(storeSC.getServletContextWrapper());
-        Util.verifyFactoriesAndInitDefaultRenderKit(
-            facesTestCase.getConfig().getServletContext());
-
-        facesContextFactory = (FacesContextFactory)
-            FactoryFinder.getFactory(FactoryFinder.FACES_CONTEXT_FACTORY);
-        assert (null != facesContextFactory);
-
         // Since we run using tomcat's deploy targets, we must obtain the
         // absolute path to where we are to write our output files.
         String testRootDir =
@@ -173,30 +148,23 @@ public class FacesTestCaseService extends Object {
                 "testRootDir");
 
         assert (null != testRootDir);
-        facesTestCase.setTestRootDir(testRootDir);
-       
-        // See if the testcase wants to have its output sent to a file.
-        if (facesTestCase.sendResponseToFile()) {
-            response =
-                new FileOutputResponseWrapper(facesTestCase.getResponse(),
-                    testRootDir );
-        } else {
-            response = facesTestCase.getResponse();
+        facesTestCase.setTestRootDir(testRootDir);             
+      
+         ConfigureListener configListener = new ConfigureListener();
+        ServletContextEvent e =
+            new ServletContextEvent(
+                facesTestCase.getConfig().getServletContext());
+
+        // make sure this gets called once per ServletContext instance.
+        if (null ==
+            (facesTestCase.getConfig().getServletContext().
+            getAttribute(FacesServlet.CONFIG_FILES_ATTR))) {
+
+            configListener.contextInitialized(e);
         }
 
-        LifecycleFactory factory = (LifecycleFactory)
-            FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
-        assert (null != factory);
-        lifecycle = factory.getLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE);
-        assert (null != lifecycle);
+        initFacesContext();
 
-
-        facesContext =
-            facesContextFactory.getFacesContext(facesTestCase.getConfig().
-                                                getServletContext(),
-                                                facesTestCase.getRequest(),
-                                                response, lifecycle);
-        assert (null != facesContext);
         if (facesTestCase.sendWriterToFile()) {
             ResponseWriter responseWriter = 
                     new FileOutputResponseWriter(testRootDir);
@@ -217,24 +185,6 @@ public class FacesTestCaseService extends Object {
                                getRequestParameterMap().get(curName));
         }
 
-        ConfigureListener configListener = new ConfigureListener();
-        ServletContextEvent e =
-            new ServletContextEvent(
-                facesTestCase.getConfig().getServletContext());
-
-        // make sure this gets called once per ServletContext instance.
-        if (null ==
-            (facesTestCase.getConfig().getServletContext().
-            getAttribute(FacesServlet.CONFIG_FILES_ATTR))) {
-
-            configListener.contextInitialized(e);
-        }
-
-	storeSC.setServletContext(facesTestCase.getConfig().getServletContext());
-        
-        // remove any view state in request state
-        facesContext.getExternalContext().getRequestMap().remove(RIConstants.LOGICAL_VIEW_MAP);
-
     }
 
 
@@ -244,7 +194,6 @@ public class FacesTestCaseService extends Object {
             facesTestCase.getConfig().getServletContext()
                 .removeAttribute(RIConstants.HTML_BASIC_RENDER_KIT);
         }
-        
         ConfigureListener configListener = new ConfigureListener();
         ServletContextEvent e =
             new ServletContextEvent(
@@ -261,7 +210,7 @@ public class FacesTestCaseService extends Object {
                 }
             }
         } catch (IllegalStateException ie) {
-        }
+        } 
     }
 
     
@@ -468,7 +417,8 @@ public class FacesTestCaseService extends Object {
         // clear out the attr that was set in the servletcontext attr set.
         facesTestCase.getConfig().getServletContext().removeAttribute(
             FacesServlet.CONFIG_FILES_ATTR);
-	ApplicationAssociate.clearInstance(facesContext.getExternalContext());
+	ApplicationAssociate.clearInstance(
+         FacesContext.getCurrentInstance().getExternalContext());
         // clear out the renderKit factory
         FactoryFinder.releaseFactories();
 
@@ -493,6 +443,7 @@ public class FacesTestCaseService extends Object {
             new ServletContextEvent(sc);
         configListener.contextDestroyed(e);
         configListener.contextInitialized(e);
+        initFacesContext();
     }
 
     public Object wrapRequestToHideParameters() {
@@ -519,6 +470,30 @@ public class FacesTestCaseService extends Object {
 
     public void unwrapRequestToShowParameters(Object oldRequest) {
 	getFacesContext().getExternalContext().setRequest(oldRequest);
+    }
+
+    private void initFacesContext() {
+        HttpServletResponse response;
+        if (facesTestCase.sendResponseToFile()) {
+            response =
+                new FileOutputResponseWrapper(facesTestCase.getResponse(),
+                    facesTestCase.getTestRootDir());
+        } else {
+            response = facesTestCase.getResponse();
+        }
+        LifecycleFactory factory = (LifecycleFactory)
+            FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
+        assert (null != factory);
+        lifecycle = factory.getLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE);
+        assert (null != lifecycle);
+
+        facesContextFactory = (FacesContextFactory)
+            FactoryFinder.getFactory(FactoryFinder.FACES_CONTEXT_FACTORY);
+        facesContext =
+            facesContextFactory.getFacesContext(facesTestCase.getConfig().
+                                                getServletContext(),
+                                               facesTestCase.getRequest(),
+                                                response, lifecycle);
     }
 
 

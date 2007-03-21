@@ -32,13 +32,10 @@
 package com.sun.faces.cactus;
 
 import com.sun.faces.RIConstants;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.LineNumberReader;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.Iterator;
+import com.sun.faces.application.ApplicationAssociate;
+import com.sun.faces.application.WebappLifecycleListener;
+import com.sun.faces.config.ConfigureListener;
+import org.apache.cactus.server.ServletContextWrapper;
 
 import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
@@ -52,11 +49,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 
-import com.sun.faces.application.ApplicationAssociate;
-import com.sun.faces.config.ConfigureListener;
-import com.sun.faces.util.Util;
-
-import org.apache.cactus.server.ServletContextWrapper;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.LineNumberReader;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Iterator;
 
 
 /**
@@ -108,6 +107,10 @@ public class FacesTestCaseService extends Object {
 
     protected FacesContext facesContext = null;
 
+    protected ConfigureListener configureListener = null;
+
+    protected WebappLifecycleListener webappListener = null;
+
     protected Lifecycle lifecycle = null;
 
 //
@@ -150,7 +153,8 @@ public class FacesTestCaseService extends Object {
         assert (null != testRootDir);
         facesTestCase.setTestRootDir(testRootDir);             
       
-         ConfigureListener configListener = new ConfigureListener();
+         this.configureListener = new ConfigureListener();
+        this.webappListener = new WebappLifecycleListener();
         ServletContextEvent e =
             new ServletContextEvent(
                 facesTestCase.getConfig().getServletContext());
@@ -160,7 +164,8 @@ public class FacesTestCaseService extends Object {
             (facesTestCase.getConfig().getServletContext().
             getAttribute(FacesServlet.CONFIG_FILES_ATTR))) {
 
-            configListener.contextInitialized(e);
+            webappListener.contextInitialized(e);
+            configureListener.contextInitialized(e);
         }
 
         initFacesContext();
@@ -194,11 +199,12 @@ public class FacesTestCaseService extends Object {
             facesTestCase.getConfig().getServletContext()
                 .removeAttribute(RIConstants.HTML_BASIC_RENDER_KIT);
         }
-        ConfigureListener configListener = new ConfigureListener();
+
         ServletContextEvent e =
             new ServletContextEvent(
                 facesTestCase.getConfig().getServletContext());
-        configListener.contextDestroyed(e);
+        configureListener.contextDestroyed(e);
+        webappListener.contextDestroyed(e);
 
         // make sure session is not null. It will null in case release
         // was invoked.
@@ -438,11 +444,18 @@ public class FacesTestCaseService extends Object {
                 }
             };
 
-        ConfigureListener configListener = new ConfigureListener();
         ServletContextEvent e =
             new ServletContextEvent(sc);
-        configListener.contextDestroyed(e);
-        configListener.contextInitialized(e);
+        configureListener.contextDestroyed(e);
+        webappListener.contextDestroyed(e);
+        configureListener = new ConfigureListener();
+        webappListener = new WebappLifecycleListener();
+        webappListener.contextInitialized(e);
+        ApplicationAssociate.setCurrentInstance(
+             ApplicationAssociate.getInstance(
+                  FacesContext.getCurrentInstance().getExternalContext()));
+        configureListener.contextInitialized(e);
+
         initFacesContext();
     }
 

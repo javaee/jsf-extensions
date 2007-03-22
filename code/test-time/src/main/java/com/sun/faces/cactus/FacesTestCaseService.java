@@ -45,6 +45,8 @@ import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.webapp.FacesServlet;
 import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletRequestEvent;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
@@ -451,9 +453,7 @@ public class FacesTestCaseService extends Object {
         configureListener = new ConfigureListener();
         webappListener = new WebappLifecycleListener();
         webappListener.contextInitialized(e);
-        ApplicationAssociate.setCurrentInstance(
-             ApplicationAssociate.getInstance(
-                  FacesContext.getCurrentInstance().getExternalContext()));
+        webappListener.requestInitialized(new ServletRequestEvent(sc, (ServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest()));
         configureListener.contextInitialized(e);
 
         initFacesContext();

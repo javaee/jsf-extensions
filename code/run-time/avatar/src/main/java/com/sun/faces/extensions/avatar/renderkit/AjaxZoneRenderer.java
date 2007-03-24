@@ -30,6 +30,7 @@
 package com.sun.faces.extensions.avatar.renderkit;
 
 import com.sun.faces.extensions.avatar.components.AjaxZone;
+import com.sun.faces.extensions.avatar.components.ScriptsComponent;
 import com.sun.faces.extensions.avatar.lifecycle.AsyncResponse;
 import com.sun.faces.extensions.common.util.Util;
 import java.io.IOException;
@@ -51,6 +52,7 @@ import javax.faces.render.Renderer;
 import org.apache.shale.remoting.Mechanism;
 import org.apache.shale.remoting.XhtmlHelper;
 
+
 /**
  * This class renderers TextField components.
  */
@@ -65,8 +67,14 @@ public class AjaxZoneRenderer extends Renderer {
         "/META-INF/libs/scriptaculous/version1.6.4/prototype.js",
         "/META-INF/com_sun_faces_ajax.js",
         "/META-INF/com_sun_faces_ajax_zone.js"
-    };    
-
+    };
+    
+    private static final String scriptLinkKeys[] = {
+        ScriptsComponent.PROTOTYPE_JS_LINKED,
+        ScriptsComponent.AJAX_JS_LINKED,
+        AjaxZone.ZONE_JS_LINKED        
+    };
+    
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Renderer methods
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -409,8 +417,12 @@ public class AjaxZoneRenderer extends Renderer {
             
             if (!isAjaxRequest && !java.beans.Beans.isDesignTime()) {
                 for (int i = 0; i < scriptIds.length; i++) {
-                    getXhtmlHelper().linkJavascript(context, component, writer,
+                    Map requestMap = context.getExternalContext().getRequestMap();
+                    if (!requestMap.containsKey(scriptLinkKeys[i])) {
+                        getXhtmlHelper().linkJavascript(context, component, writer,
                             Mechanism.CLASS_RESOURCE, scriptIds[i]);
+                        requestMap.put(scriptLinkKeys[i], Boolean.TRUE);
+                    }
                 }
             }
             writeAjaxifyScripts(context, writer, zone, isAjaxRequest);

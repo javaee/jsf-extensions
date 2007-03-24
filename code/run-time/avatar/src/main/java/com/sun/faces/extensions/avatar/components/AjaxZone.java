@@ -32,6 +32,11 @@ public class AjaxZone extends UICommand implements Serializable, NamingContainer
     public String getFamily() { 
         return "com.sun.faces.AjaxZone"; 
     }
+    
+    /**
+     * <p>Request attribute that indicates a <code>script</code> tag pointing to com_sun_faces_ajax_zone.js has been rendered already.</p>
+     */
+    public static final String ZONE_JS_LINKED = "com.sun.faces.extensions.avatar.LINKED/com_sun_faces_ajax_zone.js";
 
     /**
      * <p>Override the <code>UICommand</code> method to wrap the

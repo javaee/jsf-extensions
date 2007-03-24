@@ -37,6 +37,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.render.Renderer;
 import org.apache.shale.remoting.Mechanism;
 import org.apache.shale.remoting.XhtmlHelper;
+import com.sun.faces.extensions.avatar.components.ScriptsComponent;
+import java.util.Map;
 
 /**
  * This class renderers TextField components.
@@ -52,7 +54,12 @@ public class ScriptsRenderer extends Renderer {
         "/META-INF/libs/scriptaculous/version1.6.4/prototype.js",
         "/META-INF/com_sun_faces_ajax.js"
     };    
-
+    
+    private static final String scriptLinkKeys[] = {
+        ScriptsComponent.PROTOTYPE_JS_LINKED,
+        ScriptsComponent.AJAX_JS_LINKED,  
+    };
+    
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Renderer methods
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -69,10 +76,14 @@ public class ScriptsRenderer extends Renderer {
      */
     public void encodeBegin(FacesContext context, UIComponent component)
             throws IOException {
-        if (!AsyncResponse.isAjaxRequest()) {
+        if (!AsyncResponse.isAjaxRequest() && !java.beans.Beans.isDesignTime()) {
             for (int i = 0; i < scriptIds.length; i++) {
-                getXhtmlHelper().linkJavascript(context, component, context.getResponseWriter(),
+                Map requestMap = context.getExternalContext().getRequestMap();
+                if (!requestMap.containsKey(scriptLinkKeys[i])) {
+                    getXhtmlHelper().linkJavascript(context, component, context.getResponseWriter(),
                         Mechanism.CLASS_RESOURCE, scriptIds[i]);
+                    requestMap.put(scriptLinkKeys[i], Boolean.TRUE);
+                }                
             }
         }
     }

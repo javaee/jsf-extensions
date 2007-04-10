@@ -385,3 +385,59 @@ DynaFacesZones.isCommand =
 
     return result;
 }
+
+/**
+ * Convenience function for customizing inspectElement.
+ * @param element The element being inspected.
+ * @param tagNames A string or array of strings specifying the tag names of elements to arm.
+ * @param attributeNames A string or array of strings (parallel to tagNames) 
+ * that restrict the elements to arm by attribute name. Can be undefined or 
+ * null if we do not want to restrict the elements to arm by attribute name and value.
+ * @param attributeValues A string or array of strings (parallel to tagNames)
+ * that restrict the elements to arm by attribute value. Can be undefined or 
+ * null if we do not want to restrict the elements to arm by attribute value.
+ */
+DynaFacesZones.inspectElementByNameAndAttribute = function(element, tagNames, attributeNames, attributeValues) {
+    var defaultResult = DynaFacesZones.inspectElement(element);
+    if (defaultResult != true) {
+        return false;
+    }
+    if (! (tagNames instanceof Array)) {
+        tagNames = [tagNames];
+    }
+    if (typeof attributeNames != 'undefined' && attributeNames != null && !(attributeNames instanceof Array)) {
+        attributeNames = [attributeNames];
+    }
+    if (typeof attributeValues != 'undefined' && attributeValues != null && !(attributeValues instanceof Array)) {
+        attributeValues = [attributeValues];
+    }
+    for (var i = 0; i < tagNames.length; i++) {
+        tagNames[i] = tagNames[i].toLowerCase();
+        if (element.nodeName.toLowerCase().indexOf(tagNames[i]) != 0) {
+            continue;
+        }
+        //if an attribute name corresponding to tagNames[i] was supplied
+        if (typeof attributeNames != 'undefined' && attributeNames != null && attributeNames[i] != null) {
+            //if an attribute value corresponding to tagNames[i] was supplied
+            if (typeof attributeValues != 'undefined' && attributeValues != null && attributeValues[i] != null) {
+                //if the attribute's value is the same as the one supplied, return true
+                if (element.getAttribute(attributeNames[i]) == attributeValues[i]) {
+                    return true;
+                }
+            }
+            else {
+                //an attribute name corresponding to tagNames[i] was supplied
+                //an attribute value corresponding to tagNames[i] was NOT supplied
+                //if the attribute has a defined, non-null value, return true
+                var value = element.getAttribute(attributeNames[i]);
+                if (typeof value != 'undefined' && value != null) {
+                    return true;
+                }
+            }
+        }
+        else {
+            return true;
+        }   
+    }
+    return false;
+}

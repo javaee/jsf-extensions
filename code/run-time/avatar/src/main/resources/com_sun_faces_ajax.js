@@ -27,8 +27,9 @@
  * Copyright 2005 Sun Microsystems Inc. All Rights Reserved
  */
 
+var __existingDynaFaces__ = null;
 if (typeof DynaFaces != 'undefined') {
-    alert("DynaFaces already defined!"); 
+    __existingDynaFaces__ = DynaFaces;
 }
 
 var DynaFaces = new Object();
@@ -291,7 +292,7 @@ DynaFaces.replace = function replace(dest, src)  {
 	var temp = document.createElement('div');
 	var result = null;
 	temp.id = d.id;
-	temp.innerHTML = src;
+	temp.innerHTML = DynaFaces.trim(src);
 
 	result = temp.firstChild;
 	parent.replaceChild(temp.firstChild,d);
@@ -340,6 +341,11 @@ DynaFaces.getForm = function getForm(src) {
     }
     return document.forms[0];
 };
+
+var __existingFaces__ = null;
+if (typeof Faces != 'undefined') {
+    __existingFaces__ = Faces;
+}
 
 /* Facelet Utility Class
  ***********************************************************/
@@ -1014,4 +1020,13 @@ DynaFaces.ActionEvent.prototype = new DynaFaces.FacesEvent;
 
 DynaFaces.queueFacesEvent = function (facesEvent) {
     DynaFaces._eventQueue.push(facesEvent);
+}
+
+if (__existingDynaFaces__ != null) {
+    DynaFaces = __existingDynaFaces__;
+    __existingDynaFaces__ = null;
+}
+if (__existingFaces__ != null) {
+    Faces = __existingFaces__;
+    __existingFaces__ = null;
 }

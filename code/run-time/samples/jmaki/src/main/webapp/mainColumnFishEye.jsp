@@ -1,7 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@ taglib uri="http://java.sun.com/blueprints/ui" prefix="d" %>
-<%@ taglib prefix="a" uri="http://java.sun.com/jmaki-jsf" %>
+<%@ taglib prefix="a" uri="http://jmaki/v1.0/jsf" %>
 <%@taglib prefix="jsfExt" uri="http://java.sun.com/jsf/extensions/dynafaces"%> 
 
 <jsfExt:scripts/>
@@ -25,7 +25,7 @@
 
 <td colspan="2">
 
-    <a:ajax name="dojo.fisheye"
+    <a:widget name="dojo.fisheye"
             value="#{fishEyeBean.selectedIndex}"
             valueChangeListener="#{fishEyeBean.valueChanged}"
             args="{items:[

@@ -71,9 +71,21 @@
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>com.sun.jmaki</groupId>
+      <groupId>jmaki</groupId>
       <artifactId>ajax-wrapper-comp</artifactId>
-      <version>v.8.2-SNAPSHOT</version>
+      <version>1.0-SNAPSHOT</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>jmaki</groupId>
+      <artifactId>jmaki-resources-dojo</artifactId>
+      <version>0.4.2-SNAPSHOT</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>jmaki</groupId>
+      <artifactId>jmaki-resources-scriptaculous</artifactId>
+      <version>1.6.4-SNAPSHOT</version>
       <scope>runtime</scope>
     </dependency>
   </dependencies>

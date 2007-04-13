@@ -1,5 +1,5 @@
 <%@ taglib uri="http://java.sun.com/blueprints/ui" prefix="d" %>
-<%@ taglib prefix="a" uri="http://java.sun.com/jmaki-jsf" %>
+<%@ taglib prefix="a" uri="http://jmaki/v1.0/jsf" %>
 
 <h:form id="form">
 
@@ -42,7 +42,7 @@
       <f:facet           name="header">
         <h:outputText  value="Customer Name"/>
       </f:facet>
-      <a:ajax name="scriptaculous.inplace" value="#{customer.name}"/>
+      <a:widget name="scriptaculous.inplace" value="#{customer.name}"/>
     </h:column>
 
     <h:column>

@@ -201,7 +201,9 @@ public class ELFlash implements Map<String,Object> {
                 facesMessages.add(messageIter.next());
             }
             // Add the list to the map
-            allFacesMessages = new HashMap<String, List<FacesMessage>>();             
+            if (null == allFacesMessages) {
+                allFacesMessages = new HashMap<String, List<FacesMessage>>();
+            }
             allFacesMessages.put(curMessageId, facesMessages);
         }
         facesMessages = null;

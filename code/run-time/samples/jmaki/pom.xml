@@ -79,13 +79,13 @@
     <dependency>
       <groupId>jmaki</groupId>
       <artifactId>jmaki-resources-dojo</artifactId>
-      <version>0.4.2-SNAPSHOT</version>
+      <version>0.9-SNAPSHOT</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>jmaki</groupId>
       <artifactId>jmaki-resources-scriptaculous</artifactId>
-      <version>1.6.4-SNAPSHOT</version>
+      <version>0.9-SNAPSHOT</version>
       <scope>runtime</scope>
     </dependency>
   </dependencies>

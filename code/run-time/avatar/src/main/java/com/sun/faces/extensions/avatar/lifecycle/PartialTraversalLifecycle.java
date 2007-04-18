@@ -80,7 +80,7 @@ public class PartialTraversalLifecycle extends Lifecycle {
             parent.execute(context);
         }
         finally {
-            PartialTraversalViewRoot root = async.getPartialTraversalViewRoot();
+            PartialTraversalViewRoot root =async.getPartialTraversalViewRoot();
             if (null != root) {
                 root.postExecuteCleanup(context);
             }
@@ -102,7 +102,8 @@ public class PartialTraversalLifecycle extends Lifecycle {
         try {
 
             // Don't allow any content between now and the call
-            // to PartialTraversalViewRoot.encodeBegin() to be written to the response.
+            // to PartialTraversalViewRoot.encodeBegin() to be 
+	    // written to the response.
             async.setOnOffResponseEnabled(false);
             parent.render(context);
             
@@ -114,7 +115,9 @@ public class PartialTraversalLifecycle extends Lifecycle {
             if (!async.isRenderNone()) {
                 writer = async.getResponseWriter();
                 if (!(root instanceof UIComponent)) {
-                    throw new IllegalStateException("Class returned from AsyncResponse.getPartialTraversalViewRoot must be a UIComponent");
+                    throw new IllegalStateException("Class returned from" +
+				" AsyncResponse.getPartialTraversalViewRoot" +
+						    " must be a UIComponent");
                 }
                 writer.startElement("state", (UIComponent) root);
                 state = async.getViewState(context);
@@ -157,7 +160,7 @@ public class PartialTraversalLifecycle extends Lifecycle {
         PhaseListener [] listeners = getPhaseListeners();
         
         for (PhaseListener cur : listeners) {
-            if (cur.getClass().getName().equals(listener.getClass().getName())){
+           if (cur.getClass().getName().equals(listener.getClass().getName())){
                 result = true;
                 break;
             }

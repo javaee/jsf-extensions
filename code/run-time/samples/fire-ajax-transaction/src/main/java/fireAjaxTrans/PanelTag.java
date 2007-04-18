@@ -238,7 +238,11 @@ public final class PanelTag extends UIComponentELTag {
         try {
             panel = (javax.faces.component.UIPanel) component;
         } catch (ClassCastException cce) {
-            throw new IllegalStateException("Component " + component.toString() + " not expected type.  Expected: javax.faces.component.UIPanel.  Perhaps you're missing a tag?");
+            throw new IllegalStateException("Component " + 
+					    component.toString() + 
+					    " not expected type.  Expected:"+
+					    " javax.faces.component.UIPanel."+
+					    " Perhaps you're missing a tag?");
         }
 
         if (bgcolor != null) {

@@ -69,7 +69,8 @@ import javax.servlet.http.HttpServletResponse;
  *	com.sun.faces.extensions.avatar.lifecycle.AsyncResponse#isAjaxRequest}
  *	returns <code>false</code>, the UIViewRoot superclass implementation of
  *	the respective method is called.  Otherwise,
- *	{@link com.sun.faces.extensions.avatar.lifecycle.AsyncResponse#getExecuteSubtrees}
+ *	{@link 
+com.sun.faces.extensions.avatar.lifecycle.AsyncResponse#getExecuteSubtrees}
  *	is called.  This returns a list of client ids suitable for the
  *	<code>execute</code> portion of the request processing lifecycle.  If
  *	the list is empty, call through to the UIViewRoot superclass
@@ -85,7 +86,7 @@ import javax.servlet.http.HttpServletResponse;
  *	com.sun.faces.extensions.avatar.lifecycle.AsyncResponse#isAjaxRequest}
  *	returns <code>false</code>, the UIViewRoot superclass
  *	<code>encode*</code> methods are called.  Otherwise, {@link
- *	com.sun.faces.extensions.avatar.lifecycle.AsyncResponse#getRenderSubtrees}
+ *  com.sun.faces.extensions.avatar.lifecycle.AsyncResponse#getRenderSubtrees}
  *	is called.  This returns a list of client ids suitable for the
  *	{@link javax.faces.lifecycle.Lifecycle#render} portion of the request
  *	processing lifecycle.  If the list is empty, call through to the
@@ -141,14 +142,17 @@ public class PartialTraversalViewRootHelper implements Serializable {
      */
     public PartialTraversalViewRootHelper(PartialTraversalViewRoot viewRoot) {
 	if (viewRoot == null) {
-	    throw new IllegalArgumentException("PartialTraversalViewRoot cannot be null!");
+	    throw new IllegalArgumentException("PartialTraversalViewRoot " +
+					       "cannot be null!");
 	}
 	setUIViewRoot(viewRoot);
 
         modifiedComponents = new ArrayList<UIComponent>();
 
         markImmediate = new Util.TreeTraversalCallback() {
-            public boolean takeActionOnNode(FacesContext context, UIComponent comp) throws FacesException {
+            public boolean takeActionOnNode(FacesContext context, 
+					    UIComponent comp) 
+		throws FacesException {
                 if (comp instanceof ActionSource) {
                     ActionSource as = (ActionSource)comp;
                     if (!as.isImmediate()) {
@@ -319,11 +323,14 @@ public class PartialTraversalViewRootHelper implements Serializable {
         try {
             // Turn on the response that has been embedded in the ViewHandler.
             async.setOnOffResponseEnabled(true);
-            // If this is an ajax request, and it is a partial render request...
+            // If this is an ajax request, and it is a partial render
+            // request...
 
             if (!renderAll) {
-                // replace the context's responseWriter with the AjaxResponseWriter
-                // Get (and maybe create) the AjaxResponseWriter
+
+                // replace the context's responseWriter with the
+                // AjaxResponseWriter Get (and maybe create) the
+                // AjaxResponseWriter
                 writer = async.getResponseWriter();
                 orig = context.getResponseWriter();
 
@@ -437,7 +444,8 @@ public class PartialTraversalViewRootHelper implements Serializable {
         AsyncResponse async = AsyncResponse.getInstance();
 
         ExternalContext extContext = context.getExternalContext();
-        // If the client did not explicitly request that no subtrees be rendered...
+        // If the client did not explicitly request that no subtrees be
+        // rendered...
         if (!async.isRenderNone()) {
             // prepare to render the partial response.
             if (extContext.getResponse() instanceof HttpServletResponse) {
@@ -446,7 +454,8 @@ public class PartialTraversalViewRootHelper implements Serializable {
                 servletResponse.setContentType("text/xml");
                 servletResponse.setHeader("Cache-Control", "no-cache");
                 String xjson =
-                        extContext.getRequestHeaderMap().get(AsyncResponse.XJSON_HEADER);
+                        extContext.getRequestHeaderMap().
+		    get(AsyncResponse.XJSON_HEADER);
                 if (null != xjson) {
                     servletResponse.setHeader(AsyncResponse.XJSON_HEADER,
                             xjson);
@@ -462,7 +471,8 @@ public class PartialTraversalViewRootHelper implements Serializable {
     /**
      *
      */
-    public void encodePartialResponseEnd(FacesContext context) throws IOException {
+    public void encodePartialResponseEnd(FacesContext context) 
+	throws IOException {
         ResponseWriter writer = context.getResponseWriter();
         AsyncResponse async = AsyncResponse.getInstance();
 
@@ -471,7 +481,8 @@ public class PartialTraversalViewRootHelper implements Serializable {
         // template text can rely on the tree including template text.
         this.broadcastEvents(context, PhaseId.RENDER_RESPONSE);
 
-        // If the client did not explicitly request that no subtrees be rendered...
+        // If the client did not explicitly request that no subtrees be
+        // rendered...
         if (!async.isRenderNone()) {
             writer.endElement("components");
         }
@@ -519,7 +530,8 @@ public class PartialTraversalViewRootHelper implements Serializable {
         // after view content.
         // We will have to do something different for other implementations.
         // This is not a problem for Facelets.
-        context.getExternalContext().getRequestMap().remove("com.sun.faces.AFTER_VIEW_CONTENT");
+        context.getExternalContext().getRequestMap().
+	    remove("com.sun.faces.AFTER_VIEW_CONTENT");
 
         // move aside the AjaxResponseWriter
         if (null != orig) {
@@ -533,8 +545,9 @@ public class PartialTraversalViewRootHelper implements Serializable {
         List<String> subtrees = null;
 
         // If this callback is intended for RENDER_RESPONSE, use
-        // async.getRenderSubtrees().  Otherwise, use async.getExecuteSubtrees().
-        // If async.getExecuteSubtrees() is empty, use async.getRenderSubtrees().
+        // async.getRenderSubtrees().  Otherwise, use
+        // async.getExecuteSubtrees().  If async.getExecuteSubtrees() is
+        // empty, use async.getRenderSubtrees().
 
         if (cb.getPhaseId() == PhaseId.RENDER_RESPONSE) {
             subtrees = async.getRenderSubtrees();
@@ -585,7 +598,8 @@ public class PartialTraversalViewRootHelper implements Serializable {
             return curPhase;
         }
 
-        public void invokeContextCallback(FacesContext facesContext, UIComponent comp) {
+        public void invokeContextCallback(FacesContext facesContext, 
+					  UIComponent comp) {
             try {
                 ConverterException converterException = null;
 
@@ -593,7 +607,8 @@ public class PartialTraversalViewRootHelper implements Serializable {
                     // If the user requested an immediate request
                     // Make sure to set the immediate flag.
                     if (AsyncResponse.isImmediateAjaxRequest()) {
-                        PartialTraversalViewRootHelper.this.markImmediate.takeActionOnNode(facesContext, comp);
+                        PartialTraversalViewRootHelper.this.markImmediate.
+			    takeActionOnNode(facesContext, comp);
                     }
 
                     comp.processDecodes(facesContext);
@@ -604,16 +619,20 @@ public class PartialTraversalViewRootHelper implements Serializable {
                 } else if (curPhase == PhaseId.RENDER_RESPONSE) {
 
                     if (comp.isRendered()) {
-                        ResponseWriter writer = AsyncResponse.getInstance().getResponseWriter();
+                        ResponseWriter writer = AsyncResponse.getInstance().
+			    getResponseWriter();
 
                         writer.startElement("render", comp);
-                        writer.writeAttribute("id", comp.getClientId(facesContext), "id");
+                        writer.writeAttribute("id", 
+					comp.getClientId(facesContext), "id");
                         try {
                             writer.startElement("markup", comp);
                             writer.write("<![CDATA[");
 
-                            // setup up a writer which will escape any CDATA sections
-                            facesContext.setResponseWriter(new EscapeCDATAWriter(writer));
+                            // setup up a writer which will escape any
+                            // CDATA sections
+                            facesContext.
+			      setResponseWriter(new EscapeCDATAWriter(writer));
 
                             // do the default behavior...
                             comp.encodeAll(facesContext);
@@ -630,7 +649,10 @@ public class PartialTraversalViewRootHelper implements Serializable {
                     }
                 }
                 else {
-                    throw new IllegalStateException("I18N: Unexpected PhaseId passed to PhaseAwareContextCallback: " + curPhase.toString());
+                    throw new IllegalStateException("I18N: Unexpected " + 
+						    "PhaseId passed to " +
+					      " PhaseAwareContextCallback: " +
+						    curPhase.toString());
                 }
 
             }

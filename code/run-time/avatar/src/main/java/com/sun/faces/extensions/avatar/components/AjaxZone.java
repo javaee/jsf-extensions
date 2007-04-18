@@ -20,7 +20,8 @@ import javax.faces.component.NamingContainer;
 /**
  * 
  */
-public class AjaxZone extends UICommand implements Serializable, NamingContainer {
+public class AjaxZone extends UICommand implements Serializable, 
+						   NamingContainer {
     public AjaxZone() {
         super();
         setRendererType("com.sun.faces.AjaxZone");
@@ -34,9 +35,13 @@ public class AjaxZone extends UICommand implements Serializable, NamingContainer
     }
     
     /**
-     * <p>Request attribute that indicates a <code>script</code> tag pointing to com_sun_faces_ajax_zone.js has been rendered already.</p>
+     * <p>Request attribute that indicates a <code>script</code> tag
+     * pointing to com_sun_faces_ajax_zone.js has been rendered
+     * already.</p>
      */
-    public static final String ZONE_JS_LINKED = "com.sun.faces.extensions.avatar.LINKED/com_sun_faces_ajax_zone.js";
+
+    public static final String ZONE_JS_LINKED = 
+	"com.sun.faces.extensions.avatar.LINKED/com_sun_faces_ajax_zone.js";
 
     /**
      * <p>Override the <code>UICommand</code> method to wrap the
@@ -91,8 +96,10 @@ public class AjaxZone extends UICommand implements Serializable, NamingContainer
     }
     
     public List<AjaxZone> getAllZoneList() {
-        Map<String,Object> requestMap = FacesContext.getCurrentInstance().getExternalContext().getRequestMap();
-        List<AjaxZone> zoneList = (List<AjaxZone>) requestMap.get(ALL_ZONE_LIST);
+        Map<String,Object> requestMap = 
+	FacesContext.getCurrentInstance().getExternalContext().getRequestMap();
+        List<AjaxZone> zoneList = (List<AjaxZone>) 
+	    requestMap.get(ALL_ZONE_LIST);
         if (null == zoneList) {
             zoneList = new ArrayList<AjaxZone>();
             requestMap.put(ALL_ZONE_LIST, zoneList);
@@ -102,8 +109,11 @@ public class AjaxZone extends UICommand implements Serializable, NamingContainer
     }
 
     public List<AjaxZone> getRenderedZoneList() {
-        Map<String,Object> requestMap = FacesContext.getCurrentInstance().getExternalContext().getRequestMap();
-        List<AjaxZone> zoneList = (List<AjaxZone>) requestMap.get(RENDERED_ZONE_LIST);
+        Map<String,Object> requestMap = 
+	    FacesContext.getCurrentInstance().getExternalContext().
+	    getRequestMap();
+        List<AjaxZone> zoneList = (List<AjaxZone>) 
+	    requestMap.get(RENDERED_ZONE_LIST);
         // If this is an AjaxRequest, the effective zoneList is
         // (allZoneList - (allZoneList - renderedZoneList))
         // where renderedZoneList is the list of zones specified
@@ -112,19 +122,24 @@ public class AjaxZone extends UICommand implements Serializable, NamingContainer
             zoneList = new ArrayList<AjaxZone>();
             requestMap.put(RENDERED_ZONE_LIST, zoneList);
             List<AjaxZone> allZoneList = getAllZoneList();
-            List<AjaxZone> allZonesMinusRenderedComponents = new ArrayList<AjaxZone>();
+            List<AjaxZone> allZonesMinusRenderedComponents = 
+		new ArrayList<AjaxZone>();
 
             zoneList.addAll(allZoneList);
             allZonesMinusRenderedComponents.addAll(allZoneList);
-            allZonesMinusRenderedComponents.removeAll(AsyncResponse.getInstance().getRenderedComponentSubtrees());
+            allZonesMinusRenderedComponents.
+		removeAll(AsyncResponse.getInstance().
+			  getRenderedComponentSubtrees());
             zoneList.removeAll(allZonesMinusRenderedComponents);
         }
 
         return zoneList;
     }    
 
-    private static final String ALL_ZONE_LIST = AsyncResponse.FACES_PREFIX + "ALL_AJAX_ZONE_LIST";
-    private static final String RENDERED_ZONE_LIST = AsyncResponse.FACES_PREFIX + "RENDERED_AJAX_ZONE_LIST";
+    private static final String ALL_ZONE_LIST = AsyncResponse.FACES_PREFIX + 
+	"ALL_AJAX_ZONE_LIST";
+    private static final String RENDERED_ZONE_LIST = 
+	AsyncResponse.FACES_PREFIX + "RENDERED_AJAX_ZONE_LIST";
 
     
     /* --------------- style and styleClass ------------- */
@@ -160,15 +175,15 @@ public class AjaxZone extends UICommand implements Serializable, NamingContainer
     }
 
     /**
-     * <p>CSS style class(es) to be applied to the outermost HTML element when this 
-     * component is rendered.</p>
+     * <p>CSS style class(es) to be applied to the outermost HTML
+     * element when this component is rendered.</p>
      */
 
     private String styleClass = null;
 
     /**
-     * <p>CSS style class(es) to be applied to the outermost HTML element when this 
-     * component is rendered.</p>
+     * <p>CSS style class(es) to be applied to the outermost HTML
+     * element when this component is rendered.</p>
      */
     public String getStyleClass() {
         if (this.styleClass != null) {
@@ -182,8 +197,8 @@ public class AjaxZone extends UICommand implements Serializable, NamingContainer
     }
 
     /**
-     * <p>CSS style class(es) to be applied to the outermost HTML element when this 
-     * component is rendered.</p>
+     * <p>CSS style class(es) to be applied to the outermost HTML
+     * element when this component is rendered.</p>
      * @see #getStyleClass()
      */
     public void setStyleClass(String styleClass) {

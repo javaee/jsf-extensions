@@ -246,14 +246,19 @@ public final class ButtonTag extends UIComponentELTag {
         try {
             command = (javax.faces.component.UICommand) component;
         } catch (ClassCastException cce) {
-            throw new IllegalStateException("Component " + component.toString() + " not expected type.  Expected: javax.faces.component.UICommand.  Perhaps you're missing a tag?");
+            throw new IllegalStateException("Component " + 
+					    component.toString() + 
+					    " not expected type.  Expected:" +
+					  " javax.faces.component.UICommand." +
+					    " Perhaps you're missing a tag?");
         }
 
         if (action != null) {
             command.setActionExpression(action);
         }
         if (actionListener != null) {
-            command.addActionListener(new MethodExpressionActionListener(actionListener));
+            command.addActionListener(new 
+               MethodExpressionActionListener(actionListener));
         }
         if (immediate != null) {
             command.setValueExpression("immediate", immediate);

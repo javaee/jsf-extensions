@@ -59,9 +59,9 @@ import org.apache.shale.remoting.XhtmlHelper;
 public class AjaxZoneRenderer extends Renderer {
     
 
-    // PENDING(craigmcc): I've filed SHALE-183 on this.  I'd like to get out of 
-    // the business of maintaining all this JavaScript myself and let Shale 
-    // take care of it.
+    // PENDING(craigmcc): I've filed SHALE-183 on this.  I'd like to get
+    // out of the business of maintaining all this JavaScript myself and
+    // let Shale take care of it.
     
     private static final String scriptIds[] = {
         "/META-INF/libs/scriptaculous/version1.6.4/prototype.js",
@@ -75,20 +75,20 @@ public class AjaxZoneRenderer extends Renderer {
         AjaxZone.ZONE_JS_LINKED        
     };
     
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Renderer methods
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     public void decode(FacesContext context, UIComponent component) {
         if (context == null || component == null) {
             throw new NullPointerException();
         }
 
-        // Was our command the one that caused this submission?
-        // we don' have to worry about getting the value from request parameter
-        // because we just need to know if this command caused the submission. We
-        // can get the command name by calling currentValue. This way we can 
-        // get around the IE bug.
+        // Was our command the one that caused this submission?  we don'
+        // have to worry about getting the value from request parameter
+        // because we just need to know if this command caused the
+        // submission. We can get the command name by calling
+        // currentValue. This way we can get around the IE bug.
         String clientId = component.getClientId(context);
         Map<String,String> requestParameterMap = context.getExternalContext()
             .getRequestParameterMap();
@@ -109,8 +109,8 @@ public class AjaxZoneRenderer extends Renderer {
     }
 
     /**
-     * Render the beginning of the specified UIComponent to the output stream or
-     * writer associated with the response we are creating.
+     * Render the beginning of the specified UIComponent to the output
+     * stream or writer associated with the response we are creating.
      *
      * @param context FacesContext for the current request.
      * @param component UIComponent to be rendered.
@@ -136,14 +136,18 @@ public class AjaxZoneRenderer extends Renderer {
         writeStyle(context, writer, component, true);
     }
     
-    private void writeStyle(FacesContext context, ResponseWriter writer, UIComponent comp, boolean isStyleClass) throws IOException {
+    private void writeStyle(FacesContext context, ResponseWriter writer, 
+			    UIComponent comp, boolean isStyleClass) 
+	throws IOException {
         String styleValue = null;
         ValueExpression styleExp = null;
         String styleProperty = isStyleClass ? "styleClass" : "style";
         
-        if (null == (styleValue = (String) comp.getAttributes().get(styleProperty))) {
+        if (null == (styleValue = (String) comp.getAttributes().
+		     get(styleProperty))) {
             if (null != (styleExp = comp.getValueExpression(styleProperty))) {
-                styleValue = (String) styleExp.getValue(context.getELContext());
+                styleValue = (String) styleExp.getValue(context.
+							getELContext());
             }
         }
         
@@ -157,22 +161,23 @@ public class AjaxZoneRenderer extends Renderer {
      * component attribute and the result of calling 
      * <code>getInteractionType</code>.</p>
      *
-     * <p>If isAjaxRequest, and interactionType is null or "output", take no
-     * action.</p>
+     * <p>If isAjaxRequest, and interactionType is null or "output",
+     * take no action.</p>
      *
-     * <p>If !isAjaxRequest, and interactionType is null or "output", write only
-     * the zone accruer.</p>
+     * <p>If !isAjaxRequest, and interactionType is null or "output",
+     * write only the zone accruer.</p>
      *
-     * <p>If !isAjaxRequest, and interactionType is non-null and "input", write 
-     * the zone accrual and ajaxifyChildren script.</p>
+     * <p>If !isAjaxRequest, and interactionType is non-null and
+     * "input", write the zone accrual and ajaxifyChildren script.</p>
      *
-     * <p>If isAjaxRequest, and interactionType is "input", write only the 
-     * ajaxifyChildren script.</P>
+     * <p>If isAjaxRequest, and interactionType is "input", write only
+     * the ajaxifyChildren script.</P>
      *
      * <p>
      */
     
-    private void writeAjaxifyScripts(FacesContext context, ResponseWriter writer, AjaxZone comp,
+    private void writeAjaxifyScripts(FacesContext context, 
+				     ResponseWriter writer, AjaxZone comp,
             boolean isAjaxRequest) throws IOException {
         String
                 clientId = null,
@@ -214,7 +219,8 @@ public class AjaxZoneRenderer extends Renderer {
 	    
                 clientId = currentZone.getClientId(context);
                 if (writeZoneAccruer) {
-                    writer.write("\nDynaFacesZones.g_zones.push(\"" + clientId + "\");");
+                    writer.write("\nDynaFacesZones.g_zones.push(\"" +
+				 clientId + "\");");
                 }
                 execute = getAttr(context, currentZone, "execute");
                 render = getAttr(context, currentZone, "render");
@@ -223,10 +229,12 @@ public class AjaxZoneRenderer extends Renderer {
                             clientId + "\");");
                 }
                 if (null != execute) {
-                    writer.write("\ncurZone[\"execute\"] = \"" + execute + "\";");
+                    writer.write("\ncurZone[\"execute\"] = \"" + execute + 
+				 "\";");
                 }
                 if (null != render) {
-                    writer.write("\ncurZone[\"render\"] = \"" + render + "\";");
+                    writer.write("\ncurZone[\"render\"] = \"" + render + 
+				 "\";");
                 }
             }
             
@@ -250,58 +258,73 @@ public class AjaxZoneRenderer extends Renderer {
 
                 if (writeAjaxifyChildren) {
                     boolean wroteAttribute = false;
-                    collectPostData = getAttr(context, currentZone, "collectPostData");
+                    collectPostData = getAttr(context, currentZone, 
+					      "collectPostData");
                     eventType = getAttr(context, currentZone, "eventType");
-                    getCallbackData = getAttr(context, currentZone, "getCallbackData");
-                    inspectElement = getAttr(context, currentZone, "inspectElement");
-                    replaceElement = getAttr(context, currentZone, "replaceElement");
-                    postReplace = getAttr(context, currentZone, "postReplace");
+                    getCallbackData = getAttr(context, currentZone, 
+					      "getCallbackData");
+                    inspectElement = getAttr(context, currentZone, 
+					     "inspectElement");
+                    replaceElement = getAttr(context, currentZone, 
+					     "replaceElement");
+                    postReplace = getAttr(context, currentZone, 
+					  "postReplace");
 
                     ajaxifyChildren = new StringBuffer();
-                    ajaxifyChildren.append("\nDynaFacesZones.ajaxifyChildren($(\'" + clientId + "\'), ");
+                    ajaxifyChildren.append("\nDynaFacesZones." +
+					   "ajaxifyChildren($(\'" + 
+					   clientId + "\'), ");
                     ajaxifyChildren.append("{ ");
                     if (null != collectPostData) {
                         wroteAttribute = true;
-                        ajaxifyChildren.append(" collectPostData: \'" + collectPostData + "\'");
+                        ajaxifyChildren.append(" collectPostData: \'" + 
+					       collectPostData + "\'");
                     }
                     if (null != eventType) {
                         if (wroteAttribute) {
                             ajaxifyChildren.append(", ");
                         }
                         wroteAttribute = true;
-                        ajaxifyChildren.append("eventType: \'" + eventType + "\'");
+                        ajaxifyChildren.append("eventType: \'" + eventType +
+					       "\'");
                     }
                     if (null != inspectElement) {
                         if (wroteAttribute) {
                             ajaxifyChildren.append(", ");
                         }
                         wroteAttribute = true;
-                        ajaxifyChildren.append("inspectElement: \'" + inspectElement + "\'");
+                        ajaxifyChildren.append("inspectElement: \'" + 
+					       inspectElement + "\'");
                     }
                     if (null != replaceElement) {
                         if (wroteAttribute) {
                             ajaxifyChildren.append(", ");
                         }
                         wroteAttribute = true;
-                        ajaxifyChildren.append("replaceElement: \'" + replaceElement + "\'");
+                        ajaxifyChildren.append("replaceElement: \'" + 
+					       replaceElement + "\'");
                     }
                     if (null != postReplace) {
                         if (wroteAttribute) {
                             ajaxifyChildren.append(", ");
                         }
                         wroteAttribute = true;
-                        ajaxifyChildren.append("postReplace: \'" + postReplace + "\'");
+                        ajaxifyChildren.append("postReplace: \'" + 
+					       postReplace + "\'");
                     }
                     if (null != (action = currentZone.getActionExpression())) {
                         if (wroteAttribute) {
                             ajaxifyChildren.append(", ");
                         }
                         wroteAttribute = true;
-                        ajaxifyChildren.append("action: \'" + action.getExpressionString() + "\'");
+                        ajaxifyChildren.append("action: \'" + 
+					       action.getExpressionString() + 
+					       "\'");
                     }
                     ajaxifyChildren.append(" }");
                     if (null != getCallbackData) {
-                        ajaxifyChildren.append(", \'" + getCallbackData + "\'");
+                        ajaxifyChildren.append(", \'" + getCallbackData + 
+					       "\'");
                     }
                     ajaxifyChildren.append(");");
 
@@ -319,14 +342,18 @@ public class AjaxZoneRenderer extends Renderer {
     private enum InteractionType { input, output }
     
     /**
-     * <p>Return input if this component has one or more children that are 
-     * <code>EditableValueHolder</code> instances.  Return output otherwise.</p>
+     * <p>Return input if this component has one or more children that
+     * are <code>EditableValueHolder</code> instances.  Return output
+     * otherwise.</p>
      */ 
     
-    private InteractionType getInteractionType(FacesContext context, final AjaxZone component) {
+    private InteractionType getInteractionType(FacesContext context, 
+					       final AjaxZone component) {
         Util.TreeTraversalCallback findEditableValueHolder = 
                 new Util.TreeTraversalCallback() {
-            public boolean takeActionOnNode(FacesContext context, UIComponent curNode) throws FacesException {
+            public boolean takeActionOnNode(FacesContext context,
+					    UIComponent curNode)
+		throws FacesException {
                 boolean keepGoing = true;
                 // Skipping the zone itself, return false if the curNode
                 // is an EditableValueHolder or ActionSource
@@ -341,12 +368,14 @@ public class AjaxZoneRenderer extends Renderer {
         // the view traversal will return false iff there is one or more 
         // EditableValueHolder in this zone.
         InteractionType result = 
-         Util.prefixViewTraversal(context, component, findEditableValueHolder) ?
+         Util.prefixViewTraversal(context, component, 
+				  findEditableValueHolder) ?
          InteractionType.output : InteractionType.input;
         return result;
     }
     
-    private String getAttr(FacesContext context, UIComponent comp, String name) {
+    private String getAttr(FacesContext context, UIComponent comp, 
+			   String name) {
         String result = null;
         ValueExpression ve;
         
@@ -413,13 +442,16 @@ public class AjaxZoneRenderer extends Renderer {
         ResponseWriter writer = context.getResponseWriter();
         AjaxZone zone = (AjaxZone) component;
         boolean isAjaxRequest = AsyncResponse.isAjaxRequest();
-        if (this.isRenderScriptsForAllZonesRightNow(context, zone, isAjaxRequest)) {
+        if (this.isRenderScriptsForAllZonesRightNow(context, zone, 
+						    isAjaxRequest)) {
             
             if (!isAjaxRequest && !java.beans.Beans.isDesignTime()) {
                 for (int i = 0; i < scriptIds.length; i++) {
-                    Map requestMap = context.getExternalContext().getRequestMap();
+                    Map requestMap = context.getExternalContext().
+			getRequestMap();
                     if (!requestMap.containsKey(scriptLinkKeys[i])) {
-                        getXhtmlHelper().linkJavascript(context, component, writer,
+                        getXhtmlHelper().linkJavascript(context, component,
+							writer,
                             Mechanism.CLASS_RESOURCE, scriptIds[i]);
                         requestMap.put(scriptLinkKeys[i], Boolean.TRUE);
                     }
@@ -439,9 +471,9 @@ public class AjaxZoneRenderer extends Renderer {
         return true; 
     }
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Private methods
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     private transient XhtmlHelper xHtmlHelper = null;
     
@@ -464,7 +496,8 @@ public class AjaxZoneRenderer extends Renderer {
     private boolean isRenderScriptsForAllZonesRightNow(FacesContext context,
             AjaxZone currentZone, boolean isAjaxRequest) {
         boolean result = false;
-        List<AjaxZone> zoneList = isAjaxRequest ? currentZone.getRenderedZoneList()
+        List<AjaxZone> zoneList = isAjaxRequest ?
+	    currentZone.getRenderedZoneList()
          : currentZone.getAllZoneList();
         if (null != zoneList && !zoneList.isEmpty()) {
             AjaxZone lastRenderedZone = null;

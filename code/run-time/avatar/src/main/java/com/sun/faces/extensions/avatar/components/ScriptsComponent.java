@@ -19,12 +19,16 @@ public class ScriptsComponent extends UIOutput {
     }
 
     /**
-     * <p>Request attribute that indicates a <code>script</code> tag pointing to com_sun_faces_ajax.js has been rendered already.</p>
+     * <p>Request attribute that indicates a <code>script</code> tag
+     * pointing to com_sun_faces_ajax.js has been rendered already.</p>
      */
-    public static final String AJAX_JS_LINKED = "com.sun.faces.extensions.avatar.LINKED/com_sun_faces_ajax.js";
+    public static final String AJAX_JS_LINKED =
+	"com.sun.faces.extensions.avatar.LINKED/com_sun_faces_ajax.js";
     
     /**
-     * <p>Request attribute that indicates a <code>script</code> tag pointing to prototype.js has been rendered already.</p>
+     * <p>Request attribute that indicates a <code>script</code> tag
+     * pointing to prototype.js has been rendered already.</p>
      */
-    public static final String PROTOTYPE_JS_LINKED = "com.sun.faces.extensions.avatar.LINKED/prototype.js";
+    public static final String PROTOTYPE_JS_LINKED = 
+	"com.sun.faces.extensions.avatar.LINKED/prototype.js";
 }

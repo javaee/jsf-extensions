@@ -212,7 +212,8 @@ public class FacesTestCaseService extends Object {
         // was invoked.
         try {
             if (facesContext.getExternalContext() != null) {
-                if (facesContext.getExternalContext().getSession(true) != null) {
+                if (facesContext.getExternalContext().getSession(true) != 
+		    null) {
                     facesContext.getExternalContext().getSessionMap().remove(
                         "TestBean");
                 }
@@ -275,8 +276,8 @@ public class FacesTestCaseService extends Object {
 
 
     /**
-     * This utiity method searches the specified file (line by line) for the occurence
-     * of the specified string.
+     * This utiity method searches the specified file (line by line) for
+     * the occurence of the specified string.
      */
     public boolean verifyExpectedStringInOutput(String str) {
         boolean exists = false;
@@ -368,8 +369,8 @@ public class FacesTestCaseService extends Object {
      * HttpServletRequests for equality.</p>
      *
      * @return true if every attribute in in request1 has an analog in
-     *         request2, with the same value as in request1, and the converse is true
-     *         as well.
+     * request2, with the same value as in request1, and the converse is
+     * true as well.
      */
 
 
@@ -392,7 +393,8 @@ public class FacesTestCaseService extends Object {
                     return false;
                 }
             } else if (null != valA || null != valB) {
-                // one of the values is null, therefore, not equal, return false
+                // one of the values is null, therefore, not equal, 
+		// return false
                 return false;
             }
         }
@@ -411,7 +413,8 @@ public class FacesTestCaseService extends Object {
                     return false;
                 }
             } else if (null != valA || null != valB) {
-                // one of the values is null, therefore, not equal, return false
+                // one of the values is null, therefore, not equal, 
+		// return false
                 return false;
             }
         }
@@ -453,7 +456,9 @@ public class FacesTestCaseService extends Object {
         configureListener = new ConfigureListener();
         webappListener = new WebappLifecycleListener();
         webappListener.contextInitialized(e);
-        webappListener.requestInitialized(new ServletRequestEvent(sc, (ServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest()));
+        webappListener.requestInitialized(new ServletRequestEvent(sc, 
+			   (ServletRequest) FacesContext.getCurrentInstance().
+					  getExternalContext().getRequest()));
         configureListener.contextInitialized(e);
 
         initFacesContext();

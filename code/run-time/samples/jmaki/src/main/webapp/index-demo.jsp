@@ -58,10 +58,10 @@ achieved when using JSF + Dynamic Faces + jMaki.</p>
 
 	<ul>
 
-	  <li><p><a href="home.jsf">Ajax Scrollable Result Set with
+	  <li><p><a id="inplace-test" href="home.jsf">Ajax Scrollable Result Set with
 	  per-cell editing using jMaki.</a> </p></li>
 
-	  <li><p><a href="fisheye.jsf">Ajax FishEye widget with
+	  <li><p><a id="fisheye-test" href="fisheye.jsf">Ajax FishEye widget with
 	  JSF <code>ValueChangeListener</code></a> </p></li>
 
 

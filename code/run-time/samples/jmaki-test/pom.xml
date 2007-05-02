@@ -40,6 +40,7 @@
   </properties>
   
   <build>
+    <defaultGoal>post-integration-test</defaultGoal>
     <!-- We need to force the compiler plugin to compile tests and the surefire plugin to execute
          them because we're using a pom packaging that doesn't have those mapped in its lifecycle.
          -->

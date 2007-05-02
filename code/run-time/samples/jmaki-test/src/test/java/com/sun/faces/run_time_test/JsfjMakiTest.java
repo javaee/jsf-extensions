@@ -125,7 +125,7 @@ public class JsfjMakiTest extends WebclientTestCase  {
         mcp.addAjaxListener(listener);
         
         // Load the result-set scroller
-        mcp.blockingLoad("http://http://localhost:8080/jsf-jmaki/home.jsf");
+        mcp.blockingLoad("http://localhost:8080/jsf-jmaki/home.jsf");
         
         scrollToBeginningOfResultSet(mcp, bitSet);
         

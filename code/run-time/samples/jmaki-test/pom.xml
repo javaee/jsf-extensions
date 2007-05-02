@@ -7,6 +7,8 @@
   <version>0.1</version>
   <packaging>pom</packaging>
   <name>Functional Tests for jmaki DynaFaces app</name>
+  <description>Add the following properties: -Dbrowser.bin.dir=C:\Projects\chaff\xulrunner 
+  -Dcontainer.home=C:/Sun/AppServer clean post-integration-test</description>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -191,4 +193,19 @@
       </plugin>
     </plugins>
   </build>
+  <repositories>
+    <repository>
+      <snapshots />
+      <id>codecaus</id>
+      <name>codehaus</name>
+      <url>http://repository.codehaus.org/</url>
+    </repository>
+    <repository>
+      <snapshots />
+      <id>mozilla.org</id>
+      <name>mozilla.org</name>
+      <url>http://www.mozilla.org/projects/blackwood/webclient/bin/maven2/</url>
+    </repository>
+    </repositories>
+
 </project>

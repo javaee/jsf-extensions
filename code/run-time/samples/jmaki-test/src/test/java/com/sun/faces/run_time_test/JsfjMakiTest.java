@@ -47,7 +47,7 @@ public class JsfjMakiTest extends WebclientTestCase  {
         super(testName);
     }
     
-    private int ajaxTimeOut = 60000;
+    private int ajaxTimeOut = 30000;
     
     private int ajaxWaitInterval = 5000;
 
@@ -77,6 +77,13 @@ public class JsfjMakiTest extends WebclientTestCase  {
         mcp.getRealizedVisibleBrowserWindow();
         final BitSet bitSet = new BitSet();
         AjaxListener listener = new AjaxListener() {
+            
+            public void timedOut() {
+                fail("Timed out waiting for ajax transaction to complete.");
+            }
+            public void errorAjax(Map eventMap) {
+                fail("Received error on Ajax transaction");
+            }
             public void endAjax(Map eventMap) {
                 bitSet.flip(TestFeature.RECEIVED_END_AJAX_EVENT.ordinal());
                 if (null != eventMap) {
@@ -170,18 +177,23 @@ public class JsfjMakiTest extends WebclientTestCase  {
         Thread.currentThread().sleep(10000);
         
         mcp.deleteBrowserControl();
+
     }
     
     private void makeAjaxAssertions(BitSet bitSet) throws Exception {
         // Artifically wait for the ajax transaction to complete, or the timeout to be reached.
         int i = 0;
-        while (!bitSet.get(TestFeature.STOP_WAITING.ordinal()) ||
-                ((i * getAjaxWaitInterval()) > getAjaxTimeOut())) {
+        boolean doTimeout = false;
+        while (!(doTimeout = (i * getAjaxWaitInterval()) > getAjaxTimeOut())) {
+            if (bitSet.get(TestFeature.STOP_WAITING.ordinal())) {
+                break;
+            }
             i++;
             Thread.currentThread().sleep(getAjaxWaitInterval());
         }
-        // Ensure the timeout was not reached
-        assertFalse(((i * getAjaxWaitInterval()) > getAjaxTimeOut()));
+        if (doTimeout) {
+            fail("Timed out waiting for ajax transaction to complete.");
+        }
 
         // assert that the ajax transaction succeeded
         assertTrue(bitSet.get(TestFeature.RECEIVED_END_AJAX_EVENT.ordinal()));

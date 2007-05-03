@@ -36,7 +36,6 @@
     <cargo.resources.version>0.9.1</cargo.resources.version>
     <cargo.core.version>0.9</cargo.core.version>
     <containerId>glassfish1x</containerId>
-    <debug.jvm.args></debug.jvm.args>
   </properties>
   
   <build>
@@ -119,7 +118,7 @@
                         <value>${browser.bin.dir}</value>
                     </property>
                 </systemProperties>
-                <jvm>${debug.jvm.args}</jvm>
+                <argLine>${debug.jvm.args}</argLine>
         </configuration>
         <executions>
           <execution>
@@ -192,6 +191,27 @@
           </execution>
         </executions>
       </plugin>
+      
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-verifier-plugin</artifactId>
+        <configuration>
+            <baseDir>${project.build.directory}</baseDir>
+            <failOnError>true</failOnError>
+            <verificationFile>src/test/verifier/verifications-test.xml</verificationFile>
+        </configuration>
+        <executions>
+          <execution>
+            <id>main</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>verify</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      
     </plugins>
   </build>
   <repositories>
@@ -208,5 +228,23 @@
       <url>http://www.mozilla.org/projects/blackwood/webclient/bin/maven2/</url>
     </repository>
     </repositories>
+    
+    <profiles>
+        <profile>
+            <id>client.debug.shmem</id>
+            <properties>
+                <debug.jvm.args>-Xdebug -Xrunjdwp:transport=dt_shmem,address=jdbconn,server=y,suspend=y</debug.jvm.args>
+            </properties>
+        </profile>
+        
+        <profile>
+            <id>env-edburns</id>
+            <properties>
+                <browser.bin.dir>C:\Projects\chaff\xulrunner</browser.bin.dir> 
+                <container.home>C:\Sun\AppServer</container.home>
+            </properties>
+        </profile>
+        
+    </profiles>
 
 </project>

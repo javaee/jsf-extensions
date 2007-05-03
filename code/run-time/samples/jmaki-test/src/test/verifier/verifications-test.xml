@@ -1,0 +1,8 @@
+<verifications>
+  <files>
+    <file>
+      <location>target/surefire-reports/com.sun.faces.run_time_test.JsfjMakiTest.txt</location>
+      <contains>Failures: 0</contains>
+    </file>
+  </files>
+</verifications>

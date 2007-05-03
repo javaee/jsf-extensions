@@ -128,6 +128,12 @@
   <repositories>
     <repository>
       <snapshots />
+      <id>codecaus</id>
+      <name>codehaus</name>
+      <url>http://repository.codehaus.org/</url>
+    </repository>
+    <repository>
+      <snapshots />
       <id>java.net</id>
       <name>Java.net Maven 1.x Repository for external projects</name>
       <url>https://maven-repository.dev.java.net/nonav/repository</url>

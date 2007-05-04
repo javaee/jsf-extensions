@@ -1,5 +1,5 @@
 /*
- * $Id: JsfjMakiTest.java,v 1.1 2007/04/21 03:25:36 edburns%acm.org Exp $
+ * $Id: JsfjMakiTest.java,v 1.2 2007/05/04 17:10:16 edburns%acm.org Exp $
  */
 
 /* 
@@ -31,6 +31,8 @@ import java.util.Map;
 import junit.framework.TestFailure;
 import org.mozilla.mcp.AjaxListener;
 import org.mozilla.mcp.MCP;
+import org.mozilla.mcp.TimeoutHandler;
+import org.mozilla.mcp.junit.WebclientTestCase;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.Document;
@@ -47,9 +49,7 @@ public class JsfjMakiTest extends WebclientTestCase  {
         super(testName);
     }
     
-    private int ajaxTimeOut = 30000;
-    
-    private int ajaxWaitInterval = 5000;
+    private TimeoutHandler timeoutHandler = null;
 
     public void setUp() {
         super.setUp();
@@ -75,6 +75,16 @@ public class JsfjMakiTest extends WebclientTestCase  {
     
     public void testInplace() throws Exception {
         mcp.getRealizedVisibleBrowserWindow();
+        final Thread testThread = Thread.currentThread();
+        timeoutHandler = new TimeoutHandler() {
+            public void timeout() {
+                super.timeout();
+                testThread.interrupt();
+                fail("Action timed out");
+            }
+        };        
+        mcp.setTimeoutHandler(timeoutHandler);
+        
         final BitSet bitSet = new BitSet();
         AjaxListener listener = new AjaxListener() {
             
@@ -131,8 +141,15 @@ public class JsfjMakiTest extends WebclientTestCase  {
         };
         mcp.addAjaxListener(listener);
         
-        // Load the result-set scroller
-        mcp.blockingLoad("http://localhost:8080/jsf-jmaki/home.jsf");
+        // Load the main page of the app
+        mcp.blockingLoad("http://localhost:8080/jsf-jmaki/index-demo.jsf");
+        
+        if (timeoutHandler.isDidTimeout()) {
+            fail("timed out waiting for load");
+        }
+        
+        // Choose the inplace test
+        mcp.blockingClickElement("inplace-test");
         
         scrollToBeginningOfResultSet(mcp, bitSet);
         
@@ -183,16 +200,12 @@ public class JsfjMakiTest extends WebclientTestCase  {
     private void makeAjaxAssertions(BitSet bitSet) throws Exception {
         // Artifically wait for the ajax transaction to complete, or the timeout to be reached.
         int i = 0;
-        boolean doTimeout = false;
-        while (!(doTimeout = (i * getAjaxWaitInterval()) > getAjaxTimeOut())) {
+        while (true) {
             if (bitSet.get(TestFeature.STOP_WAITING.ordinal())) {
                 break;
             }
             i++;
-            Thread.currentThread().sleep(getAjaxWaitInterval());
-        }
-        if (doTimeout) {
-            fail("Timed out waiting for ajax transaction to complete.");
+            Thread.currentThread().sleep(mcp.getTimeoutWaitInterval());
         }
 
         // assert that the ajax transaction succeeded
@@ -263,22 +276,5 @@ public class JsfjMakiTest extends WebclientTestCase  {
         makeAjaxAssertions(bitSet);
         
     }
-
-    public int getAjaxTimeOut() {
-        return ajaxTimeOut;
-    }
-
-    public void setAjaxTimeOut(int ajaxTimeOut) {
-        this.ajaxTimeOut = ajaxTimeOut;
-    }
-
-    public int getAjaxWaitInterval() {
-        return ajaxWaitInterval;
-    }
-
-    public void setAjaxWaitInterval(int ajaxWaitInterval) {
-        this.ajaxWaitInterval = ajaxWaitInterval;
-    }
-    
     
 }

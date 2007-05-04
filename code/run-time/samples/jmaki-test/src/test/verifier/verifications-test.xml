@@ -4,5 +4,9 @@
       <location>target/surefire-reports/com.sun.faces.run_time_test.JsfjMakiTest.txt</location>
       <contains>Failures: 0</contains>
     </file>
+    <file>
+      <location>target/surefire-reports/com.sun.faces.run_time_test.JsfjMakiTest.txt</location>
+      <contains>Errors: 0</contains>
+    </file>
   </files>
 </verifications>

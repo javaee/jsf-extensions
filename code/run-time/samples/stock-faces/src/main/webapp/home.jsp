@@ -65,8 +65,6 @@ function include_js(file) {
     }
     return false;
 }
-include_js('javascripts/oom_sun_faces_ajax.js');
-include_js('javascripts/behaviour.js');
 include_js('javascripts/stock-faces.js');
 </script>
 </head>
@@ -83,6 +81,16 @@ include_js('javascripts/stock-faces.js');
             <h:inputText id="proxyHost"/>
             <h:outputText value="Proxy Port:"/>
             <h:inputText id="proxyPort"/>
+            <h:outputText value="Streaming:"/>
+            <h:selectOneMenu id="streaming" value="Off" 
+                onchange="toggleStreaming()">
+                <f:selectItem itemValue="Off" itemLabel="Off"/>
+                <f:selectItem itemValue="On" itemLabel="On"/>
+            </h:selectOneMenu>
+            <h:selectOneMenu id="connection" value="Local"> 
+                <f:selectItem itemValue="Local" itemLabel="Local"/>
+                <f:selectItem itemValue="Remote" itemLabel="Remote"/>
+            </h:selectOneMenu>
         </h:panelGrid>
     </h:panelGrid>
           

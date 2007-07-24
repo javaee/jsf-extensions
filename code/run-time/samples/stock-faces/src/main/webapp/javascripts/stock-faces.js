@@ -62,4 +62,14 @@ function queueEvent() {
     return false;
 }
 
-Behaviour.addLoadEvent(start);
+function toggleStreaming() {
+    var menu = document.getElementById("streaming");
+    var idx = menu.selectedIndex;
+    var streaming = menu[idx].value;
+    if (streaming == "Off") {
+        stop();
+    } else if (streaming == "On") {
+        start();
+    }
+}
+

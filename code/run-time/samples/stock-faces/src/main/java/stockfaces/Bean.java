@@ -40,8 +40,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.Map;
+import java.util.Random;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -51,6 +50,7 @@ import javax.faces.component.UIGraphic;
 import javax.faces.component.UIInput;
 import javax.faces.component.UIOutput;
 import javax.faces.component.UIPanel;
+import javax.faces.component.UISelectOne;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
@@ -72,24 +72,23 @@ public class Bean {
     public void getStockInfo(ActionEvent ae) {
         FacesContext context = FacesContext.getCurrentInstance();
         UIForm form = (UIForm)context.getViewRoot().findComponent("form");
+        UISelectOne select = (UISelectOne)form.findComponent("connection");
+        String connection = (String)select.getValue();
         if (form != null) {
-            UIInput component = (UIInput)form.findComponent("proxyHost");
-            String proxyHost = (String)component.getValue();
-            component = (UIInput)form.findComponent("proxyPort");
-            String proxyPort = (String)component.getValue();
-            if (proxyHost != null && proxyPort != null) {
-                try {
-                    System.setProperty("http.proxyHost", proxyHost); 
-                    System.setProperty("http.proxyPort", proxyPort); 
-                } catch (SecurityException e) {
-                }
+            if (connection.equals("Remote")) {
+                setProxyIfNeeded(form);
             }
-            component = (UIInput)form.findComponent("symbol");
+            UIInput component = (UIInput)form.findComponent("symbol");
             if (component != null) {
                 String symbolInput = (String)component.getValue();
                 if (symbolInput != null) {
                     String[] symbols = symbolInput.split("\\s");
                     String[] stockData = null;
+                    if (connection.equals("Local")) {
+                        stockData = getLocalStockData(symbols);
+                        buildUI(stockData);
+                        return;
+                    }
                     try {
                         stockData = getStockData(symbols);
                         buildUI(stockData);
@@ -101,7 +100,7 @@ public class Bean {
     }
 
     /**
-     * Helper method to get the stock data.
+     * Helper method to get the stock data (remotely).
      */
     private String[] getStockData(String[] symbols)
         throws IOException, MalformedURLException {
@@ -121,6 +120,7 @@ public class Bean {
                     urlConn.getInputStream());
                 buff = new BufferedReader(inputReader);
                 data[i] = buff.readLine();
+                data[i] = data[i].replace( "\"", "" );
             } catch (MalformedURLException e){
             } catch (IOException ioe) {
             } finally {
@@ -131,6 +131,41 @@ public class Bean {
                     } catch (Exception e) {}
                 }
             }
+        }
+        return data;
+    }
+
+    private String[] getLocalStockData(String[] symbols) {
+        String[] data = new String[symbols.length];
+        Random generator1 = new Random(1459678L);
+        Random generator2 = new Random(System.currentTimeMillis());
+        for (int i=0; i<symbols.length; i++) {
+            // generate an open price between 1 and 100
+            double openPrice = round(generator1.nextDouble() * 100, 2); 
+            // generate a last price such that:
+            // lastPrice is between 1 and (openPrice + 20) 
+            double low = 1;
+            double high = openPrice + 20;
+            double lastPrice = generator2.nextDouble() * (high - low) + low; 
+            lastPrice = round(lastPrice, 2);
+            // change
+            double change = round(lastPrice - openPrice, 2);
+            // calculate percent change
+            double percentChange = 0.00;
+            if (openPrice != lastPrice) {
+                percentChange = 100 * ((lastPrice - openPrice)/openPrice);
+                percentChange = round(percentChange, 2);
+            }
+            // generate volume between 10000 and 100000
+            int volume = generator2.nextInt(90001) + 10000; 
+            // now build the string to pass to buildUI routine
+            data[i] = symbols[i].toUpperCase()+","+
+                symbols[i].toUpperCase()+" INC.,"+
+                new Double(openPrice).toString()+","+
+                new Double(lastPrice).toString()+","+ 
+                new Double(change).toString()+","+
+                new Double(percentChange).toString()+"%,"+
+                new Integer(volume).toString(); 
         }
         return data;
     }
@@ -146,61 +181,115 @@ public class Bean {
         String buffer = null;
         dataPanel.getChildren().clear();
         for (int i=0; i<stockData.length; i++) {
-            buffer = stockData[i];
-            buffer = buffer.replace( "\"", "" );
-            String[] data = buffer.split("\\,");
+            String[] data = stockData[i].split("\\,");
             UIOutput outputComponent = null;
             UIGraphic imageComponent = null;
             double openPrice = 0;
             double lastPrice = 0;
             double change = 0;
-            for (int j=0; j<7; j++) {
+            boolean openPriceAvailable = true;
+
+            // Create and add components wth data values
+
+            // Symbol
+
+            outputComponent = new UIOutput();
+            outputComponent.setValue(data[0]);
+            dataPanel.getChildren().add(outputComponent);
+
+            // Name
+
+            outputComponent = new UIOutput();
+            outputComponent.setValue(data[1]);
+            dataPanel.getChildren().add(outputComponent);
+
+            // Open Price (if any)
+
+            outputComponent = new UIOutput();
+            try {
+                openPrice = new Double(data[2]).doubleValue();
+            } catch (NumberFormatException nfe) {
+                openPriceAvailable = false;
+            }
+            outputComponent.setValue(data[2]);
+            dataPanel.getChildren().add(outputComponent);
+
+            // Last Price
+
+            outputComponent = new UIOutput();
+            if (openPriceAvailable) {
+                lastPrice = new Double(data[3]).doubleValue();
+                lastPrice = round(lastPrice, 2);
+                change = lastPrice - openPrice;
+                change = round(change, 2);
+            }
+            outputComponent.setValue(lastPrice);
+            dataPanel.getChildren().add(outputComponent);
+
+            // Arrow (up or down) Graphic
+
+            if (change < 0) {
+                imageComponent = new UIGraphic();
+                imageComponent.setUrl("images/down_r.gif");
+                dataPanel.getChildren().add(imageComponent);
+            } else if (change > 0) {
+                imageComponent = new UIGraphic();
+                imageComponent.setUrl("images/up_g.gif");
+                dataPanel.getChildren().add(imageComponent);
+            } else {
                 outputComponent = new UIOutput();
-                if (j < 2) {
-                    outputComponent.setValue(data[j]); 
-                }
-                if (j == 2) {
-                    openPrice = new Double(data[j]).doubleValue();
-                    outputComponent.setValue(data[j]); 
-                }
-                if (j == 3) {
-                    lastPrice = new Double(data[j]).doubleValue();
-                    change = lastPrice - openPrice;
-                    change = round(change, 2);
-                    outputComponent.setValue(data[j]); 
-                }
-                if (j == 4) {
-                    if (change < 0) {
-                        imageComponent = new UIGraphic();
-                        imageComponent.setUrl("images/down_r.gif");
-                        dataPanel.getChildren().add(imageComponent);
-                        outputComponent.getAttributes().put("styleClass",
-                            "down-color");
-                    } else if (change > 0) {
-                        imageComponent = new UIGraphic();
-                        imageComponent.setUrl("images/up_g.gif");
-                        dataPanel.getChildren().add(imageComponent);
-                        outputComponent.getAttributes().put("styleClass",
-                            "up-color");
-                    }
-                    outputComponent.setValue(String.valueOf(change));
-                } else {
-                    if (j == 5) {
-                        if (change < 0) {
-                            outputComponent.getAttributes().put("styleClass",
-                                "down-color");
-                        } else if (change > 0) {
-                            outputComponent.getAttributes().put("styleClass",
-                                "up-color");
-                        }
-                    }
-                    
-                    outputComponent.setValue(data[j]); 
-                }
+                outputComponent.setValue("");
                 dataPanel.getChildren().add(outputComponent);
             }
+
+            // Price Change
+
+            outputComponent = new UIOutput();
+            if (change < 0) {
+                outputComponent.getAttributes().put("styleClass",
+                    "down-color");
+            } else if (change > 0) {
+                outputComponent.getAttributes().put("styleClass",
+                    "up-color");
+            }
+            outputComponent.setValue(String.valueOf(change));
+            dataPanel.getChildren().add(outputComponent);
+
+            // Percent Change
+
+            outputComponent = new UIOutput();
+            if (change < 0) {
+                outputComponent.getAttributes().put("styleClass",
+                    "down-color");
+            } else if (change > 0) {
+                outputComponent.getAttributes().put("styleClass",
+                    "up-color");
+            }
+            outputComponent.setValue(data[5]);
+            dataPanel.getChildren().add(outputComponent);
+
+            // Volume
+
+            outputComponent = new UIOutput();
+            outputComponent.setValue(data[6]);
+            dataPanel.getChildren().add(outputComponent);
         }
         dataPanel.setRendered(true);
+    }
+
+    private void setProxyIfNeeded(UIForm form) {
+        UIInput component = (UIInput)form.findComponent("proxyHost");
+        String proxyHost = (String)component.getValue();
+        component = (UIInput)form.findComponent("proxyPort");
+        String proxyPort = (String)component.getValue();
+        if ((proxyHost != null && proxyHost.length() > 0) && 
+            (proxyPort != null && proxyPort.length() > 0)) {
+            try {
+                System.setProperty("http.proxyHost", proxyHost); 
+                System.setProperty("http.proxyPort", proxyPort); 
+            } catch (SecurityException e) {
+            }
+        }
     }
 
     private double round(double val, int places) {

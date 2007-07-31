@@ -70,6 +70,10 @@ include_js('javascripts/stock-faces.js');
 </head>
 <body>
   <h:form id="form" prependId="false">
+    <h:panelGrid styleClass="title-panel">
+        <h:outputText value="Stock Query" styleClass="title-panel-text"/>
+        <h:outputText value="Powered By Dynamic Faces" styleClass="title-panel-subtext"/>
+    </h:panelGrid>
     <h:panelGrid border="1" columns="1" styleClass="panel-input-border">
         <h:panelGrid border="1" columns="7">
             <h:outputText value="Symbol:"/>
@@ -94,7 +98,7 @@ include_js('javascripts/stock-faces.js');
         </h:panelGrid>
     </h:panelGrid>
           
-    <h:panelGrid id="stockdata" border="1" columns="8" 
+    <h:panelGrid id="stockdata" border="1" columns="8"
         styleClass="panel-data-border" rendered="false">
         <h:panelGrid>
             <f:facet name="header">

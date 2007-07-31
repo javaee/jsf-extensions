@@ -34,13 +34,34 @@
  * holder.
  */
 
+.title-panel {
+    background-image: url(images/bgblack18.jpg);
+    height: 80px;
+    width: 780;
+}
+
+.title-panel-text {
+    color: white;
+    font-family: 'Georgia','Times New Roman','times',serif;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.title-panel-subtext {
+    color: white;
+    font-family: 'Georgia','Times New Roman','times',serif;
+    font-size: 14px;
+    font-style: italic
+}
+
 .panel-input-border {
     border: 2px outset blue;
-    background-color: #c1cdcd;
+    background-color: #e0eeee;
 }
 
 .panel-data-border {
     border: 3px outset blue;
+    background-color: #e0eeee;
 }
 
 .down-color {

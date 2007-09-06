@@ -62,13 +62,27 @@ import javax.faces.context.ResponseWriter;
 public class PartialTraversalLifecycle extends Lifecycle {
     
     private Lifecycle parent = null;
+    private boolean redundantPhaseListenersRemoved = false;
 
     public PartialTraversalLifecycle(Lifecycle parent) {
         this.parent = parent;
     }
 
-
     public void execute(FacesContext context) throws FacesException {
+        if (!redundantPhaseListenersRemoved) {
+            PhaseListener [] listeners = getPhaseListeners();
+            for (int i = 0; i < listeners.length; i++) {
+               //test if listeners[i] has any duplicates later in the array,
+               //and, if so, remove listeners[i]
+               for (int j = i + 1; j < listeners.length; j++) {
+                   if (listeners[i].getClass().getName().equals(listeners[j].getClass().getName()) || listeners[i].equals(listeners[j])){
+                        removePhaseListener(listeners[i]);
+                        break;  //go to the next i
+                   }
+               }
+            }
+            redundantPhaseListenersRemoved = true;
+        }
         AsyncResponse async = AsyncResponse.getInstance();
         if (AsyncResponse.isAjaxRequest()) {
             async.installOnOffResponse(context);
@@ -139,13 +153,11 @@ public class PartialTraversalLifecycle extends Lifecycle {
     
 
     public void removePhaseListener(PhaseListener phaseListener) {
-        if (!parentHasListenerOfClass(phaseListener)) {
-            parent.removePhaseListener(phaseListener);
-        }
+        parent.removePhaseListener(phaseListener);
     }
 
     public void addPhaseListener(PhaseListener phaseListener) {
-        if (!parentHasListenerOfClass(phaseListener)) {
+        if (!parentHasListener(phaseListener)) {
             parent.addPhaseListener(phaseListener);
         }
     }
@@ -155,12 +167,12 @@ public class PartialTraversalLifecycle extends Lifecycle {
         return result;
     }
     
-    private boolean parentHasListenerOfClass(PhaseListener listener) {
+    private boolean parentHasListener(PhaseListener listener) {
         boolean result = false;
         PhaseListener [] listeners = getPhaseListeners();
         
         for (PhaseListener cur : listeners) {
-           if (cur.getClass().getName().equals(listener.getClass().getName())){
+           if (cur.getClass().getName().equals(listener.getClass().getName()) || cur.equals(listener)){
                 result = true;
                 break;
             }

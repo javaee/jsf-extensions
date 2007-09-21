@@ -32,6 +32,88 @@ if (typeof DynaFaces != 'undefined') {
     __existingDynaFaces__ = DynaFaces;
 }
 
+// from http://www.quirksmode.org/js/detect.html
+var BrowserDetect = {
+	init: function () {
+		this.browser = this.searchString(this.dataBrowser) || "An unknown browser";
+	},
+	searchString: function (data) {
+		for (var i=0;i<data.length;i++)	{
+			var dataString = data[i].string;
+			var dataProp = data[i].prop;
+			this.versionSearchString = data[i].versionSearch || data[i].identity;
+			if (dataString) {
+				if (dataString.indexOf(data[i].subString) != -1)
+					return data[i].identity;
+			}
+			else if (dataProp)
+				return data[i].identity;
+		}
+	},
+	dataBrowser: [
+		{ 	string: navigator.userAgent,
+			subString: "OmniWeb",
+			versionSearch: "OmniWeb/",
+			identity: "OmniWeb"
+		},
+		{
+			string: navigator.vendor,
+			subString: "Apple",
+			identity: "Safari"
+		},
+		{
+			prop: window.opera,
+			identity: "Opera"
+		},
+		{
+			string: navigator.vendor,
+			subString: "iCab",
+			identity: "iCab"
+		},
+		{
+			string: navigator.vendor,
+			subString: "KDE",
+			identity: "Konqueror"
+		},
+		{
+			string: navigator.userAgent,
+			subString: "Firefox",
+			identity: "Firefox"
+		},
+		{
+			string: navigator.vendor,
+			subString: "Camino",
+			identity: "Camino"
+		},
+		{		// for newer Netscapes (6+)
+			string: navigator.userAgent,
+			subString: "Netscape",
+			identity: "Netscape"
+		},
+		{
+			string: navigator.userAgent,
+			subString: "MSIE",
+			identity: "Explorer",
+			versionSearch: "MSIE"
+		},
+		{
+			string: navigator.userAgent,
+			subString: "Gecko",
+			identity: "Mozilla",
+			versionSearch: "rv"
+		},
+		{ 		// for older Netscapes (4-)
+			string: navigator.userAgent,
+			subString: "Mozilla",
+			identity: "Netscape",
+			versionSearch: "Mozilla"
+		}
+	],
+
+};
+BrowserDetect.init();
+
+
 var DynaFaces = new Object();
 
 DynaFaces.gFacesPrefix = "com.sun.faces.avatar.";
@@ -158,7 +240,13 @@ DynaFaces.elementReplace = function elementReplace(d, tempTagName, src) {
     temp.id = d.id;
 
     // If we are creating a head element...
-    if (-1 != d.tagName.indexOf("head") && d.tagName.length == 4) {
+    if (-1 != d.tagName.toLowerCase().indexOf("head") && d.tagName.length == 4) {
+
+	// head replacement only appears to work on firefox.
+	if (-1 == BrowserDetect.browser.indexOf("Firefox")) {
+	    return;
+	}
+
 	// Strip link elements from src.
 	if (-1 != src.indexOf("link")) {
 	    var 

@@ -130,7 +130,7 @@
       <snapshots />
       <id>codecaus</id>
       <name>codehaus</name>
-      <url>http://repository.codehaus.org/</url>
+      <url>http://repository.codehaus.org</url>
     </repository>
     <repository>
       <snapshots />

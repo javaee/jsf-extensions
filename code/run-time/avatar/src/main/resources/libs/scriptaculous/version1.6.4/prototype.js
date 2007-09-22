@@ -6,6 +6,10 @@
  *
 /*--------------------------------------------------------------------------*/
 
+var Edburns = {
+    alert: false
+};
+
 var Prototype = {
   Version: '1.5.0_rc1',
   ScriptFragment: '(?:<script.*?>)((\n|\r|.)*?)(?:<\/script>)',
@@ -654,6 +658,7 @@ Ajax.Responders = {
       if (responder[callback] && typeof responder[callback] == 'function') {
         try {
           responder[callback].apply(responder, [request, transport, json]);
+	  Edburns.alert = true;
         } catch (e) {}
       }
     });
@@ -814,6 +819,8 @@ Ajax.Request.prototype = Object.extend(new Ajax.Base(), {
     try {
       (this.options['on' + event] || Prototype.emptyFunction)(transport, json);
       Ajax.Responders.dispatch('on' + event, this, transport, json);
+      if (Edburns.alert) {
+      }
     } catch (e) {
       this.dispatchException(e);
     }
@@ -825,6 +832,7 @@ Ajax.Request.prototype = Object.extend(new Ajax.Base(), {
 
   dispatchException: function(exception) {
     (this.options.onException || Prototype.emptyFunction)(this, exception);
+
     Ajax.Responders.dispatch('onException', this, exception);
   }
 });

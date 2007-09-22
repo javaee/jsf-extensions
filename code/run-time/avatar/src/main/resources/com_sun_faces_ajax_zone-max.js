@@ -191,7 +191,7 @@ DynaFaces.isJsfCommandLink =
 	nodeName = nodeName.toLowerCase();
 	// if this an a href...
 	if (0 == nodeName.indexOf("a") && 1 == nodeName.length
-	    && element.hasAttribute('href')) {
+	    && element.getAttribute('href')) {
 	    // Use a heuristic to test if this is a JSF generated commandlink.
 	    
 	    // If it has an "onclick" attribute, the tostring of which contains

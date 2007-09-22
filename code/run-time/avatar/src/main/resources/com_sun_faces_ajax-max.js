@@ -36,6 +36,10 @@ if (typeof DynaFaces != 'undefined') {
 var BrowserDetect = {
 	init: function () {
 		this.browser = this.searchString(this.dataBrowser) || "An unknown browser";
+		this.version = this.searchVersion(navigator.userAgent)
+			|| this.searchVersion(navigator.appVersion)
+			|| "an unknown version";
+		this.OS = this.searchString(this.dataOS) || "an unknown OS";
 	},
 	searchString: function (data) {
 		for (var i=0;i<data.length;i++)	{
@@ -49,6 +53,11 @@ var BrowserDetect = {
 			else if (dataProp)
 				return data[i].identity;
 		}
+	},
+	searchVersion: function (dataString) {
+		var index = dataString.indexOf(this.versionSearchString);
+		if (index == -1) return;
+		return parseFloat(dataString.substring(index+this.versionSearchString.length+1));
 	},
 	dataBrowser: [
 		{ 	string: navigator.userAgent,
@@ -109,6 +118,23 @@ var BrowserDetect = {
 			versionSearch: "Mozilla"
 		}
 	],
+	dataOS : [
+		{
+			string: navigator.platform,
+			subString: "Win",
+			identity: "Windows"
+		},
+		{
+			string: navigator.platform,
+			subString: "Mac",
+			identity: "Mac"
+		},
+		{
+			string: navigator.platform,
+			subString: "Linux",
+			identity: "Linux"
+		}
+	]
 
 };
 BrowserDetect.init();

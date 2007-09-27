@@ -505,7 +505,7 @@ DynaFaces.ViewState = {
 	var collectPostDataType = typeof this.options.collectPostData;
 	var inputsType = typeof this.options.inputs;
 	if (('void' != collectPostDataType && 'undefined' != collectPostDataType) ||
-	    ('void' != inputsType && 'undefined' != collectPostDataType)) {
+	    ('void' != inputsType && 'undefined' != inputsType)) {
 	    // Just get the state data.
 	    var viewState = DynaFaces.$(DynaFaces.gViewState);
 	    t = viewState.tagName.toLowerCase();
@@ -661,7 +661,7 @@ Faces.ViewState.prototype = {
 	var collectPostDataType = typeof this.options.collectPostData;
 	var inputsType = typeof this.options.inputs;
 	if (('void' != collectPostDataType && 'undefined' != collectPostDataType) ||
-	    ('void' != inputsType && 'undefined' != collectPostDataType)) {
+	    ('void' != inputsType && 'undefined' != inputsType)) {
 	    // Just get the state data.
 	    var viewState = DynaFaces.$(DynaFaces.gViewState);
 	    t = viewState.tagName.toLowerCase();

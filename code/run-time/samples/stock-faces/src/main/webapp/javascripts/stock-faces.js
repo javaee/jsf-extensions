@@ -37,7 +37,7 @@
 var pollId;
 
 /** Delay between requests to the server when polling. */
-var pollDelay = 10000;
+var pollDelay = 5000;
 
 /** Start polling the server */
 function start() {

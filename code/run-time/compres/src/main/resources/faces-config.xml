@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : faces-config.xml
+    Created on : October 16, 2007, 1:01 PM
+    Author     : edburns
+    Description:
+        Purpose of the document follows.
+-->
+
+<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
+    version="1.2">
+        
+  <factory>
+    <application-factory>com.sun.faces.extensions.compres.application.CompResApplicationFactory</application-factory>
+  </factory>
+
+        
+    
+</faces-config>

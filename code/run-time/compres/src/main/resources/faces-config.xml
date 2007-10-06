@@ -13,6 +13,11 @@
     xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
     version="1.2">
         
+  <application>
+    <view-handler>com.sun.faces.extensions.compres.application.CompResViewHandlerImpl</view-handler>
+  </application>
+        
+        
   <factory>
     <application-factory>com.sun.faces.extensions.compres.application.CompResApplicationFactory</application-factory>
   </factory>

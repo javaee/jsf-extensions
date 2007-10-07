@@ -52,9 +52,11 @@ import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.application.CompResApplication;
 import javax.faces.application.NavigationHandler;
+import javax.faces.application.ResourceHandler;
 import javax.faces.application.StateManager;
 import javax.faces.application.ViewHandler;
 import javax.faces.component.UIComponent;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.el.MethodBinding;
@@ -72,7 +74,11 @@ public class CompResApplicationImpl extends CompResApplication {
 
     public CompResApplicationImpl(Application oldApp) {
 	this.oldApp = oldApp;
+        this.setResourceHandler(new ResourceHandlerImpl());
     }
+    
+    
+    
 
     public ActionListener getActionListener() {
 	return oldApp.getActionListener();
@@ -303,5 +309,22 @@ public class CompResApplicationImpl extends CompResApplication {
     public ELResolver getELResolver() {
         return oldApp.getELResolver();
     }
+
+    public ResourceHandler getResourceHandler() {
+        ResourceHandler retValue;
+        
+        retValue = super.getResourceHandler();
+        
+        if (null == retValue) {
+            
+        }
+        return retValue;
+    }
+
+    public void setResourceHandler(ResourceHandler resourceHandler) {
+        super.setResourceHandler(resourceHandler);
+    }
+    
+    
 
 }

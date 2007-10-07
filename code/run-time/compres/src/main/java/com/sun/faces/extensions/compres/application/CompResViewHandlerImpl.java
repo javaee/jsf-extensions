@@ -42,19 +42,31 @@
 package com.sun.faces.extensions.compres.application;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.channels.WritableByteChannel;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.FacesException;
 import javax.faces.application.CompResApplication;
+import javax.faces.application.Resource;
 import javax.faces.application.ResourceHandler;
 import javax.faces.application.ViewHandler;
 import javax.faces.application.ViewHandlerWrapper;
 import javax.faces.component.UIViewRoot;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.servlet.ServletResponse;
 
 /**
  *
  * @author edburns
  */
 public class CompResViewHandlerImpl extends ViewHandlerWrapper {
+    // Log instance for this class
+    private static final Logger logger = com.sun.faces.util.Util.getLogger(com.sun.faces.util.Util.FACES_LOGGER 
+            + com.sun.faces.util.Util.APPLICATION_LOGGER);
     
 
     private ViewHandler oldViewHandler = null;
@@ -75,7 +87,36 @@ public class CompResViewHandlerImpl extends ViewHandlerWrapper {
             getWrapped().renderView(facesContext, uIViewRoot);
         }
         else {
-            
+            ExternalContext extContext = facesContext.getExternalContext();
+            ServletResponse response = (ServletResponse) extContext.getResponse();
+            Resource resource = resourceHandler.restoreResource(facesContext);
+            ReadableByteChannel resourceChannel;
+            WritableByteChannel out;
+            ByteBuffer buf = ByteBuffer.allocate(8192);
+            resourceChannel = Channels.newChannel(resource.getInputStream());
+            out = Channels.newChannel(response.getOutputStream());
+            try {
+                while (-1 != resourceChannel.read(buf)) {
+                    buf.rewind();
+                    out.write(buf);
+                    buf.clear();
+                }
+                resourceChannel.close();
+                out.close();
+                facesContext.responseComplete();
+                
+            } catch (IOException ioe) {
+                String message = null;
+                if (null != resource.getLibraryName()) {
+                    message = "Unable to serve resource " + resource.getResourceName() + 
+                            " in library " + resource.getLibraryName();
+                }
+                else {
+                    message = "Unable to serve resource " + resource.getResourceName();
+                }
+                logger.log(Level.WARNING, message, ioe);
+                throw ioe;
+            }
         }
     }
     

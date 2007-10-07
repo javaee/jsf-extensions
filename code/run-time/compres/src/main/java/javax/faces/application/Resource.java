@@ -68,17 +68,39 @@ public abstract class Resource {
 /**
   * Return the resourceName for this resource.  Will never be null.
   */
-  public abstract String getResourceName();
+  public String getResourceName() {
+      return resourceName;
+  }
+  
+  private String resourceName;
+  public void setResourceName(String resourceName) {
+      this.resourceName = resourceName;
+  }
   
 /**
   * Return the libraryName for this resource.  May be null.
   */
-  public abstract String getLibraryName();
-
+  public String getLibraryName() {      
+      return libraryName;
+  }
+  
+  private String libraryName;
+  public void setLibraryName(String libraryName) {
+      this.libraryName = libraryName;
+  }
+  
 /**
   * Return the content-type for this resource.
   */
-  public abstract String getContentType();
+  public String getContentType() {
+      return contentType;
+  }
+  
+  private String contentType;
+  public void setContentType(String contentType) {
+      this.contentType = contentType;
+  }
+
 
 /**
   * If the current request is a resource request, return an InputStream 

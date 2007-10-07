@@ -1,15 +1,12 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.sun.jsf-extensions</groupId>
   <artifactId>jsf-extensions-flash-test</artifactId>
   <packaging>war</packaging>
   <name>jsf-compres-simple</name>
   <url>https://jsf-extensions.dev.java.net/</url>
-  <description>
-    Run time jsf-extensions: flash
-  </description>
+  <description>Run time jsf-extensions: flash</description>
 
   <parent>
     <groupId>com.sun.faces.extensions.maven</groupId>
@@ -54,10 +51,10 @@
 	     <phase>generate-resources</phase>
 	     <configuration>
 	       <tasks>
-                 <echo message="Copying sources jar to WEB-INF/lib" />
+                 <echo message="Copying sources jar to WEB-INF/lib"></echo>
                  <copy todir="target/${project.build.finalName}/WEB-INF/lib">
                    <fileset dir="../..">
-                     <include name="*-sources.jar" />
+                     <include name="*-sources.jar"></include>
                    </fileset>
                  </copy>
 	       </tasks>
@@ -94,6 +91,7 @@
       <artifactId>jsf-facelets</artifactId>
       <version>1.1.11a</version>
     </dependency>
+    
   </dependencies>
   <reporting>
     <plugins>
@@ -101,10 +99,9 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-project-info-reports-plugin</artifactId>
-        <reportSets><reportSet><reports/></reportSet></reportSets>
+        <reportSets><reportSet /></reportSets>
       </plugin>
     </plugins>
   </reporting>
 
 </project>
-

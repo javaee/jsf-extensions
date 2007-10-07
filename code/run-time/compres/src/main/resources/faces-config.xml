@@ -13,15 +13,175 @@
     xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
     version="1.2">
         
-  <application>
-    <view-handler>com.sun.faces.extensions.compres.application.CompResViewHandlerImpl</view-handler>
-  </application>
-        
-        
-  <factory>
-    <application-factory>com.sun.faces.extensions.compres.application.CompResApplicationFactory</application-factory>
-  </factory>
+    <application>
+        <view-handler>com.sun.faces.extensions.compres.application.CompResViewHandlerImpl</view-handler>
+    </application>
+    
+    
+    <factory>
+        <application-factory>com.sun.faces.extensions.compres.application.CompResApplicationFactory</application-factory>
+    </factory>
 
-        
+    <render-kit>
+        <description><![CDATA[   ]]></description>      
+        <renderer>
+            <description><![CDATA[   ]]></description>
+            <component-family>javax.faces.Output</component-family>
+            <renderer-type>javax.faces.resource.Script</renderer-type>
+            <renderer-class>
+                com.sun.faces.extensions.compres.render.ScriptRenderer
+            </renderer-class>
+
+            <attribute>
+                <description>
+                    The Resource instance for which this Renderer should render markup.
+                </description>
+                <display-name>resource</display-name>
+                <icon/>
+                <attribute-name>javax.faces.resource</attribute-name>
+                <attribute-class>javax.faces.application.Resource</attribute-class>
+                <attribute-extension>
+                    <pass-through>false</pass-through>
+                </attribute-extension>
+            </attribute>
+
+            <attribute>
+                <description>
+                    The resourceName of the resource for which this Renderer should render markup.
+                </description>
+                <display-name>resourceName</display-name>
+                <icon/>
+                <attribute-name>resourceName</attribute-name>
+                <attribute-class>java.lang.String</attribute-class>
+                <attribute-extension>
+                    <pass-through>false</pass-through>
+                </attribute-extension>
+            </attribute>
+
+            <attribute>
+                <description>
+                    The libraryName of the resource for which this Renderer should render markup.
+                </description>
+                <display-name>libraryName</display-name>
+                <icon/>
+                <attribute-name>libraryName</attribute-name>
+                <attribute-class>java.lang.String</attribute-class>
+                <attribute-extension>
+                    <pass-through>false</pass-through>
+                </attribute-extension>
+            </attribute>
+            
+            
+            <renderer-extension>
+                <renders-children>true</renders-children>
+            </renderer-extension>
+        </renderer>      
+        <renderer>
+            <description><![CDATA[   ]]></description>
+            <component-family>javax.faces.Output</component-family>
+            <renderer-type>javax.faces.resource.Stylesheet</renderer-type>
+            <renderer-class>
+                com.sun.faces.extensions.compres.render.StylesheetRenderer
+            </renderer-class>
+
+            <attribute>
+                <description>
+                    The Resource instance for which this Renderer should render markup.
+                </description>
+                <display-name>resource</display-name>
+                <icon/>
+                <attribute-name>javax.faces.resource</attribute-name>
+                <attribute-class>javax.faces.application.Resource</attribute-class>
+                <attribute-extension>
+                    <pass-through>false</pass-through>
+                </attribute-extension>
+            </attribute>
+
+            <attribute>
+                <description>
+                    The resourceName of the resource for which this Renderer should render markup.
+                </description>
+                <display-name>resourceName</display-name>
+                <icon/>
+                <attribute-name>resourceName</attribute-name>
+                <attribute-class>java.lang.String</attribute-class>
+                <attribute-extension>
+                    <pass-through>false</pass-through>
+                </attribute-extension>
+            </attribute>
+
+            <attribute>
+                <description>
+                    The libraryName of the resource for which this Renderer should render markup.
+                </description>
+                <display-name>libraryName</display-name>
+                <icon/>
+                <attribute-name>libraryName</attribute-name>
+                <attribute-class>java.lang.String</attribute-class>
+                <attribute-extension>
+                    <pass-through>false</pass-through>
+                </attribute-extension>
+            </attribute>
+            
+            
+            <renderer-extension>
+                <renders-children>true</renders-children>
+            </renderer-extension>
+        </renderer>      
+        <renderer>
+            <description><![CDATA[   ]]></description>
+            <component-family>javax.faces.Output</component-family>
+            <renderer-type>javax.faces.resource.Image</renderer-type>
+            <renderer-class>
+                com.sun.faces.extensions.compres.render.ImageRenderer
+            </renderer-class>
+
+            <attribute>
+                <description>
+                    The Resource instance for which this Renderer should render markup.
+                </description>
+                <display-name>resource</display-name>
+                <icon/>
+                <attribute-name>javax.faces.resource</attribute-name>
+                <attribute-class>javax.faces.application.Resource</attribute-class>
+                <attribute-extension>
+                    <pass-through>false</pass-through>
+                </attribute-extension>
+            </attribute>
+
+            <attribute>
+                <description>
+                    The resourceName of the resource for which this Renderer should render markup.
+                </description>
+                <display-name>resourceName</display-name>
+                <icon/>
+                <attribute-name>resourceName</attribute-name>
+                <attribute-class>java.lang.String</attribute-class>
+                <attribute-extension>
+                    <pass-through>false</pass-through>
+                </attribute-extension>
+            </attribute>
+
+            <attribute>
+                <description>
+                    The libraryName of the resource for which this Renderer should render markup.
+                </description>
+                <display-name>libraryName</display-name>
+                <icon/>
+                <attribute-name>libraryName</attribute-name>
+                <attribute-class>java.lang.String</attribute-class>
+                <attribute-extension>
+                    <pass-through>false</pass-through>
+                </attribute-extension>
+            </attribute>
+            
+            
+            <renderer-extension>
+                <renders-children>true</renders-children>
+            </renderer-extension>
+        </renderer>      
+
+    </render-kit>
+    
     
 </faces-config>

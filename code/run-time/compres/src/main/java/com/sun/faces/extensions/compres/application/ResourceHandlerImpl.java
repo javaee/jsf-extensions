@@ -106,20 +106,16 @@ public class ResourceHandlerImpl extends ResourceHandler {
     }
 
     public Resource restoreResource(FacesContext context) {
-        String viewId = context.getViewRoot().getViewId();
-        if (viewId.startsWith("/") && 2 < viewId.length()) {
-            viewId = viewId.substring(1);
-        }
+        String viewId = normalizeViewId(context);
         String resourceName, libraryName, localePrefix;
         Resource result = null;
         assert(null != viewId);
-        if (isResourceRequest(context)) {
-            assert(viewId.startsWith("javax.faces.resource."));
-            if ("javax.faces.resource.".length() < viewId.length()) {
-                resourceName = viewId.substring("javax.faces.resource.".length() + 1);
-                libraryName = context.getExternalContext().getRequestParameterMap().get("ln");
-                result = createResource(resourceName, libraryName);
-            }
+        assert(viewId.startsWith("javax.faces.resource."));
+        if ("javax.faces.resource.".length() < viewId.length()) {
+
+            resourceName = viewId.substring("javax.faces.resource.".length() + 1);
+            libraryName = context.getExternalContext().getRequestParameterMap().get("ln");
+            result = createResource(resourceName, libraryName);
         }
         return result;
     }
@@ -145,12 +141,26 @@ public class ResourceHandlerImpl extends ResourceHandler {
     long getCreationTime() {
         return creationTime;
     }
-
-    public boolean isResourceRequest(FacesContext context) {
+    
+    private String normalizeViewId(FacesContext context) {
         String viewId = context.getViewRoot().getViewId();
         if (viewId.startsWith("/") && 2 < viewId.length()) {
             viewId = viewId.substring(1);
         }
+        String facesServletMapping = Util.getFacesMapping(context);
+        // If it is extension mapped
+        if (!Util.isPrefixMapped(facesServletMapping)) {
+            // strip off the extension
+            int i = viewId.lastIndexOf(".");
+            if (0 < i) {
+                viewId = viewId.substring(0, i);
+            }
+        }
+        return viewId;
+    }
+
+    public boolean isResourceRequest(FacesContext context) {
+        String viewId = normalizeViewId(context);
         boolean 
                 result = false,
                 matchesExcludeEntry = false;

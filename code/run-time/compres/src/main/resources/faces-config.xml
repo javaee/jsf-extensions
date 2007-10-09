@@ -130,7 +130,7 @@
         </renderer>      
         <renderer>
             <description><![CDATA[   ]]></description>
-            <component-family>javax.faces.Output</component-family>
+            <component-family>javax.faces.Graphic</component-family>
             <renderer-type>javax.faces.resource.Image</renderer-type>
             <renderer-class>
                 com.sun.faces.extensions.compres.render.ImageRenderer

@@ -57,20 +57,10 @@ import javax.faces.render.Renderer;
  */
 public class ScriptRenderer extends Renderer {
     public void encodeBegin(FacesContext facesContext, UIComponent comp) throws IOException {
-        Map<String, Object> attrs = comp.getAttributes();
         Map<String, Object> requestMap = facesContext.getExternalContext().getRequestMap();
-        Resource resource = (Resource) attrs.get("javax.faces.resource");
-        ResourceHandler resourceHandler = ((CompResApplication)facesContext.getApplication()).getResourceHandler();
+        Resource resource = ResourceRendererHelper.getResource(facesContext,
+                comp);
         ResponseWriter writer;
-        if (null == resource) {
-            String 
-                    resourceName,
-                    libraryName;
-            resourceName = (String) attrs.get("resourceName");
-            assert(null != resourceName);
-            libraryName = (String) attrs.get("libraryName");
-            resource = resourceHandler.createResource(resourceName, libraryName);
-        }
         assert(null != resource);
         String scriptURI = resource.getURI();
         // If this script has not yet been written to the request

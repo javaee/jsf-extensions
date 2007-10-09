@@ -23,7 +23,7 @@
   <tag>
     <tag-name>outputImage</tag-name>
     <component>
-      <component-type>javax.faces.Output</component-type>
+      <component-type>javax.faces.Graphic</component-type>
       <renderer-type>javax.faces.resource.Image</renderer-type>
     </component>
   </tag>

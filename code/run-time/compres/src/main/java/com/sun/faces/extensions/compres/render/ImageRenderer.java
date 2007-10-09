@@ -42,8 +42,11 @@
 package com.sun.faces.extensions.compres.render;
 
 import java.io.IOException;
+import javax.faces.application.Resource;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIGraphic;
 import javax.faces.context.FacesContext;
+import javax.faces.render.RenderKit;
 import javax.faces.render.Renderer;
 
 /**
@@ -51,9 +54,61 @@ import javax.faces.render.Renderer;
  * @author edburns
  */
 public class ImageRenderer extends Renderer {
-    public void encodeBegin(FacesContext facesContext, UIComponent uIComponent) throws IOException {
-        
+    
+    private Renderer graphicImageRenderer = null;
+    
+    public Renderer getGraphicImageRenderer() {
+        if (null == graphicImageRenderer) {
+            RenderKit kit = FacesContext.getCurrentInstance().getRenderKit();
+            graphicImageRenderer = kit.getRenderer("javax.faces.Graphic", 
+                    "javax.faces.Image");
+        }
+        return graphicImageRenderer;
     }
+    
+    
+    public void encodeBegin(FacesContext context, UIComponent comp) throws IOException {
+        if (!(comp instanceof UIGraphic)) {
+            return;
+        }
+        UIGraphic graphic = (UIGraphic)comp;
+        Object oldValue = graphic.getValue();
+        Resource resource = ResourceRendererHelper.getResource(context, comp);
+        String uri = resource.getURI();
+        graphic.setValue(uri);
+        getGraphicImageRenderer().encodeBegin(context, comp);
+    }
+
+    public void encodeEnd(FacesContext context, UIComponent comp) throws IOException {
+        UIGraphic graphic = (UIGraphic)comp;
+        Object oldValue = graphic.getValue();
+        Resource resource = ResourceRendererHelper.getResource(context, comp);
+        String uri = resource.getURI();
+        // Special Case, have to trim off the contextRoot from the front of
+        // URI because the graphicImageRenderer will duplicate it.
+        String contextRoot = context.getExternalContext().getRequestContextPath();
+        uri = uri.substring(contextRoot.length());
+        graphic.setValue(uri);
+        getGraphicImageRenderer().encodeEnd(context, comp);
+    }
+
+    public void encodeChildren(FacesContext context, UIComponent comp) throws IOException {
+        UIGraphic graphic = (UIGraphic)comp;
+        Object oldValue = graphic.getValue();
+        Resource resource = ResourceRendererHelper.getResource(context, comp);
+        String uri = resource.getURI();
+        graphic.setValue(uri);
+        getGraphicImageRenderer().encodeChildren(context, comp);
+    }
+
+    public boolean getRendersChildren() {
+        boolean retValue;
+        
+        retValue = true;
+        return retValue;
+    }
+    
+    
     
 
     

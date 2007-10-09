@@ -56,7 +56,7 @@ import javax.faces.application.ResourceHandler;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
-import com.sun.faces.util.Util;
+import com.sun.faces.extensions.common.util.Util;
 
 /**
  *
@@ -65,11 +65,11 @@ import com.sun.faces.util.Util;
 public class ResourceHandlerImpl extends ResourceHandler {
     
     // Log instance for this class
-    private static final Logger logger = Util.getLogger(Util.FACES_LOGGER 
-            + Util.APPLICATION_LOGGER);
+    private static final Logger logger = Util.getLogger(Util.FACES_LOGGER + Util.APPLICATION_LOGGER);
 
     FileTypeMap mimeTypeMap = null;
     List<Pattern> excludePatterns = null;
+    long creationTime = 0;
     
     
     /** Creates a new instance of ResourceHandlerImpl */
@@ -90,7 +90,7 @@ public class ResourceHandlerImpl extends ResourceHandler {
             excludePatterns.add(Pattern.compile(".*\\.jsp"));
         }
         
-        
+        creationTime = System.currentTimeMillis();
     }
     
     String getContentTypeFromResourceName(String resourceName) {
@@ -107,6 +107,9 @@ public class ResourceHandlerImpl extends ResourceHandler {
 
     public Resource restoreResource(FacesContext context) {
         String viewId = context.getViewRoot().getViewId();
+        if (viewId.startsWith("/") && 2 < viewId.length()) {
+            viewId = viewId.substring(1);
+        }
         String resourceName, libraryName, localePrefix;
         Resource result = null;
         assert(null != viewId);
@@ -136,6 +139,11 @@ public class ResourceHandlerImpl extends ResourceHandler {
             }
         }
         return localePrefix;
+    }
+    
+    
+    long getCreationTime() {
+        return creationTime;
     }
 
     public boolean isResourceRequest(FacesContext context) {

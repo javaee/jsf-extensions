@@ -7,12 +7,7 @@
   <name>jsf-extensions-compres</name>
   <url>https://jsf-extensions.dev.java.net/</url>
   <description>Run time jsf-extensions</description>
-
-  <parent>
-    <groupId>com.sun.faces.extensions.maven</groupId>
-    <artifactId>jsf-extensions-master</artifactId>
-    <version>0.1</version>
-  </parent>
+  <version>0.1</version>
 
   <scm>
     <connection>scm:svn:http://jsf-extensions.dev.java.net/svn/jsf-extensions/trunk</connection>
@@ -23,6 +18,21 @@
   <build>
     <sourceDirectory>src/main/java</sourceDirectory>
     <defaultGoal>install</defaultGoal>
+
+   <pluginManagement>
+     <plugins>
+       <plugin>
+         <groupId>org.apache.maven.plugins</groupId>
+         <artifactId>maven-compiler-plugin</artifactId>
+         <configuration>
+           <source>1.5</source>
+           <target>1.5</target>
+         </configuration>
+       </plugin>
+     </plugins>
+   </pluginManagement>
+
+
     <resources>
       <resource>
         <targetPath>META-INF</targetPath>
@@ -62,25 +72,32 @@
 
   <dependencies>
     <dependency>
-      <groupId>com.sun.faces.extensions</groupId>
-      <artifactId>jsf-extensions-common</artifactId>
-      <version>0.1</version>
+      <groupId>javaee</groupId>
+      <artifactId>javaee-api</artifactId>
+      <version>5</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
-            <groupId>javax.faces</groupId>
-            <artifactId>jsf-impl</artifactId>
-            <version>1.2_04-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-    
-    
+      <groupId>com.sun.faces.extensions</groupId>
+      <artifactId>jsf-extensions-common</artifactId>
+      <version>0.1</version>
+      <exclusions>
+        <exclusion>
+          <groupId>commons-logging</groupId>
+          <artifactId>commons-logging</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>javax.faces</groupId>
+          <artifactId>shale-remoting</artifactId>
+        </exclusion>
+      </exclusions>
+
+    </dependency>
 
   </dependencies>
 
   <reporting>
     <plugins>
-      <excludeDefaults>true</excludeDefaults>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-project-info-reports-plugin</artifactId>

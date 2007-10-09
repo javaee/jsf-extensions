@@ -27,6 +27,8 @@ package com.sun.faces.extensions.common.util;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.MissingResourceException;
+import java.util.logging.Logger;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
@@ -47,6 +49,27 @@ public class Util {
     
     private Util() {
     }
+    
+    public static final String FACES_LOGGER = "javax.enterprise.resource.webcontainer.jsf";
+    
+    
+    
+    public static final String FACES_LOG_STRINGS = 
+            "com.sun.faces.LogStrings";        
+    
+    // Loggers
+    public static final String RENDERKIT_LOGGER = ".renderkit";
+    public static final String TAGLIB_LOGGER = ".taglib";
+    public static final String APPLICATION_LOGGER = ".application";
+    public static final String CONTEXT_LOGGER = ".context";
+    public static final String CONFIG_LOGGER = ".config";
+    public static final String LIFECYCLE_LOGGER = ".lifecycle";
+    public static final String TIMING_LOGGER = ".timing";
+    
+    
+    // Log instance for this class
+    private static final Logger LOGGER = getLogger(FACES_LOGGER);
+    
     
     public static String getFormattedValue(FacesContext context, UIComponent component,
                                        Object currentValue)
@@ -159,5 +182,17 @@ public class Util {
 	public boolean takeActionOnNode(FacesContext context, 
 					UIComponent curNode) throws FacesException;
     }
+    
+    public static Logger getLogger( String loggerName ) {
+        Logger logger = null;
+        try {
+            logger = Logger.getLogger(loggerName, FACES_LOG_STRINGS );
+        } catch (MissingResourceException mre) {
+            logger = Logger.getLogger(loggerName);
+        }
+        
+        return logger;
+    }
+    
     
 }

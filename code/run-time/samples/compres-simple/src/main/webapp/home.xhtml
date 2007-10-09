@@ -6,14 +6,28 @@
 	  xmlns:d="http://java.sun.com/jsf/facelets/demo">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<title>115-Component Resources Facelets Blank App</title>
+<title>DynaFaces Facelets Blank App</title>
 </head>
 
 <body>
 
 <ui:composition template="_template.xhtml">
 <ui:define name="body">
-<h1>115-Component Resources Facelets Blank App</h1>
+<h1>DynaFaces Facelets Blank App</h1>
+
+<p>Case 1: image loaded from webapp root</p>
+
+<img src="/jsf-compres-simple/faces/javax.faces.resources.image-from-webapp-root.png" />
+
+<p>Case 2: image loaded from classpath, not occluded by webapp root</p>
+
+<img src="/jsf-compres-simple/faces/javax.faces.resources.image-from-classpath-not-overridden.png" />
+
+<p>Case 3: image loaded from classpath, occluded by webapp root</p>
+
+<img src="/jsf-compres-simple/faces/javax.faces.resources.image-from-classpath.png" />
+
+
 </ui:define>
 </ui:composition>
 

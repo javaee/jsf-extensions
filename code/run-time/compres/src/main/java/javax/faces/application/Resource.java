@@ -44,6 +44,7 @@ package javax.faces.application;
 import java.io.IOException;
 import java.io.InputStream;
 import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 import javax.faces.render.Renderer;
 
 /**
@@ -127,5 +128,13 @@ public abstract class Resource {
   */
   public abstract Renderer getRenderer(UIComponent component);
     
+  /**
+   * Return true if the user agent requesting this resource needs an update.
+   * Returns false otherwise.  If false, the caller should send a 
+   * 304 not modified to the client.
+   */
     
+  public abstract boolean userAgentNeedsUpdate(FacesContext context);
+  
+  public abstract int getMaxAge(FacesContext context);
 }

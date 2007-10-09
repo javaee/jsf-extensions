@@ -57,16 +57,17 @@ import javax.faces.application.ViewHandlerWrapper;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletResponse;
 
+import com.sun.faces.extensions.common.util.Util;
 /**
  *
  * @author edburns
  */
 public class CompResViewHandlerImpl extends ViewHandlerWrapper {
     // Log instance for this class
-    private static final Logger logger = com.sun.faces.util.Util.getLogger(com.sun.faces.util.Util.FACES_LOGGER 
-            + com.sun.faces.util.Util.APPLICATION_LOGGER);
+    private static final Logger logger = Util.getLogger(Util.FACES_LOGGER 
+            + Util.APPLICATION_LOGGER);
     
 
     private ViewHandler oldViewHandler = null;
@@ -88,38 +89,49 @@ public class CompResViewHandlerImpl extends ViewHandlerWrapper {
         }
         else {
             ExternalContext extContext = facesContext.getExternalContext();
-            ServletResponse response = (ServletResponse) extContext.getResponse();
+            HttpServletResponse response = (HttpServletResponse) extContext.getResponse();
             Resource resource = resourceHandler.restoreResource(facesContext);
-            ReadableByteChannel resourceChannel;
-            WritableByteChannel out;
-            ByteBuffer buf = ByteBuffer.allocate(8192);
-            resourceChannel = Channels.newChannel(resource.getInputStream());
-            out = Channels.newChannel(response.getOutputStream());
-            try {
-                while (-1 != resourceChannel.read(buf)) {
-                    buf.rewind();
-                    out.write(buf);
-                    buf.clear();
+            if (resource.userAgentNeedsUpdate(facesContext)) {
+                ReadableByteChannel resourceChannel;
+                WritableByteChannel out;
+                ByteBuffer buf = ByteBuffer.allocate(8192);
+                try {
+                    resourceChannel = Channels.newChannel(resource.getInputStream());
+                    out = Channels.newChannel(response.getOutputStream());
+                    int thisRead, totalWritten = 0, size = 0;
+                    response.setContentType(resource.getContentType());
+                    response.setHeader("Cache-Control", "max-age=" + 
+                            resource.getMaxAge(facesContext));
+                    while (-1 != (thisRead = resourceChannel.read(buf))) {
+                        buf.rewind();
+                        do {
+                            totalWritten += out.write(buf);
+                        } while (totalWritten < size);
+                        buf.clear();
+                        size += thisRead;
+                    }
+                    response.setContentLength(size);
+                    resourceChannel.close();
+                    out.close();
+
+                } catch (IOException ioe) {
+                    response.setStatus(404);
+                    String message = null;
+                    if (null != resource.getLibraryName()) {
+                        message = "Unable to serve resource " + resource.getResourceName() +
+                                " in library " + resource.getLibraryName();
+                    } else {
+                        message = "Unable to serve resource " + resource.getResourceName();
+                    }
+                    logger.log(Level.WARNING, message, ioe);
                 }
-                resourceChannel.close();
-                out.close();
-                facesContext.responseComplete();
-                
-            } catch (IOException ioe) {
-                String message = null;
-                if (null != resource.getLibraryName()) {
-                    message = "Unable to serve resource " + resource.getResourceName() + 
-                            " in library " + resource.getLibraryName();
-                }
-                else {
-                    message = "Unable to serve resource " + resource.getResourceName();
-                }
-                logger.log(Level.WARNING, message, ioe);
-                throw ioe;
             }
+            else {
+                response.setStatus(304);
+            }
+            facesContext.responseComplete();
         }
     }
-    
     
     
     

@@ -41,15 +41,23 @@
 
 package com.sun.faces.extensions.compres.application;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.application.Resource;
 import javax.faces.component.UIComponent;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.render.Renderer;
+import javax.servlet.ServletContext;
+
+import com.sun.faces.extensions.common.util.Util;
 
 /**
  *
@@ -57,10 +65,19 @@ import javax.faces.render.Renderer;
  */
 public class ResourceBase extends Resource {
     // Log instance for this class
-    private static final Logger logger = com.sun.faces.util.Util.getLogger(com.sun.faces.util.Util.FACES_LOGGER 
-            + com.sun.faces.util.Util.APPLICATION_LOGGER);
+    private static final Logger logger = Util.getLogger(Util.FACES_LOGGER 
+            + Util.APPLICATION_LOGGER);
     
     ResourceHandlerImpl owner;
+    int maxAge = 86400;
+    String resourceId;
+    
+    private enum ResourceOrigin {
+        FileSystem,
+        Classpath
+    };
+    
+    private ResourceOrigin resourceOrigin = null;
     
     /** Creates a new instance of ResourceBase */
     ResourceBase(ResourceHandlerImpl owner, String resourceName, String libraryName, String contentType) {
@@ -82,22 +99,78 @@ public class ResourceBase extends Resource {
 
     public InputStream getInputStream() throws IOException {
         FacesContext context = FacesContext.getCurrentInstance();
+        URL url = null;
         InputStream resourceStream = null;
         
-        if (null == (resourceStream = resourceSearch(context, "/resources"))) {
-            if (null == (resourceStream = resourceSearch(context, "/META-INF/resources"))) {
-                throw new IOException("Unable to find resource for " + this.toString());
-            }
+        if (null == (resourceStream = searchForInputStream(context))) {
+            resourceId = null;
+            throw new IOException("Unable to find resource for " + this.toString());
         }
         return resourceStream;
     }
     
-    private InputStream resourceSearch(FacesContext context, String prefix) throws IOException {
-        InputStream resourceStream = null;
+    private InputStream searchForInputStream(FacesContext context) throws IOException {
+        InputStream result = null;
+        
+        if (null == (result = getInputStreamFromWebapp(context))) {
+            result = getInputStreamFromClasspath(context);
+        }
+        return result;
+    }
+    
+    public int getMaxAge(FacesContext context) {
+        return maxAge;
+    }
+
+    private InputStream getInputStreamFromWebapp(FacesContext context) throws IOException {
+        resourceId = getResourceId(context, "/resources");
+        InputStream result = 
+                context.getExternalContext().getResourceAsStream(resourceId);
+        if (null != result) {
+            resourceOrigin = ResourceOrigin.FileSystem;
+        }
+        return result;        
+        
+    }
+    
+    private InputStream getInputStreamFromClasspath(FacesContext context) throws IOException {
+        resourceId = getResourceId(context, "/META-INF/resources");
+        InputStream result = 
+                Thread.currentThread().getContextClassLoader().getResourceAsStream(resourceId.substring(1));
+        if (null != result) {
+            resourceOrigin = ResourceOrigin.Classpath;
+        }
+        return result;        
+    }
+    
+    
+    private ResourceOrigin getResourceOrigin(FacesContext context) {
+        ResourceOrigin result = null;
+        if (null != resourceOrigin) {
+            result = resourceOrigin;
+        }
+        else {
+            InputStream stream = null;
+            try {
+                stream = searchForInputStream(context);
+                stream.close();
+            } catch (IOException ex) {
+                logger.log(Level.WARNING, "Unable to get Resource Origin for " +
+                        this.toString(), ex);
+            }
+            if (null != stream) {
+                result = resourceOrigin;
+            }
+        }
+        return result;
+    }
+        
+    private String getResourceId(FacesContext context, String prefix) throws IOException {
+        
         ExternalContext extContext = context.getExternalContext();
         String localePrefix = owner.getLocalePrefix(context);
         Set<String> resourcePaths;
-        String resourceId, libraryVersion = null, resourceVersion = null;
+        String resId, libraryVersion = null, resourceVersion = null;
         if (null != localePrefix && 0 < localePrefix.length()) {
             prefix = prefix + '/' + localePrefix;
         }
@@ -114,18 +187,18 @@ public class ResourceBase extends Resource {
                 // Apply the same process to resourceVersion.
             }
             if (null != libraryVersion) {
-                resourceId = prefix + '/' + getLibraryName() + '/' + 
+                resId = prefix + '/' + getLibraryName() + '/' + 
                         libraryVersion + '/';
             }
             else {
-                resourceId = prefix + '/' + getLibraryName() + '/';
+                resId = prefix + '/' + getLibraryName() + '/';
             }
             if (null != resourceVersion) {
-                resourceId = prefix + '/' + resourceId + '/' + 
+                resId = prefix + '/' + resId + '/' + 
                         getResourceName() + '/' + resourceVersion;
             }
             else {
-                resourceId = prefix + '/' + resourceId + '/' + getResourceName();
+                resId = prefix + '/' + resId + '/' + getResourceName();
             }
         }
         else {
@@ -139,16 +212,71 @@ public class ResourceBase extends Resource {
 
             }
             if (null != resourceVersion) {
-                resourceId = prefix + '/' + getResourceName() + '/' + resourceVersion;
+                resId = prefix + '/' + getResourceName() + '/' + resourceVersion;
             }
             else {
-                resourceId = prefix + '/' + getResourceName();
+                resId = prefix + '/' + getResourceName();
             }
         }
-        resourceStream = extContext.getResourceAsStream(resourceId);
-
-        return resourceStream;
+        return resId;
     }
-    
-    
+
+    /**
+     * Return true if the user agent needs an update of this resource.
+     * Look for a "Cache-Control" request header with a "max-age=0" value.
+     * If not found, assume the browser does not have a copy of the
+     * resource and return true.
+     *
+     * If found, assume the user agent has
+     * an entry in its local cache for this resource and is just trying to 
+     * determine if it needs to be refreshed.  Determine the ResourceOrigin.
+     *
+     * If FileSystem:
+     * If the file has been modified since the ResourceHandler instance
+     * was instantiated, return true.  Otherwise, return false.
+     * 
+     *
+     * If Classpath, the age of the resource is the value of the creationTime
+     * property of our ResourceLoaderImpl, in seconds.
+     *
+     * If the file is older than getMaxAge() return true;
+     *
+     */ 
+    public boolean userAgentNeedsUpdate(FacesContext context) {
+        boolean result = true;
+        long current_age, ageInMillis = 0, freshness_lifetime = getMaxAge(context);
+        Map<String, String> headers = 
+                context.getExternalContext().getRequestHeaderMap();
+                
+        String cacheControlHeader = headers.get("Cache-Control");
+        if (null == cacheControlHeader ||
+                (!cacheControlHeader.equals("max-age=0"))) {
+            return true;
+        }
+        
+        if (ResourceOrigin.FileSystem == getResourceOrigin(context)) {
+            InputStream stream = null;
+            try {
+                stream = searchForInputStream(context);
+                stream.close();
+            } catch (IOException ex) {
+                logger.log(Level.WARNING, "Unable to determine age of " + 
+                        this.toString(), ex);
+            }
+            if (null != stream) {
+                ServletContext servletContext =
+                        (ServletContext) context.getExternalContext().getContext();
+                File resource = new File(servletContext.getRealPath(resourceId));
+                result = resource.lastModified() > owner.getCreationTime();
+            }
+
+        }
+        else {
+            ageInMillis = System.currentTimeMillis() - owner.getCreationTime();
+            current_age = ageInMillis / 1000;
+            result =  (freshness_lifetime > current_age);
+        }
+        return result;
+    }
+       
 }

@@ -188,17 +188,16 @@ public class ResourceBase extends Resource {
             }
             if (null != libraryVersion) {
                 resId = prefix + '/' + getLibraryName() + '/' + 
-                        libraryVersion + '/';
+                        libraryVersion;
             }
             else {
-                resId = prefix + '/' + getLibraryName() + '/';
+                resId = prefix + '/' + getLibraryName();
             }
             if (null != resourceVersion) {
-                resId = prefix + '/' + resId + '/' + 
-                        getResourceName() + '/' + resourceVersion;
+                resId = resId + '/' + getResourceName() + '/' + resourceVersion;
             }
             else {
-                resId = prefix + '/' + resId + '/' + getResourceName();
+                resId = resId + '/' + getResourceName();
             }
         }
         else {
@@ -236,8 +235,7 @@ public class ResourceBase extends Resource {
      * was instantiated, return true.  Otherwise, return false.
      * 
      *
-     * If Classpath, the age of the resource is the value of the creationTime
-     * property of our ResourceLoaderImpl, in seconds.
+     * If Classpath, return false;
      *
      * If the file is older than getMaxAge() return true;
      *
@@ -272,9 +270,7 @@ public class ResourceBase extends Resource {
 
         }
         else {
-            ageInMillis = System.currentTimeMillis() - owner.getCreationTime();
-            current_age = ageInMillis / 1000;
-            result =  (freshness_lifetime > current_age);
+            result = false;
         }
         return result;
     }

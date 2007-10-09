@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
 	  xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:jsfExt="http://java.sun.com/jsf/extensions/compres"
 	  xmlns:ui="http://java.sun.com/jsf/facelets"
 	  xmlns:d="http://java.sun.com/jsf/facelets/demo">
 <head>
@@ -19,52 +20,66 @@
 
 <h2>1a: prefix mapped</h2>
 
-<img src="/jsf-compres-simple/faces/javax.faces.resources.image-from-webapp-root.png" />
+<img src="/jsf-compres-simple/faces/javax.faces.resource/image-from-webapp-root.png" />
 
 <h2>1b: extension mapped</h2>
 
-<img src="/jsf-compres-simple/javax.faces.resources.image-from-webapp-root.png.jsf" />
+<img src="/jsf-compres-simple/javax.faces.resource/image-from-webapp-root.png.jsf" />
 
 <h1>Case 2: image loaded from classpath, not occluded by webapp root</h1>
 
 <h2>2a: prefix mapped</h2>
 
-<img src="/jsf-compres-simple/faces/javax.faces.resources.image-from-classpath-not-overridden.png" />
+<img src="/jsf-compres-simple/faces/javax.faces.resource/image-from-classpath-not-overridden.png" />
 
 <h2>2b: extension mapped</h2>
 
-<img src="/jsf-compres-simple/javax.faces.resources.image-from-classpath-not-overridden.png.jsf" />
+<img src="/jsf-compres-simple/javax.faces.resource/image-from-classpath-not-overridden.png.jsf" />
 
 <h1>Case 3: image loaded from classpath, occluded by webapp root</h1>
 
 <h2>3a: prefix mapped</h2>
 
-<img src="/jsf-compres-simple/faces/javax.faces.resources.image-from-classpath.png" />
+<img src="/jsf-compres-simple/faces/javax.faces.resource/image-from-classpath.png" />
 
 <h2>3b: extension mapped</h2>
 
-<img src="/jsf-compres-simple/javax.faces.resources.image-from-classpath.png.jsf" />
+<img src="/jsf-compres-simple/javax.faces.resource/image-from-classpath.png.jsf" />
 
 
 <h1>Case 4: Image in library in webapp root</h1>
 
 <h2>4a: prefix mapped</h2>
 
-<img src="/jsf-compres-simple/faces/javax.faces.resources.image-in-basic.png?ln=basic" />
+<img src="/jsf-compres-simple/faces/javax.faces.resource/image-in-basic.png?ln=basic" />
 
 <h2>4b: extension mapped</h2>
 
-<img src="/jsf-compres-simple/javax.faces.resources.image-in-basic.png.jsf?ln=basic" />
+<img src="/jsf-compres-simple/javax.faces.resource/image-in-basic.png.jsf?ln=basic" />
 
 <h1>Case 5: Image in library in classpath</h1>
 
 <h2>4a: prefix mapped</h2>
 
-<img src="/jsf-compres-simple/faces/javax.faces.resources.image-in-basic-in-classpath.png?ln=basic" />
+<img src="/jsf-compres-simple/faces/javax.faces.resource/image-in-basic-in-classpath.png?ln=basic" />
 
 <h2>4b: extension mapped</h2>
 
-<img src="/jsf-compres-simple/javax.faces.resources.image-in-basic-in-classpath.png.jsf?ln=basic" />
+<img src="/jsf-compres-simple/javax.faces.resource/image-in-basic-in-classpath.png.jsf?ln=basic" />
+
+<h1>Case 6: Script in library in webapp root</h1>
+
+<jsfExt:outputScript resourceName="foo.js" libraryName="basic" />
+
+<input type="submit" onclick="foo(); return false;" value="Run foo()" />
+
+<h1>Case 7: Script in library in classpath</h1>
+
+<jsfExt:outputScript resourceName="bar.js" libraryName="advanced" />
+
+<input type="submit" onclick="bar(); return false;" value="Run bar()" />
+
+
 
 </ui:define>
 </ui:composition>

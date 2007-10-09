@@ -42,8 +42,13 @@
 package com.sun.faces.extensions.compres.render;
 
 import java.io.IOException;
+import java.util.Map;
+import javax.faces.application.CompResApplication;
+import javax.faces.application.Resource;
+import javax.faces.application.ResourceHandler;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
 
 /**
@@ -51,9 +56,42 @@ import javax.faces.render.Renderer;
  * @author edburns
  */
 public class ScriptRenderer extends Renderer {
-    public void encodeBegin(FacesContext facesContext, UIComponent uIComponent) throws IOException {
-        
+    public void encodeBegin(FacesContext facesContext, UIComponent comp) throws IOException {
+        Map<String, Object> attrs = comp.getAttributes();
+        Map<String, Object> requestMap = facesContext.getExternalContext().getRequestMap();
+        Resource resource = (Resource) attrs.get("javax.faces.resource");
+        ResourceHandler resourceHandler = ((CompResApplication)facesContext.getApplication()).getResourceHandler();
+        ResponseWriter writer;
+        if (null == resource) {
+            String 
+                    resourceName,
+                    libraryName;
+            resourceName = (String) attrs.get("resourceName");
+            assert(null != resourceName);
+            libraryName = (String) attrs.get("libraryName");
+            resource = resourceHandler.createResource(resourceName, libraryName);
+        }
+        assert(null != resource);
+        String scriptURI = resource.getURI();
+        // If this script has not yet been written to the request
+        if (null != scriptURI && !requestMap.containsKey(scriptURI)) {
+            writer = facesContext.getResponseWriter();
+            writer.startElement("script", comp);
+            writer.writeAttribute("type", resource.getContentType(), "type");
+            writer.writeURIAttribute("src", scriptURI, "src");
+            writer.endElement("script");
+            requestMap.put(scriptURI, scriptURI);
+        }
     }
+
+    public boolean getRendersChildren() {
+        boolean retValue;
+        
+        retValue = true;
+        return retValue;
+    }
+    
+    
     
 
     

@@ -67,7 +67,7 @@ public class ResourceHandlerImpl extends ResourceHandler {
     // Log instance for this class
     private static final Logger logger = Util.getLogger(Util.FACES_LOGGER + Util.APPLICATION_LOGGER);
 
-    FileTypeMap mimeTypeMap = null;
+    MimetypesFileTypeMap mimeTypeMap = null;
     List<Pattern> excludePatterns = null;
     long creationTime = 0;
     
@@ -75,6 +75,7 @@ public class ResourceHandlerImpl extends ResourceHandler {
     /** Creates a new instance of ResourceHandlerImpl */
     ResourceHandlerImpl() {
         mimeTypeMap = new MimetypesFileTypeMap();
+        mimeTypeMap.addMimeTypes("text/javascript js JS");
         ExternalContext extContext = 
                 FacesContext.getCurrentInstance().getExternalContext();
         String excludesParam = 
@@ -110,10 +111,10 @@ public class ResourceHandlerImpl extends ResourceHandler {
         String resourceName, libraryName, localePrefix;
         Resource result = null;
         assert(null != viewId);
-        assert(viewId.startsWith("javax.faces.resource."));
-        if ("javax.faces.resource.".length() < viewId.length()) {
+        assert(viewId.startsWith("javax.faces.resource/"));
+        if ("javax.faces.resource/".length() < viewId.length()) {
 
-            resourceName = viewId.substring("javax.faces.resource.".length() + 1);
+            resourceName = viewId.substring("javax.faces.resource/".length());
             libraryName = context.getExternalContext().getRequestParameterMap().get("ln");
             result = createResource(resourceName, libraryName);
         }

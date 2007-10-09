@@ -94,6 +94,24 @@ public class ResourceBase extends Resource {
 
     public String getURI() {
         String uri = null;
+        FacesContext context= FacesContext.getCurrentInstance();
+        ExternalContext extContext = context.getExternalContext();
+        String facesServletMapping = Util.getFacesMapping(context);
+        // If it is extension mapped
+        if (Util.isPrefixMapped(facesServletMapping)) {
+            uri = '/' + facesServletMapping + "/javax.faces.resource/" + 
+                    getResourceName();
+        }
+        else {
+            uri = "/javax.faces.resource/" + getResourceName() + 
+                    facesServletMapping;
+        }
+        if (null != getLibraryName()) {
+            uri = uri + "?ln=" + getLibraryName();
+        }
+        uri = context.getApplication().getViewHandler().getResourceURL(context,
+                uri);
+        
         return uri;
     }
 

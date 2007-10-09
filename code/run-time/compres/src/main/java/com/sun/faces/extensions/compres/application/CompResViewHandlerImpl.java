@@ -104,6 +104,7 @@ public class CompResViewHandlerImpl extends ViewHandlerWrapper {
                             resource.getMaxAge(facesContext));
                     while (-1 != (thisRead = resourceChannel.read(buf))) {
                         buf.rewind();
+                        buf.limit(thisRead);
                         do {
                             totalWritten += out.write(buf);
                         } while (totalWritten < size);

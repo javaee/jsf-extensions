@@ -43,6 +43,7 @@ package javax.faces.application;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.render.Renderer;
@@ -109,24 +110,6 @@ public abstract class Resource {
   * IOException.
   */
   public abstract InputStream getInputStream() throws IOException;
-
-/**
-  * Use the contentType of this resource to find an appropriate Renderer
-  * that is capable of writing the markup for this Resource.  This
-  * method places a reference to the Resource instance into the
-  * attributes Map of the argument component under the key
-  * "javax.faces.resource".  This enables the Renderer to call back into
-  * this Resource to obtain the URI for the Resource.
-  * 
-  * Three renderers will be added to the Standard HTML RenderKit,
-  * javax.faces.resource.{Script,Style,Image}.  We need to define
-  * somewhere the mapping between content types and these renderers, but
-  * for now we'll just use common sense.
-  *
-  * @param component the UIComponent that is associated with the markup
-  * that is to be generated for this Resource.
-  */
-  public abstract Renderer getRenderer(UIComponent component);
     
   /**
    * Return true if the user agent requesting this resource needs an update.
@@ -137,4 +120,11 @@ public abstract class Resource {
   public abstract boolean userAgentNeedsUpdate(FacesContext context);
   
   public abstract int getMaxAge(FacesContext context);
+  
+  /**
+   * Returns a Map of response headers to be sent with this resource, or
+   * an empty map if no response headers are to be sent.
+   */
+  
+  public abstract Map<String,String> getResponseHeaders();
 }

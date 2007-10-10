@@ -46,6 +46,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.FacesException;
@@ -102,6 +103,10 @@ public class CompResViewHandlerImpl extends ViewHandlerWrapper {
                     response.setContentType(resource.getContentType());
                     response.setHeader("Cache-Control", "max-age=" + 
                             resource.getMaxAge(facesContext));
+                    for (Map.Entry<String, String> cur : 
+                        resource.getResponseHeaders().entrySet()) {
+                            response.setHeader(cur.getKey(), cur.getValue());
+                        }
                     while (-1 != (thisRead = resourceChannel.read(buf))) {
                         buf.rewind();
                         buf.limit(thisRead);

@@ -46,6 +46,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
@@ -87,11 +88,6 @@ public class ResourceBase extends Resource {
         super.setContentType(contentType);
     }
 
-    public Renderer getRenderer(UIComponent component) {
-        Renderer result = null;
-        return result;
-    }
-
     public String getURI() {
         String uri = null;
         FacesContext context= FacesContext.getCurrentInstance();
@@ -113,6 +109,10 @@ public class ResourceBase extends Resource {
                 uri);
         
         return uri;
+    }
+    
+    public Map<String,String> getResponseHeaders() {
+        return Collections.emptyMap();
     }
 
     public InputStream getInputStream() throws IOException {

@@ -44,9 +44,9 @@
     <html>
         <head>
             <meta http-equiv="Content-Type" content="text/html;CHARSET=UTF-8" />
-            <title>3D Tic Tac Toe</title>
             <link rel="stylesheet" type="text/css"
                   href="${pageContext.request.contextPath}/stylesheet.css" />
+            <title>3D Tic Tac Toe</title>
         </head>
         
         <f:loadBundle basename="tictactoe.Resources" var="bundle"/>
@@ -56,8 +56,10 @@
             <f:view>
                 
                 <h:form id="form" prependId="false">  
-                    
-                    <h1>3D Tic Tac Toe</h1>
+                    <h:panelGrid styleClass="title-panel">
+                        <h:outputText value="3D Tic Tac Toe" styleClass="title-panel-text"/>
+                        <h:outputText value="Powered By Dynamic Faces" styleClass="title-panel-subtext"/>
+                    </h:panelGrid>
                     
                     <jsfExt:ajaxZone id="zone0" render="zone0,zone1">
                         <h:panelGrid columns="2" > 

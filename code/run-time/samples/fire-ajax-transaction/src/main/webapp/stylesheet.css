@@ -34,6 +34,26 @@
  * holder.
  */
 
+.title-panel {
+    background-image: url(images/redwaveani.gif);
+    height: 80px;
+    width: 1380;
+}
+
+.title-panel-text {
+    color: white;
+    font-family: 'Georgia','Times New Roman','times',serif;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.title-panel-subtext {
+    color: white;
+    font-family: 'Georgia','Times New Roman','times',serif;
+    font-size: 14px;
+    font-style: italic
+}
+
 body {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 12px;

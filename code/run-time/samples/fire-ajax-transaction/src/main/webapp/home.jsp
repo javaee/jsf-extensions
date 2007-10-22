@@ -53,9 +53,11 @@
             </head>
             <body  bgcolor="white">
                 <h:form id="form" prependId="false">  
-                    
-                    <h1>Dynamic Faces fireAjaxTransaction</h1>
-                    
+                    <h:panelGrid styleClass="title-panel">
+                        <h:outputText value="f i r e A j a x T r a n s a c t i o n" styleClass="title-panel-text"/>
+                        <h:outputText value="Powered By Dynamic Faces" styleClass="title-panel-subtext"/>
+                    </h:panelGrid>
+
                     <jsp:include page="colorKey.jsp"/> 
                     
                     <h:panelGrid columns="2" cellspacing="30">     

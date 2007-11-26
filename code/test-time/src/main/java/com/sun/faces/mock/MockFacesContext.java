@@ -55,6 +55,8 @@ import javax.el.ELContext;
 
 // Mock Object for FacesContext
 public class MockFacesContext extends FacesContext {
+  
+    private Severity maxSeverity;
 
 
     // ------------------------------------------------------------ Constructors
@@ -124,7 +126,7 @@ public class MockFacesContext extends FacesContext {
 
     // maximumSeverity
     public Severity getMaximumSeverity() {
-        throw new UnsupportedOperationException();
+       return maxSeverity;
     }
 
 
@@ -219,6 +221,14 @@ public class MockFacesContext extends FacesContext {
     public void addMessage(String clientId, FacesMessage message){ 
         if (message == null) {
             throw new NullPointerException();
+        }
+        if (maxSeverity == null) {
+            maxSeverity = message.getSeverity();
+        } else {
+           Severity sev = message.getSeverity();
+           if (sev.getOrdinal() > maxSeverity.getOrdinal()) {
+              maxSeverity = sev;
+           }
         }
         List list = (List) messages.get(clientId);
         if (list == null) {

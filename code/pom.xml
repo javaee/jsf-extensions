@@ -12,6 +12,11 @@
     including an implementation of the Avatar AJAX architecture.
 
   </description>
+  <properties>
+    <jar.version>0.1</jar.version>
+    <jar.version.extension>rc5</jar.version.extension>
+    <jar.full.version>${jar.version}-SNAPSHOT</jar.full.version>
+  </properties>
 
   <name>JavaServer(tm) Faces Extensions</name>
   <url>https://jsf-extensions.dev.java.net/</url>
@@ -88,7 +93,7 @@
     <dependency>
       <groupId>com.sun.faces.extensions</groupId>
       <artifactId>jsf-extensions-dynamic-faces</artifactId>
-      <version>0.1</version>
+      <version>${jar.full.version}</version>
     </dependency>
   </dependencies>
   <reporting>

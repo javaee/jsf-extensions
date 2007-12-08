@@ -4,6 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.sun.faces.extensions</groupId>
   <artifactId>dynafaces-getting-started</artifactId>
+  <version>${jar.full.version}</version>
   <packaging>war</packaging>
   <name>dynafaces-getting-started</name>
   <url>https://jsf-extensions.dev.java.net/</url>
@@ -91,13 +92,13 @@
     <dependency>
       <groupId>com.sun.faces.extensions</groupId>
       <artifactId>jsf-extensions-dynamic-faces</artifactId>
-      <version>0.1</version>
+      <version>${jar.full.version}</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>com.sun.faces.extensions</groupId>
       <artifactId>jsf-extensions-common</artifactId>
-      <version>0.1</version>
+      <version>${jar.full.version}</version>
       <scope>runtime</scope>
     </dependency>
   </dependencies>

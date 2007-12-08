@@ -4,6 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.sun.faces.extensions</groupId>
   <artifactId>jsf-tictactoe</artifactId>
+  <version>${jar.full.version}</version>
   <packaging>war</packaging>
   <name>jsf-extensions-tictactoe</name>
   <url>https://jsf-extensions.dev.java.net/</url>
@@ -77,17 +78,17 @@
     <dependency>
       <groupId>com.sun.faces.extensions</groupId>
       <artifactId>jsf-extensions-dynamic-faces</artifactId>
-      <version>0.1</version>
+      <version>${jar.full.version}</version>
     </dependency>
     <dependency>
       <groupId>com.sun.faces.extensions</groupId>
       <artifactId>jsf-extensions-dev-time</artifactId>
-      <version>0.1</version>
+      <version>${jar.full.version}</version>
     </dependency>
     <dependency>
       <groupId>com.sun.faces.extensions</groupId>
       <artifactId>jsf-extensions-common</artifactId>
-      <version>0.1</version>
+      <version>${jar.full.version}</version>
     </dependency>
   </dependencies>
   <reporting>

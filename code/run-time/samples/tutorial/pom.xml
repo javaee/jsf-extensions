@@ -4,6 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.sun.faces.extensions</groupId>
   <artifactId>dynafaces-jsp-blank</artifactId>
+  <version>${jar.full.version}</version>
   <packaging>war</packaging>
   <name>tutorial</name>
   <url>https://jsf-extensions.dev.java.net/</url>
@@ -14,7 +15,7 @@
   <parent>
     <groupId>com.sun.faces.extensions.maven</groupId>
     <artifactId>jsf-extensions-master</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>0.1</version>
   </parent>
 
   <build>

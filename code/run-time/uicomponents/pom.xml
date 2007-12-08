@@ -4,6 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.sun.faces.extensions</groupId>
   <artifactId>jsf-extensions-dynamic-faces</artifactId>
+  <version>${jar.full.version}</version>
   <packaging>jar</packaging>
   <name>jsf-extensions-dynamic-faces</name>
   <url>https://jsf-extensions.dev.java.net/</url>
@@ -134,7 +135,7 @@
     <dependency>
       <groupId>com.sun.faces.extensions</groupId>
       <artifactId>jsf-extensions-common</artifactId>
-      <version>0.1</version>
+      <version>${jar.full.version}</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>

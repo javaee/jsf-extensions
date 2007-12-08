@@ -128,7 +128,7 @@
             <manifestEntries>
               <Created-By>${pom.organization.name}</Created-By>
               <Implementation-Title>${pom.artifactId}</Implementation-Title>
-              <Implementation-Version>${pom.version}-rc5</Implementation-Version>
+              <Implementation-Version>${pom.version}-${jar.version.extension}</Implementation-Version>
               <Implementation-Vendor>${pom.organization.name}</Implementation-Vendor>
               <Implementation-Vendor-Id>com.sun</Implementation-Vendor-Id>
             </manifestEntries>
@@ -229,4 +229,8 @@
   </reporting>
 
   <distributionManagement />
+
+  <properties>
+    <jar.version.extension>rc5</jar.version.extension>
+  </properties>
 </project>

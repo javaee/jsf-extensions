@@ -4,9 +4,14 @@
   <artifactId>jsf-extensions-master</artifactId>
   <packaging>pom</packaging>
   <name>Master POM</name>
-  <version>0.1</version>
+  <version>0.1-rc5</version>
   <description>This is a master POM that is meant to be used by the various jsf-extensions modules.  It contains information that is 
      common to all projects.</description>
+  <organization>
+    <name>Sun Microsystems, Inc.</name>
+    <url>http://www.sun.com/</url>
+  </organization>
+
   <url>https://jsf-extensions.dev.java.net/</url>
   <issueManagement>
     <system>issueZilla</system>
@@ -97,11 +102,6 @@
     <developerConnection>scm:svn:https://jsf-extensions.dev.java.net/svn/jsf-extensions/trunk</developerConnection>
     <url>https://jsf-extensions.dev.java.net/source/browse/jsf-extensions/</url>
   </scm>
-  <organization>
-    <name>Sun Microsystems, Inc</name>
-    <url>http://www.sun.com/</url>
-  </organization>
-
   <build>
    <defaultGoal>install</defaultGoal>
 
@@ -120,6 +120,21 @@
 	 <artifactId>maven-war-plugin</artifactId>
 	 <version>2.0</version>
        </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifestEntries>
+              <Created-By>${pom.organization.name}</Created-By>
+              <Implementation-Title>${pom.artifactId}</Implementation-Title>
+              <Implementation-Version>${pom.version}</Implementation-Version>
+              <Implementation-Vendor>${pom.organization.name}</Implementation-Vendor>
+              <Implementation-Vendor-Id>com.sun</Implementation-Vendor-Id>
+            </manifestEntries>
+          </archive>
+        </configuration>
+      </plugin>
      </plugins>
    </pluginManagement>
 

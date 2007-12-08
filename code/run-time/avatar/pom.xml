@@ -24,7 +24,7 @@
   </scm>
 
   <build>
-    <sourceDirectory>src/main/java</sourceDirectory>
+    <sourceDirectory>target/filter/src/main/java</sourceDirectory>
     <defaultGoal>install</defaultGoal>
     <resources>
       <resource>
@@ -35,6 +35,21 @@
             <include>**/*.js</include>
             <include>*.tld</include>
         </includes>
+        <excludes>
+          <exclude>**/com_sun_faces*.js</exclude>
+        </excludes>
+     </resource>
+      <resource>
+        <targetPath>META-INF/${pom.version}-${jar.version.extension}/</targetPath>
+        <directory>src/main/resources</directory>
+        <includes>
+          <include>**/com_sun_faces*.js</include>
+        </includes>
+     </resource>
+     <resource>
+       <targetPath>../filter/src/main/java</targetPath>
+       <directory>src/main/java</directory>
+       <filtering>true</filtering>
      </resource>
    </resources>
     <plugins>

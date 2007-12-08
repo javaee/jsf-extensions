@@ -52,7 +52,7 @@ public class ScriptsRenderer extends Renderer {
     
     private static final String scriptIds[] = {
         "/META-INF/libs/scriptaculous/version1.6.4/prototype.js",
-        "/META-INF/com_sun_faces_ajax.js"
+        "/META-INF/${pom.version}-${jar.version.extension}/com_sun_faces_ajax.js"
     };    
     
     private static final String scriptLinkKeys[] = {

@@ -11,6 +11,9 @@
     <name>Sun Microsystems, Inc.</name>
     <url>http://www.sun.com/</url>
   </organization>
+  <properties>
+    <jar.version.extension>rc5</jar.version.extension>
+  </properties>
 
   <url>https://jsf-extensions.dev.java.net/</url>
   <issueManagement>
@@ -230,7 +233,4 @@
 
   <distributionManagement />
 
-  <properties>
-    <jar.version.extension>rc5</jar.version.extension>
-  </properties>
 </project>

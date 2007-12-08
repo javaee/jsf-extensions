@@ -4,7 +4,7 @@
   <artifactId>jsf-extensions-master</artifactId>
   <packaging>pom</packaging>
   <name>Master POM</name>
-  <version>0.1-rc5</version>
+  <version>0.1</version>
   <description>This is a master POM that is meant to be used by the various jsf-extensions modules.  It contains information that is 
      common to all projects.</description>
   <organization>
@@ -128,7 +128,7 @@
             <manifestEntries>
               <Created-By>${pom.organization.name}</Created-By>
               <Implementation-Title>${pom.artifactId}</Implementation-Title>
-              <Implementation-Version>${pom.version}</Implementation-Version>
+              <Implementation-Version>${pom.version}-rc5</Implementation-Version>
               <Implementation-Vendor>${pom.organization.name}</Implementation-Vendor>
               <Implementation-Vendor-Id>com.sun</Implementation-Vendor-Id>
             </manifestEntries>

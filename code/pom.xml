@@ -122,7 +122,9 @@
       <modules>
 	<module>maven/master-pom</module>
 	<module>test-time</module>
-	<module>dev-time</module>
+	<module>dev-time/annotations/library</module>
+	<module>dev-time/annotations/processor</module>
+	<module>dev-time/misc</module>
 	<module>run-time/common</module>
 	<module>run-time/flash</module>
 	<module>run-time/avatar</module>

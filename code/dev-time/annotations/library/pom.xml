@@ -16,15 +16,4 @@
         <artifactId>jsf-extensions-master</artifactId>
         <version>0.1</version>
     </parent>
-
-    <reporting>
-        <plugins>
-            <excludeDefaults>true</excludeDefaults>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-project-info-reports-plugin</artifactId>
-                <reportSets><reportSet><reports/></reportSet></reportSets>
-            </plugin>
-        </plugins>
-    </reporting>
 </project>

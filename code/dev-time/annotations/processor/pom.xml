@@ -1,15 +1,12 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.sun.faces.extensions</groupId>
     <artifactId>jsf-extensions-dev-time-annotations-processor</artifactId>
     <packaging>jar</packaging>
     <name>jsf-extensions-dev-time-annotations-processor</name>
     <url>https://jsf-extensions.dev.java.net/</url>
-    <description>
-        Annotations for creating UIComponents more easily
-    </description>
+    <description>Annotations for creating UIComponents more easily</description>
 
     <parent>
         <groupId>com.sun.faces.extensions.maven</groupId>
@@ -22,36 +19,29 @@
             <groupId>velocity</groupId>
             <artifactId>velocity</artifactId>
             <version>1.4</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>velocity</groupId>
             <artifactId>velocity-dep</artifactId>
             <version>1.4</version>
-            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sun</groupId>
+            <artifactId>tools</artifactId>
+            <version>1.5.0</version>
+            <scope>system</scope>
+            <systemPath>${java.home}/../lib/tools.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.faces.extensions</groupId>
+            <artifactId>jsf-extensions-dev-time-annotations</artifactId>
+            <version>0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.4</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <classpath1>${java.home}../lib/tools.jar</classpath1>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-
-
-    <reporting>
-        <plugins>
-            <excludeDefaults>true</excludeDefaults>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-project-info-reports-plugin</artifactId>
-                <reportSets><reportSet><reports/></reportSet></reportSets>
-            </plugin>
-        </plugins>
-    </reporting>
 </project>

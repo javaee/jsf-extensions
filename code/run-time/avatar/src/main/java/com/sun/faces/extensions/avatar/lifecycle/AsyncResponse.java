@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
+import javax.faces.application.ViewHandler;
 import javax.faces.component.ContextCallback;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
@@ -339,8 +340,34 @@ public class AsyncResponse {
                 renderFactory.getRenderKit(context,
                 context.getViewRoot().getRenderKitId());
         Writer out = null;
+        ExternalContext extContext = context.getExternalContext();
         Object response = (null != origResponse) ? origResponse :
-            context.getExternalContext().getResponse();
+            extContext.getResponse();
+        
+        if (null != extContext.getSession(false)) {
+            String charEnc = (String) extContext.getSessionMap().get
+                (ViewHandler.CHARACTER_ENCODING_KEY);
+            try {
+                Class[] paramTypes = new Class[] {String.class};
+                Method setCharacterEncoding = 
+                    response.getClass().getMethod(
+                        "setCharacterEncoding", paramTypes);
+                if (null != setCharacterEncoding) {
+                    Object[] params = {charEnc};
+                    setCharacterEncoding.invoke(response, params);
+                }
+            } catch (IllegalArgumentException ex) {
+                ex.printStackTrace();
+            } catch (SecurityException ex) {
+                ex.printStackTrace();
+            } catch (InvocationTargetException ex) {
+                ex.printStackTrace();
+            } catch (IllegalAccessException ex) {
+                ex.printStackTrace();
+            } catch (NoSuchMethodException ex) {
+                ex.printStackTrace();
+            }            
+        }
         try {
             Method getWriter =
                     response.getClass().getMethod("getWriter",

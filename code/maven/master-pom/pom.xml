@@ -13,7 +13,7 @@
   </organization>
   <properties>
     <jar.version>0.1</jar.version>
-    <jar.version.extension>rc5</jar.version.extension>
+    <jar.version.extension>rc7</jar.version.extension>
     <jar.full.version>${jar.version}-SNAPSHOT</jar.full.version>
   </properties>
 

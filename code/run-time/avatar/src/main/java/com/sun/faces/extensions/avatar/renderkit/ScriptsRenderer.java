@@ -51,14 +51,35 @@ public class ScriptsRenderer extends Renderer {
     // take care of it.
     
     private static final String scriptIds[] = {
-        "/META-INF/libs/scriptaculous/version1.6.4/prototype.js",
-        "/META-INF/${pom.version}-${jar.version.extension}/com_sun_faces_ajax.js"
+        "/META-INF/libs/scriptaculous/version1.6.4/prototype",
+        "/META-INF/${pom.version}-${jar.version.extension}/com_sun_faces_ajax"
     };    
     
     private static final String scriptLinkKeys[] = {
         ScriptsComponent.PROTOTYPE_JS_LINKED,
         ScriptsComponent.AJAX_JS_LINKED,  
     };
+    
+    private boolean didInit = false;
+
+    public void init() {
+        if (!didInit) {
+            String maxValue = FacesContext.getCurrentInstance().getExternalContext().
+   
+                getInitParameter("com.sun.faces.extensions.MAXIMIZE_RESOURCES");
+            boolean doMax = (null != maxValue) && 0 < maxValue.length() ? true : false;
+            for (int i = 0; i < scriptIds.length; i++) {
+                if (doMax) {
+                    scriptIds[i] = scriptIds[i] + "-max.js";
+                } else {
+                    scriptIds[i] = scriptIds[i] + ".js";
+                }
+            }
+            didInit = true;
+        }
+    }
+    
+    
     
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Renderer methods
@@ -76,6 +97,8 @@ public class ScriptsRenderer extends Renderer {
      */
     public void encodeBegin(FacesContext context, UIComponent component)
             throws IOException {
+        init();
+        
         if (!AsyncResponse.isAjaxRequest() && !java.beans.Beans.isDesignTime()) {
             for (int i = 0; i < scriptIds.length; i++) {
                 Map requestMap = context.getExternalContext().getRequestMap();

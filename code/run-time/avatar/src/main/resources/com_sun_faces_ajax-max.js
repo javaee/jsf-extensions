@@ -1000,6 +1000,20 @@ Object.extend(Object.extend(Faces.Event.prototype, Ajax.Request.prototype), {
 	 if (hf) {
 	     hf.value = state.text || state.data;
 	 }
+	 // make sure all the forms have a viewState hidden field.
+         var numForms = document.forms.length;
+	 var field;
+         for (var i = 0; i < numForms; i++) {
+	     field = document.forms[i].elements["javax.faces.ViewState"];
+	     if (typeof field == 'undefined') {
+		 field = document.createElement("input");
+		 field.type = "hidden";
+		 field.name = "javax.faces.ViewState";
+		 document.forms[i].appendChild(field);
+	     }
+	     field.value = state.text || state.data;
+	 }
+	     
      }
   },
   evalResponse: function() {

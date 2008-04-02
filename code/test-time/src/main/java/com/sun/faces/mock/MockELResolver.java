@@ -84,7 +84,7 @@ public class MockELResolver extends ELResolver {
 		throw new ELException(e);
 	    }
 	}
-
+        context.setPropertyResolved(result != null); 
 	return result;
     }
 

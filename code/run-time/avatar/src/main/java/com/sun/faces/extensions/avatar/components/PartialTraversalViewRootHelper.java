@@ -38,6 +38,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import javax.faces.FacesException;
 import javax.faces.component.ActionSource;
 import javax.faces.component.ContextCallback;
@@ -356,8 +357,11 @@ public class PartialTraversalViewRootHelper implements Serializable {
                 writer.startElement("markup", (UIComponent) root);
                 writer.write("<![CDATA[");
 
+                EscapeCDATAWriter cdataWriter =
+                        new EscapeCDATAWriter(writer);
+
                 // setup up a writer which will escape any CDATA sections
-                context.setResponseWriter(new EscapeCDATAWriter(writer));
+                context.setResponseWriter(context.getResponseWriter().cloneWithWriter(cdataWriter));
             }
         } catch (IOException ex) {
 	    this.cleanupAfterView(context);
@@ -530,8 +534,14 @@ public class PartialTraversalViewRootHelper implements Serializable {
         // after view content.
         // We will have to do something different for other implementations.
         // This is not a problem for Facelets.
-        context.getExternalContext().getRequestMap().
-	    remove("com.sun.faces.AFTER_VIEW_CONTENT");
+        Map<String,Object> reqStateMap = (Map<String, Object>) context.getExternalContext().getRequestMap().
+                get("com.sun.faces.util.RequestStateManager");
+        if (null != reqStateMap) {
+            reqStateMap.remove("com.sun.faces.AFTER_VIEW_CONTENT");
+        }
+        else {
+            context.getExternalContext().getRequestMap().remove("com.sun.faces.AFTER_VIEW_CONTENT");
+        }
 
         // move aside the AjaxResponseWriter
         if (null != orig) {
@@ -631,8 +641,10 @@ public class PartialTraversalViewRootHelper implements Serializable {
 
                             // setup up a writer which will escape any
                             // CDATA sections
+                            EscapeCDATAWriter cdataWriter = 
+                                    new EscapeCDATAWriter(writer);
                             facesContext.
-			      setResponseWriter(new EscapeCDATAWriter(writer));
+			      setResponseWriter(facesContext.getResponseWriter().cloneWithWriter(cdataWriter));
 
                             // do the default behavior...
                             comp.encodeAll(facesContext);
@@ -675,6 +687,18 @@ public class PartialTraversalViewRootHelper implements Serializable {
 
         public void write(String string) throws IOException {
             super.write(string.replace("]]>", "]]]]><![CDATA[>"));
+        }
+        
+        public void write(char[] cbuf, int off, int len) throws IOException {
+            String str = new String(cbuf, off, len);
+            if (-1 != str.indexOf("]]>")) {
+                str = str.replace("]]>", "]]]]><![CDATA[>");
+                cbuf = str.toCharArray();
+                super.write(cbuf, off, cbuf.length);
+            }
+            else {
+                super.write(cbuf, off, len);
+            }
         }
     }
 

@@ -61,9 +61,6 @@ xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLS
         <tag-class>
             fireAjaxTrans.PanelTag
         </tag-class>
-        <tei-class>
-            com.sun.faces.taglib.FacesTagExtraInfo
-        </tei-class>
         <body-content>
             JSP
         </body-content>
@@ -662,9 +659,6 @@ xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLS
         <tag-class>
             fireAjaxTrans.ButtonTag
         </tag-class>
-        <tei-class>
-            com.sun.faces.taglib.FacesTagExtraInfo
-        </tei-class>
         <body-content>
             JSP
         </body-content>

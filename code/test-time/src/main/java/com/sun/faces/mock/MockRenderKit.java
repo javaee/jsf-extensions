@@ -64,10 +64,12 @@ public class MockRenderKit extends RenderKit {
 		    "javax.faces.Text", new TestRenderer());
         addRenderer(UIPanel.COMPONENT_FAMILY, 
 		    "javax.faces.Grid", new TestRenderer(true));
+        responseStateManager = new MockResponseStateManager();
     }
 
 
     private Map renderers = new HashMap();
+    private ResponseStateManager responseStateManager = null;
 
 
     public void addRenderer(String family, String rendererType,
@@ -116,7 +118,7 @@ public class MockRenderKit extends RenderKit {
 
 
     public ResponseStateManager getResponseStateManager() {
-	return null;
+	return responseStateManager;
     }
 
 

@@ -58,6 +58,8 @@ import java.io.LineNumberReader;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
+import javax.faces.component.UIViewRoot;
+import javax.faces.event.PhaseId;
 
 
 /**
@@ -191,6 +193,12 @@ public class FacesTestCaseService extends Object {
                                getFacesContext().getExternalContext().
                                getRequestParameterMap().get(curName));
         }
+        
+        UIViewRoot root = getFacesContext().getApplication().getViewHandler().createView(facesContext, null);
+        root.setViewId("/viewId");
+        facesContext.setViewRoot(root);
+        
+        facesContext.setCurrentPhaseId(PhaseId.RESTORE_VIEW);
 
     }
 

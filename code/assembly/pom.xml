@@ -14,6 +14,10 @@
     <url>https://jsf-extensions.dev.java.net/source/browse/jsf-extensions/</url>
   </scm>
 
+  <properties>
+    <build.standalone>true</build.standalone>
+  </properties>
+
   <build>
     <defaultGoal>package</defaultGoal>
     <finalName>jsf-extensions</finalName>
@@ -99,8 +103,9 @@
 
                  <copy tofile="target/dist/jsf-extensions/samples/README.html" file="${antbuild.dir}/README.html"/>
 
-                 <!-- copy the source files of each sample to the distro -->
 
+                 <!-- copy the source files of each sample to the distro -->
+<!--
 		 <condition property="extra.excludes" 
                             value="jmaki/src/main/webapp/resources/**/*.*">
                    <not>
@@ -120,6 +125,8 @@
                    <property name="extra.includes" value="${extra.includes}" />
                    <property name="extra.excludes" value="${extra.excludes}" />
                  </ant>
+
+-->
 
                  <copy overwrite="true" todir="${basedir}/target/dist/jsf-extensions/samples">
                    <fileset dir="${basedir}/../run-time/samples">
@@ -172,15 +179,15 @@
                    <property name="appname" value="tictactoe" />
                  </ant>
 
+<!--
                  <ant inheritAll="false" dir="${antbuild.dir}" antfile="${antbuild.dir}/apply-sunbrand-using-ant.xml">
                    <property name="appname" value="jmaki" />
                  </ant>
+-->
 
-<!-- PENDING(edburns): 20070124 jsf-extensions issue 50
                  <ant inheritAll="false" dir="${antbuild.dir}" antfile="${antbuild.dir}/copy-sample-from-maven-to-dist-using-ant.xml">
                    <property name="appname" value="j1" />
                  </ant>
--->
 
                  <tar destfile="target/jsf-extensions-${pom.version}.tar"
                       basedir="target/dist" />

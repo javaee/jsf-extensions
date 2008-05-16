@@ -128,7 +128,9 @@
 	<module>run-time/avatar</module>
 	<module>run-time/samples/blank-facelets</module>
 	<module>run-time/samples/blank-jsp</module>
+<!--
 	<module>run-time/samples/jmaki</module>
+-->
 	<module>run-time/samples/cardemo</module>
 	<module>run-time/samples/flash</module>
 	<module>run-time/samples/tictactoe</module>
@@ -169,7 +171,9 @@
 	<module>run-time/samples/cardemo</module>
 	<module>run-time/samples/tictactoe</module>
 	<module>run-time/samples/fire-ajax-transaction</module>
+<!--
 	<module>run-time/samples/jmaki</module>
+-->
 	<module>run-time/samples/simple-events</module>
 	<module>run-time/samples/simple-partial-update</module>
 	<module>run-time/samples/stock-faces</module>
@@ -198,7 +202,9 @@
 	<module>run-time/samples/cardemo</module>
 	<module>run-time/samples/tictactoe</module>
 	<module>run-time/samples/fire-ajax-transaction</module>
+<!--
 	<module>run-time/samples/jmaki</module>
+-->
 	<module>run-time/samples/simple-events</module>
 	<module>run-time/samples/simple-partial-update</module>
 	<module>run-time/samples/stock-faces</module>

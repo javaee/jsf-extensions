@@ -16,8 +16,10 @@
 
                  <copy todir="../target/dist/jsf-extensions/lib" 
                        file="${settings.localRepository}/commons-logging/commons-logging/1.1/commons-logging-1.1.jar" />
+<!--
                  <copy todir="../target/dist/jsf-extensions/samples/lib" 
                        file="${settings.localRepository}/com/sun/jmaki/ajax-wrapper-comp/v.8.2/ajax-wrapper-comp-v.8.2.jar" />
+-->
 
     </target>
 

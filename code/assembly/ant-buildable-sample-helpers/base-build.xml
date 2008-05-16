@@ -4,6 +4,9 @@
 
     <property file="../build.properties"/> 
 
+    <property name="javaee.jar" value="${glassfish.home}/lib/javaee.jar" />
+    <property name="jsf-api.jar" value="${glassfish.home}/lib/jsf-api.jar" />
+
     <property name="build.standalone.set" value="@BUILD.STANDALONE.SET@" />   
 
   <condition property="build.standalone">
@@ -17,6 +20,7 @@
     <property name="default.src.path" value="src/main/java" />
 
     <path id="base.classpath">
+        <pathelement location="${jsf-api.jar}"/>
         <pathelement location="${javaee.jar}"/>
         <pathelement location="${war.classes.dir}" />
     </path>
@@ -97,10 +101,10 @@
       <ant dir="${basedir}/cardemo" inheritAll="false" />
       <ant dir="${basedir}/fire-ajax-transaction" inheritAll="false" />
       <ant dir="${basedir}/flash" inheritAll="false" />
-<!-- PENDING(edburns): 20070124 jsf-extensions issue 50
       <ant dir="${basedir}/j1" inheritAll="false" />
--->
+<!-- jmaki+jsf needs a refresh
       <ant dir="${basedir}/jmaki" inheritAll="false" />
+-->
       <ant dir="${basedir}/simple-events" inheritAll="false" />
       <ant dir="${basedir}/simple-partial-update" inheritAll="false" />
       <ant dir="${basedir}/tictactoe" inheritAll="false" />

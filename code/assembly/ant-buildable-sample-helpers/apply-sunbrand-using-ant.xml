@@ -4,7 +4,7 @@
 
   <target name="default">
 
-                     <copy todir="${basedir}/../target/dist/samples/${appname}/src/main/webapp">
+                     <copy todir="${basedir}/../target/dist/jsf-extensions/samples/${appname}/src/main/webapp">
                        <fileset dir="${basedir}/../../run-time/samples/sunbrand/src/main/webapp" />
                      </copy>
 

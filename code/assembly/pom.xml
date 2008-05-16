@@ -27,8 +27,8 @@
 	     <configuration>
 	       <tasks>
                  <echo message="Building distribution" />
-                 <mkdir dir="target/dist/lib" />
-                 <copy todir="target/dist/lib">
+                 <mkdir dir="target/dist/jsf-extensions/lib" />
+                 <copy todir="target/dist/jsf-extensions/lib">
                    <fileset dir="../run-time/avatar/target">
                      <include name="*.jar" />
                    </fileset>
@@ -42,7 +42,7 @@
                      <include name="*.jar" />
                    </fileset>
                  </copy>
-                 <copy todir="target/dist/">
+                 <copy todir="target/dist/jsf-extensions/">
                    <fileset dir=".">
                      <include name="*.txt" />
                      <include name="COPYRIGHT" />
@@ -50,9 +50,9 @@
 		 </copy>
 
                  <!-- copy dependent jars, so people can build the samples -->
-                 <mkdir dir="target/dist/samples/lib" />
+                 <mkdir dir="target/dist/jsf-extensions/samples/lib" />
 
-                 <copy todir="target/dist/samples/lib">
+                 <copy todir="target/dist/jsf-extensions/samples/lib">
                    <fileset dir="../dev-time/target">
                      <include name="*.jar" />
                    </fileset>
@@ -88,8 +88,8 @@
 
                  <!-- copy the build.xml and README to the distro -->
 
-                 <copy tofile="target/dist/samples/build.properties" file="${antbuild.dir}/samples.properties"/>
-                 <copy tofile="target/dist/samples/build.xml" 
+                 <copy tofile="target/dist/jsf-extensions/samples/build.properties" file="${antbuild.dir}/samples.properties"/>
+                 <copy tofile="target/dist/jsf-extensions/samples/build.xml" 
                        file="${antbuild.dir}/base-build.xml">
                    <filterset>
                      <filter token="BUILD.STANDALONE.SET"
@@ -97,7 +97,7 @@
                    </filterset>
                  </copy>
 
-                 <copy tofile="target/dist/samples/README.html" file="${antbuild.dir}/README.html"/>
+                 <copy tofile="target/dist/jsf-extensions/samples/README.html" file="${antbuild.dir}/README.html"/>
 
                  <!-- copy the source files of each sample to the distro -->
 
@@ -121,7 +121,7 @@
                    <property name="extra.excludes" value="${extra.excludes}" />
                  </ant>
 
-                 <copy overwrite="true" todir="${basedir}/target/dist/samples">
+                 <copy overwrite="true" todir="${basedir}/target/dist/jsf-extensions/samples">
                    <fileset dir="${basedir}/../run-time/samples">
                      <include unless="build.standalone" 
                               name="${extra.includes}"/>

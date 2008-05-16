@@ -32,8 +32,8 @@
 
   <target name="default">
 
-    <mkdir dir="${basedir}/../target/dist/samples/${appname}/src/main/java" />
-      <copy overwrite="true" todir="${basedir}/../target/dist/samples">
+    <mkdir dir="${basedir}/../target/dist/jsf-extensions/samples/${appname}/src/main/java" />
+      <copy overwrite="true" todir="${basedir}/../target/dist/jsf-extensions/samples">
         <fileset dir="${basedir}/../../run-time/samples">
           <include name="${appname}/**/*.*"/>
           <include name="${extra.includes}"/>
@@ -54,17 +54,17 @@
 
   <target name="copy.standalone.buildfile" if="use.standalone.buildfile">
     <copy overwrite="true" 
-          tofile="${basedir}/../target/dist/samples/${appname}/build.xml"
+          tofile="${basedir}/../target/dist/jsf-extensions/samples/${appname}/build.xml"
           file="${basedir}/${appname}-build-standalone.xml" />
   </target>
   <target name="copy.integrated.buildfile" if="use.integrated.buildfile">
     <copy overwrite="true" 
-          tofile="${basedir}/../target/dist/samples/${appname}/build.xml"
+          tofile="${basedir}/../target/dist/jsf-extensions/samples/${appname}/build.xml"
           file="${basedir}/${appname}-build-integrated.xml" />
   </target>
   <target name="copy.default.buildfile" if="use.default.buildfile">
     <copy overwrite="true" 
-          tofile="${basedir}/../target/dist/samples/${appname}/build.xml"
+          tofile="${basedir}/../target/dist/jsf-extensions/samples/${appname}/build.xml"
           file="${basedir}/${appname}-build.xml" />
   </target>
 

@@ -125,23 +125,6 @@ public class MockApplication extends Application {
         this.navigationHandler = navigationHandler;
     }
 
-    public void publishEvent(Class arg0, SystemEventListenerHolder arg1) {
-    }
-
-    public void subscribeToEvent(Class arg0, Class arg1, SystemEventListener arg2) {
-    }
-
-    public void subscribeToEvent(Class arg0, SystemEventListener arg1) {
-    }
-
-    public void unsubscribeFromEvent(Class arg0, Class arg1, SystemEventListener arg2) {
-    }
-
-    public void unsubscribeFromEvent(Class arg0, SystemEventListener arg1) {
-    }
-
-    
-
     private PropertyResolver propertyResolver = null;
     public PropertyResolver getPropertyResolver() {
         if (propertyResolver == null) {

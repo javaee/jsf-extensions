@@ -36,6 +36,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.HashMap;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
@@ -57,6 +58,8 @@ import javax.el.ELContext;
 public class MockFacesContext extends FacesContext {
   
     private Severity maxSeverity;
+
+    private Map<Object, Object> attributes = null;
 
 
     // ------------------------------------------------------------ Constructors
@@ -93,6 +96,15 @@ public class MockFacesContext extends FacesContext {
         this.application = application;
     }
 
+    @Override
+    public Map<Object, Object> getAttributes() {
+        
+        if (null == attributes) {
+            attributes = new HashMap<Object,Object>();
+        }
+        
+        return attributes;
+    }
 
     // clientIdsWithMessages
     public Iterator getClientIdsWithMessages() {
@@ -248,6 +260,10 @@ public class MockFacesContext extends FacesContext {
         responseComplete = false;
         responseStream = null;
         responseWriter = null;
+	if (null != attributes) {
+	    attributes.clear();
+	    attributes = null;
+	}
         root = null;
     }
 

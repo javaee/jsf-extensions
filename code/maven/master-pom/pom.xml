@@ -154,6 +154,13 @@
     </repository>
     <repository>
       <snapshots />
+      <id>jsf-extensions-local</id>
+      <name>jsf-extensions-local</name>
+      <url>https://jsf-extensions.dev.java.net/nonav/repository</url>
+    </repository>
+
+    <repository>
+      <snapshots />
       <id>java.net</id>
       <name>Java.net Maven 1.x Repository for external projects</name>
       <url>https://maven-repository.dev.java.net/nonav/repository</url>

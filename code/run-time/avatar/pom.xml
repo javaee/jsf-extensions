@@ -1,0 +1,103 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.sun.faces.extensions</groupId>
+  <artifactId>jsf-extensions-dynamic-faces</artifactId>
+  <version>${jar.full.version}</version>
+  <packaging>jar</packaging>
+  <name>jsf-extensions-dynamic-faces</name>
+  <url>https://jsf-extensions.dev.java.net/</url>
+  <description>
+    Run time jsf-extensions
+  </description>
+
+  <parent>
+    <groupId>com.sun.faces.extensions.maven</groupId>
+    <artifactId>jsf-extensions-master</artifactId>
+    <version>2.0-SNAPSHOT</version>
+  </parent>
+
+  <scm>
+    <connection>scm:svn:http://jsf-extensions.dev.java.net/svn/jsf-extensions/trunk</connection>
+    <developerConnection>scm:svn:https://jsf-extensions.dev.java.net/svn/jsf-extensions/trunk</developerConnection>
+    <url>https://jsf-extensions.dev.java.net/source/browse/jsf-extensions/</url>
+  </scm>
+
+  <build>
+    <sourceDirectory>target/filter/src/main/java</sourceDirectory>
+    <defaultGoal>install</defaultGoal>
+    <resources>
+      <resource>
+        <targetPath>META-INF</targetPath>
+        <directory>src/main/resources</directory>
+        <includes>
+            <include>*.xml</include>
+            <include>**/*.js</include>
+            <include>*.tld</include>
+        </includes>
+        <excludes>
+          <exclude>**/com_sun_faces*.js</exclude>
+        </excludes>
+     </resource>
+      <resource>
+        <targetPath>META-INF/${pom.version}-${jar.version.extension}/</targetPath>
+        <directory>src/main/resources</directory>
+        <includes>
+          <include>**/com_sun_faces*.js</include>
+        </includes>
+     </resource>
+     <resource>
+       <targetPath>../filter/src/main/java</targetPath>
+       <directory>src/main/java</directory>
+       <filtering>true</filtering>
+     </resource>
+   </resources>
+    <plugins>
+       <plugin>
+         <artifactId>maven-source-plugin</artifactId>
+	 <executions>
+	   <execution>
+             <id>source</id>
+	     <phase>generate-resources</phase>
+	     <goals>
+	       <goal>jar</goal>
+	     </goals>
+	   </execution>
+	 </executions>
+       </plugin>
+    </plugins>
+
+  </build>
+<!--
+  <pluginRepositories>
+    <pluginRepository>
+      <snapshots />
+      <id>mvnrepository</id>
+      <url>http://mvnrepository.com/artifact/</url>
+    </pluginRepository>
+  </pluginRepositories>
+-->
+
+  <dependencies>
+    <dependency>
+      <groupId>com.sun.faces.extensions</groupId>
+      <artifactId>jsf-extensions-common</artifactId>
+      <version>${jar.full.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
+  </dependencies>
+
+  <reporting>
+    <plugins>
+      <excludeDefaults>true</excludeDefaults>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <reportSets><reportSet><reports/></reportSet></reportSets>
+      </plugin>
+    </plugins>
+  </reporting>
+
+</project>

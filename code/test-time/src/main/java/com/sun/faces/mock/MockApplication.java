@@ -42,6 +42,7 @@ import javax.faces.application.Application;
 import javax.faces.application.NavigationHandler;
 import javax.faces.application.StateManager;
 import javax.faces.application.ViewHandler;
+import javax.faces.application.ResourceHandler;
 import javax.faces.component.UIComponent;
 import javax.faces.convert.Converter;
 import javax.faces.context.FacesContext;
@@ -123,6 +124,18 @@ public class MockApplication extends Application {
     }
     public void setNavigationHandler(NavigationHandler navigationHandler) {
         this.navigationHandler = navigationHandler;
+    }
+
+    private ResourceHandler resourceHandler = new MockResourceHandler();
+
+    @Override
+    public ResourceHandler getResourceHandler() {
+        return resourceHandler;
+    }
+
+    @Override
+    public void setResourceHandler(ResourceHandler resourceHandler) {
+        this.resourceHandler = resourceHandler;
     }
 
     private PropertyResolver propertyResolver = null;

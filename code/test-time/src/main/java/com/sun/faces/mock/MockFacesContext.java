@@ -96,13 +96,12 @@ public class MockFacesContext extends FacesContext {
         this.application = application;
     }
 
-    @Override
     public Map<Object, Object> getAttributes() {
-        
+
         if (null == attributes) {
             attributes = new HashMap<Object,Object>();
         }
-        
+
         return attributes;
     }
 

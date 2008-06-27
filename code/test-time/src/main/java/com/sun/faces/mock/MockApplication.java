@@ -29,53 +29,53 @@
 
 package com.sun.faces.mock;
 
+import java.lang.reflect.Constructor;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
-import java.util.Locale;
-import java.util.ResourceBundle;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.ResourceBundle;
+import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.FutureTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.Future;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Callable;
-import java.util.concurrent.FutureTask;
-import java.util.concurrent.CancellationException;
-import java.util.concurrent.ExecutionException;
-import java.lang.reflect.Constructor;
 
+import javax.el.ELContextListener;
+import javax.el.ELException;
+import javax.el.ELResolver;
+import javax.el.ExpressionFactory;
+import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.application.NavigationHandler;
+import javax.faces.application.ResourceHandler;
 import javax.faces.application.StateManager;
 import javax.faces.application.ViewHandler;
-import javax.faces.application.ResourceHandler;
 import javax.faces.component.UIComponent;
-import javax.faces.convert.Converter;
 import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
 import javax.faces.el.MethodBinding;
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.ValueBinding;
 import javax.faces.el.VariableResolver;
-import javax.faces.event.ActionListener;
+import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ActionEvent;
+import javax.faces.event.ActionListener;
+import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
 import javax.faces.event.SystemEventListenerHolder;
-import javax.faces.event.SystemEvent;
-import javax.faces.event.AbortProcessingException;
 import javax.faces.validator.Validator;
 import javax.servlet.ServletContext;
-
-import javax.el.ELResolver;
-import javax.el.ExpressionFactory;
-import javax.el.ValueExpression;
-import javax.el.ELException;
-import javax.el.ELContextListener;
 
 import com.sun.el.ExpressionFactoryImpl;
 
@@ -544,11 +544,9 @@ public class MockApplication extends Application {
             throw new NullPointerException("listener");
         }
 
-        List<SystemEventListener> listeners =
+        Set<SystemEventListener> listeners =
               getListeners(systemEventClass, sourceClass);
-        if (!listeners.contains(listener)) {
-            listeners.add(listener);
-        }
+        listeners.add(listener);
 
     }
 
@@ -618,7 +616,7 @@ public class MockApplication extends Application {
             throw new NullPointerException("listener");
         }
 
-        List<SystemEventListener> listeners =
+        Set<SystemEventListener> listeners =
               getListeners(systemEventClass, sourceClass);
         if (listeners != null) {
             listeners.remove(listener);
@@ -655,10 +653,10 @@ public class MockApplication extends Application {
      * @return the SystemEventListeners that should be used for the
      * provided combination of SystemEvent and source.
      */
-    private List<SystemEventListener> getListeners(Class<? extends SystemEvent> systemEvent,
+    private Set<SystemEventListener> getListeners(Class<? extends SystemEvent> systemEvent,
                                                    Class<?> sourceClass) {
 
-        List<SystemEventListener> listeners = null;
+        Set<SystemEventListener> listeners = null;
         EventInfo sourceInfo =
               systemEventHelper.getEventInfo(systemEvent, sourceClass);
         if (sourceInfo != null) {
@@ -702,7 +700,7 @@ public class MockApplication extends Application {
                                                              source,
                                                              useSourceLookup);
         if (eventInfo != null) {
-            List<SystemEventListener> listeners = eventInfo.getListeners();
+            Set<SystemEventListener> listeners = eventInfo.getListeners();
             event = processListeners(listeners, event, source, eventInfo);
         }
 
@@ -714,7 +712,7 @@ public class MockApplication extends Application {
      * Iterate through and invoke the listeners.  If the passed event was
      * <code>null</code>, create the event, and return it.
      */
-    private SystemEvent processListeners(List<SystemEventListener> listeners,
+    private SystemEvent processListeners(Set<SystemEventListener> listeners,
                                          SystemEvent event,
                                          Object source,
                                          EventInfo eventInfo) {
@@ -889,7 +887,7 @@ public class MockApplication extends Application {
     private static class EventInfo {
         private Class<? extends SystemEvent> systemEvent;
         private Class<?> sourceClass;
-        private List<SystemEventListener> listeners;
+        private Set<SystemEventListener> listeners;
         private Constructor eventConstructor;
         private Map<Class<?>,Constructor> constructorMap;
 
@@ -901,7 +899,7 @@ public class MockApplication extends Application {
 
             this.systemEvent = systemEvent;
             this.sourceClass = sourceClass;
-            this.listeners = new CopyOnWriteArrayList<SystemEventListener>();
+            this.listeners = new CopyOnWriteArraySet<SystemEventListener>();
             this.constructorMap = new HashMap<Class<?>,Constructor>();
             if (!sourceClass.equals(Void.class)) {
                 eventConstructor = getEventConstructor(sourceClass);
@@ -912,7 +910,7 @@ public class MockApplication extends Application {
         // ------------------------------------------------------ Public Methods
 
 
-        public List<SystemEventListener> getListeners() {
+        public Set<SystemEventListener> getListeners() {
 
             return listeners;
 

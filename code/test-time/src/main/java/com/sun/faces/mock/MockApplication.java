@@ -34,7 +34,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -712,7 +711,7 @@ public class MockApplication extends Application {
      * Iterate through and invoke the listeners.  If the passed event was
      * <code>null</code>, create the event, and return it.
      */
-    private SystemEvent processListeners(Set<SystemEventListener> listeners,
+    private SystemEvent processListeners(Collection<SystemEventListener> listeners,
                                          SystemEvent event,
                                          Object source,
                                          EventInfo eventInfo) {

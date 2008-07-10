@@ -40,6 +40,7 @@ import java.util.HashMap;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
+import javax.faces.application.ViewHandler;
 import javax.faces.application.FacesMessage.Severity;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
@@ -53,9 +54,14 @@ import javax.faces.render.RenderKitFactory;
 
 import javax.el.ELContext;
 
+import com.sun.faces.renderkit.RenderKitUtils;
+
 
 // Mock Object for FacesContext
 public class MockFacesContext extends FacesContext {
+
+    private static final String POST_BACK_MARKER =
+           MockFacesContext.class.getName() + "_POST_BACK";
   
     private Severity maxSeverity;
 
@@ -223,6 +229,27 @@ public class MockFacesContext extends FacesContext {
     }
     public void setViewRoot(UIViewRoot root) {
         this.root = root;
+    }
+
+    @Override
+    public boolean isPostback() {
+
+        Boolean postback = (Boolean) this.getAttributes().get(POST_BACK_MARKER);
+        if (postback == null) {
+            RenderKit rk = this.getRenderKit();
+            if (rk != null) {
+                postback = rk.getResponseStateManager().isPostback(this);
+            } else {
+                // ViewRoot hasn't been set yet, so calculate the RK
+                ViewHandler vh = this.getApplication().getViewHandler();
+                String rkId = vh.calculateRenderKitId(this);
+                postback = RenderKitUtils.getResponseStateManager(this, rkId).isPostback(this);
+            }
+            this.getAttributes().put(POST_BACK_MARKER, postback);
+        }
+
+        return postback.booleanValue();
+
     }
 
 

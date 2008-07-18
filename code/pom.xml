@@ -15,7 +15,7 @@
   <properties>
     <jar.version>0.1</jar.version>
     <jar.version.extension>rc8</jar.version.extension>
-    <jar.full.version>${jar.version}-SNAPSHOT</jar.full.version>
+    <jar.full.version>${jar.version}</jar.full.version>
   </properties>
 
   <name>JavaServer(tm) Faces Extensions</name>

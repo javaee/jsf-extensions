@@ -361,6 +361,9 @@ public class PartialTraversalViewRootHelper implements Serializable {
                         new EscapeCDATAWriter(writer);
 
                 // setup up a writer which will escape any CDATA sections
+                // setup up a writer which will escape any CDATA sections
+                hack_setSavedResponseWriter(context.getExternalContext(),
+                        context.getResponseWriter());
                 context.setResponseWriter(context.getResponseWriter().cloneWithWriter(cdataWriter));
             }
         } catch (IOException ex) {
@@ -372,6 +375,20 @@ public class PartialTraversalViewRootHelper implements Serializable {
 	    throw ex;
         }
 	return false;
+    }
+
+    private static final String hack_saved_responseWriter_key =
+            "com.sun.faces.extensions.avatar.hack_savedResponseWriter";
+    private ResponseWriter hack_getSavedResponseWriter(ExternalContext extContext) {
+        ResponseWriter saved = null;
+        saved = (ResponseWriter) extContext.getRequestMap().get(hack_saved_responseWriter_key);
+
+        return saved;
+    }
+   
+    private void hack_setSavedResponseWriter(ExternalContext extContext,
+            ResponseWriter toSave) {
+        extContext.getRequestMap().put(hack_saved_responseWriter_key, toSave);
     }
 
     /**
@@ -415,9 +432,15 @@ public class PartialTraversalViewRootHelper implements Serializable {
 
         try {
             if (async.isRenderAll()) {
-		EscapeCDATAWriter cdataWriter = (EscapeCDATAWriter)
-		    context.getResponseWriter();
-		ResponseWriter writer = cdataWriter.getWrapped();
+                ResponseWriter writer = context.getResponseWriter();
+                if (writer instanceof EscapeCDATAWriter) {
+                    writer = ((EscapeCDATAWriter) writer).getWrapped();
+                }
+                else {
+                    writer = hack_getSavedResponseWriter(context.getExternalContext());
+                }
+                // revert the writer and finish up
+                context.setResponseWriter(writer);
 
                 // revert the writer and finish up
                 context.setResponseWriter(writer);

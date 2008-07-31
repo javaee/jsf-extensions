@@ -1,0 +1,160 @@
+<?xml version="1.0"?>
+<!--
+/* 
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to you under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * $Id: pom.xml 160258 2006-05-21 01:56:12Z wsmoak $
+ */
+-->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>javax.faces</groupId>
+    <artifactId>shale-remoting</artifactId>
+    <version>1.1.0-swdp-c</version>
+    <packaging>jar</packaging>
+    <name>Shale Remoting for Sun Web Developer Pack</name>
+
+  <repositories>
+    <repository>
+      <id>maven2-repository.dev.java.net</id>
+      <name>Java.net Repository for Maven</name>
+      <url>http://download.java.net/maven/2/</url>
+      <layout>default</layout>
+    </repository>
+    <repository>
+      <snapshots />
+      <id>codecaus</id>
+      <name>codehaus</name>
+      <url>http://repository.codehaus.org</url>
+    </repository>
+    <repository>
+      <snapshots />
+      <id>java.net</id>
+      <name>Java.net Maven 1.x Repository for external projects</name>
+      <url>https://maven-repository.dev.java.net/nonav/repository</url>
+      <layout>legacy</layout>
+    </repository>
+    <repository>
+      <snapshots />
+      <id>java.net.shared</id>
+      <name>Java.net Maven 1.x Repository for glassfish dependencies</name>
+      <url>http://download.java.net/javaee5/external/shared</url>
+      <layout>legacy</layout>
+    </repository>
+    <repository>
+      <snapshots />
+      <id>ibiblio</id>
+      <url>http://www.ibiblio.org/maven2/</url>
+    </repository>
+  </repositories>
+
+  <distributionManagement>
+    <repository>
+      <id>java.net-m2-repository</id>
+    <url>java-net:/maven2-repository/trunk/www/repository/</url>
+    </repository>
+  </distributionManagement>
+
+  <build>
+    <defaultGoal>install</defaultGoal>
+    <resources>
+      <resource>
+        <targetPath>/</targetPath>
+        <directory>jars</directory>
+        <includes>
+            <include>${pom.artifactId}-${pom.version}.jar</include>
+        </includes>
+     </resource>
+   </resources>
+
+   <extensions>   
+      <extension>
+        <groupId>org.jvnet.wagon-svn</groupId>
+        <artifactId>wagon-svn</artifactId>
+        <version>RELEASE</version>
+      </extension>
+   </extensions>   
+
+  </build>
+
+    <dependencies>
+        
+         <dependency>
+             <groupId>commons-chain</groupId>
+             <artifactId>commons-chain</artifactId>
+             <version>1.1</version>
+             <optional>true</optional>
+             <scope>test</scope>
+         </dependency>
+        
+
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+            <version>1.1.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.4</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>3.8.1</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.faces</groupId>
+            <artifactId>jsf-api</artifactId>
+            <version>1.1_02</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.servlet</groupId>
+                    <artifactId>servlet-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>javax.servlet.jsp</groupId>
+                    <artifactId>jsp-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>javax.servlet.jsp.jstl</groupId>
+                    <artifactId>jstl</artifactId>
+                </exclusion>
+            </exclusions>            
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.shale</groupId>
+            <artifactId>shale-test</artifactId>
+            <version>1.1.0-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+
+
+</project>

@@ -74,15 +74,29 @@
 
   <build>
     <defaultGoal>install</defaultGoal>
-    <resources>
-      <resource>
-        <targetPath>/</targetPath>
-        <directory>jars</directory>
-        <includes>
-            <include>${pom.artifactId}-${pom.version}.jar</include>
-        </includes>
-     </resource>
-   </resources>
+    <plugins>
+       <plugin>
+	 <artifactId>maven-antrun-plugin</artifactId>
+	 <executions>
+	   <execution>
+             <id>dist</id>
+	     <phase>generate-sources</phase>
+	     <configuration>
+	       <tasks>
+                 <echo message="Unpacking ${pom.artifactId}-${pom.version}.jar into target/classes" />
+                 <mkdir dir="target/classes" />
+                 <unjar src="jars/${pom.artifactId}-${pom.version}.jar" overwrite="yes" 
+                        dest="target/classes"/>
+
+	       </tasks>
+	     </configuration>
+	     <goals>
+	       <goal>run</goal>
+	     </goals>
+	   </execution>
+	 </executions>
+       </plugin>
+     </plugins>
 
    <extensions>   
       <extension>
@@ -156,7 +170,7 @@
         <dependency>
             <groupId>org.apache.shale</groupId>
             <artifactId>shale-test</artifactId>
-            <version>1.1.0-SNAPSHOT</version>
+            <version>1.0.5</version>
             <scope>test</scope>
         </dependency>
 

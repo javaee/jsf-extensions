@@ -457,7 +457,7 @@ public class MockApplication extends Application {
      * @since 2.0
      */
     public void publishEvent(Class<? extends SystemEvent> systemEventClass,
-                             SystemEventListenerHolder source) {
+                             Object source) {
 
         if (systemEventClass == null) {
             throw new NullPointerException("systemEventClass");
@@ -504,12 +504,12 @@ public class MockApplication extends Application {
      * <code>sourceClass</code> and <code>systemEventClass</code> must be
      * used to store the argument <code>listener</code> in the application in
      * such a way that the <code>listener</code> can be quickly looked
-     * up by the implementation of {@link #publishEvent} given
+     * up by the implementation of {@link javax.faces.application.Application#publishEvent} given
      * <code>systemEventClass</code> and an instance of the
      * <code>Class</code> referenced by <code>sourceClass</code>.  If
      * argument <code>sourceClass</code> is <code>null</code>, the
      * <code>listener</code> must be discoverable by the implementation
-     * of {@link #publishEvent} given only <code>systemEventClass</code>.
+     * of {@link javax.faces.application.Application#publishEvent} given only <code>systemEventClass</code>.
      * </p>
      *
      * </div>
@@ -672,14 +672,18 @@ public class MockApplication extends Application {
      *  of processing the listeners.
      */
     private SystemEvent invokeComponentListenersFor(Class<? extends SystemEvent> systemEventClass,
-                                                    SystemEventListenerHolder source) {
+                                                    Object source) {
 
-        EventInfo eventInfo = compSysEventHelper.getEventInfo(systemEventClass,
-                                                              source.getClass());
-        return processListeners(source.getListenersForEventClass(systemEventClass),
-                                null,
-                                source,
-                                eventInfo);
+        if (source instanceof SystemEventListenerHolder) {
+            EventInfo eventInfo =
+                  compSysEventHelper.getEventInfo(systemEventClass,
+                                                  source.getClass());
+            return processListeners(((SystemEventListenerHolder) source).getListenersForEventClass(systemEventClass),
+                                    null,
+                                    source,
+                                    eventInfo);
+        }
+        return null;
 
     }
 

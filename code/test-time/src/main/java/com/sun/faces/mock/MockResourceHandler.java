@@ -79,4 +79,8 @@ public class MockResourceHandler extends ResourceHandler {
             return null;  
         }
     }
+
+    public boolean libraryExists(String libraryName) {
+        throw new UnsupportedOperationException("Needs to be implemented");
+    }
 }

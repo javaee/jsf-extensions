@@ -60,6 +60,7 @@ import javax.faces.application.NavigationHandler;
 import javax.faces.application.ResourceHandler;
 import javax.faces.application.StateManager;
 import javax.faces.application.ViewHandler;
+import javax.faces.webapp.pdl.PageDeclarationLanguage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -152,6 +153,18 @@ public class MockApplication extends Application {
     @Override
     public void setResourceHandler(ResourceHandler resourceHandler) {
         this.resourceHandler = resourceHandler;
+    }
+    
+    private PageDeclarationLanguage pdl = new MockPageDeclarationLanguage();
+    
+    @Override
+    public void setPageDeclarationLanguage(PageDeclarationLanguage pdl) {
+        this.pdl = pdl;
+    }
+    
+    @Override
+    public PageDeclarationLanguage getPageDeclarationLanguage() {
+        return pdl;
     }
 
     private PropertyResolver propertyResolver = null;

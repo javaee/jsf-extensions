@@ -65,4 +65,26 @@ public class MockStateManager extends StateManager {
     protected void restoreComponentState(FacesContext context, UIViewRoot root, String renderKitId)
     {}
 
+    @Override
+    public String getViewState(FacesContext arg0) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean isSavingStateInClient(FacesContext arg0) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Object saveView(FacesContext arg0) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void writeState(FacesContext arg0, Object arg1) throws IOException {
+        throw new UnsupportedOperationException();
+    }
+    
+    
+
 }

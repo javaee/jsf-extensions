@@ -22,18 +22,45 @@
 
 package com.sun.faces.mirror;
 
-import com.sun.faces.annotation.*;
+import com.sun.faces.annotation.Component;
+import com.sun.faces.annotation.Event;
+import com.sun.faces.annotation.Property;
+import com.sun.faces.annotation.PropertyCategory;
+import com.sun.faces.annotation.Renderer;
+import com.sun.faces.annotation.Resolver;
+import com.sun.faces.annotation.Tag;
 import com.sun.faces.mirror.DeclaredRendererInfo.RendersInfo;
-import com.sun.faces.mirror.generator.*;
+import com.sun.faces.mirror.generator.BeanInfoSourceGenerator;
+import com.sun.faces.mirror.generator.DebugGenerator;
+import com.sun.faces.mirror.generator.FaceletsConfigFileGenerator;
+import com.sun.faces.mirror.generator.FacesConfigFileGenerator;
+import com.sun.faces.mirror.generator.GeneratorException;
+import com.sun.faces.mirror.generator.GeneratorFactory;
+import com.sun.faces.mirror.generator.TagLibFileGenerator;
+import com.sun.faces.mirror.generator.TagSourceGenerator;
 import com.sun.mirror.apt.AnnotationProcessor;
 import com.sun.mirror.apt.AnnotationProcessorEnvironment;
 import com.sun.mirror.apt.Filer;
-import com.sun.mirror.declaration.*;
-import com.sun.mirror.type.*;
+import com.sun.mirror.declaration.AnnotationMirror;
+import com.sun.mirror.declaration.AnnotationTypeElementDeclaration;
+import com.sun.mirror.declaration.AnnotationValue;
+import com.sun.mirror.declaration.ClassDeclaration;
+import com.sun.mirror.declaration.Declaration;
+import com.sun.mirror.declaration.FieldDeclaration;
+import com.sun.mirror.declaration.InterfaceDeclaration;
+import com.sun.mirror.declaration.MethodDeclaration;
+import com.sun.mirror.declaration.Modifier;
+import com.sun.mirror.declaration.ParameterDeclaration;
+import com.sun.mirror.declaration.TypeDeclaration;
+import com.sun.mirror.type.ClassType;
+import com.sun.mirror.type.DeclaredType;
+import com.sun.mirror.type.InterfaceType;
+import com.sun.mirror.type.TypeMirror;
+import com.sun.mirror.type.VoidType;
 import com.sun.mirror.util.DeclarationVisitors;
 import com.sun.mirror.util.SimpleDeclarationVisitor;
-import com.sun.rave.designtime.CategoryDescriptor;
-import com.sun.rave.designtime.Constants;
+//import com.sun.rave.designtime.CategoryDescriptor;
+//import com.sun.rave.designtime.Constants;
 import java.beans.BeanInfo;
 import java.beans.EventSetDescriptor;
 import java.beans.IntrospectionException;
@@ -42,6 +69,7 @@ import java.beans.PropertyDescriptor;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -51,6 +79,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.Attributes;
@@ -289,14 +319,20 @@ class FacesAnnotationProcessor implements AnnotationProcessor {
                     BeanInfo superBeanInfo = Introspector.getBeanInfo(superClass);
                     IntrospectedClassInfo superClassInfo = new IntrospectedClassInfo(superBeanInfo);
                     Map<String, PropertyInfo> propertyInfoMap = new HashMap<String, PropertyInfo>();
-                    Set<CategoryDescriptor> categoryDescriptors = new HashSet<CategoryDescriptor>();
+                    //Set<CategoryDescriptor> categoryDescriptors = new HashSet<CategoryDescriptor>();
                     for (PropertyDescriptor propertyDescriptor : superBeanInfo.getPropertyDescriptors()) {
                         String name = propertyDescriptor.getName();
                         IntrospectedPropertyInfo propertyInfo = new IntrospectedPropertyInfo(propertyDescriptor);
-                        CategoryDescriptor categoryDescriptor =
-                                (CategoryDescriptor) propertyDescriptor.getValue(Constants.PropertyDescriptor.CATEGORY);
+                        Object categoryDescriptor = propertyDescriptor.getValue("category"); // Constants.PropertyDescriptor.CATEGORY
                         if (categoryDescriptor != null) {
-                            String categoryName = categoryDescriptor.getName();
+                            String categoryName = "";
+                            try {
+                                Method getName = categoryDescriptor.getClass().getDeclaredMethod("getName", (Class[])null);
+                                categoryName = (String) getName.invoke(categoryDescriptor, (Object[])null);
+                            } catch (Exception ex) {
+                                Logger.getLogger(IntrospectedAttributeInfo.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+
                             if (this.categoryMap.containsKey(categoryName)) {
                                 propertyInfo.setCategoryInfo(this.categoryMap.get(categoryName));
                             } else {
@@ -725,9 +761,9 @@ class FacesAnnotationProcessor implements AnnotationProcessor {
                 // Annotation indicates that this field corresponds to a property category descriptor
                 boolean categoryIsValid = true;
                 Collection modifiers = decl.getModifiers();
-                if (!decl.getType().toString().equals(CategoryDescriptor.class.getName())) {
+                if (!decl.getType().toString().equals("com.sun.rave.designtime.CategoryDescriptor")) {
                     env.getMessager().printError(decl.getPosition(),
-                            "Fields identified as property categories must be of type " + CategoryDescriptor.class.getName());
+                            "Fields identified as property categories must be of type " + "com.sun.rave.designtime.CategoryDescriptor");
                     categoryIsValid = false;
                 }
                 if (!modifiers.contains(Modifier.PUBLIC)) {
@@ -754,6 +790,7 @@ class FacesAnnotationProcessor implements AnnotationProcessor {
             if (decl.getAnnotation(Property.class) != null) {
                 // Annotation indicates that this method is a property getter or setter method
                 Map<String,Object> annotationMap = getAnnotationValueMap(decl, Property.class.getName());
+                boolean print = decl.getSimpleName().equals("setValue");
                 DeclaredPropertyInfo propertyInfo = new DeclaredPropertyInfo(annotationMap, decl);
                 String name = (String) annotationMap.get(DeclaredPropertyInfo.NAME);
                 TypeMirror returnType = decl.getReturnType();

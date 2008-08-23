@@ -24,11 +24,9 @@ package com.sun.faces.mirror;
 
 import com.sun.faces.annotation.Component;
 import com.sun.mirror.declaration.ClassDeclaration;
-import com.sun.rave.designtime.CategoryDescriptor;
-import com.sun.rave.designtime.Constants;
-import java.util.HashSet;
+//import com.sun.rave.designtime.CategoryDescriptor;
+//import com.sun.rave.designtime.Constants;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Represents a JSF component class declared in the current compilation unit.
@@ -59,15 +57,17 @@ public class DeclaredComponentInfo extends DeclaredClassInfo {
     
     public String getType() {
         String type = (String) this.annotationValueMap.get(TYPE);
-        if (type == null)
+        if (type == null) {
             type = this.decl.getQualifiedName();
+        }
         return type;
     }
     
     public String getFamily() {
         String family = (String) this.annotationValueMap.get(FAMILY);
-        if (family == null)
+        if (family == null) {
             family = this.getType();
+        }
         return family;
     }
     
@@ -81,20 +81,23 @@ public class DeclaredComponentInfo extends DeclaredClassInfo {
                 char[] chars = comment.toCharArray();
                 StringBuffer buffer = new StringBuffer();
                 int index = 0;
-                while (index < chars.length && Character.isSpaceChar(chars[index]))
+                while (index < chars.length && Character.isSpaceChar(chars[index])) {
                     index++;
+                }
                 while (index < chars.length) {
                     if (chars[index] == '<') {
                         index++;
-                        while (index < chars.length && chars[index] != '>')
+                        while (index < chars.length && chars[index] != '>') {
                             index++;
+                        }
                     } else if (chars[index] == '\n') {
                         buffer.append(" ");
                     } else if (chars[index] == '"') {
                         buffer.append("&quot;");
                     } else if (chars[index] == '.') {
-                        if (index == chars.length - 1 || Character.isSpaceChar(chars[index+1]))
+                        if (index == chars.length - 1 || Character.isSpaceChar(chars[index+1])) {
                             break;
+                        }
                         buffer.append('.');
                     } else {
                         buffer.append(chars[index]);
@@ -109,8 +112,9 @@ public class DeclaredComponentInfo extends DeclaredClassInfo {
     
     public String getDisplayName() {
         String displayName = (String) this.annotationValueMap.get(DISPLAY_NAME);
-        if (displayName == null)
+        if (displayName == null) {
             displayName = this.decl.getSimpleName();
+        }
         return displayName;
     }
     
@@ -125,23 +129,26 @@ public class DeclaredComponentInfo extends DeclaredClassInfo {
     
     public boolean isTag() {
         Boolean isTag = (Boolean) this.annotationValueMap.get(IS_TAG);
-        if (isTag == null)
+        if (isTag == null) {
             return true;
+        }
         return isTag.booleanValue();
     }
     
     public String getTagName() {
         String tagName = (String) this.annotationValueMap.get(TAG_NAME);
-        if (tagName == null)
+        if (tagName == null) {
             tagName = this.getInstanceName();
+        }
         return tagName;
     }
     
     private String tagRendererType;
     
     public String getTagRendererType() {
-        if (this.tagRendererType == null)
+        if (this.tagRendererType == null) {
             return (String) this.annotationValueMap.get(TAG_RENDERER_TYPE);
+        }
         return this.tagRendererType;
     }
     
@@ -165,8 +172,9 @@ public class DeclaredComponentInfo extends DeclaredClassInfo {
     
     public String getTagClassQualifiedName() {
         ClassDeclaration tagClassDecl = this.getTagClassDeclaration();
-        if (tagClassDecl == null)
+        if (tagClassDecl == null) {
             return this.getQualifiedName() + "Tag";
+        }
         return tagClassDecl.getQualifiedName();
     }
     

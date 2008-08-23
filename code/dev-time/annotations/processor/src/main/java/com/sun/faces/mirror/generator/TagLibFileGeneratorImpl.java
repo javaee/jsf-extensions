@@ -23,10 +23,12 @@
 package com.sun.faces.mirror.generator;
 
 import com.sun.faces.mirror.DeclaredComponentInfo;
+import com.sun.faces.mirror.PropertyInfo;
 import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import org.apache.velocity.Template;
@@ -76,6 +78,7 @@ class TagLibFileGeneratorImpl extends TagLibFileGenerator {
             velocityContext.put("componentInfoSet", componentInfoSet);
             velocityContext.put("namespace", namespace == null ? "" : namespace);
             velocityContext.put("namespacePrefix", namespacePrefix == null ? "" : namespacePrefix);
+            
             Template template = this.velocityEngine.getTemplate(TEMPLATE);
             template.merge(velocityContext, printWriter);
         } catch (Exception e) {

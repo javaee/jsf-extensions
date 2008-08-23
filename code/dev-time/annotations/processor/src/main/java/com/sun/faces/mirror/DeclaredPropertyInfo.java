@@ -204,13 +204,15 @@ public class DeclaredPropertyInfo extends PropertyInfo {
     
     public AttributeInfo getAttributeInfo() {
         if (this.attributeInfo == null) {
-            if (Boolean.FALSE.equals(this.annotationValueMap.get(IS_ATTRIBUTE)))
+            if (Boolean.FALSE.equals(this.annotationValueMap.get(IS_ATTRIBUTE))) {
                 return null;
-            if (this.annotationValueMap.containsKey(ATTRIBUTE))
+            }
+            if (this.annotationValueMap.containsKey(ATTRIBUTE)) {
                 this.attributeInfo = new DeclaredAttributeInfo(
                         (Map<String,Object>) this.annotationValueMap.get(ATTRIBUTE), this);
-            else
+            } else {
                 this.attributeInfo = new DeclaredAttributeInfo(this);
+            }
         }
         return this.attributeInfo;
     }

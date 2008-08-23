@@ -27,6 +27,7 @@ import com.sun.mirror.apt.AnnotationProcessor;
 import com.sun.mirror.apt.AnnotationProcessorEnvironment;
 import com.sun.mirror.apt.AnnotationProcessorFactory;
 import com.sun.mirror.declaration.AnnotationTypeDeclaration;
+import java.io.File;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -105,6 +106,7 @@ public class FacesAnnotationProcessorFactory implements AnnotationProcessorFacto
             AnnotationProcessorEnvironment env) {
         FacesAnnotationProcessor annotationProcessor = new FacesAnnotationProcessor(env);
         Map<String,String> optionMap = env.getOptions();
+                
         // Process options passed to the annotation processor tool. The tool should be
         // doing this processing, but the apt released with JDK 5 does not. 
         // TODO - cross verify with calls to apt on other platforms, and outside of ant

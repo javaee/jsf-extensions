@@ -19,10 +19,13 @@
  * 
  * Copyright 2007 Sun Microsystems, Inc. All rights reserved.
  */
-
 package com.sun.faces.mirror;
 
-import com.sun.rave.designtime.markup.AttributeDescriptor;
+//import com.sun.rave.designtime.markup.AttributeDescriptor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Represents an attribute for a property of a class from a dependant library, 
@@ -31,38 +34,58 @@ import com.sun.rave.designtime.markup.AttributeDescriptor;
  * @author gjmurphy
  */
 public class IntrospectedAttributeInfo implements AttributeInfo {
-    
-    AttributeDescriptor attributeDescriptor;
-    
-    IntrospectedAttributeInfo(AttributeDescriptor attributeDescriptor) {
+
+    Object attributeDescriptor;
+
+    IntrospectedAttributeInfo(Object attributeDescriptor) {
         this.attributeDescriptor = attributeDescriptor;
     }
 
     public String getName() {
-        return this.attributeDescriptor.getName();
+        String ret = null;
+        try {
+            Method getName = attributeDescriptor.getClass().getDeclaredMethod("getName", (Class[])null);
+            ret = (String) getName.invoke(attributeDescriptor, (Object[])null);
+        } catch (Exception ex) {
+            Logger.getLogger(IntrospectedAttributeInfo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return ret;
     }
 
     public boolean isBindable() {
-        return this.attributeDescriptor.isBindable();
+        Boolean ret = null;
+        try {
+            Method isBindable = attributeDescriptor.getClass().getDeclaredMethod("isBindable", (Class[])null);
+            ret = (Boolean) isBindable.invoke(attributeDescriptor, (Object[])null);
+        } catch (Exception ex) {
+            Logger.getLogger(IntrospectedAttributeInfo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return ret;
     }
 
     public boolean isRequired() {
-        return this.attributeDescriptor.isRequired();
+        Boolean ret = null;
+        try {
+            Method isRequired = attributeDescriptor.getClass().getDeclaredMethod("isRequired", (Class[])null);
+            ret = (Boolean) isRequired.invoke(attributeDescriptor, (Object[])null);
+        } catch (Exception ex) {
+            Logger.getLogger(IntrospectedAttributeInfo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return ret;
     }
 
     public String getMethodSignature() {
         return null;
     }
-    
     private String description;
-    
+
     public String getDescription() {
         if (description == null) {
             return "";
         }
         return this.description;
     }
-    
+
     void setDescription(String description) {
         this.description = description;
     }
@@ -71,5 +94,4 @@ public class IntrospectedAttributeInfo implements AttributeInfo {
         String name = this.getName();
         return "set" + name.substring(0, 1).toUpperCase() + name.substring(1);
     }
-    
 }

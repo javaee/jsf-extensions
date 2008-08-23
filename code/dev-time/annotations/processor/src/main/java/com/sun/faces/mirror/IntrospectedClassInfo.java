@@ -22,13 +22,10 @@
 
 package com.sun.faces.mirror;
 
-import com.sun.rave.designtime.CategoryDescriptor;
-import com.sun.rave.designtime.Constants;
+//import com.sun.rave.designtime.CategoryDescriptor;
+//import com.sun.rave.designtime.Constants;
 import java.beans.BeanInfo;
-import java.beans.EventSetDescriptor;
 import java.beans.MethodDescriptor;
-import java.beans.PropertyDescriptor;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -146,7 +143,7 @@ public class IntrospectedClassInfo extends ClassInfo {
         return this.methodNameSet;
     }
     
-    Set<CategoryDescriptor> categoryDescriptors;
+    //Set<CategoryDescriptor> categoryDescriptors;
     
     
     

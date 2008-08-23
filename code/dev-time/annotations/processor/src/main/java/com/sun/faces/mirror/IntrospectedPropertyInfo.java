@@ -22,11 +22,13 @@
 
 package com.sun.faces.mirror;
 
-import com.sun.rave.designtime.CategoryDescriptor;
-import com.sun.rave.designtime.Constants;
-import com.sun.rave.designtime.markup.AttributeDescriptor;
+//import com.sun.rave.designtime.CategoryDescriptor;
+//import com.sun.rave.designtime.Constants;
+//import com.sun.rave.designtime.markup.AttributeDescriptor;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Represents a property of a class from a dependant library, discovered using
@@ -105,8 +107,16 @@ public class IntrospectedPropertyInfo extends PropertyInfo {
     }
     
     String getCategoryReferenceName() {
-        if (this.propertyDescriptor.getValue(Constants.PropertyDescriptor.CATEGORY) != null)
-            return ((CategoryDescriptor) this.propertyDescriptor.getValue(Constants.PropertyDescriptor.CATEGORY)).getName();
+        if (this.propertyDescriptor.getValue("category") != null) {
+            try {
+                Object o = this.propertyDescriptor.getValue("category");
+                Method m = o.getClass().getDeclaredMethod("getName", (Class[])null);
+                return (String) m.invoke(o, (Object[])null);
+            } catch (Exception ex) {
+                Logger.getLogger(IntrospectedAttributeInfo.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            //return ((CategoryDescriptor) this.propertyDescriptor.getValue("category")).getName(); // Constants.PropertyDescriptor.CATEGORY
+        }
         return null;
     }
     
@@ -132,8 +142,7 @@ public class IntrospectedPropertyInfo extends PropertyInfo {
     }
 
     public AttributeInfo getAttributeInfo() {
-        AttributeDescriptor attributeDescriptor =
-                (AttributeDescriptor) this.propertyDescriptor.getValue(Constants.PropertyDescriptor.ATTRIBUTE_DESCRIPTOR);
+        Object attributeDescriptor = this.propertyDescriptor.getValue("attributeDescriptor"); // Constants.PropertyDescriptor.ATTRIBUTE_DESCRIPTOR
         if (attributeDescriptor == null)
             return null;
         return new IntrospectedAttributeInfo(attributeDescriptor);

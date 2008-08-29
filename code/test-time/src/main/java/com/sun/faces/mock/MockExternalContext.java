@@ -39,6 +39,7 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Set;
 import java.util.Map;
+import java.util.HashMap;
 
 import javax.faces.FacesException;
 import javax.faces.context.ExternalContext;
@@ -64,6 +65,7 @@ public class MockExternalContext extends ExternalContext {
     private ServletContext context = null;
     private ServletRequest request = null;
     private ServletResponse response = null;
+    private Map<String,String> initParams;
 
 
     public Object getSession(boolean create) {
@@ -208,13 +210,21 @@ public class MockExternalContext extends ExternalContext {
 
 
     public String getInitParameter(String name) {
-	if (name.equals(javax.faces.application.StateManager.STATE_SAVING_METHOD_PARAM_NAME)) {
-	    return null;
-	}
-	if (name.equals(javax.faces.webapp.FacesServlet.LIFECYCLE_ID_ATTR)) {
-	    return null;
-	}
-        throw new UnsupportedOperationException();
+        if (name
+              .equals(javax.faces.application.StateManager.STATE_SAVING_METHOD_PARAM_NAME)) {
+            return null;
+        }
+        if (name.equals(javax.faces.webapp.FacesServlet.LIFECYCLE_ID_ATTR)) {
+            return null;
+        }
+        return ((initParams == null) ? null : initParams.get(name));
+    }
+
+    public void addInitParameter(String name, String value) {
+        if (initParams == null) {
+            initParams = new HashMap<String,String>();
+        }
+        initParams.put(name, value);
     }
 
 

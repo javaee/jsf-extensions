@@ -76,6 +76,11 @@ public class MockExternalContext extends ExternalContext {
     public Object getContext() {
         return (context);
     }
+
+    public String getContextName() { 
+	return context.getServletContextName();
+    }
+
     
     
     public Object getRequest() {
@@ -199,6 +204,11 @@ public class MockExternalContext extends ExternalContext {
     public String getRequestContentType() {
         throw new UnsupportedOperationException();
     }
+
+    public int getRequestContentLength() {
+        throw new UnsupportedOperationException();
+    }
+
 
     public String getResponseCharacterEncoding() {
         throw new UnsupportedOperationException();

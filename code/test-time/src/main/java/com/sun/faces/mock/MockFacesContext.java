@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Collections;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
@@ -149,23 +150,35 @@ public class MockFacesContext extends FacesContext {
 
 
     // messages
-    private Map messages = new HashMap();
+    private Map<String,List<FacesMessage>> messages = new HashMap();
     public Iterator getMessages() {
-        ArrayList results = new ArrayList();
-        Iterator clientIds = messages.keySet().iterator();
-        while (clientIds.hasNext()) {
-            String clientId = (String) clientIds.next();
-            results.addAll((List) messages.get(clientId));
-        }
+        List<FacesMessage> results = getMessageList();
         return (results.iterator());
     }
     public Iterator getMessages(String clientId) {
-        List list = (List) messages.get(clientId);
-        if (list == null) {
-            list = new ArrayList();
-        }
+	List<FacesMessage> list = getMessageList(clientId);
         return (list.iterator());
     }
+
+    public List<FacesMessage> getMessageList() {
+        ArrayList results = new ArrayList<FacesMessage>();
+        Iterator clientIds = messages.keySet().iterator();
+        while (clientIds.hasNext()) {
+            String clientId = (String) clientIds.next();
+            results.addAll((List<FacesMessage>) messages.get(clientId));
+        }
+	return results;
+    }
+
+
+    public List<FacesMessage> getMessageList(String clientId) {
+        List<FacesMessage> list = messages.get(clientId);
+        if (list == null) {
+            list = Collections.EMPTY_LIST;
+        }
+	return list;
+    }
+
     
     
 

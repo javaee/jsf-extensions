@@ -1,0 +1,116 @@
+## The contents of this file are subject to the terms
+## of the Common Development and Distribution License
+## (the License).  You may not use this file except in
+## compliance with the License.
+## 
+## You can obtain a copy of the license at
+## https://woodstock.dev.java.net/public/CDDLv1.0.html.
+## See the License for the specific language governing
+## permissions and limitations under the License.
+## 
+## When distributing Covered Code, include this CDDL
+## Header Notice in each file and include the License file
+## at https://woodstock.dev.java.net/public/CDDLv1.0.html.
+## If applicable, add the following below the CDDL Header,
+## with the fields enclosed by brackets [] replaced by
+## you own identifying information:
+## "Portions Copyrighted [year] [name of copyright owner]"
+## 
+## Copyright 2007 Sun Microsystems, Inc. All rights reserved.
+
+package ${tagPackage};
+
+import javax.el.ELException;
+import javax.el.MethodExpression;
+import javax.el.ValueExpression;
+import javax.faces.FacesException;
+import javax.faces.component.UIComponent;
+import javax.faces.component.StateHolder;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
+import javax.faces.event.ValueChangeEvent;
+import javax.faces.webapp.UIComponentELTag;
+import javax.faces.context.FacesContext;
+
+/**
+ * This file was generated automatically on ${date}.
+ */
+
+public class ${tagClass} extends UIComponentELTag {
+    
+    /**
+     * Returns the requested component type.
+     */
+    public String getComponentType() {
+        return "${componentInfo.family}";
+    }
+    
+    /**
+     * Returns the requested renderer type.
+     */
+    public String getRendererType() {
+#if ($componentInfo.tagRendererType)
+        return "${componentInfo.tagRendererType}";
+#else
+        return null;
+#end
+    }
+    
+    /**
+     * Release any allocated tag handler attributes.
+     */
+    public void release() {
+        super.release();
+#foreach($propertyInfo in $propertyInfos)
+#if ($propertyInfo.attributeInfo && !($propertyInfo.name == "id" || $propertyInfo.name == "parent"))
+        ${propertyInfo.instanceName} = null;
+#end
+#end
+    }
+    
+    /**
+     * Transfer tag attribute values to component properties.
+     */
+    protected void setProperties(UIComponent component) {
+        super.setProperties(component);
+                        
+#foreach($propertyInfo in $propertyInfos)
+#if ($propertyInfo.attributeInfo)
+#if ($propertyInfo.type == "javax.el.MethodExpression")
+        if (${propertyInfo.instanceName} != null) {
+            try {
+                component.getAttributes().put("${propertyInfo.instanceName}", ${propertyInfo.instanceName});
+            } catch (ELException e) {
+                throw new FacesException(e);
+            }
+        }
+#elseif (!($propertyInfo.name == "id" || $propertyInfo.name == "parent"))
+        if (${propertyInfo.instanceName} != null) {
+            component.setValueExpression("${propertyInfo.attributeInfo.name}", ${propertyInfo.instanceName});
+        }
+#end
+#end
+#end ##foreach($propertyInfo in $propertyInfos)
+    }
+    
+
+#foreach($propertyInfo in $propertyInfos)
+#if ($propertyInfo.attributeInfo && !($propertyInfo.name == "id" || $propertyInfo.name == "parent"))
+    /**
+     * Set attribute corresponding to the "${propertyInfo.name}" property
+     */
+#if ($propertyInfo.type == 'javax.el.MethodExpression')
+    private MethodExpression ${propertyInfo.instanceName} = null;
+    public void ${propertyInfo.attributeInfo.writeMethodName} (MethodExpression ${propertyInfo.instanceName}) {
+        this.${propertyInfo.instanceName} = ${propertyInfo.instanceName};
+    }
+#else
+    private ValueExpression ${propertyInfo.instanceName} = null;
+    public void ${propertyInfo.attributeInfo.writeMethodName} (ValueExpression ${propertyInfo.instanceName}) {
+        this.${propertyInfo.instanceName} = ${propertyInfo.instanceName};
+    }
+#end
+#end ##if ($propertyInfo.attributeInfo)
+#end ##foreach($propertyInfo in $propertyInfos)
+
+}

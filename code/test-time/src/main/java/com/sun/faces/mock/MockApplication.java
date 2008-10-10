@@ -546,7 +546,7 @@ public class MockApplication extends Application {
      * @since 2.0
      */
     public void subscribeToEvent(Class<? extends SystemEvent> systemEventClass,
-                                 Class sourceClass,
+                                 Class<?> sourceClass,
                                  SystemEventListener listener) {
 
         if (systemEventClass == null) {
@@ -618,7 +618,7 @@ public class MockApplication extends Application {
      * <code>null</code>.
      */
     public void unsubscribeFromEvent(Class<? extends SystemEvent> systemEventClass,
-                                     Class sourceClass,
+                                     Class<?> sourceClass,
                                      SystemEventListener listener) {
 
         if (systemEventClass == null) {

@@ -49,6 +49,7 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseStream;
 import javax.faces.context.ResponseWriter;
+import javax.faces.context.PartialViewContext;
 import javax.faces.event.PhaseId;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.render.RenderKit;
@@ -68,6 +69,7 @@ public class MockFacesContext extends FacesContext {
     private Severity maxSeverity;
 
     private Map<Object, Object> attributes = null;
+    private PartialViewContext partialView = new MockPartialViewContext();
 
 
     // ------------------------------------------------------------ Constructors
@@ -320,68 +322,7 @@ public class MockFacesContext extends FacesContext {
     }
 
     @Override
-    public void enableResponseWriting(boolean arg0) {
-        throw new UnsupportedOperationException();
+    public PartialViewContext getPartialViewContext() {
+        return partialView;
     }
-
-    @Override
-    public PhaseId getCurrentPhaseId() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public List<String> getExecutePhaseClientIds() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public ResponseWriter getPartialResponseWriter() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public List<String> getRenderPhaseClientIds() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean isAjaxRequest() {
-        return false;
-    }
-
-    @Override
-    public boolean isExecuteNone() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean isRenderAll() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean isRenderNone() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void setCurrentPhaseId(PhaseId arg0) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void setExecutePhaseClientIds(List<String> arg0) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void setRenderAll(boolean arg0) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void setRenderPhaseClientIds(List<String> arg0) {
-        throw new UnsupportedOperationException();
-    }
-
 }

@@ -44,8 +44,7 @@ import javax.faces.context.PartialViewContext;
 import javax.faces.context.ResponseWriter;
 
 /**
- * Created by IntelliJ IDEA. User: rlubke Date: Oct 10, 2008 Time: 1:22:36 PM To
- * change this template use File | Settings | File Templates.
+ * MockPartialViewContext implementation.
  */
 public class MockPartialViewContext extends PartialViewContext {
 

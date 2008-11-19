@@ -37,9 +37,12 @@
 package com.sun.faces.mock;
 
 import java.beans.BeanInfo;
+import java.io.IOException;
+
 import javax.faces.webapp.pdl.PageDeclarationLanguage;
 import javax.faces.application.Resource;
 import javax.faces.context.FacesContext;
+import javax.faces.component.UIViewRoot;
 
 /**
  *
@@ -57,5 +60,16 @@ public class MockPageDeclarationLanguage extends PageDeclarationLanguage {
 	throw new UnsupportedOperationException();
     }
 
+    public UIViewRoot createView(FacesContext ctx, String viewId) {
+        throw new UnsupportedOperationException();
+    }
 
+    public UIViewRoot restoreView(FacesContext ctx, String viewId) {
+        throw new UnsupportedOperationException();
+    }
+
+    public void renderView(FacesContext ctx, UIViewRoot view)
+          throws IOException {
+        throw new UnsupportedOperationException();
+    }
 }

@@ -155,18 +155,6 @@ public class MockApplication extends Application {
         this.resourceHandler = resourceHandler;
     }
     
-    private PageDeclarationLanguage pdl = new MockPageDeclarationLanguage();
-    
-    @Override
-    public void setPageDeclarationLanguage(PageDeclarationLanguage pdl) {
-        this.pdl = pdl;
-    }
-    
-    @Override
-    public PageDeclarationLanguage getPageDeclarationLanguage() {
-        return pdl;
-    }
-
     private PropertyResolver propertyResolver = null;
     public PropertyResolver getPropertyResolver() {
         if (propertyResolver == null) {

@@ -39,6 +39,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Collections;
 import javax.faces.FactoryFinder;
+import javax.faces.webapp.PreJsf2ExceptionHandlerFactory;
 import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
 import javax.faces.application.ViewHandler;
@@ -50,6 +51,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseStream;
 import javax.faces.context.ResponseWriter;
 import javax.faces.context.PartialViewContext;
+import javax.faces.context.ExceptionHandler;
 import javax.faces.event.PhaseId;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.render.RenderKit;
@@ -268,6 +270,19 @@ public class MockFacesContext extends FacesContext {
 
         return postback.booleanValue();
 
+    }
+
+    private ExceptionHandler exceptionHandler =
+          new PreJsf2ExceptionHandlerFactory().getExceptionHandler();
+
+    @Override
+    public ExceptionHandler getExceptionHandler() {
+        return exceptionHandler;
+    }
+
+    @Override
+    public void setExceptionHandler(ExceptionHandler exceptionHandler) {
+        this.exceptionHandler = exceptionHandler;
     }
 
 

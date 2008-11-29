@@ -55,11 +55,7 @@ import javax.el.ELResolver;
 import javax.el.ExpressionFactory;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
-import javax.faces.application.Application;
-import javax.faces.application.NavigationHandler;
-import javax.faces.application.ResourceHandler;
-import javax.faces.application.StateManager;
-import javax.faces.application.ViewHandler;
+import javax.faces.application.*;
 import javax.faces.webapp.pdl.PageDeclarationLanguage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -364,7 +360,15 @@ public class MockApplication extends Application {
 
     public void setDefaultRenderKitId(String renderKitId) {
     }
-    
+
+    public PartialTraversal getPartialTraversal() {
+        return null;
+    }
+
+    public void setPartialTraversal(PartialTraversal partialTraversal) {
+        throw new UnsupportedOperationException();
+    }
+
     public ResourceBundle getResourceBundle(FacesContext ctx, String name) {
         return null;
     }

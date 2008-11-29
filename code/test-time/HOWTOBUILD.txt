@@ -1,0 +1,11 @@
+To build this target, you need to have the latest jsf apis in your maven cache.
+
+You can get that by checking out Mojarra, 
+cd jsf-api
+edit jsf-api-pom.xml
+  change artifactId to mojarra-jsf-api
+  change version to 2.0.0-SNAPSHOT
+ant push-to-maven-prefare
+
+go back to this directory, and 
+mvn install

@@ -92,7 +92,15 @@ public class MockPartialViewContext extends PartialViewContext {
         return false;
     }
 
+    public boolean isPartialRequest() {
+        return false;
+    }
+
     public boolean isExecuteNone() {
+        throw new UnsupportedOperationException();
+    }
+
+    public boolean isExecuteAll() {
         throw new UnsupportedOperationException();
     }
 

@@ -361,14 +361,6 @@ public class MockApplication extends Application {
     public void setDefaultRenderKitId(String renderKitId) {
     }
 
-    public PartialTraversal getPartialTraversal() {
-        return null;
-    }
-
-    public void setPartialTraversal(PartialTraversal partialTraversal) {
-        throw new UnsupportedOperationException();
-    }
-
     public ResourceBundle getResourceBundle(FacesContext ctx, String name) {
         return null;
     }

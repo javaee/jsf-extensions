@@ -525,7 +525,7 @@ public class AsyncResponse {
             this.fw = fw;
         }
 
-        protected ResponseWriter getWrapped() {
+        public ResponseWriter getWrapped() {
             return this.orig;
         }
 

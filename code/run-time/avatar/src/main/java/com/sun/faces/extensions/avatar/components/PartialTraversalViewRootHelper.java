@@ -704,7 +704,7 @@ public class PartialTraversalViewRootHelper implements Serializable {
         public EscapeCDATAWriter(ResponseWriter toWrap) {
             this.toWrap = toWrap;
         }
-        protected ResponseWriter getWrapped() {
+        public ResponseWriter getWrapped() {
             return toWrap;
         }
 

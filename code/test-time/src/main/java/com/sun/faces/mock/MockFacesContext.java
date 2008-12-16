@@ -31,7 +31,6 @@ package com.sun.faces.mock;
 
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -44,7 +43,6 @@ import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
 import javax.faces.application.ViewHandler;
 import javax.faces.application.FacesMessage.Severity;
-import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -52,7 +50,6 @@ import javax.faces.context.ResponseStream;
 import javax.faces.context.ResponseWriter;
 import javax.faces.context.PartialViewContext;
 import javax.faces.context.ExceptionHandler;
-import javax.faces.event.PhaseId;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;

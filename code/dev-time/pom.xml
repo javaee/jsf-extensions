@@ -16,8 +16,4 @@
     <version>2.0-SNAPSHOT</version>
   </parent>
 
-    <modules>
-        <module>annotations</module>
-        <module>misc</module>
-    </modules>
 </project>

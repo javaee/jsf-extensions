@@ -237,6 +237,17 @@ public class MockExternalContext extends ExternalContext {
         initParams.put(name, value);
     }
 
+    @Override
+    public void addResponseHeader(String arg0, String arg1) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void setResponseHeader(String arg0, String arg1) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    
 
     public Map getInitParameterMap() {
         throw new UnsupportedOperationException();

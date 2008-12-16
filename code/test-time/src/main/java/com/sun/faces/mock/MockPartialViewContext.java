@@ -36,12 +36,15 @@
 
 package com.sun.faces.mock;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.List;
 import java.util.HashMap;
 
+import javax.faces.context.FacesContext;
+import javax.faces.context.PartialResponseWriter;
 import javax.faces.context.PartialViewContext;
-import javax.faces.context.ResponseWriter;
+import javax.faces.event.PhaseId;
 
 /**
  * MockPartialViewContext implementation.
@@ -76,15 +79,22 @@ public class MockPartialViewContext extends PartialViewContext {
         throw new UnsupportedOperationException();
     }
 
-    public List<String> getRenderPhaseClientIds() {
-        throw new UnsupportedOperationException();
+    @Override
+    public Collection<String> getExecuteIds() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
+
+    @Override
+    public Collection<String> getRenderIds() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
 
     public void setRenderPhaseClientIds(List<String> renderPhaseClientIds) {
         throw new UnsupportedOperationException();
     }
 
-    public ResponseWriter getPartialResponseWriter() {
+    public PartialResponseWriter getPartialResponseWriter() {
         throw new UnsupportedOperationException();
     }
 
@@ -95,6 +105,13 @@ public class MockPartialViewContext extends PartialViewContext {
     public boolean isPartialRequest() {
         return false;
     }
+
+    @Override
+    public void processPartial(FacesContext arg0, PhaseId arg1) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+    
+    
 
     public boolean isExecuteNone() {
         throw new UnsupportedOperationException();

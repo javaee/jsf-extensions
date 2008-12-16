@@ -53,7 +53,7 @@ public class ClientWriter extends ResponseWriterWrapper {
         this.writer = writer;
     }
 
-    protected ResponseWriter getWrapped() {
+    public ResponseWriter getWrapped() {
         return this.writer;
     }
 

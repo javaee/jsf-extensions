@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.sun.jsf-extensions</groupId>
   <artifactId>jsf-extensions-flash-test</artifactId>
-  <version>${jar.full.version}</version>
+  <version>2.0-SNAPSHOT</version>
   <packaging>war</packaging>
   <name>jsf-flash</name>
   <url>https://jsf-extensions.dev.java.net/</url>
@@ -12,11 +12,12 @@
     Run time jsf-extensions: flash
   </description>
 
-  <parent>
-    <groupId>com.sun.faces.extensions.maven</groupId>
-    <artifactId>jsf-extensions-master</artifactId>
-    <version>2.0-SNAPSHOT</version>
-  </parent>
+  <properties>
+    <jar.version>2.0</jar.version>
+    <jar.version.extension>rc0</jar.version.extension>
+    <jar.full.version>${jar.version}-SNAPSHOT</jar.full.version>
+  </properties>
+
 
   <scm>
     <connection>scm:svn:http://jsf-extensions.dev.java.net/svn/jsf-extensions/trunk</connection>
@@ -28,6 +29,38 @@
     <defaultGoal>install</defaultGoal>
     <sourceDirectory>src/main/java</sourceDirectory>
     <finalName>jsf-flash</finalName>
+   <pluginManagement>
+     <plugins>
+       <plugin>
+         <groupId>org.apache.maven.plugins</groupId>
+         <artifactId>maven-compiler-plugin</artifactId>
+         <configuration>
+           <source>1.5</source>
+           <target>1.5</target>
+         </configuration>
+       </plugin>
+       <plugin>
+	 <groupId>org.apache.maven.plugins</groupId>
+	 <artifactId>maven-war-plugin</artifactId>
+	 <version>2.0</version>
+       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifestEntries>
+              <Created-By>${pom.organization.name}</Created-By>
+              <Implementation-Title>${pom.artifactId}</Implementation-Title>
+              <Implementation-Version>${pom.version}-${jar.version.extension}</Implementation-Version>
+              <Implementation-Vendor>${pom.organization.name}</Implementation-Vendor>
+              <Implementation-Vendor-Id>com.sun</Implementation-Vendor-Id>
+            </manifestEntries>
+          </archive>
+        </configuration>
+      </plugin>
+     </plugins>
+   </pluginManagement>
    <plugins>
     <plugin>
       <groupId>org.apache.maven.plugins</groupId>
@@ -79,16 +112,34 @@
       <groupId>com.sun.faces.extensions</groupId>
       <artifactId>jsf-extensions-common</artifactId>
       <version>${jar.full.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>javax.faces</groupId>
+          <artifactId>shale-remoting</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>com.sun.faces.extensions</groupId>
       <artifactId>jsf-extensions-flash</artifactId>
       <version>${jar.full.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>javax.faces</groupId>
+          <artifactId>shale-remoting</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>com.sun.faces.extensions</groupId>
       <artifactId>jsf-extensions-test-time</artifactId>
       <version>${jar.full.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>javax.faces</groupId>
+          <artifactId>shale-remoting</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
   </dependencies>
   <reporting>

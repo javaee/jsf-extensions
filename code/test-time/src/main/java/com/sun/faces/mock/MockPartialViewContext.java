@@ -106,13 +106,6 @@ public class MockPartialViewContext extends PartialViewContext {
         return false;
     }
 
-    @Override
-    public void processPartial(FacesContext arg0, PhaseId arg1) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-    
-    
-
     public boolean isExecuteNone() {
         throw new UnsupportedOperationException();
     }
@@ -134,6 +127,10 @@ public class MockPartialViewContext extends PartialViewContext {
     }
 
     public void enableResponseWriting(boolean enable) {
+        throw new UnsupportedOperationException();
+    }
+
+    public void processPartial(PhaseId phaseId) {
         throw new UnsupportedOperationException();
     }
 

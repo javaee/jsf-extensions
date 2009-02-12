@@ -50,6 +50,7 @@ import javax.faces.context.ResponseStream;
 import javax.faces.context.ResponseWriter;
 import javax.faces.context.PartialViewContext;
 import javax.faces.context.ExceptionHandler;
+import javax.faces.event.PhaseId;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
@@ -117,6 +118,16 @@ public class MockFacesContext extends FacesContext {
     // clientIdsWithMessages
     public Iterator getClientIdsWithMessages() {
         return (messages.keySet().iterator());
+    }
+
+    private PhaseId currentPhaseId = PhaseId.RESTORE_VIEW;
+
+    public PhaseId getCurrentPhaseId() {
+	return currentPhaseId;
+    }
+
+    public void setCurrentPhaseId(PhaseId currentPhaseId) {
+	this.currentPhaseId = currentPhaseId;
     }
 
     private ELContext elContext = null;

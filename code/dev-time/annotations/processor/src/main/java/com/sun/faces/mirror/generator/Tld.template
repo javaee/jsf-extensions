@@ -1,0 +1,136 @@
+<?xml version="1.0"?>
+
+## The contents of this file are subject to the terms
+## of the Common Development and Distribution License
+## (the License).  You may not use this file except in
+## compliance with the License.
+## 
+## You can obtain a copy of the license at
+## https://woodstock.dev.java.net/public/CDDLv1.0.html.
+## See the License for the specific language governing
+## permissions and limitations under the License.
+## 
+## When distributing Covered Code, include this CDDL
+## Header Notice in each file and include the License file
+## at https://woodstock.dev.java.net/public/CDDLv1.0.html.
+## If applicable, add the following below the CDDL Header,
+## with the fields enclosed by brackets [] replaced by
+## you own identifying information:
+## "Portions Copyrighted [year] [name of copyright owner]"
+## 
+## Copyright 2007 Sun Microsystems, Inc. All rights reserved.
+
+<!-- This file was generated automatically on ${date}. -->
+
+## TODO Extract javadoc for taglib descriptions
+    
+<taglib>
+
+    <tlib-version>1.1</tlib-version>
+    <jsp-version>2.1</jsp-version>
+    <short-name>${namespacePrefix}</short-name>
+    <uri>${namespace}</uri>
+#foreach ($componentInfo in $componentInfoSet)
+#if ($componentInfo.isTag())
+    <tag>
+        <name>${componentInfo.tagName}</name>
+        <tag-class>${componentInfo.tagClassQualifiedName}</tag-class>
+        <body-content>JSP</body-content>
+        <description><![CDATA[${componentInfo.tagDescription}]]></description>
+
+        <attribute>
+            <name>binding</name>
+            <required>false</required>
+            <deferred-value>
+                <type>${componentInfo.qualifiedName}</type>
+            </deferred-value>
+            <description>
+                A ValueExpression that resolves to the UIComponent that corresponds
+                to this tag. This attribute allows the Java bean that contains the UIComponent 
+                to manipulate the UIComponent, its properties, and its children.
+            </description>
+        </attribute>
+#foreach ($propertyInfo in $componentInfo.propertyInfoMap)
+#if ($propertyInfo.name == 'id' && $propertyInfo.attributeInfo)
+        <attribute>
+            <name>${propertyInfo.attributeInfo.name}</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+#elseif ($propertyInfo.attributeInfo)
+
+        <attribute>
+            <name>${propertyInfo.attributeInfo.name}</name>
+#if ($propertyInfo.attributeInfo.isRequired())
+            <required>true</required>
+#else
+            <required>false</required>
+#end  
+#if ($propertyInfo.type == 'javax.el.MethodExpression')
+#if ($propertyInfo.attributeInfo.methodSignature)
+            <deferred-method>
+                <method-signature>${propertyInfo.attributeInfo.methodSignature}</method-signature>
+            </deferred-method>
+#else
+            <deferred-method>
+                <method-signature/>
+            </deferred-method>
+#end
+#else
+            <deferred-value>
+                <type>${escaper.escape($propertyInfo.type)}</type>
+            </deferred-value>
+#end##if ($propertyInfo.type == 'javax.el.MethodExpression')
+#if ($propertyInfo.attributeInfo.description)
+            <description><![CDATA[${propertyInfo.attributeInfo.description}]]></description>
+#end
+        </attribute>
+#end##if ($propertyInfo.attributeInfo)
+#end##foreach ($propertyInfo in $componentInfo.propertyInfoMap)
+
+#if ($componentInfo.inheritedPropertyInfoMap.size() > 0)
+        <!-- Inherited properties -->
+#end
+#foreach ($propertyInfo in $componentInfo.inheritedPropertyInfoMap)
+#if ($propertyInfo.name == 'id' && $propertyInfo.attributeInfo)
+        <attribute>
+            <name>${propertyInfo.attributeInfo.name}</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+#elseif ($propertyInfo.attributeInfo)
+
+        <attribute>
+            <name>${propertyInfo.attributeInfo.name}</name>
+#if ($propertyInfo.attributeInfo.isRequired())
+            <required>true</required>
+#else
+            <required>false</required>
+#end
+#if ($propertyInfo.type == 'javax.el.MethodExpression')
+#if ($propertyInfo.attributeInfo.methodSignature)
+            <deferred-method>
+                <method-signature>${propertyInfo.attributeInfo.methodSignature}</method-signature>
+            </deferred-method>
+#else
+            <deferred-method>
+                <method-signature/>
+            </deferred-method>
+#end
+#else
+            <deferred-value>
+                <type>${propertyInfo.type}</type>
+            </deferred-value>
+#end##if ($propertyInfo.type == 'javax.el.MethodExpression')
+#if ($propertyInfo.attributeInfo.description)
+            <description><![CDATA[${propertyInfo.attributeInfo.description}]]></description>
+#end
+        </attribute>
+#end##if ($propertyInfo.attributeInfo)
+#end##foreach ($propertyInfo in $componentInfo.inheritedPropertyInfoMap)
+
+    </tag>
+
+#end
+#end
+</taglib>

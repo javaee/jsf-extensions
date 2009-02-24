@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.sun.faces.extensions</groupId>
   <artifactId>jmaki-test-functional-tests</artifactId>
-  <version>0.1</version>
+  <version>0.2</version>
   <packaging>pom</packaging>
   <name>Functional Tests for jmaki DynaFaces app</name>
   <description>Add the following properties: -Dbrowser.bin.dir=C:\Projects\chaff\xulrunner 

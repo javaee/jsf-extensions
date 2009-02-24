@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.sun.faces.extensions</groupId>
   <artifactId>jsf-extensions</artifactId>
-  <version>0.1</version>
+  <version>0.2</version>
   <packaging>pom</packaging>
   <description>
 
@@ -13,8 +13,8 @@
 
   </description>
   <properties>
-    <jar.version>0.1</jar.version>
-    <jar.version.extension>rc8</jar.version.extension>
+    <jar.version>0.2</jar.version>
+    <jar.version.extension>final</jar.version.extension>
     <jar.full.version>${jar.version}</jar.full.version>
   </properties>
 
@@ -30,6 +30,14 @@
   <build>
     <defaultGoal>install</defaultGoal>
     <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.5</source>
+                    <target>1.5</target>
+                </configuration>
+            </plugin>
+
        <plugin>
 	 <artifactId>maven-antrun-plugin</artifactId>
 	 <executions>

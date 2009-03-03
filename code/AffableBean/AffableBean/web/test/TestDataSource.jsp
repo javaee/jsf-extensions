@@ -9,7 +9,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <sql:setDataSource dataSource="jdbc/affableBean" />
-<sql:query var="customers" sql="SELECT * FROM customer"></sql:query>
+<sql:query var="categories" sql="SELECT * FROM category"></sql:query>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
@@ -21,15 +21,14 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>data from affablebean.customers:</h1>
+        <h1>data from affablebean.category:</h1>
 
-        <table border="1" align="center" valign="center">
-            <c:forEach var="row" items="${customers.rows}">
+        <table align="center">
+            <c:forEach var="row" items="${categories.rows}">
                 <tr>
-                    <td><c:out value="${row.firstname}"/></td>
-                    <td><c:out value="${row.familyname}"/></td>
-                    <td><c:out value="${row.telephone}"/></td>
-                    <td><c:out value="${row.email}"/></td>
+                    <td><c:out value="${row.id}"/></td>
+                    <td><c:out value="${row.name}"/></td>
+                    <td><c:out value="${row.description}"/></td>
                 </tr>
             </c:forEach>
         </table>

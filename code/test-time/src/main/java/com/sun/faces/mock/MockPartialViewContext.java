@@ -137,4 +137,10 @@ public class MockPartialViewContext extends PartialViewContext {
     public void release() {
         // no-op
     }
+
+    @Override
+    public void setPartialRequest(boolean arg0) {
+    }
+    
+    
 }

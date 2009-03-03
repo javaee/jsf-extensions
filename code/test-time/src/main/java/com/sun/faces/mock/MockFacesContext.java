@@ -348,4 +348,16 @@ public class MockFacesContext extends FacesContext {
     public PartialViewContext getPartialViewContext() {
         return partialView;
     }
+
+    boolean validationFailed = false;
+
+    public void validationFailed() {
+	validationFailed = true;
+    }
+
+    public boolean getValidationFailed() {
+	return validationFailed;
+    }
+
+    
 }

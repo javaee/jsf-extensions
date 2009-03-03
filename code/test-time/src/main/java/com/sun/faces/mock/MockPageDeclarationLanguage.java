@@ -43,6 +43,7 @@ import javax.faces.webapp.pdl.PageDeclarationLanguage;
 import javax.faces.application.Resource;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIViewRoot;
+import javax.faces.webapp.pdl.ViewMetadata;
 
 /**
  *
@@ -72,4 +73,16 @@ public class MockPageDeclarationLanguage extends PageDeclarationLanguage {
           throws IOException {
         throw new UnsupportedOperationException();
     }
+
+    @Override
+    public void buildView(FacesContext arg0, UIViewRoot arg1) throws IOException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public ViewMetadata getViewMetadata(FacesContext arg0, String arg1) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+    
+    
 }

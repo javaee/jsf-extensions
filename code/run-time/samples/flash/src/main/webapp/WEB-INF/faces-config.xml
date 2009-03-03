@@ -45,6 +45,7 @@
     <navigation-case>
       <from-outcome>next</from-outcome>
       <to-view-id>/flash2.jsp</to-view-id>
+      <redirect />
     </navigation-case>
   </navigation-rule>
 

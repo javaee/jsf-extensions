@@ -1,0 +1,164 @@
+/* 
+Document   : affablebean
+Created on : Feb 18, 2009, 2:39:07 PM
+Author     : nbuser
+Description: Style rules for the AffableBean application
+*/
+
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    width: 850px;
+    position: relative;
+    text-align: center;    /* required for IE */
+    margin: 0 auto;
+}
+
+#main {
+    background: #f7f7e9;
+}
+
+#header {
+    background: #aaa url(../img/logo.png) no-repeat 25px 20px;
+    width: 850px;
+    height: 250px;
+}
+
+#footer {
+    width: 350px;
+    height: 30px;
+    clear: both;
+    background: #aaa;
+}
+
+
+/* Styles for elements contained in the header, i.e.,
+ * shopping cart, language, login widgets, and logo */
+
+#headerBar {
+    float: right;
+    width: 850px;
+    height: 50px;
+    background: #ccc;
+}
+
+#logoText {
+    /* font styles apply to text within alt tags */
+    font-family: 'American Typewriter', Courier, monospace;
+    font-size: 50px;
+    color: #333;
+    margin-top: 35px;
+}
+
+.headerWidget {
+    border: 1px black solid;
+    width: 100px;
+    height: 20px;
+    margin: 10px 50px;
+    font-size: x-small;
+    float: right;
+}
+
+
+/* Styles specific to index page */
+
+#indexLeftColumn {
+    text-align: left;
+    height: 350px;
+    width: 350px;
+    float: left;
+    background: #ccc;
+}
+
+#indexRightColumn {
+    text-align: left;
+    float: left;
+    height: 350px;
+    width: 500px;
+    background: #eee;
+}
+
+#welcomeText {
+    margin: 20px 5px 0 30px;
+    line-height: 1.4em;
+}
+
+.categoryBox {
+    margin: 20px 10px 0 30px;
+    height: 150px;
+    width: 200px;
+    float: inherit;
+    background-color: #d3ede8;
+}
+
+
+/* Styles specific to category page */
+
+#categoryLeftColumn {
+    text-align: left;
+    width: 200px;
+    float: left;
+    background: #ccc;
+}
+
+#categoryRightColumn {
+    text-align: left;
+    float: left;
+    width: 650px;
+    background: #eee;
+}
+
+#productTable {
+    margin: 0 20px;
+}
+
+#categoryTitle {
+    float: right;
+    width: 270px;
+    margin: -8px 0 0 0;
+    background-color: #d3ede8;
+}
+
+.categoryButton {
+    margin: 15px 27px;
+    height: 50px;
+    width: 153px;
+    background-color: #d3ede8;
+}
+
+
+/* html tags */
+
+p {
+    color: #444;
+}
+
+hr {
+border: 0;
+background-color: #333;
+margin: 0 25px;
+height: 1px;
+width: 300px;
+}
+
+table {
+    border:solid 1px #f5eabe;
+    width: 600px;
+}
+
+tr {
+    height: 100px;
+}
+
+/* general classes */
+.smallText {
+    font-size: xx-small;
+}
+
+.even {
+    background-color: #edf8f7;
+}
+
+.odd {
+    background-color: #fff;
+}

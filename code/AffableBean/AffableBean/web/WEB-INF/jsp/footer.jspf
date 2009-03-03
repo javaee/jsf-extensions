@@ -1,0 +1,18 @@
+<%--
+    Document   : footer
+    Created on : Feb 18, 2009, 2:36:42 PM
+    Author     : nbuser
+--%>
+
+            <div id="footer">
+                <hr>
+                <p class="smallText">
+                    <a href="#">Privacy Policy</a>
+                    &nbsp;&nbsp;::&nbsp;&nbsp;
+                    <a href="#">Contact</a>
+                    &nbsp;&nbsp;&copy;&nbsp;&nbsp;
+                    2009 the affable bean</p>
+            </div>
+        </div>
+    </body>
+</html>

@@ -6,6 +6,7 @@
 package database.entity.controller;
 
 import database.entity.Category;
+import database.entity.controller.exceptions.IllegalOrphanException;
 import database.entity.controller.exceptions.NonexistentEntityException;
 import database.entity.controller.exceptions.RollbackFailureException;
 import java.util.List;
@@ -15,6 +16,9 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import database.entity.Product;
+import java.util.ArrayList;
+import java.util.Collection;
 import javax.transaction.UserTransaction;
 
 /**
@@ -32,11 +36,29 @@ public class CategoryJpaController {
     }
 
     public void create(Category category) throws RollbackFailureException, Exception {
+        if (category.getProductCollection() == null) {
+            category.setProductCollection(new ArrayList<Product>());
+        }
         EntityManager em = null;
         try {
             utx.begin();
             em = getEntityManager();
+            Collection<Product> attachedProductCollection = new ArrayList<Product>();
+            for (Product productCollectionProductToAttach : category.getProductCollection()) {
+                productCollectionProductToAttach = em.getReference(productCollectionProductToAttach.getClass(), productCollectionProductToAttach.getProductId());
+                attachedProductCollection.add(productCollectionProductToAttach);
+            }
+            category.setProductCollection(attachedProductCollection);
             em.persist(category);
+            for (Product productCollectionProduct : category.getProductCollection()) {
+                Category oldCategoryIdOfProductCollectionProduct = productCollectionProduct.getCategoryId();
+                productCollectionProduct.setCategoryId(category);
+                productCollectionProduct = em.merge(productCollectionProduct);
+                if (oldCategoryIdOfProductCollectionProduct != null) {
+                    oldCategoryIdOfProductCollectionProduct.getProductCollection().remove(productCollectionProduct);
+                    oldCategoryIdOfProductCollectionProduct = em.merge(oldCategoryIdOfProductCollectionProduct);
+                }
+            }
             utx.commit();
         } catch (Exception ex) {
             try {
@@ -52,12 +74,45 @@ public class CategoryJpaController {
         }
     }
 
-    public void edit(Category category) throws NonexistentEntityException, RollbackFailureException, Exception {
+    public void edit(Category category) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
             utx.begin();
             em = getEntityManager();
+            Category persistentCategory = em.find(Category.class, category.getCategoryId());
+            Collection<Product> productCollectionOld = persistentCategory.getProductCollection();
+            Collection<Product> productCollectionNew = category.getProductCollection();
+            List<String> illegalOrphanMessages = null;
+            for (Product productCollectionOldProduct : productCollectionOld) {
+                if (!productCollectionNew.contains(productCollectionOldProduct)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain Product " + productCollectionOldProduct + " since its categoryId field is not nullable.");
+                }
+            }
+            if (illegalOrphanMessages != null) {
+                throw new IllegalOrphanException(illegalOrphanMessages);
+            }
+            Collection<Product> attachedProductCollectionNew = new ArrayList<Product>();
+            for (Product productCollectionNewProductToAttach : productCollectionNew) {
+                productCollectionNewProductToAttach = em.getReference(productCollectionNewProductToAttach.getClass(), productCollectionNewProductToAttach.getProductId());
+                attachedProductCollectionNew.add(productCollectionNewProductToAttach);
+            }
+            productCollectionNew = attachedProductCollectionNew;
+            category.setProductCollection(productCollectionNew);
             category = em.merge(category);
+            for (Product productCollectionNewProduct : productCollectionNew) {
+                if (!productCollectionOld.contains(productCollectionNewProduct)) {
+                    Category oldCategoryIdOfProductCollectionNewProduct = productCollectionNewProduct.getCategoryId();
+                    productCollectionNewProduct.setCategoryId(category);
+                    productCollectionNewProduct = em.merge(productCollectionNewProduct);
+                    if (oldCategoryIdOfProductCollectionNewProduct != null && !oldCategoryIdOfProductCollectionNewProduct.equals(category)) {
+                        oldCategoryIdOfProductCollectionNewProduct.getProductCollection().remove(productCollectionNewProduct);
+                        oldCategoryIdOfProductCollectionNewProduct = em.merge(oldCategoryIdOfProductCollectionNewProduct);
+                    }
+                }
+            }
             utx.commit();
         } catch (Exception ex) {
             try {
@@ -67,7 +122,7 @@ public class CategoryJpaController {
             }
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                Short id = category.getId();
+                Short id = category.getCategoryId();
                 if (findCategory(id) == null) {
                     throw new NonexistentEntityException("The category with id " + id + " no longer exists.");
                 }
@@ -80,7 +135,7 @@ public class CategoryJpaController {
         }
     }
 
-    public void destroy(Short id) throws NonexistentEntityException, RollbackFailureException, Exception {
+    public void destroy(Short id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
             utx.begin();
@@ -88,9 +143,20 @@ public class CategoryJpaController {
             Category category;
             try {
                 category = em.getReference(Category.class, id);
-                category.getId();
+                category.getCategoryId();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The category with id " + id + " no longer exists.", enfe);
+            }
+            List<String> illegalOrphanMessages = null;
+            Collection<Product> productCollectionOrphanCheck = category.getProductCollection();
+            for (Product productCollectionOrphanCheckProduct : productCollectionOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Category (" + category + ") cannot be destroyed since the Product " + productCollectionOrphanCheckProduct + " in its productCollection field has a non-nullable categoryId field.");
+            }
+            if (illegalOrphanMessages != null) {
+                throw new IllegalOrphanException(illegalOrphanMessages);
             }
             em.remove(category);
             utx.commit();

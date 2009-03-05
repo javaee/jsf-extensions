@@ -6,13 +6,18 @@
 package database.entity;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -23,13 +28,14 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "customer")
-@NamedQueries({@NamedQuery(name = "Customer.findAll", query = "SELECT c FROM Customer c"), @NamedQuery(name = "Customer.findById", query = "SELECT c FROM Customer c WHERE c.id = :id"), @NamedQuery(name = "Customer.findByFirstname", query = "SELECT c FROM Customer c WHERE c.firstname = :firstname"), @NamedQuery(name = "Customer.findByFamilyname", query = "SELECT c FROM Customer c WHERE c.familyname = :familyname"), @NamedQuery(name = "Customer.findByTelephone", query = "SELECT c FROM Customer c WHERE c.telephone = :telephone"), @NamedQuery(name = "Customer.findByEmail", query = "SELECT c FROM Customer c WHERE c.email = :email"), @NamedQuery(name = "Customer.findByAddress1", query = "SELECT c FROM Customer c WHERE c.address1 = :address1"), @NamedQuery(name = "Customer.findByAddress2", query = "SELECT c FROM Customer c WHERE c.address2 = :address2"), @NamedQuery(name = "Customer.findByCity", query = "SELECT c FROM Customer c WHERE c.city = :city"), @NamedQuery(name = "Customer.findByPostcode", query = "SELECT c FROM Customer c WHERE c.postcode = :postcode"), @NamedQuery(name = "Customer.findByPassword", query = "SELECT c FROM Customer c WHERE c.password = :password"), @NamedQuery(name = "Customer.findByDateAccountCreated", query = "SELECT c FROM Customer c WHERE c.dateAccountCreated = :dateAccountCreated")})
+@NamedQueries({@NamedQuery(name = "Customer.findAll", query = "SELECT c FROM Customer c"), @NamedQuery(name = "Customer.findByCustomerId", query = "SELECT c FROM Customer c WHERE c.customerId = :customerId"), @NamedQuery(name = "Customer.findByFirstname", query = "SELECT c FROM Customer c WHERE c.firstname = :firstname"), @NamedQuery(name = "Customer.findByFamilyname", query = "SELECT c FROM Customer c WHERE c.familyname = :familyname"), @NamedQuery(name = "Customer.findByTelephone", query = "SELECT c FROM Customer c WHERE c.telephone = :telephone"), @NamedQuery(name = "Customer.findByEmail", query = "SELECT c FROM Customer c WHERE c.email = :email"), @NamedQuery(name = "Customer.findByAddress1", query = "SELECT c FROM Customer c WHERE c.address1 = :address1"), @NamedQuery(name = "Customer.findByAddress2", query = "SELECT c FROM Customer c WHERE c.address2 = :address2"), @NamedQuery(name = "Customer.findByCity", query = "SELECT c FROM Customer c WHERE c.city = :city"), @NamedQuery(name = "Customer.findByPostcode", query = "SELECT c FROM Customer c WHERE c.postcode = :postcode"), @NamedQuery(name = "Customer.findByPassword", query = "SELECT c FROM Customer c WHERE c.password = :password"), @NamedQuery(name = "Customer.findByCreateDate", query = "SELECT c FROM Customer c WHERE c.createDate = :createDate")})
 public class Customer implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id")
-    private String id;
+    @Column(name = "customer_id")
+    private Short customerId;
     @Basic(optional = false)
     @Column(name = "firstname")
     private String firstname;
@@ -58,19 +64,21 @@ public class Customer implements Serializable {
     @Column(name = "password")
     private String password;
     @Basic(optional = false)
-    @Column(name = "date_account_created")
+    @Column(name = "create_date")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date dateAccountCreated;
+    private Date createDate;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "customerId")
+    private Collection<CustomerOrder> customerOrderCollection;
 
     public Customer() {
     }
 
-    public Customer(String id) {
-        this.id = id;
+    public Customer(Short customerId) {
+        this.customerId = customerId;
     }
 
-    public Customer(String id, String firstname, String familyname, String telephone, String email, String address1, String address2, String city, String postcode, String password, Date dateAccountCreated) {
-        this.id = id;
+    public Customer(Short customerId, String firstname, String familyname, String telephone, String email, String address1, String address2, String city, String postcode, String password, Date createDate) {
+        this.customerId = customerId;
         this.firstname = firstname;
         this.familyname = familyname;
         this.telephone = telephone;
@@ -80,15 +88,15 @@ public class Customer implements Serializable {
         this.city = city;
         this.postcode = postcode;
         this.password = password;
-        this.dateAccountCreated = dateAccountCreated;
+        this.createDate = createDate;
     }
 
-    public String getId() {
-        return id;
+    public Short getCustomerId() {
+        return customerId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setCustomerId(Short customerId) {
+        this.customerId = customerId;
     }
 
     public String getFirstname() {
@@ -163,18 +171,26 @@ public class Customer implements Serializable {
         this.password = password;
     }
 
-    public Date getDateAccountCreated() {
-        return dateAccountCreated;
+    public Date getCreateDate() {
+        return createDate;
     }
 
-    public void setDateAccountCreated(Date dateAccountCreated) {
-        this.dateAccountCreated = dateAccountCreated;
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Collection<CustomerOrder> getCustomerOrderCollection() {
+        return customerOrderCollection;
+    }
+
+    public void setCustomerOrderCollection(Collection<CustomerOrder> customerOrderCollection) {
+        this.customerOrderCollection = customerOrderCollection;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (customerId != null ? customerId.hashCode() : 0);
         return hash;
     }
 
@@ -185,7 +201,7 @@ public class Customer implements Serializable {
             return false;
         }
         Customer other = (Customer) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.customerId == null && other.customerId != null) || (this.customerId != null && !this.customerId.equals(other.customerId))) {
             return false;
         }
         return true;
@@ -193,7 +209,7 @@ public class Customer implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.Customer[id=" + id + "]";
+        return "database.entity.Customer[customerId=" + customerId + "]";
     }
 
 }

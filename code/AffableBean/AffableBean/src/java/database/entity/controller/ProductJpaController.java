@@ -6,6 +6,7 @@
 package database.entity.controller;
 
 import database.entity.Product;
+import database.entity.controller.exceptions.IllegalOrphanException;
 import database.entity.controller.exceptions.NonexistentEntityException;
 import database.entity.controller.exceptions.RollbackFailureException;
 import java.util.List;
@@ -15,6 +16,10 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import database.entity.Category;
+import database.entity.OrderedProduct;
+import java.util.ArrayList;
+import java.util.Collection;
 import javax.transaction.UserTransaction;
 
 /**
@@ -32,11 +37,38 @@ public class ProductJpaController {
     }
 
     public void create(Product product) throws RollbackFailureException, Exception {
+        if (product.getOrderedProductCollection() == null) {
+            product.setOrderedProductCollection(new ArrayList<OrderedProduct>());
+        }
         EntityManager em = null;
         try {
             utx.begin();
             em = getEntityManager();
+            Category categoryId = product.getCategoryId();
+            if (categoryId != null) {
+                categoryId = em.getReference(categoryId.getClass(), categoryId.getCategoryId());
+                product.setCategoryId(categoryId);
+            }
+            Collection<OrderedProduct> attachedOrderedProductCollection = new ArrayList<OrderedProduct>();
+            for (OrderedProduct orderedProductCollectionOrderedProductToAttach : product.getOrderedProductCollection()) {
+                orderedProductCollectionOrderedProductToAttach = em.getReference(orderedProductCollectionOrderedProductToAttach.getClass(), orderedProductCollectionOrderedProductToAttach.getOrderedProductPK());
+                attachedOrderedProductCollection.add(orderedProductCollectionOrderedProductToAttach);
+            }
+            product.setOrderedProductCollection(attachedOrderedProductCollection);
             em.persist(product);
+            if (categoryId != null) {
+                categoryId.getProductCollection().add(product);
+                categoryId = em.merge(categoryId);
+            }
+            for (OrderedProduct orderedProductCollectionOrderedProduct : product.getOrderedProductCollection()) {
+                Product oldProductOfOrderedProductCollectionOrderedProduct = orderedProductCollectionOrderedProduct.getProduct();
+                orderedProductCollectionOrderedProduct.setProduct(product);
+                orderedProductCollectionOrderedProduct = em.merge(orderedProductCollectionOrderedProduct);
+                if (oldProductOfOrderedProductCollectionOrderedProduct != null) {
+                    oldProductOfOrderedProductCollectionOrderedProduct.getOrderedProductCollection().remove(orderedProductCollectionOrderedProduct);
+                    oldProductOfOrderedProductCollectionOrderedProduct = em.merge(oldProductOfOrderedProductCollectionOrderedProduct);
+                }
+            }
             utx.commit();
         } catch (Exception ex) {
             try {
@@ -52,12 +84,59 @@ public class ProductJpaController {
         }
     }
 
-    public void edit(Product product) throws NonexistentEntityException, RollbackFailureException, Exception {
+    public void edit(Product product) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
             utx.begin();
             em = getEntityManager();
+            Product persistentProduct = em.find(Product.class, product.getProductId());
+            Category categoryIdOld = persistentProduct.getCategoryId();
+            Category categoryIdNew = product.getCategoryId();
+            Collection<OrderedProduct> orderedProductCollectionOld = persistentProduct.getOrderedProductCollection();
+            Collection<OrderedProduct> orderedProductCollectionNew = product.getOrderedProductCollection();
+            List<String> illegalOrphanMessages = null;
+            for (OrderedProduct orderedProductCollectionOldOrderedProduct : orderedProductCollectionOld) {
+                if (!orderedProductCollectionNew.contains(orderedProductCollectionOldOrderedProduct)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain OrderedProduct " + orderedProductCollectionOldOrderedProduct + " since its product field is not nullable.");
+                }
+            }
+            if (illegalOrphanMessages != null) {
+                throw new IllegalOrphanException(illegalOrphanMessages);
+            }
+            if (categoryIdNew != null) {
+                categoryIdNew = em.getReference(categoryIdNew.getClass(), categoryIdNew.getCategoryId());
+                product.setCategoryId(categoryIdNew);
+            }
+            Collection<OrderedProduct> attachedOrderedProductCollectionNew = new ArrayList<OrderedProduct>();
+            for (OrderedProduct orderedProductCollectionNewOrderedProductToAttach : orderedProductCollectionNew) {
+                orderedProductCollectionNewOrderedProductToAttach = em.getReference(orderedProductCollectionNewOrderedProductToAttach.getClass(), orderedProductCollectionNewOrderedProductToAttach.getOrderedProductPK());
+                attachedOrderedProductCollectionNew.add(orderedProductCollectionNewOrderedProductToAttach);
+            }
+            orderedProductCollectionNew = attachedOrderedProductCollectionNew;
+            product.setOrderedProductCollection(orderedProductCollectionNew);
             product = em.merge(product);
+            if (categoryIdOld != null && !categoryIdOld.equals(categoryIdNew)) {
+                categoryIdOld.getProductCollection().remove(product);
+                categoryIdOld = em.merge(categoryIdOld);
+            }
+            if (categoryIdNew != null && !categoryIdNew.equals(categoryIdOld)) {
+                categoryIdNew.getProductCollection().add(product);
+                categoryIdNew = em.merge(categoryIdNew);
+            }
+            for (OrderedProduct orderedProductCollectionNewOrderedProduct : orderedProductCollectionNew) {
+                if (!orderedProductCollectionOld.contains(orderedProductCollectionNewOrderedProduct)) {
+                    Product oldProductOfOrderedProductCollectionNewOrderedProduct = orderedProductCollectionNewOrderedProduct.getProduct();
+                    orderedProductCollectionNewOrderedProduct.setProduct(product);
+                    orderedProductCollectionNewOrderedProduct = em.merge(orderedProductCollectionNewOrderedProduct);
+                    if (oldProductOfOrderedProductCollectionNewOrderedProduct != null && !oldProductOfOrderedProductCollectionNewOrderedProduct.equals(product)) {
+                        oldProductOfOrderedProductCollectionNewOrderedProduct.getOrderedProductCollection().remove(orderedProductCollectionNewOrderedProduct);
+                        oldProductOfOrderedProductCollectionNewOrderedProduct = em.merge(oldProductOfOrderedProductCollectionNewOrderedProduct);
+                    }
+                }
+            }
             utx.commit();
         } catch (Exception ex) {
             try {
@@ -67,7 +146,7 @@ public class ProductJpaController {
             }
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                Integer id = product.getId();
+                Integer id = product.getProductId();
                 if (findProduct(id) == null) {
                     throw new NonexistentEntityException("The product with id " + id + " no longer exists.");
                 }
@@ -80,7 +159,7 @@ public class ProductJpaController {
         }
     }
 
-    public void destroy(Integer id) throws NonexistentEntityException, RollbackFailureException, Exception {
+    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
             utx.begin();
@@ -88,9 +167,25 @@ public class ProductJpaController {
             Product product;
             try {
                 product = em.getReference(Product.class, id);
-                product.getId();
+                product.getProductId();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The product with id " + id + " no longer exists.", enfe);
+            }
+            List<String> illegalOrphanMessages = null;
+            Collection<OrderedProduct> orderedProductCollectionOrphanCheck = product.getOrderedProductCollection();
+            for (OrderedProduct orderedProductCollectionOrphanCheckOrderedProduct : orderedProductCollectionOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Product (" + product + ") cannot be destroyed since the OrderedProduct " + orderedProductCollectionOrphanCheckOrderedProduct + " in its orderedProductCollection field has a non-nullable product field.");
+            }
+            if (illegalOrphanMessages != null) {
+                throw new IllegalOrphanException(illegalOrphanMessages);
+            }
+            Category categoryId = product.getCategoryId();
+            if (categoryId != null) {
+                categoryId.getProductCollection().remove(product);
+                categoryId = em.merge(categoryId);
             }
             em.remove(product);
             utx.commit();

@@ -6,6 +6,7 @@
 package database.entity.controller;
 
 import database.entity.CustomerOrder;
+import database.entity.controller.exceptions.IllegalOrphanException;
 import database.entity.controller.exceptions.NonexistentEntityException;
 import database.entity.controller.exceptions.RollbackFailureException;
 import java.util.List;
@@ -15,6 +16,10 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import database.entity.Customer;
+import database.entity.OrderedProduct;
+import java.util.ArrayList;
+import java.util.Collection;
 import javax.transaction.UserTransaction;
 
 /**
@@ -32,11 +37,38 @@ public class CustomerOrderJpaController {
     }
 
     public void create(CustomerOrder customerOrder) throws RollbackFailureException, Exception {
+        if (customerOrder.getOrderedProductCollection() == null) {
+            customerOrder.setOrderedProductCollection(new ArrayList<OrderedProduct>());
+        }
         EntityManager em = null;
         try {
             utx.begin();
             em = getEntityManager();
+            Customer customerId = customerOrder.getCustomerId();
+            if (customerId != null) {
+                customerId = em.getReference(customerId.getClass(), customerId.getCustomerId());
+                customerOrder.setCustomerId(customerId);
+            }
+            Collection<OrderedProduct> attachedOrderedProductCollection = new ArrayList<OrderedProduct>();
+            for (OrderedProduct orderedProductCollectionOrderedProductToAttach : customerOrder.getOrderedProductCollection()) {
+                orderedProductCollectionOrderedProductToAttach = em.getReference(orderedProductCollectionOrderedProductToAttach.getClass(), orderedProductCollectionOrderedProductToAttach.getOrderedProductPK());
+                attachedOrderedProductCollection.add(orderedProductCollectionOrderedProductToAttach);
+            }
+            customerOrder.setOrderedProductCollection(attachedOrderedProductCollection);
             em.persist(customerOrder);
+            if (customerId != null) {
+                customerId.getCustomerOrderCollection().add(customerOrder);
+                customerId = em.merge(customerId);
+            }
+            for (OrderedProduct orderedProductCollectionOrderedProduct : customerOrder.getOrderedProductCollection()) {
+                CustomerOrder oldCustomerOrderOfOrderedProductCollectionOrderedProduct = orderedProductCollectionOrderedProduct.getCustomerOrder();
+                orderedProductCollectionOrderedProduct.setCustomerOrder(customerOrder);
+                orderedProductCollectionOrderedProduct = em.merge(orderedProductCollectionOrderedProduct);
+                if (oldCustomerOrderOfOrderedProductCollectionOrderedProduct != null) {
+                    oldCustomerOrderOfOrderedProductCollectionOrderedProduct.getOrderedProductCollection().remove(orderedProductCollectionOrderedProduct);
+                    oldCustomerOrderOfOrderedProductCollectionOrderedProduct = em.merge(oldCustomerOrderOfOrderedProductCollectionOrderedProduct);
+                }
+            }
             utx.commit();
         } catch (Exception ex) {
             try {
@@ -52,12 +84,59 @@ public class CustomerOrderJpaController {
         }
     }
 
-    public void edit(CustomerOrder customerOrder) throws NonexistentEntityException, RollbackFailureException, Exception {
+    public void edit(CustomerOrder customerOrder) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
             utx.begin();
             em = getEntityManager();
+            CustomerOrder persistentCustomerOrder = em.find(CustomerOrder.class, customerOrder.getOrderId());
+            Customer customerIdOld = persistentCustomerOrder.getCustomerId();
+            Customer customerIdNew = customerOrder.getCustomerId();
+            Collection<OrderedProduct> orderedProductCollectionOld = persistentCustomerOrder.getOrderedProductCollection();
+            Collection<OrderedProduct> orderedProductCollectionNew = customerOrder.getOrderedProductCollection();
+            List<String> illegalOrphanMessages = null;
+            for (OrderedProduct orderedProductCollectionOldOrderedProduct : orderedProductCollectionOld) {
+                if (!orderedProductCollectionNew.contains(orderedProductCollectionOldOrderedProduct)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain OrderedProduct " + orderedProductCollectionOldOrderedProduct + " since its customerOrder field is not nullable.");
+                }
+            }
+            if (illegalOrphanMessages != null) {
+                throw new IllegalOrphanException(illegalOrphanMessages);
+            }
+            if (customerIdNew != null) {
+                customerIdNew = em.getReference(customerIdNew.getClass(), customerIdNew.getCustomerId());
+                customerOrder.setCustomerId(customerIdNew);
+            }
+            Collection<OrderedProduct> attachedOrderedProductCollectionNew = new ArrayList<OrderedProduct>();
+            for (OrderedProduct orderedProductCollectionNewOrderedProductToAttach : orderedProductCollectionNew) {
+                orderedProductCollectionNewOrderedProductToAttach = em.getReference(orderedProductCollectionNewOrderedProductToAttach.getClass(), orderedProductCollectionNewOrderedProductToAttach.getOrderedProductPK());
+                attachedOrderedProductCollectionNew.add(orderedProductCollectionNewOrderedProductToAttach);
+            }
+            orderedProductCollectionNew = attachedOrderedProductCollectionNew;
+            customerOrder.setOrderedProductCollection(orderedProductCollectionNew);
             customerOrder = em.merge(customerOrder);
+            if (customerIdOld != null && !customerIdOld.equals(customerIdNew)) {
+                customerIdOld.getCustomerOrderCollection().remove(customerOrder);
+                customerIdOld = em.merge(customerIdOld);
+            }
+            if (customerIdNew != null && !customerIdNew.equals(customerIdOld)) {
+                customerIdNew.getCustomerOrderCollection().add(customerOrder);
+                customerIdNew = em.merge(customerIdNew);
+            }
+            for (OrderedProduct orderedProductCollectionNewOrderedProduct : orderedProductCollectionNew) {
+                if (!orderedProductCollectionOld.contains(orderedProductCollectionNewOrderedProduct)) {
+                    CustomerOrder oldCustomerOrderOfOrderedProductCollectionNewOrderedProduct = orderedProductCollectionNewOrderedProduct.getCustomerOrder();
+                    orderedProductCollectionNewOrderedProduct.setCustomerOrder(customerOrder);
+                    orderedProductCollectionNewOrderedProduct = em.merge(orderedProductCollectionNewOrderedProduct);
+                    if (oldCustomerOrderOfOrderedProductCollectionNewOrderedProduct != null && !oldCustomerOrderOfOrderedProductCollectionNewOrderedProduct.equals(customerOrder)) {
+                        oldCustomerOrderOfOrderedProductCollectionNewOrderedProduct.getOrderedProductCollection().remove(orderedProductCollectionNewOrderedProduct);
+                        oldCustomerOrderOfOrderedProductCollectionNewOrderedProduct = em.merge(oldCustomerOrderOfOrderedProductCollectionNewOrderedProduct);
+                    }
+                }
+            }
             utx.commit();
         } catch (Exception ex) {
             try {
@@ -67,7 +146,7 @@ public class CustomerOrderJpaController {
             }
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                Integer id = customerOrder.getId();
+                Integer id = customerOrder.getOrderId();
                 if (findCustomerOrder(id) == null) {
                     throw new NonexistentEntityException("The customerOrder with id " + id + " no longer exists.");
                 }
@@ -80,7 +159,7 @@ public class CustomerOrderJpaController {
         }
     }
 
-    public void destroy(Integer id) throws NonexistentEntityException, RollbackFailureException, Exception {
+    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
             utx.begin();
@@ -88,9 +167,25 @@ public class CustomerOrderJpaController {
             CustomerOrder customerOrder;
             try {
                 customerOrder = em.getReference(CustomerOrder.class, id);
-                customerOrder.getId();
+                customerOrder.getOrderId();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The customerOrder with id " + id + " no longer exists.", enfe);
+            }
+            List<String> illegalOrphanMessages = null;
+            Collection<OrderedProduct> orderedProductCollectionOrphanCheck = customerOrder.getOrderedProductCollection();
+            for (OrderedProduct orderedProductCollectionOrphanCheckOrderedProduct : orderedProductCollectionOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This CustomerOrder (" + customerOrder + ") cannot be destroyed since the OrderedProduct " + orderedProductCollectionOrphanCheckOrderedProduct + " in its orderedProductCollection field has a non-nullable customerOrder field.");
+            }
+            if (illegalOrphanMessages != null) {
+                throw new IllegalOrphanException(illegalOrphanMessages);
+            }
+            Customer customerId = customerOrder.getCustomerId();
+            if (customerId != null) {
+                customerId.getCustomerOrderCollection().remove(customerOrder);
+                customerId = em.merge(customerId);
             }
             em.remove(customerOrder);
             utx.commit();

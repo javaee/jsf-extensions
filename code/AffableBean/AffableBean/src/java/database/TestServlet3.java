@@ -14,8 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- *
- * @author troy
+ * This servlet tests whether data can be retrieved from
+ * the affablebean database using JPA controllers
  */
 public class TestServlet3 extends HttpServlet {
 
@@ -43,8 +43,10 @@ public class TestServlet3 extends HttpServlet {
             String customerNr = request.getParameter("customer_nr");
             if ((customerNr != null) && !(customerNr.equals(""))) {
 
+                Short id = Short.parseShort(customerNr);
+
                 customerTable = new CustomerJpaController();
-                Customer customer = customerTable.findCustomer(customerNr);
+                Customer customer = customerTable.findCustomer(id);
                 if (customer != null) {
                     out.println("Customer's info for nr. " + customerNr + ": " + customer.getFirstname());
                 } else {

@@ -28,7 +28,7 @@
                 <c:forEach var="row" items="${categories.rows}">
 
                     <div class="categoryBox">
-                            <c:out value="${row.name}"/>
+                        <c:out value="${row.name}"/>
                         <img src="<c:out value="${row.image_path}"/>"
                              alt="<c:out value="${row.name}"/>">
                     </div>

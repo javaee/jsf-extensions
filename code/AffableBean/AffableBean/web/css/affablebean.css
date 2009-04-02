@@ -19,7 +19,7 @@ body {
 }
 
 #header {
-    background: #aaa url(../img/logo.png) no-repeat 25px 20px;
+    background: /* #aaa */ url(../img/logo.png) no-repeat 25px 20px;
     width: 850px;
     height: 250px;
 }
@@ -28,7 +28,7 @@ body {
     width: 350px;
     height: 30px;
     clear: both;
-    background: #aaa;
+ /* background: #aaa; */
 }
 
 
@@ -39,7 +39,7 @@ body {
     float: right;
     width: 850px;
     height: 50px;
-    background: #ccc;
+ /* background: #ccc; */
 }
 
 #logoText {
@@ -67,7 +67,7 @@ body {
     height: 350px;
     width: 350px;
     float: left;
-    background: #ccc;
+ /* background: #ccc; */
 }
 
 #indexRightColumn {
@@ -75,7 +75,7 @@ body {
     float: left;
     height: 350px;
     width: 500px;
-    background: #eee;
+ /* background: #eee; */
 }
 
 #welcomeText {
@@ -88,7 +88,7 @@ body {
     height: 150px;
     width: 200px;
     float: inherit;
-    background-color: #d3ede8;
+ /* background-color: #d3ede8; */
 }
 
 

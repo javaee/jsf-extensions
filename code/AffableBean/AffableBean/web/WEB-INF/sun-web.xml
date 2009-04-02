@@ -9,7 +9,7 @@
   <class-loader delegate="true"/>
   <jsp-config>
     <property name="keepgenerated" value="true">
-      <description>Keep a copy of the generated servlet class' java code.</description>
+      <description>If true, generated java files are not deleted.</description>
     </property>
   </jsp-config>
 </sun-web-app>

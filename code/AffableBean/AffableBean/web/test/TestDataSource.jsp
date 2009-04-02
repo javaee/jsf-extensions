@@ -26,9 +26,10 @@
         <table align="center">
             <c:forEach var="row" items="${categories.rows}">
                 <tr>
-                    <td><c:out value="${row.id}"/></td>
+                    <td><c:out value="${row.category_id}"/></td>
                     <td><c:out value="${row.name}"/></td>
-                    <td><c:out value="${row.description}"/></td>
+                    <td><c:out value="${row.image_path}"/></td>
+                    <td><c:out value="${row.last_update}"/></td>
                 </tr>
             </c:forEach>
         </table>

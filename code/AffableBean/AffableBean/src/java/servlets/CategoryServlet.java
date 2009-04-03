@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package servlets;
 
 import java.io.IOException;
@@ -35,7 +30,11 @@ public class CategoryServlet extends HttpServlet {
             out.println("<title>Servlet CategoryServlet</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet CategoryServlet at " + request.getContextPath () + "</h1>");
+            out.println("<h1>request.getContextPath(): " + request.getContextPath() + "</h1>");
+            out.println("<h1>request.getRequestURI(): " + request.getRequestURI() + "</h1>");
+            out.println("<h1>request.getQueryString(): " + request.getQueryString() + "</h1>");
+            out.println("<h1>request.getServletPath(): " + request.getServletPath() + "</h1>");
+            out.println("<h1>request.getMethod(): " + request.getMethod() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         } finally { 

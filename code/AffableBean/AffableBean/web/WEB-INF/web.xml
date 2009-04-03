@@ -37,6 +37,16 @@
         <url-pattern>/TestServlet1</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>CategoryServlet</servlet-name>
+        <servlet-class>servlets.CategoryServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>CategoryServlet</servlet-name>
+        <url-pattern>/category</url-pattern>
+    </servlet-mapping>
+
     <session-config>
         <session-timeout>
             30

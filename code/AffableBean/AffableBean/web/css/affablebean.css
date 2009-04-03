@@ -11,7 +11,7 @@ body {
     width: 850px;
     position: relative;
     text-align: center;    /* required for IE */
-    margin: 0 auto;
+    margin: 10px auto;
 }
 
 #main {
@@ -28,7 +28,7 @@ body {
     width: 350px;
     height: 30px;
     clear: both;
- /* background: #aaa; */
+    /* background: #aaa; */
 }
 
 
@@ -39,7 +39,7 @@ body {
     float: right;
     width: 850px;
     height: 50px;
- /* background: #ccc; */
+    /* background: #ccc; */
 }
 
 #logoText {
@@ -64,31 +64,49 @@ body {
 
 #indexLeftColumn {
     text-align: left;
-    height: 350px;
+    height: 400px;
     width: 350px;
     float: left;
- /* background: #ccc; */
+    /* background: #ccc; */
 }
 
 #indexRightColumn {
     text-align: left;
     float: left;
-    height: 350px;
+    height: 400px;
     width: 500px;
- /* background: #eee; */
+    /* background: #eee; */
 }
 
 #welcomeText {
-    margin: 20px 5px 0 30px;
+    margin: 30px 5px 0 30px;
     line-height: 1.4em;
 }
 
 .categoryBox {
-    margin: 20px 10px 0 30px;
+    position: relative;
+    padding: 22px 15px;
     height: 150px;
-    width: 200px;
+    /* width: 200px; */
     float: inherit;
- /* background-color: #d3ede8; */
+    /* background-color: #d3ede8; */
+}
+
+.categoryLabel {
+    position: absolute;
+    background-color: #fff;
+    filter: alpha(opacity=70);
+    opacity: 0.7;
+    font-size: x-large;
+    text-align: center;
+    width: 210px;
+    margin: 2px;
+    line-height: 150%;
+}
+
+.categoryImage {
+    padding: 1px;
+    border:solid 1px #555;
 }
 
 
@@ -134,11 +152,11 @@ p {
 }
 
 hr {
-border: 0;
-background-color: #333;
-margin: 0 25px;
-height: 1px;
-width: 300px;
+    border: 0;
+    background-color: #333;
+    margin: 0 25px;
+    height: 1px;
+    width: 300px;
 }
 
 table {
@@ -153,6 +171,10 @@ tr {
 /* general classes */
 .smallText {
     font-size: xx-small;
+}
+
+.footerText {
+    margin-top: 5px;
 }
 
 .even {

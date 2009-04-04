@@ -4,6 +4,7 @@
                 Author     : nbuser
             --%>
 
+
 <%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
@@ -26,21 +27,17 @@
 
             <div id="indexRightColumn">
 
-<!--
-                <script>
-                    $(document).ready( function(){
-                        $('.rounded').corners();
-                    });
-                </script>
--->
-
                 <c:forEach var="row" items="${categories.rows}">
                     
                     <div class="categoryBox">
 
-                        <div class="categoryLabel"><c:out value="${row.name}"/></div>
-
                         <a href="category?<c:out value="${row.name}"/>">
+
+                            <div class="categoryLabel">
+                                <span class="opaqueText">  <!-- is there a better way? -->
+                                    <c:out value="${row.name}"/>
+                                </span>
+                            </div>
 
                             <img src="<c:out value="${row.image_path}"/>"
                                 alt="<c:out value="${row.name}"/>"

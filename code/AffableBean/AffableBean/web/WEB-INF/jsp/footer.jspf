@@ -5,6 +5,7 @@
 --%>
 
             <div id="footer">
+                <br>
                 <hr>
                 <p class="smallText footerText">
                     <a href="#">Privacy Policy</a>

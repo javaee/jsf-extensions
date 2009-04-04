@@ -27,5 +27,5 @@
                     <div class="headerWidget">shopping cart</div>
                 </div>
 
-                <img src="/AffableBean/img/logoText.png" id="logoText" alt="the affable bean">
+                <a href="index.jsp"><img src="/AffableBean/img/logoText.png" id="logoText" alt="the affable bean"></a>
             </div>

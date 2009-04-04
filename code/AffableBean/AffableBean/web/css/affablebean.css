@@ -26,14 +26,14 @@ body {
 
 #footer {
     width: 350px;
-    height: 30px;
+    height: 60px;
     clear: both;
     /* background: #aaa; */
 }
 
 
 /* Styles for elements contained in the header, i.e.,
- * shopping cart, language, login widgets, and logo */
+* shopping cart, language, login widgets, and logo */
 
 #headerBar {
     float: right;
@@ -104,6 +104,12 @@ body {
     line-height: 150%;
 }
 
+/* test this */
+.opaqueText {
+    filter: alpha(opacity=100);
+    opacity: 1.0;
+}
+
 .categoryImage {
     padding: 1px;
     border:solid 1px #555;
@@ -116,14 +122,15 @@ body {
     text-align: left;
     width: 200px;
     float: left;
-    background: #ccc;
+    /* background: #ccc; */
+    margin-top: 20px;
 }
 
 #categoryRightColumn {
     text-align: left;
     float: left;
     width: 650px;
-    background: #eee;
+    /* background: #eee; */
 }
 
 #productTable {
@@ -134,7 +141,8 @@ body {
     float: right;
     width: 270px;
     margin: -8px 0 0 0;
-    background-color: #d3ede8;
+    /* background-color: #d3ede8; */
+    font-size: larger;
 }
 
 .categoryButton {
@@ -166,6 +174,18 @@ table {
 
 tr {
     height: 100px;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+a:visited {
+   color: inherit;
+}
+
+img {
+    border: none;
 }
 
 /* general classes */

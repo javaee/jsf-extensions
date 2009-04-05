@@ -1,31 +1,30 @@
-package prototype;
+package beans;
 
 /**
  *
  * @author troy
  */
-public class Product {
+public class Category {
 
-    private int id;
-    private String name;
-    private String price;
     private int categoryId;
+    private String name;
+    private String imagePath;
     private String lastUpdate;
 
     public int getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
+    public void setCategoryId(int id) {
+        this.categoryId = id;
     }
 
-    public int getId() {
-        return id;
+    public String getImagePath() {
+        return imagePath;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 
     public String getLastUpdate() {
@@ -42,13 +41,5 @@ public class Product {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getPrice() {
-        return price;
-    }
-
-    public void setPrice(String price) {
-        this.price = price;
     }
 }

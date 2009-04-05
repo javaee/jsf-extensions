@@ -9,7 +9,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <sql:setDataSource dataSource="jdbc/affableBean" />
-<sql:query var="categories" sql="SELECT * FROM category"></sql:query>
+<sql:query var="categories" sql="SELECT * FROM category" />
 
 
             <div id="indexLeftColumn">
@@ -31,7 +31,7 @@
                     
                     <div class="categoryBox">
 
-                        <a href="category?<c:out value="${row.name}"/>">
+                        <a href="category?<c:out value="${row.category_id}"/>">
 
                             <div class="categoryLabel">
                                 <span class="opaqueText">  <!-- is there a better way? -->

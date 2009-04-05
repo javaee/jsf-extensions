@@ -23,8 +23,8 @@ public class CategoryServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String category = request.getQueryString();
-        request.setAttribute("category", category);
+        String categoryId = request.getQueryString();
+        request.setAttribute("categoryId", categoryId);
 
         String url = "/category.jsp";
         RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher(url);

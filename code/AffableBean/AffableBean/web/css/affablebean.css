@@ -140,9 +140,9 @@ body {
 #categoryTitle {
     float: right;
     width: 270px;
-    margin: -8px 0 0 0;
+    margin: -30px 0 0 0;
     /* background-color: #d3ede8; */
-    font-size: larger;
+    font-size: x-large;
 }
 
 .categoryButton {
@@ -174,8 +174,16 @@ table {
 
 tr {
     height: 100px;
+    text-align:center;
 }
 
+td {
+    width: 145px;
+}
+
+a {
+    color: inherit;
+}
 a:hover {
     text-decoration: none;
 }

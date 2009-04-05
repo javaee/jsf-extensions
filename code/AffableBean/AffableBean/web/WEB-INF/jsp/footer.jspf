@@ -4,13 +4,15 @@
     Author     : nbuser
 --%>
 
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
             <div id="footer">
                 <br>
                 <hr>
                 <p class="smallText footerText">
-                    <a href="#">Privacy Policy</a>
+                    <a href="#"><fmt:message key="privacy" /></a>
                     &nbsp;&nbsp;::&nbsp;&nbsp;
-                    <a href="#">Contact</a>
+                    <a href="#"><fmt:message key="contact" /></a>
                     &nbsp;&nbsp;&copy;&nbsp;&nbsp;
                     2009 the affable bean</p>
             </div>

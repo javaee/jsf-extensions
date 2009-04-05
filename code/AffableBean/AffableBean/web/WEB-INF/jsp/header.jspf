@@ -4,25 +4,38 @@
     Author     : nbuser
 --%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+
+<%-- test switching locale --%>
+<%-- <fmt:setLocale value="cs" /> --%>
+
+
+<%@page contentType="text/html; charset=UTF-8"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="stylesheet" type="text/css" href="/AffableBean/css/affablebean.css">
         <link rel="shortcut icon" href="img/favicon.ico">
 
         <script src="resources/jquery_1.2.6/jquery-1.2.6.js" type="text/javascript"></script>
         <script src="resources/jquery_1.2.6/jquery.corners.js" type="text/javascript"></script>
 
-        <title>The Affable Bean</title>
+        <script>
+            $(document).ready( function(){
+                $('.rounded').corners();
+            });
+        </script>
+
+        <title><fmt:message key="title" /></title>
     </head>
     <body>
         <div id="main">
             <div id="header">
                 <div id="headerBar">
-                    <div class="headerWidget">languages</div>
+                    <div class="headerWidget"><span class="languageSelected rounded">english</span> | czech</div>
                     <div class="headerWidget">login / register</div>
                     <div class="headerWidget">shopping cart</div>
                 </div>

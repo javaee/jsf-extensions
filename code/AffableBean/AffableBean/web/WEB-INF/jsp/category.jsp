@@ -30,12 +30,7 @@
 </sql:query>
 
 
-<script>
-    $(document).ready( function(){
-        $('.rounded').corners();
-    });
-</script>
-
+<%-- HTML Markup starts below --%>
 
 <div id="categoryLeftColumn">
 

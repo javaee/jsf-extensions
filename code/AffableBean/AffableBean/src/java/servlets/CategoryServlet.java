@@ -23,12 +23,37 @@ public class CategoryServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String categoryId = request.getQueryString();
-        request.setAttribute("categoryId", categoryId);
+        RequestDispatcher requestDispatcher;
 
-        String url = "/category.jsp";
-        RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher(url);
-        requestDispatcher.forward(request, response);
+//// add language resource bundle to user's session
+//
+//// get user's locale
+//Locale locale = request.getLocale();
+//
+//// get resource bundle
+//ResourceBundle messages =
+//        ResourceBundle.getBundle("resources.messages", locale);
+//
+//// put resource bundle in user's session
+//HttpSession session = request.getSession();
+//session.setAttribute("messages", messages);
+
+
+        String categoryId = request.getQueryString();
+
+        // if category not specified in request, redirect request to the welcome page
+        if (categoryId == null) {
+
+            response.sendRedirect("index.jsp");
+
+        } else {
+
+            request.setAttribute("categoryId", categoryId);
+
+            String url = "/WEB-INF/jsp/category.jsp";
+            requestDispatcher = getServletContext().getRequestDispatcher(url);
+            requestDispatcher.forward(request, response);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -64,7 +89,7 @@ public class CategoryServlet extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "The CategoryServlet places the requested category in request scope " +
+        return java.util.ResourceBundle.getBundle("resources/messages").getString("The_CategoryServlet_places_the_requested_category_in_request_scope_") +
                 "and forwards the request to the \"category.jsp\" view.";
     }// </editor-fold>
 }

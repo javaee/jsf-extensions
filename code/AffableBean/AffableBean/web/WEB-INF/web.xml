@@ -57,6 +57,11 @@
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
 
+  <context-param>
+    <param-name>javax.servlet.jsp.jstl.fmt.localizationContext</param-name>
+    <param-value>resources.messages</param-value>
+  </context-param>
+
     <!-- This is only needed for testing the datasource (TestDataSource.jsp) -->
     <resource-ref>
         <description>jdbc:mysql://localhost:3306/affablebean</description>

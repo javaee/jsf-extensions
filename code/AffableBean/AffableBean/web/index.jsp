@@ -7,6 +7,7 @@
 
 <%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <sql:setDataSource dataSource="jdbc/affableBean" />
 <sql:query var="categories" sql="SELECT * FROM category" />
@@ -14,14 +15,13 @@
 
             <div id="indexLeftColumn">
                 <div id="welcomeText">
-                    <p><span style="font-size: larger">Welcome to the online home of the
-                        Affable Bean Green Grocer.</span></p>
+                    <p>
+                        <span style="font-size: larger">
+                            <fmt:message key="greeting" />
+                        </span>
+                    </p>
 
-                    <p>Enjoy browsing and learning more about our unique home delivery
-                        service bringing you fresh organic produce, dairy, meats, breads
-                        and other delicious and healthy items to your doorstep.</p>
-
-                    <p><a href="category.jsp">category page</a></p>
+                    <p><fmt:message key="introText" /></p>
                 </div>
             </div>
 

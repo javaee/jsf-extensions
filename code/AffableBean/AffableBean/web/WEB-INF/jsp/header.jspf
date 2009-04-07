@@ -9,7 +9,7 @@
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 
-<%-- Set user's language choice --%>
+<%-- Set language based on user's choice --%>
 <c:if test="${sessionScope.language != null}">
     <fmt:setLocale value="${sessionScope.language}" scope="session" />
 </c:if>
@@ -44,7 +44,7 @@
 
                     <div class="headerWidget">
 
-                        <%-- Offer locale choice to user --%>
+                        <%-- Offer language choice to user --%>
                         <a href="languageChoice?language=en">
                             <c:choose>
                                 <c:when test="${sessionScope.language ne 'cs'}">

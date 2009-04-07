@@ -28,13 +28,10 @@
     </servlet>
 
     <servlet>
-        <servlet-name>NewServlet</servlet-name>
-        <servlet-class>servlets.NewServlet</servlet-class>
+        <servlet-name>LanguageServlet</servlet-name>
+        <servlet-class>servlets.LanguageServlet</servlet-class>
     </servlet>
-    <servlet>
-        <servlet-name>NewServlet_1</servlet-name>
-        <servlet-class>servlets.NewServlet</servlet-class>
-    </servlet>
+
     <servlet-mapping>
         <servlet-name>TestServlet3</servlet-name>
         <url-pattern>/TestServlet3</url-pattern>
@@ -56,13 +53,10 @@
     </servlet-mapping>
 
     <servlet-mapping>
-        <servlet-name>NewServlet</servlet-name>
-        <url-pattern>/NewServlet</url-pattern>
+        <servlet-name>LanguageServlet</servlet-name>
+        <url-pattern>/languageChoice</url-pattern>
     </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>NewServlet_1</servlet-name>
-        <url-pattern>/NewServlet_1</url-pattern>
-    </servlet-mapping>
+    
     <session-config>
         <session-timeout>
             30

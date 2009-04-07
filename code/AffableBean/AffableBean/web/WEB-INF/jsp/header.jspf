@@ -2,13 +2,25 @@
     Document   : header
     Created on : Feb 18, 2009, 2:36:42 PM
     Author     : nbuser
+
+
+<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
+
 --%>
 
+
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 
 <%-- test switching locale --%>
 <%-- <fmt:setLocale value="cs" /> --%>
+
+
+<%-- Interpret user's locale choice --%>
+<c:if test="${sessionScope.language != null}">
+  <fmt:setLocale value="${sessionScope.language}" scope="session" />
+</c:if>
 
 
 <%@page contentType="text/html; charset=UTF-8"%>
@@ -35,7 +47,34 @@
         <div id="main">
             <div id="header">
                 <div id="headerBar">
-                    <div class="headerWidget"><span class="languageSelected rounded">english</span> | czech</div>
+
+                    <div class="headerWidget">
+
+<%-- <c:out value="${sessionScope.language}" /> --%>
+
+                        <%-- Offer locale choice to user --%>
+                        <a href="languageChoice?language=en">
+                            <c:choose>
+                                <c:when test="${sessionScope.language eq 'en'}">
+                                    <span class="languageSelected rounded">english</span></a>
+                                </c:when>
+                                <c:otherwise>
+                                    english</a>
+                                </c:otherwise>
+                            </c:choose> |
+                    
+                        <a href="languageChoice?language=cs">
+                            <c:choose>
+                                <c:when test="${sessionScope.language eq 'cs'}">
+                                    <span class="languageSelected rounded">česky</span></a>
+                                </c:when>
+                                <c:otherwise>
+                                    česky</a>
+                                </c:otherwise>
+                            </c:choose>
+
+                    </div>
+
                     <div class="headerWidget">login / register</div>
                     <div class="headerWidget">shopping cart</div>
                 </div>

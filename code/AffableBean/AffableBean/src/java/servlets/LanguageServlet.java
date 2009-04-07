@@ -38,15 +38,15 @@ public class LanguageServlet extends HttpServlet {
         // place in session scope
         session.setAttribute("language", language);
 
-        // return user from whence s/he came
+//        // return user from whence s/he came
+//        // note: this doesn't work - getting the referer isn't reliable
+//        String url = request.getHeader("Referer");
+//        System.out.println(url);
+//
+//        url = url.substring(url.lastIndexOf('/'));
+//        System.out.println(url);
 
-        String url = request.getHeader("Referer");
-        System.out.println(url);
-        
-	url = url.substring(url.lastIndexOf('/'));
-        System.out.println(url);
-
-        RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher(url);
+        RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/");
         requestDispatcher.forward(request, response);
     } 
 

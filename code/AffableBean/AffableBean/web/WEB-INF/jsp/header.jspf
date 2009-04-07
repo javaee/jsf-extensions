@@ -2,10 +2,6 @@
     Document   : header
     Created on : Feb 18, 2009, 2:36:42 PM
     Author     : nbuser
-
-
-<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
-
 --%>
 
 
@@ -13,13 +9,9 @@
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 
-<%-- test switching locale --%>
-<%-- <fmt:setLocale value="cs" /> --%>
-
-
-<%-- Interpret user's locale choice --%>
+<%-- Set user's language choice --%>
 <c:if test="${sessionScope.language != null}">
-  <fmt:setLocale value="${sessionScope.language}" scope="session" />
+    <fmt:setLocale value="${sessionScope.language}" scope="session" />
 </c:if>
 
 
@@ -48,14 +40,14 @@
             <div id="header">
                 <div id="headerBar">
 
-                    <div class="headerWidget">
-
 <%-- <c:out value="${sessionScope.language}" /> --%>
+
+                    <div class="headerWidget">
 
                         <%-- Offer locale choice to user --%>
                         <a href="languageChoice?language=en">
                             <c:choose>
-                                <c:when test="${sessionScope.language eq 'en'}">
+                                <c:when test="${sessionScope.language ne 'cs'}">
                                     <span class="languageSelected rounded">english</span></a>
                                 </c:when>
                                 <c:otherwise>

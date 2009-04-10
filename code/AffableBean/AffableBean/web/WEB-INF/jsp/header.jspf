@@ -40,14 +40,49 @@
             <div id="header">
                 <div id="headerBar">
 
-<%-- <c:out value="${sessionScope.language}" /> --%>
+<%--
+<div align="left" style="margin-left:60%;">
+    <strong>tests:</strong>
+    <br>sessionScope.language = <c:out value="${sessionScope.language}" />
+    <br>sessionScope.language ne 'cs' = <c:out value="${sessionScope.language ne 'cs'}" />
+    <br>sessionScope.language eq 'cs' = <c:out value="${sessionScope.language eq 'cs'}" />
+</div>
+--%>
 
                     <div class="headerWidget">
+
+<%--
+
+Client browser requests languages in the following priority:
+
+    Use-case 1: 1.  cs
+                2.  en
+
+    Use-case 2: 1.  en  !! this is why you can't just have a cs bundle - browser will choose cs before default !!
+                2.  cs
+
+    Use-case 3: 1.  en
+
+    Use-case 4: 1.  cs
+
+    Use-case 5: [none]
+
+--%>
 
                         <%-- Offer language choice to user --%>
                         <a href="languageChoice?language=en">
                             <c:choose>
                                 <c:when test="${sessionScope.language ne 'cs'}">
+
+<%-- This won't work! When client calls page w/o
+     making a selection, this test will always return
+     true, and the second test will always return false.
+
+     (i.e., testing use-case 4 above fails)
+
+     Here, it would be better to check for the actual
+     language by extracting it from the locale value --%>
+
                                     <span class="languageSelected rounded">english</span></a>
                                 </c:when>
                                 <c:otherwise>

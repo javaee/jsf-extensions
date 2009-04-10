@@ -189,10 +189,11 @@ td {
 
 a {
     color: inherit;
+    text-decoration: none;
 }
 
 a:hover {
-    text-decoration: none;
+    text-decoration: underline;
 }
 
 a:visited {

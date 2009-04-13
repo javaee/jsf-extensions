@@ -20,15 +20,15 @@ public class ShoppingCart {
         items = new HashMap<String, ShoppingCartItem>();
     }
 
-    public synchronized void add(String bookId, Book book) {
-        if (items.containsKey(bookId)) {
-            ShoppingCartItem scitem = (ShoppingCartItem) items.get(bookId);
-            scitem.incrementQuantity();
-        } else {
-            ShoppingCartItem newItem = new ShoppingCartItem(book);
-            items.put(bookId, newItem);
-        }
-    }
+//    public synchronized void add(String bookId, Book book) {
+//        if (items.containsKey(bookId)) {
+//            ShoppingCartItem scitem = (ShoppingCartItem) items.get(bookId);
+//            scitem.incrementQuantity();
+//        } else {
+//            ShoppingCartItem newItem = new ShoppingCartItem(book);
+//            items.put(bookId, newItem);
+//        }
+//    }
 
     public synchronized void remove(String bookId) {
         if (items.containsKey(bookId)) {
@@ -67,19 +67,19 @@ public class ShoppingCart {
         return numberOfItems;
     }
 
-    public synchronized double getTotal() {
-        double amount = 0.0;
-
-        for (Iterator i = getItems()
-                              .iterator(); i.hasNext();) {
-            ShoppingCartItem item = (ShoppingCartItem) i.next();
-            Book bookDetails = (Book) item.getItem();
-
-            amount += (item.getQuantity() * bookDetails.getPrice());
-        }
-
-        return roundOff(amount);
-    }
+//    public synchronized double getTotal() {
+//        double amount = 0.0;
+//
+//        for (Iterator i = getItems()
+//                              .iterator(); i.hasNext();) {
+//            ShoppingCartItem item = (ShoppingCartItem) i.next();
+//            Book bookDetails = (Book) item.getItem();
+//
+//            amount += (item.getQuantity() * bookDetails.getPrice());
+//        }
+//
+//        return roundOff(amount);
+//    }
 
     private double roundOff(double x) {
         long val = Math.round(x * 100); // cents

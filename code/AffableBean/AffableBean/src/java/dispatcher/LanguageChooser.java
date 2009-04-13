@@ -1,18 +1,25 @@
-package servlets;
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 
+package dispatcher;
+
+import servlets.*;
 import java.io.IOException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author troy
  */
-public class CategoryServlet extends HttpServlet {
-
+public class LanguageChooser extends HttpServlet {
+   
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
@@ -21,40 +28,28 @@ public class CategoryServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    throws ServletException, IOException {
 
-        RequestDispatcher requestDispatcher;
+        // get language choice
+        String language = request.getParameter("language");
 
-//// add language resource bundle to user's session
+        //Get the session object
+        HttpSession session = request.getSession(true);
+
+        // place in session scope
+        session.setAttribute("language", language);
+
+//        // return user from whence s/he came
+//        // note: this doesn't work - getting the referer isn't reliable
+//        String url = request.getHeader("Referer");
+//        System.out.println(url);
 //
-//// get user's locale
-//Locale locale = request.getLocale();
-//
-//// get resource bundle
-//ResourceBundle messages =
-//        ResourceBundle.getBundle("resources.messages", locale);
-//
-//// put resource bundle in user's session
-//HttpSession session = request.getSession();
-//session.setAttribute("messages", messages);
+//        url = url.substring(url.lastIndexOf('/'));
+//        System.out.println(url);
 
-
-        String categoryId = request.getQueryString();
-
-        // if category not specified in request, redirect request to the welcome page
-        if (categoryId == null) {
-
-            response.sendRedirect("index.jsp");
-
-        } else {
-
-            request.setAttribute("categoryId", categoryId);
-
-            String url = "/WEB-INF/jsp/category.jsp";
-            requestDispatcher = getServletContext().getRequestDispatcher(url);
-            requestDispatcher.forward(request, response);
-        }
-    }
+        RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/");
+        requestDispatcher.forward(request, response);
+    } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /** 
@@ -66,9 +61,9 @@ public class CategoryServlet extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    throws ServletException, IOException {
         processRequest(request, response);
-    }
+    } 
 
     /** 
      * Handles the HTTP <code>POST</code> method.
@@ -79,7 +74,7 @@ public class CategoryServlet extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    throws ServletException, IOException {
         processRequest(request, response);
     }
 
@@ -89,7 +84,7 @@ public class CategoryServlet extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return java.util.ResourceBundle.getBundle("resources/messages").getString("The_CategoryServlet_places_the_requested_category_in_request_scope_") +
-                "and forwards the request to the \"category.jsp\" view.";
+        return "Short description";
     }// </editor-fold>
+
 }

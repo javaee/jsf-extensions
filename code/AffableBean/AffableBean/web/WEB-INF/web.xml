@@ -8,55 +8,25 @@
     -->
 
     <servlet>
-        <servlet-name>TestServlet3</servlet-name>
-        <servlet-class>database.TestServlet3</servlet-class>
+        <servlet-name>Dispatcher</servlet-name>
+        <servlet-class>dispatcher.Dispatcher</servlet-class>
     </servlet>
 
     <servlet>
-        <servlet-name>TestServlet2</servlet-name>
-        <servlet-class>database.TestServlet2</servlet-class>
-    </servlet>
-
-    <servlet>
-        <servlet-name>TestServlet1</servlet-name>
-        <servlet-class>database.TestServlet1</servlet-class>
-    </servlet>
-
-    <servlet>
-        <servlet-name>CategoryServlet</servlet-name>
-        <servlet-class>servlets.CategoryServlet</servlet-class>
-    </servlet>
-
-    <servlet>
-        <servlet-name>LanguageServlet</servlet-name>
-        <servlet-class>servlets.LanguageServlet</servlet-class>
+        <servlet-name>LanguageChooser</servlet-name>
+        <servlet-class>dispatcher.LanguageChooser</servlet-class>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>TestServlet3</servlet-name>
-        <url-pattern>/TestServlet3</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>TestServlet2</servlet-name>
-        <url-pattern>/TestServlet2</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>TestServlet1</servlet-name>
-        <url-pattern>/TestServlet1</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>CategoryServlet</servlet-name>
+        <servlet-name>Dispatcher</servlet-name>
         <url-pattern>/category</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
-        <servlet-name>LanguageServlet</servlet-name>
+        <servlet-name>LanguageChooser</servlet-name>
         <url-pattern>/languageChoice</url-pattern>
     </servlet-mapping>
-    
+
     <session-config>
         <session-timeout>
             30

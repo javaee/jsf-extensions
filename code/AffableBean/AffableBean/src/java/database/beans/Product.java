@@ -1,30 +1,31 @@
-package beans;
+package database.beans;
 
 /**
  *
  * @author troy
  */
-public class Category {
+public class Product {
 
-    private int categoryId;
+    private int id;
     private String name;
-    private String imagePath;
+    private String price;
+    private int categoryId;
     private String lastUpdate;
 
     public int getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(int id) {
-        this.categoryId = id;
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
     }
 
-    public String getImagePath() {
-        return imagePath;
+    public int getId() {
+        return id;
     }
 
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getLastUpdate() {
@@ -41,5 +42,13 @@ public class Category {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
     }
 }

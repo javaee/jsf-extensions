@@ -63,7 +63,7 @@
                 <c:out value="${row.name}"/>
             </td>
             <td class="${((iter.index % 2) == 0) ? 'even' : 'odd'}">
-                &euro; <c:out value="${row.price}"/>
+                $ <c:out value="${row.price}"/>
             </td>
             <td class="${((iter.index % 2) == 0) ? 'even' : 'odd'}">
                 <input type="text" maxlength="2" size="2" value="1">

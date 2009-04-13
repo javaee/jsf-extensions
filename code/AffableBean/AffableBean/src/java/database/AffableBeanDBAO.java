@@ -32,14 +32,14 @@ public class AffableBeanDBAO {
         }
     }
 
-//    public void remove() {
-//        try {
-//            em.close();
-//        } catch (Exception ex) {
-//            System.out.println(ex.getMessage());
-//        }
-//    }
-//
+    public void remove() {
+        try {
+            em.close();
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+
 //    public List getBooks() throws BooksNotFoundException {
 //        try {
 //            return em.createQuery("SELECT bd FROM Book bd ORDER BY bd.bookId")

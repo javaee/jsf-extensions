@@ -33,7 +33,6 @@ package com.sun.faces.cactus;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.application.ApplicationAssociate;
-import com.sun.faces.application.WebappLifecycleListener;
 import com.sun.faces.config.ConfigureListener;
 import org.apache.cactus.server.ServletContextWrapper;
 
@@ -45,8 +44,7 @@ import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.webapp.FacesServlet;
 import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletRequestEvent;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
@@ -66,15 +64,15 @@ import javax.faces.event.PhaseId;
  * Subclasses of ServletTestCase and JspTestCase use an instance of this
  * class to handle behavior specific to Faces TestCases.  You may
  * recognize this as using object compositition vs multiple inheritance.
- * <P>
+ * <p/>
  * <p/>
  * <p/>
  * <B>Lifetime And Scope</B> <P> Same as the JspTestCase or
  * ServletTestCase instance that uses it.
  *
  * @version $Id: FacesTestCaseService.java,v 1.2 2005/10/26 02:24:05 edburns Exp $
- * @see	com.sun.faces.context.FacesContextFactoryImpl
- * @see	com.sun.faces.context.FacesContextImpl
+ * @see    com.sun.faces.context.FacesContextFactoryImpl
+ * @see    com.sun.faces.context.FacesContextImpl
  */
 
 public class FacesTestCaseService extends Object {
@@ -90,7 +88,6 @@ public class FacesTestCaseService extends Object {
     public static final String ENTER_CALLED = "enterCalled";
     public static final String EXIT_CALLED = "exitCalled";
     public static final String EMPTY = "empty";
-
 
 
 //
@@ -113,9 +110,11 @@ public class FacesTestCaseService extends Object {
 
     protected ConfigureListener configureListener = null;
 
-    protected WebappLifecycleListener webappListener = null;
-
     protected Lifecycle lifecycle = null;
+
+    protected ServletContext servletContext = null;
+
+
 
 //
 // Constructors and Initializers    
@@ -151,53 +150,39 @@ public class FacesTestCaseService extends Object {
         // Since we run using tomcat's deploy targets, we must obtain the
         // absolute path to where we are to write our output files.
         String testRootDir =
-            facesTestCase.getConfig().getServletContext().getInitParameter(
-                "testRootDir");
+              facesTestCase.getConfig().getServletContext().getInitParameter(
+                    "testRootDir");
 
         assert (null != testRootDir);
-        facesTestCase.setTestRootDir(testRootDir);             
-      
-         this.configureListener = new ConfigureListener();
-        this.webappListener = new WebappLifecycleListener();
-        ServletContextEvent e =
-            new ServletContextEvent(
-                facesTestCase.getConfig().getServletContext());
+        facesTestCase.setTestRootDir(testRootDir);
+
+        this.configureListener = new ConfigureListener();
+        this.servletContext = facesTestCase.getConfig().getServletContext();
+        ServletContextEvent e = new ServletContextEvent(this.servletContext);
 
         // make sure this gets called once per ServletContext instance.
-        if (null ==
-            (facesTestCase.getConfig().getServletContext().
-            getAttribute(FacesServlet.CONFIG_FILES_ATTR))) {
-
-            webappListener.contextInitialized(e);
+        if (null == (servletContext.getAttribute(FacesServlet.CONFIG_FILES_ATTR))) {
+            System.out.println("INVOKING CONFIGLISTENER");
             configureListener.contextInitialized(e);
         }
 
         initFacesContext();
 
         if (facesTestCase.sendWriterToFile()) {
-            ResponseWriter responseWriter = 
-                    new FileOutputResponseWriter(testRootDir);
+            ResponseWriter responseWriter =
+                  new FileOutputResponseWriter(testRootDir);
             facesContext.setResponseWriter(responseWriter);
         }
-        
+
         TestBean testBean = new TestBean();
         facesContext.getExternalContext().getSessionMap().put("TestBean",
                                                               testBean);
 
-        Iterator paramNames = getFacesContext().getExternalContext()
-            .getRequestParameterNames();
-        while (paramNames.hasNext()) {
-            String curName = (String) paramNames.next();
-
-            System.out.println(curName + "=" +
-                               getFacesContext().getExternalContext().
-                               getRequestParameterMap().get(curName));
-        }
-        
-        UIViewRoot root = getFacesContext().getApplication().getViewHandler().createView(facesContext, null);
+        UIViewRoot root = getFacesContext().getApplication().getViewHandler()
+              .createView(facesContext, null);
         root.setViewId("/viewId");
         facesContext.setViewRoot(root);
-        
+
         facesContext.setCurrentPhaseId(PhaseId.RESTORE_VIEW);
 
     }
@@ -205,32 +190,31 @@ public class FacesTestCaseService extends Object {
 
     public void tearDown() {
         // make sure this gets called!
-        if ( facesTestCase.getConfig().getServletContext() != null ) {
+        if (facesTestCase.getConfig().getServletContext() != null) {
             facesTestCase.getConfig().getServletContext()
-                .removeAttribute(RIConstants.HTML_BASIC_RENDER_KIT);
+                  .removeAttribute(RIConstants.HTML_BASIC_RENDER_KIT);
         }
 
         ServletContextEvent e =
-            new ServletContextEvent(
-                facesTestCase.getConfig().getServletContext());
+              new ServletContextEvent(servletContext);
         configureListener.contextDestroyed(e);
-        webappListener.contextDestroyed(e);
 
         // make sure session is not null. It will null in case release
         // was invoked.
         try {
             if (facesContext.getExternalContext() != null) {
-                if (facesContext.getExternalContext().getSession(true) != 
-		    null) {
+                if (facesContext.getExternalContext().getSession(true) !=
+                    null) {
                     facesContext.getExternalContext().getSessionMap().remove(
-                        "TestBean");
+                          "TestBean");
                 }
             }
         } catch (IllegalStateException ie) {
-        } 
+        }
+        this.servletContext = null;
     }
 
-    
+
     public boolean verifyExpectedOutput() {
         boolean result = false;
         CompareFiles cf = new CompareFiles();
@@ -251,11 +235,11 @@ public class FacesTestCaseService extends Object {
             outputFileName = FileOutputResponseWriter.RESPONSE_WRITER_FILENAME;
         }
         correctFileName = FileOutputResponseWriter.FACES_RESPONSE_ROOT +
-            facesTestCase.getExpectedOutputFilename();
+                          facesTestCase.getExpectedOutputFilename();
 
         errorMessage = "File Comparison failed: diff -u " + outputFileName +
-            " " +
-            correctFileName;
+                       " " +
+                       correctFileName;
 
         ArrayList ignoreList = null;
         String[] ignore = null;
@@ -269,7 +253,9 @@ public class FacesTestCaseService extends Object {
 
         try {
             result =
-                cf.filesIdentical(outputFileName, correctFileName, ignoreList);
+                  cf.filesIdentical(outputFileName,
+                                    correctFileName,
+                                    ignoreList);
         } catch (IOException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
@@ -327,8 +313,8 @@ public class FacesTestCaseService extends Object {
 
     public boolean isMember(String toTest, String[] set) {
         int
-            len = set.length,
-            i = 0;
+              len = set.length,
+              i = 0;
         for (i = 0; i < len; i++) {
             if (set[i].equals(toTest)) {
                 return true;
@@ -377,8 +363,8 @@ public class FacesTestCaseService extends Object {
      * HttpServletRequests for equality.</p>
      *
      * @return true if every attribute in in request1 has an analog in
-     * request2, with the same value as in request1, and the converse is
-     * true as well.
+     *         request2, with the same value as in request1, and the converse is
+     *         true as well.
      */
 
 
@@ -402,7 +388,7 @@ public class FacesTestCaseService extends Object {
                 }
             } else if (null != valA || null != valB) {
                 // one of the values is null, therefore, not equal, 
-		// return false
+                // return false
                 return false;
             }
         }
@@ -422,7 +408,7 @@ public class FacesTestCaseService extends Object {
                 }
             } else if (null != valA || null != valB) {
                 // one of the values is null, therefore, not equal, 
-		// return false
+                // return false
                 return false;
             }
         }
@@ -435,9 +421,9 @@ public class FacesTestCaseService extends Object {
 
         // clear out the attr that was set in the servletcontext attr set.
         facesTestCase.getConfig().getServletContext().removeAttribute(
-            FacesServlet.CONFIG_FILES_ATTR);
-	ApplicationAssociate.clearInstance(
-         FacesContext.getCurrentInstance().getExternalContext());
+              FacesServlet.CONFIG_FILES_ATTR);
+        ApplicationAssociate.clearInstance(
+              FacesContext.getCurrentInstance().getExternalContext());
         // clear out the renderKit factory
         FactoryFinder.releaseFactories();
 
@@ -446,80 +432,80 @@ public class FacesTestCaseService extends Object {
         // servletContext.getInitParameter() to relfect the call.
 
         ServletContextWrapper sc =
-            new ServletContextWrapper(
-                facesTestCase.getConfig().getServletContext()) {
-                public String getInitParameter(String theName) {
-                    if (null != theName &&
-                        theName.equals(FacesServlet.CONFIG_FILES_ATTR)) {
-                        return paramVal;
-                    }
-                    return super.getInitParameter(theName);
-                }
-            };
+              new ServletContextWrapper(servletContext) {
+                  public String getInitParameter(String theName) {
+                      if (null != theName &&
+                          theName.equals(FacesServlet.CONFIG_FILES_ATTR)) {
+                          return paramVal;
+                      }
+                      return super.getInitParameter(theName);
+                  }
+
+                  public String getContextPath() {
+                      return "/test";
+                  }
+              };
 
         ServletContextEvent e =
-            new ServletContextEvent(sc);
-        configureListener.contextDestroyed(e);
-        webappListener.contextDestroyed(e);
+              new ServletContextEvent(sc);
+        ApplicationAssociate.setCurrentInstance(null);
+        configureListener.contextDestroyed(new ServletContextEvent(servletContext));
+        servletContext = sc;
+
         configureListener = new ConfigureListener();
-        webappListener = new WebappLifecycleListener();
-        webappListener.contextInitialized(e);
-        webappListener.requestInitialized(new ServletRequestEvent(sc, 
-			   (ServletRequest) FacesContext.getCurrentInstance().
-					  getExternalContext().getRequest()));
         configureListener.contextInitialized(e);
 
         initFacesContext();
     }
 
     public Object wrapRequestToHideParameters() {
-	Object oldRequest = 
-	    getFacesContext().getExternalContext().getRequest();
-	
-	HttpServletRequest wrapper = 
-	    new HttpServletRequestWrapper((HttpServletRequest)oldRequest) {
-		public java.util.Enumeration getParameterNames() {
-		    return new java.util.Enumeration() {
-			    public boolean hasMoreElements() {
-				return( false );
-			    }
-			    
-			    public Object nextElement() {
-				return new java.util.NoSuchElementException();
-			    }
-			};
-		}
-	    };
-	getFacesContext().getExternalContext().setRequest(wrapper);
-	return oldRequest;
+        Object oldRequest =
+              getFacesContext().getExternalContext().getRequest();
+
+        HttpServletRequest wrapper =
+              new HttpServletRequestWrapper((HttpServletRequest) oldRequest) {
+                  public java.util.Enumeration getParameterNames() {
+                      return new java.util.Enumeration() {
+                          public boolean hasMoreElements() {
+                              return (false);
+                          }
+
+                          public Object nextElement() {
+                              return new java.util.NoSuchElementException();
+                          }
+                      };
+                  }
+              };
+        getFacesContext().getExternalContext().setRequest(wrapper);
+        return oldRequest;
     }
 
     public void unwrapRequestToShowParameters(Object oldRequest) {
-	getFacesContext().getExternalContext().setRequest(oldRequest);
+        getFacesContext().getExternalContext().setRequest(oldRequest);
     }
 
     private void initFacesContext() {
         HttpServletResponse response;
         if (facesTestCase.sendResponseToFile()) {
             response =
-                new FileOutputResponseWrapper(facesTestCase.getResponse(),
-                    facesTestCase.getTestRootDir());
+                  new FileOutputResponseWrapper(facesTestCase.getResponse(),
+                                                facesTestCase.getTestRootDir());
         } else {
             response = facesTestCase.getResponse();
         }
         LifecycleFactory factory = (LifecycleFactory)
-            FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
+              FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
         assert (null != factory);
         lifecycle = factory.getLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE);
         assert (null != lifecycle);
 
         facesContextFactory = (FacesContextFactory)
-            FactoryFinder.getFactory(FactoryFinder.FACES_CONTEXT_FACTORY);
+              FactoryFinder.getFactory(FactoryFinder.FACES_CONTEXT_FACTORY);
         facesContext =
-            facesContextFactory.getFacesContext(facesTestCase.getConfig().
-                                                getServletContext(),
-                                               facesTestCase.getRequest(),
-                                                response, lifecycle);
+              facesContextFactory.getFacesContext(facesTestCase.getConfig().
+                    getServletContext(),
+                                                  facesTestCase.getRequest(),
+                                                  response, lifecycle);
     }
 
 

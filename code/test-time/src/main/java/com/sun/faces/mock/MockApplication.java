@@ -452,7 +452,8 @@ public class MockApplication extends Application {
      *
      * @since 2.0
      */
-    public void publishEvent(Class<? extends SystemEvent> systemEventClass,
+    public void publishEvent(FacesContext context,
+                             Class<? extends SystemEvent> systemEventClass,
                              Object source) {
 
         if (systemEventClass == null) {

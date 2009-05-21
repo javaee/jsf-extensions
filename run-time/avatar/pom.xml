@@ -9,9 +9,7 @@
     <packaging>jar</packaging>
     <name>jsf-extensions-dynamic-faces</name>
     <url>https://jsf-extensions.dev.java.net/</url>
-    <description>
-    Run time jsf-extensions
-    </description>
+    <description>Run time jsf-extensions</description>
 
     <parent>
         <groupId>com.sun.faces.extensions.maven</groupId>
@@ -20,9 +18,9 @@
     </parent>
 
     <scm>
-        <connection>scm:svn:http://jsf-extensions.dev.java.net/svn/jsf-extensions/trunk</connection>
-        <developerConnection>scm:svn:https://jsf-extensions.dev.java.net/svn/jsf-extensions/trunk</developerConnection>
-        <url>https://jsf-extensions.dev.java.net/source/browse/jsf-extensions/</url>
+        <connection>scm:svn:https://jsf-extensions.dev.java.net/svn/jsf-extensions/branches/JSFTEMPLATING_BRANCH</connection>
+        <developerConnection>scm:svn:https://jsf-extensions.dev.java.net/svn/jsf-extensions/branches/JSFTEMPLATING_BRANCH</developerConnection>
+        <url>https://jsf-extensions.dev.java.net/svn/jsf-extensions/branches/JSFTEMPLATING_BRANCH</url>
     </scm>
 
     <build>
@@ -67,19 +65,22 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <configuration>
+                            <classifier>jsftemplating</classifier>
+                        </configuration>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
-
     </build>
-<!--
-  <pluginRepositories>
-    <pluginRepository>
-      <snapshots />
-      <id>mvnrepository</id>
-      <url>http://mvnrepository.com/artifact/</url>
-    </pluginRepository>
-  </pluginRepositories>
--->
-
     <dependencies>
         <dependency>
             <groupId>com.sun.faces.extensions</groupId>
@@ -104,5 +105,4 @@
             </plugin>
         </plugins>
     </reporting>
-
 </project>

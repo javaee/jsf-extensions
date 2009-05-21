@@ -1,51 +1,48 @@
+
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>com.sun.faces.extensions</groupId>
-  <artifactId>jsf-extensions</artifactId>
-  <version>0.2</version>
-  <packaging>pom</packaging>
-  <description>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.sun.faces.extensions</groupId>
+    <artifactId>jsf-extensions</artifactId>
+    <version>0.2</version>
+    <packaging>pom</packaging>
+    <description>
+        JCP Standard compliant extensions to JavaServer Faces Technology,
+        including an implementation of the Avatar AJAX architecture.
+    </description>
+    <properties>
+        <jar.version>0.2</jar.version>
+        <jar.version.extension>final</jar.version.extension>
+        <jar.full.version>${jar.version}</jar.full.version>
+    </properties>
 
-    JCP Standard compliant extensions to JavaServer Faces Technology,
-    including an implementation of the Avatar AJAX architecture.
+    <name>JavaServer(tm) Faces Extensions</name>
+    <url>https://jsf-extensions.dev.java.net/</url>
 
-  </description>
-  <properties>
-    <jar.version>0.2</jar.version>
-    <jar.version.extension>final</jar.version.extension>
-    <jar.full.version>${jar.version}</jar.full.version>
-  </properties>
+    <scm>
+        <connection>scm:svn:https://jsf-extensions.dev.java.net/svn/jsf-extensions/branches/JSFTEMPLATING_BRANCH</connection>
+        <developerConnection>scm:svn:https://jsf-extensions.dev.java.net/svn/jsf-extensions/branches/JSFTEMPLATING_BRANCH</developerConnection>
+        <url>https://jsf-extensions.dev.java.net/svn/jsf-extensions/branches/JSFTEMPLATING_BRANCH</url>
+    </scm>
 
-  <name>JavaServer(tm) Faces Extensions</name>
-  <url>https://jsf-extensions.dev.java.net/</url>
-
-  <scm>
-    <connection>scm:svn:http://jsf-extensions.dev.java.net/svn/jsf-extensions/trunk</connection>
-    <developerConnection>scm:svn:https://jsf-extensions.dev.java.net/svn/jsf-extensions/trunk</developerConnection>
-    <url>https://jsf-extensions.dev.java.net/source/browse/jsf-extensions/</url>
-  </scm>
-
-  <build>
-    <defaultGoal>install</defaultGoal>
-    <plugins>
-                    <plugin>
-
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-jar-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <configuration>
-                                    <classifier>jsftemplating</classifier>
-                                </configuration>
-
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
+    <build>
+        <defaultGoal>install</defaultGoal>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <configuration>
+                            <classifier>jsftemplating</classifier>
+                        </configuration>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -54,89 +51,59 @@
                     <target>1.5</target>
                 </configuration>
             </plugin>
+        </plugins>
+    </build>
+    <dependencies>
+        <dependency>
+            <groupId>javaee</groupId>
+            <artifactId>javaee-api</artifactId>
+            <version>5</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.sourceforge.maven-taglib</groupId>
+            <artifactId>maven-taglib-plugin</artifactId>
+            <version>2.2.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.faces.extensions</groupId>
+            <artifactId>jsf-extensions-dynamic-faces</artifactId>
+            <version>${jar.full.version}</version>
+        </dependency>
+    </dependencies>
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>dependencies</report>
+                            <report>license</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+        </plugins>
+    </reporting>
 
-       <plugin>
-	 <artifactId>maven-antrun-plugin</artifactId>
-	 <executions>
-	   <execution>
-             <id>javadoc</id>
-	     <phase>generate-resources</phase>
-	     <configuration>
-	       <tasks>
-                 <property name="cp" refid="maven.compile.classpath" />
-                 <echo message="${cp}" />
-                 <echo message="${pom.version}" />
-                 <ant antfile="src/site/javadoc-build.xml" inheritAll="true"
-                      inheritRefs="true">
-                   <property name="pom.version" value="${pom.version}" />
-                   <property name="pom.artifactId" value="${pom.artifactId}" />
-                 </ant>
-	       </tasks>
-	     </configuration>
-	     <goals>
-	       <goal>run</goal>
-	     </goals>
-	   </execution>
-	 </executions>
-       </plugin>
-       <plugin>
-	 <groupId>org.apache.maven.plugins</groupId>
-	 <artifactId>maven-war-plugin</artifactId>
-	 <version>2.0</version>
-       </plugin>
-    </plugins>
-  </build>
-  <dependencies>
-    <dependency>
-      <groupId>javaee</groupId>
-      <artifactId>javaee-api</artifactId>
-      <version>5</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>net.sourceforge.maven-taglib</groupId>
-      <artifactId>maven-taglib-plugin</artifactId>
-      <version>2.2.1</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.sun.faces.extensions</groupId>
-      <artifactId>jsf-extensions-dynamic-faces</artifactId>
-      <version>${jar.full.version}</version>
-    </dependency>
-  </dependencies>
-  <reporting>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-project-info-reports-plugin</artifactId>
-        <reportSets>
-          <reportSet>
-            <reports>
-              <report>dependencies</report>
-              <report>license</report>
-            </reports>
-          </reportSet>
-        </reportSets>
-      </plugin>
-    </plugins>
-  </reporting>
-
-  <profiles>
-    <profile>
-      <id>default</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <modules>
-	<module>maven/master-pom</module>
+    <profiles>
+        <profile>
+            <id>default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <modules>
     <!--
+                <module>maven/master-pom</module>
 	<module>test-time</module>
 	<module>dev-time</module>
 	<module>run-time/common</module>
 	<module>run-time/flash</module>
     -->
-	<module>run-time/avatar</module>
+                <module>run-time/avatar</module>
 <!--
 	<module>run-time/samples/blank-facelets</module>
 	<module>run-time/samples/blank-jsp</module>
@@ -149,115 +116,7 @@
 	<module>run-time/samples/stock-faces</module>
 	<module>run-time/samples/dynafaces-getting-started</module>
 -->
-      </modules>
-    </profile>
-    <profile>
-      <id>flash</id>
-      <modules>
-	<module>maven/master-pom</module>
-	<module>run-time/common</module>
-	<module>run-time/flash</module>
-	<module>run-time/samples/flash</module>
-      </modules>
-    </profile>
-    <profile>
-      <id>jsf-j1</id>
-      <modules>
-	<module>run-time/avatar</module>
-	<module>run-time/samples/j1</module>
-      </modules>
-    </profile>
-    <profile>
-      <id>samples</id>
-      <modules>
-	<module>maven/master-pom</module>
-	<module>test-time</module>
-	<module>dev-time</module>
-	<module>run-time/common</module>
-	<module>run-time/flash</module>
-	<module>run-time/avatar</module>
-	<module>run-time/samples/j1</module>
-	<module>run-time/samples/cardemo</module>
-	<module>run-time/samples/tictactoe</module>
-	<module>run-time/samples/fire-ajax-transaction</module>
-<!--
-	<module>run-time/samples/jmaki</module>
--->
-	<module>run-time/samples/simple-events</module>
-	<module>run-time/samples/simple-partial-update</module>
-	<module>run-time/samples/stock-faces</module>
-	<module>run-time/samples/dynafaces-getting-started</module>
-	<module>run-time/samples/flash</module>
-      </modules>
-    </profile>
-    <profile>
-      <id>jmaki-test</id>
-      <modules>
-	<module>maven/master-pom</module>
-	<module>test-time</module>
-	<module>dev-time</module>
-	<module>run-time/common</module>
-	<module>run-time/flash</module>
-	<module>run-time/avatar</module>
-	<module>run-time/samples/jmaki</module>
-	<module>run-time/samples/jmaki-test</module>
-      </modules>
-    </profile>
-
-    <profile>
-      <id>samples-only</id>
-      <modules>
-	<module>run-time/samples/j1</module>
-	<module>run-time/samples/cardemo</module>
-	<module>run-time/samples/tictactoe</module>
-	<module>run-time/samples/fire-ajax-transaction</module>
-<!--
-	<module>run-time/samples/jmaki</module>
--->
-	<module>run-time/samples/simple-events</module>
-	<module>run-time/samples/simple-partial-update</module>
-	<module>run-time/samples/stock-faces</module>
-	<module>run-time/samples/dynafaces-getting-started</module>
-	<module>run-time/samples/flash</module>
-      </modules>
-    </profile>
-    <profile>
-      <id>site</id>
-      <modules>
-      </modules>
-    </profile>
-
-    <profile>
-      <id>simple-events</id>
-      <modules>
-	<module>maven/master-pom</module>
-	<module>run-time/common</module>
-	<module>run-time/avatar</module>
-	<module>run-time/samples/simple-events</module>
-      </modules>
-    </profile>
-
-    <profile>
-      <id>jmaki</id>
-      <modules>
-	<module>maven/master-pom</module>
-	<module>run-time/common</module>
-	<module>run-time/avatar</module>
-	<module>run-time/samples/jmaki</module>
-      </modules>
-    </profile>
-
-    <profile>
-      <id>cardemo</id>
-      <modules>
-	<module>maven/master-pom</module>
-	<module>run-time/common</module>
-	<module>run-time/avatar</module>
-	<module>run-time/samples/cardemo</module>
-      </modules>
-    </profile>
-
-
-  </profiles>
+            </modules>
+        </profile>
+    </profiles>
 </project>
-

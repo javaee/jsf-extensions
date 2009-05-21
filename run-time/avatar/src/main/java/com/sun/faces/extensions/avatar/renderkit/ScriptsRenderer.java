@@ -31,12 +31,12 @@ package com.sun.faces.extensions.avatar.renderkit;
 
 import com.sun.faces.extensions.avatar.lifecycle.AsyncResponse;
 import java.io.IOException;
+import java.util.Map;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.render.Renderer;
-import org.apache.shale.remoting.Mechanism;
-import org.apache.shale.remoting.XhtmlHelper;
+import javax.faces.context.ResponseWriter;
 import com.sun.faces.extensions.avatar.components.ScriptsComponent;
 import java.util.Map;
 
@@ -51,35 +51,14 @@ public class ScriptsRenderer extends Renderer {
     // take care of it.
     
     private static final String scriptIds[] = {
-        "/META-INF/libs/scriptaculous/version1.6.4/prototype",
-        "/META-INF/${pom.version}-${jar.version.extension}/com_sun_faces_ajax"
+        "/META-INF/libs/scriptaculous/version1.6.4/prototype.js",
+        "/META-INF/com_sun_faces_ajax.js"
     };    
     
     private static final String scriptLinkKeys[] = {
         ScriptsComponent.PROTOTYPE_JS_LINKED,
         ScriptsComponent.AJAX_JS_LINKED,  
     };
-    
-    private boolean didInit = false;
-
-    public void init() {
-        if (!didInit) {
-            String maxValue = FacesContext.getCurrentInstance().getExternalContext().
-   
-                getInitParameter("com.sun.faces.extensions.MAXIMIZE_RESOURCES");
-            boolean doMax = (null != maxValue) && 0 < maxValue.length() ? true : false;
-            for (int i = 0; i < scriptIds.length; i++) {
-                if (doMax) {
-                    scriptIds[i] = scriptIds[i] + "-max.js";
-                } else {
-                    scriptIds[i] = scriptIds[i] + ".js";
-                }
-            }
-            didInit = true;
-        }
-    }
-    
-    
     
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Renderer methods
@@ -97,26 +76,60 @@ public class ScriptsRenderer extends Renderer {
      */
     public void encodeBegin(FacesContext context, UIComponent component)
             throws IOException {
-        init();
-        
         if (!AsyncResponse.isAjaxRequest() && !java.beans.Beans.isDesignTime()) {
+	    ResponseWriter writer = context.getResponseWriter();
             for (int i = 0; i < scriptIds.length; i++) {
                 Map requestMap = context.getExternalContext().getRequestMap();
                 if (!requestMap.containsKey(scriptLinkKeys[i])) {
-                    getXhtmlHelper().linkJavascript(context, component, context.getResponseWriter(),
-                        Mechanism.CLASS_RESOURCE, scriptIds[i]);
+		    linkJavascript(context, component, writer, scriptIds[i]);
+//                    getXhtmlHelper().linkJavascript(context, component, context.getResponseWriter(),
+//                        Mechanism.CLASS_RESOURCE, scriptIds[i]);
                     requestMap.put(scriptLinkKeys[i], Boolean.TRUE);
                 }                
             }
         }
     }
     
-    private transient XhtmlHelper xHtmlHelper = null;
-    
-    private XhtmlHelper getXhtmlHelper() {
-        if (null == xHtmlHelper) {
-            xHtmlHelper = new XhtmlHelper();
-        }
-        return xHtmlHelper;
+    /**
+     *	<p> Directory scoped to share w/ the ScriptsRenderer.  This is a
+     *	    work-a-round method to do what I need to get done to get rid of
+     *	    shale.</p>
+     */
+    static void linkJavascript(FacesContext ctx, UIComponent comp, ResponseWriter writer, String script) throws IOException {
+	// Find the UIViewRoot (don't rely on it being set in the FacesContext)
+	UIComponent root = comp;
+	while (root.getParent() != null) {
+	    root = root.getParent();
+	}
+
+	// Generate a view specific id to mark this script as rendered
+	String resId = "" + comp.getAttributes().get("viewId") + script;
+	Map requestMap = ctx.getExternalContext().getRequestMap();
+	if (requestMap.get(resId) != null) {
+	    // Script already written, don't do it again
+	    return;
+	}
+
+	// Write the script
+	writer.startElement("script", comp);
+	writer.writeAttribute("type", "text/javascript", null);
+// FIXME: I am hard-coding "/resource" for now... b/c shale is behaving flakey
+//	  and has too many dependencies, perhaps if shale behaves I can use
+//	  it in the future, or write a more mappable solution.  Ideally Dynamic
+//	  Faces makes resource resolving plugable so that I can do this in a
+//	  clean way.
+	if (!script.startsWith("/")) {
+	    script = "/" + script;
+	}
+	if (script.startsWith("/META-INF/")) {
+	    script = script.substring(9);
+	}
+	writer.writeURIAttribute("src", ctx.getApplication().getViewHandler().
+		getResourceURL(ctx, "/resource" + script), null);
+	writer.endElement("script");
+	writer.write("\n");
+
+	// Mark
+	requestMap.put(resId, Boolean.TRUE);
     }
 }

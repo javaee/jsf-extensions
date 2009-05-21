@@ -30,6 +30,23 @@
   <build>
     <defaultGoal>install</defaultGoal>
     <plugins>
+                    <plugin>
+
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jar-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <configuration>
+                                    <classifier>jsftemplating</classifier>
+                                </configuration>
+
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
@@ -83,22 +100,6 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>javax.faces</groupId>
-      <artifactId>shale-remoting</artifactId>
-      <version>1.1.0-swdp-b</version>
-      <exclusions>
-        <exclusion>
-          <groupId>myfaces</groupId>
-          <artifactId>myfaces-api</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>myfaces</groupId>
-          <artifactId>myfaces-impl</artifactId>
-        </exclusion>
-      </exclusions>
-      <scope>provided</scope>
-    </dependency>  
-    <dependency>
       <groupId>com.sun.faces.extensions</groupId>
       <artifactId>jsf-extensions-dynamic-faces</artifactId>
       <version>${jar.full.version}</version>
@@ -129,25 +130,25 @@
       </activation>
       <modules>
 	<module>maven/master-pom</module>
+    <!--
 	<module>test-time</module>
 	<module>dev-time</module>
 	<module>run-time/common</module>
 	<module>run-time/flash</module>
+    -->
 	<module>run-time/avatar</module>
+<!--
 	<module>run-time/samples/blank-facelets</module>
 	<module>run-time/samples/blank-jsp</module>
-<!--
-	<module>run-time/samples/jmaki</module>
--->
 	<module>run-time/samples/cardemo</module>
 	<module>run-time/samples/flash</module>
 	<module>run-time/samples/tictactoe</module>
 	<module>run-time/samples/fire-ajax-transaction</module>
-	<module>run-time/samples/j1</module>
 	<module>run-time/samples/simple-events</module>
 	<module>run-time/samples/simple-partial-update</module>
 	<module>run-time/samples/stock-faces</module>
 	<module>run-time/samples/dynafaces-getting-started</module>
+-->
       </modules>
     </profile>
     <profile>

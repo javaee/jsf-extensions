@@ -1,0 +1,137 @@
+<%--
+    Document   : header
+    Created on : Feb 18, 2009, 2:36:42 PM
+    Author     : nbuser
+--%>
+
+
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+
+<%-- Set language based on user's choice --%>
+<c:if test="${sessionScope.language != null}">
+    <fmt:setLocale value="${sessionScope.language}" scope="session" />
+</c:if>
+
+
+<%@page contentType="text/html; charset=UTF-8"%>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+    <head>
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" type="text/css" href="/AffableBean/css/affablebean.css">
+        <link rel="shortcut icon" href="img/favicon.ico">
+
+        <script src="resources/jquery_1.2.6/jquery-1.2.6.js" type="text/javascript"></script>
+        <script src="resources/jquery_1.2.6/jquery.corners.js" type="text/javascript"></script>
+
+        <script type="text/javascript">
+                $(document).ready( function(){
+                    $('.rounded').corners();
+                });
+            </script>
+
+        <title><fmt:message key="title" /></title>
+    </head>
+    <body>
+        <div id="main">
+            <div id="header">
+                <div id="headerBar">
+
+<%--
+<div align="left" style="margin-left:60%;">
+    <strong>tests:</strong>
+    <br>sessionScope.language = <c:out value="${sessionScope.language}" />
+    <br>sessionScope.language ne 'cs' = <c:out value="${sessionScope.language ne 'cs'}" />
+    <br>sessionScope.language eq 'cs' = <c:out value="${sessionScope.language eq 'cs'}" />
+</div>
+--%>
+
+                    <div class="headerWidget">
+
+<%--
+
+Client browser requests languages in the following priority:
+
+    Use-case 1: 1.  cs
+                2.  en
+
+    Use-case 2: 1.  en  !! this is why you can't just have a cs bundle - browser will choose cs before default !!
+                2.  cs
+
+    Use-case 3: 1.  en
+
+    Use-case 4: 1.  cs
+
+    Use-case 5: [none]
+
+--%>
+
+                        <%-- Offer language choice to user --%>
+                            <c:choose>
+                                <c:when test="${sessionScope.language != 'cs'}">
+                                         <%-- ${sessionScope.language ne 'cs'} also works --%>
+
+<%-- This won't work! When client calls page w/o
+     making a selection, this test will always return
+     true, and the second test will always return false.
+
+     (i.e., testing use-case 4 above fails)
+
+     Here, it would be better to check for the actual
+     language by extracting it from the locale value --%>
+
+                                    <span class="rounded bubble">english</span>
+                                </c:when>
+                                <c:otherwise>
+                                    <a href="languageChoice?language=en">english</a>
+                                </c:otherwise>
+                            </c:choose> |
+                    
+                            <c:choose>
+                                <c:when test="${sessionScope.language == 'cs'}">
+                                         <%-- ${sessionScope.language eq 'cs'} also works --%>
+                                    <span class="rounded bubble">česky</span>
+                                </c:when>
+                                <c:otherwise>
+                                    <a href="languageChoice?language=cs">česky</a>
+                                </c:otherwise>
+                            </c:choose>
+
+                    </div>
+
+                    <div class="headerWidget">
+                        <a href="viewCart">
+                            <span class="cartMsg">view cart</span>
+                            <img src="img/cart.gif" alt="shopping cart icon" id="cart">
+                        </a>
+
+                        <span class="cartMsg">
+                          <%-- If 'numberOfItems' property doesn't exist, or if number of items
+                               in cart is 0, output '0', otherwise output 'numberOfItems' --%>
+                            <c:choose>
+                                <c:when test="${sessionScope.cart.numberOfItems == null}">
+                                    0
+                                </c:when>
+                                <c:otherwise>
+                                    ${sessionScope.cart.numberOfItems}
+                                </c:otherwise>
+                            </c:choose>
+
+                          <%-- If one item in cart, output 'item', otherwise output 'items' --%>
+                            <c:choose>
+                                <c:when test="${sessionScope.cart.numberOfItems == 1}">
+                                    item
+                                </c:when>
+                                <c:otherwise>
+                                    items
+                                </c:otherwise>
+                            </c:choose>
+                        </span>
+                    </div>
+                </div>
+
+                <a href="index.jsp"><img src="img/logoText.png" id="logoText" alt="the affable bean"></a>
+            </div>

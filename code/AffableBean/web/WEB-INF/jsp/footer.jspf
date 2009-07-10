@@ -9,9 +9,9 @@
                 <br>
                 <hr>
                 <p class="reallySmallText footerText">
-                    <a href="#"><fmt:message key="privacy" /></a>
+                    <a href="<c:url value="#"/>"><fmt:message key="privacy" /></a>
                     &nbsp;&nbsp;::&nbsp;&nbsp;
-                    <a href="#"><fmt:message key="contact" /></a>
+                    <a href="<c:url value="#"/>"><fmt:message key="contact" /></a>
                     &nbsp;&nbsp;&copy;&nbsp;&nbsp;
                     2009 the affable bean</p>
             </div>

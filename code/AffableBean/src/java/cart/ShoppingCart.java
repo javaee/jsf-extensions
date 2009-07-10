@@ -5,8 +5,6 @@
  * compliance with  the terms of the License at:
  * http://developer.sun.com/berkeley_license.html
  */
-
-
 package cart;
 
 import entity.Product;
@@ -14,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.HashMap;
 import java.util.List;
-
 
 public class ShoppingCart {
 
@@ -26,44 +23,44 @@ public class ShoppingCart {
         numberOfItems = 0;
     }
 
-    public void add(String productId, Product product, String qty) {
+    public void add(String productId, Product product, String quantity) {
 
         // cast quantity as int
-        int quantity = Integer.parseInt(qty);
+        int qty = Integer.parseInt(quantity);
 
         if (items.containsKey(productId)) {
             ShoppingCartItem scitem = (ShoppingCartItem) items.get(productId);
-            if (quantity == 1) {
+            if (qty == 1) {
                 scitem.incrementQuantity();
             } else {
-                scitem.setQuantity(scitem.getQuantity() + quantity);
+                scitem.setQuantity(scitem.getQuantity() + qty);
             }
         } else {
             ShoppingCartItem newItem = new ShoppingCartItem(product);
-            if (quantity > 1) {
-                newItem.setQuantity(quantity);
+            if (qty > 1) {
+                newItem.setQuantity(qty);
             }
             items.put(productId, newItem);
         }
     }
 
-    public void update(String productId, Product product, String qty) {
+    public void update(String productId, Product product, String quantity) {
 
         // cast quantity as int
-        int quantity = Integer.parseInt(qty);
+        int qty = Integer.parseInt(quantity);
 
         if (items.containsKey(productId)) {
             ShoppingCartItem scitem = (ShoppingCartItem) items.get(productId);
-            if (quantity != 0) {
+            if (qty != 0) {
                 // set item quantity to new value
-                scitem.setQuantity(quantity);
+                scitem.setQuantity(qty);
             } else {
                 // if quantity equals 0, remove from cart
                 Iterator iterator = (items.keySet()).iterator();
-                while(iterator.hasNext()) {
+                while (iterator.hasNext()) {
                     String key = iterator.next().toString();
                     ShoppingCartItem value = items.get(key);
-                    if(value.equals(scitem)){
+                    if (value.equals(scitem)) {
                         //if value exists in the map then print
                         items.remove(key);
                     }
@@ -71,8 +68,8 @@ public class ShoppingCart {
             }
         } else {
             ShoppingCartItem newItem = new ShoppingCartItem(product);
-            if (quantity > 1) {
-                newItem.setQuantity(quantity);
+            if (qty > 1) {
+                newItem.setQuantity(qty);
             }
             items.put(productId, newItem);
         }
@@ -106,8 +103,7 @@ public class ShoppingCart {
     public synchronized int getNumberOfItems() {
         numberOfItems = 0;
 
-        for (Iterator i = getItems()
-                              .iterator(); i.hasNext();) {
+        for (Iterator i = getItems().iterator(); i.hasNext();) {
             ShoppingCartItem item = (ShoppingCartItem) i.next();
             numberOfItems += item.getQuantity();
         }
@@ -118,13 +114,22 @@ public class ShoppingCart {
     public synchronized double getTotal() {
         double amount = 0.0;
 
-        for (Iterator i = getItems()
-                              .iterator(); i.hasNext();) {
+        for (Iterator i = getItems().iterator(); i.hasNext();) {
             ShoppingCartItem item = (ShoppingCartItem) i.next();
             Product productDetails = (Product) item.getItem();
 
             amount += (item.getQuantity() * productDetails.getPrice());
         }
+
+        return roundOff(amount);
+    }
+
+    public synchronized double getTotalPerItem(ShoppingCartItem item) {
+        double amount = 0.0;
+
+        Product productDetails = (Product) item.getItem();
+
+        amount = (item.getQuantity() * productDetails.getPrice());
 
         return roundOff(amount);
     }

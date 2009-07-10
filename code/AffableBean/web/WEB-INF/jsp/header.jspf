@@ -86,7 +86,10 @@ Client browser requests languages in the following priority:
                                     <span class="rounded bubble">english</span>
                                 </c:when>
                                 <c:otherwise>
-                                    <a href="languageChoice?language=en">english</a>
+                                    <c:url var="url" value="languageChoice">
+                                        <c:param name="language" value="en"/>
+                                    </c:url>
+                                    <a href="${url}">english</a>
                                 </c:otherwise>
                             </c:choose> |
                     
@@ -96,7 +99,10 @@ Client browser requests languages in the following priority:
                                     <span class="rounded bubble">česky</span>
                                 </c:when>
                                 <c:otherwise>
-                                    <a href="languageChoice?language=cs">česky</a>
+                                    <c:url var="url" value="languageChoice">
+                                        <c:param name="language" value="cs"/>
+                                    </c:url>
+                                    <a href="${url}">česky</a>
                                 </c:otherwise>
                             </c:choose>
 
@@ -112,17 +118,17 @@ Client browser requests languages in the following priority:
                           <%-- If 'numberOfItems' property doesn't exist, or if number of items
                                in cart is 0, output '0', otherwise output 'numberOfItems' --%>
                             <c:choose>
-                                <c:when test="${sessionScope.cart.numberOfItems == null}">
+                                <c:when test="${cart.numberOfItems == null}">
                                     0
                                 </c:when>
                                 <c:otherwise>
-                                    ${sessionScope.cart.numberOfItems}
+                                    ${cart.numberOfItems}
                                 </c:otherwise>
                             </c:choose>
 
-                          <%-- If one item in cart, output 'item', otherwise output 'items' --%>
+                          <%-- If only one item in cart, output 'item', otherwise output 'items' --%>
                             <c:choose>
-                                <c:when test="${sessionScope.cart.numberOfItems == 1}">
+                                <c:when test="${cart.numberOfItems == 1}">
                                     item
                                 </c:when>
                                 <c:otherwise>
@@ -133,5 +139,5 @@ Client browser requests languages in the following priority:
                     </div>
                 </div>
 
-                <a href="index.jsp"><img src="img/logoText.png" id="logoText" alt="the affable bean"></a>
+                <a href="<c:url value="index.jsp"/>"><img src="img/logoText.png" id="logoText" alt="the affable bean"></a>
             </div>

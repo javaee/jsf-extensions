@@ -22,7 +22,8 @@
                 id="selectedCategory"
              </c:if>>
 
-            <a href="category?<c:out value="${category.categoryId}"/>" class="categoryText">
+            <c:set var="url" value="category?${category.categoryId}"/>
+            <a href="${url}" class="categoryText">
                 <c:out value="${category.name}"/>
             </a>
         </div>
@@ -55,16 +56,19 @@
                 <td class="${((iter.index % 2) == 0) ? 'even' : 'odd'}">
 
                     <form action="addToCart" method="post">
-                        <input type="hidden" name="productId" value="<c:out value="${product.productId}"/>">
-                        <input type="text" maxlength="2" size="2" value="1" name="quantity" style="margin:5px">
-                        <input type="submit" name="submit" value="<fmt:message key="addToCart" />">
+                        <input type="hidden"
+                                           name="productId"
+                                           value="<c:out value="${product.productId}"/>">
+                        <input type="text"
+                                           maxlength="2"
+                                           size="2"
+                                           value="1"
+                                           name="quantity"
+                                           style="margin:5px">
+                        <input type="submit"
+                                           name="submit"
+                                           value="<fmt:message key="addToCart"/>">
                     </form>
-
-                    <%-- test to determine if the previous action was adding an item to cart [NOT REQUIRED]
-
-                    <c:if test="${requestScope['javax.servlet.forward.servlet_path'] == \"/addToCart\"}"></c:if>
-
-                    --%>
 
                 </td>
             </tr>

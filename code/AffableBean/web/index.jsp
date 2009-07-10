@@ -29,7 +29,8 @@
 
         <div class="categoryBox">
 
-            <a href="category?<c:out value="${category.categoryId}"/>">
+            <c:set var="url" value="category?${category.categoryId}"/>
+            <a href="${url}">
 
                 <span class="categoryLabel">
                     <c:out value="${category.name}"/>

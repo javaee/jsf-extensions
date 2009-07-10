@@ -54,7 +54,6 @@ public class Dispatcher extends HttpServlet {
 
         String clear;
 
-
         if (cart == null) {
             cart = new ShoppingCart();
             session.setAttribute("cart", cart);
@@ -89,41 +88,29 @@ public class Dispatcher extends HttpServlet {
                 session.setAttribute("categoryProducts", categoryProducts);
             }
 
-            // use RequestDispatcher to forward request
-            // internally to: '/WEB-INF/jsp/category.jsp'
-            String url = "/WEB-INF/jsp/category.jsp";
-
-            try {
-                request.getRequestDispatcher(url).forward(request, response);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-
+            // if shopping cart page is requested
         } else if (requestedPath.equals("/viewCart")) {
+
+            requestedPath = "/cart";
 
             clear = request.getParameter("clear");
 
             if ((clear != null) && clear.equals("true")) {
                 cart.clear();
             }
-            
-            String url = "/WEB-INF/jsp/cart.jsp";
 
-            try {
-                request.getRequestDispatcher(url).forward(request, response);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-
+            // if checkout page is requested
         } else if (requestedPath.equals("/checkout")) {
+            // TODO
+        }
 
-            String url = "/WEB-INF/jsp/checkout.jsp";
+        // use RequestDispatcher to forward request internally
+        String url = "/WEB-INF/jsp" + requestedPath + ".jsp";
 
-            try {
-                request.getRequestDispatcher(url).forward(request, response);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
+        try {
+            request.getRequestDispatcher(url).forward(request, response);
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -147,6 +134,8 @@ public class Dispatcher extends HttpServlet {
         // if addToCart action is called
         if (requestedPath.equals("/addToCart")) {
 
+            requestedPath = "/category";
+
             // get categoryId from request
             String productId = request.getParameter("productId");
             String quantity = request.getParameter("quantity");
@@ -164,19 +153,10 @@ public class Dispatcher extends HttpServlet {
                 }
             }
 
-            // use RequestDispatcher to forward request
-            // internally to: '/WEB-INF/jsp/category.jsp'
-            String url = "/WEB-INF/jsp/category.jsp";
+            // if updateCart action is called
+        } else if (requestedPath.equals("/updateCart")) {
 
-            try {
-                request.getRequestDispatcher(url).forward(request, response);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
-
-        // if updateCart action is called
-        if (requestedPath.equals("/updateCart")) {
+            requestedPath = "/cart";
 
             // get categoryId from request
             String productId = request.getParameter("productId");
@@ -194,16 +174,15 @@ public class Dispatcher extends HttpServlet {
                     System.out.println("Unable to update cart: " + ex.getMessage());
                 }
             }
+        }
+        
+        // use RequestDispatcher to forward request internally
+        String url = "/WEB-INF/jsp" + requestedPath + ".jsp";
 
-            // use RequestDispatcher to forward request
-            // internally to: '/WEB-INF/jsp/category.jsp'
-            String url = "/WEB-INF/jsp/cart.jsp";
-
-            try {
-                request.getRequestDispatcher(url).forward(request, response);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
+        try {
+            request.getRequestDispatcher(url).forward(request, response);
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 }

@@ -9,6 +9,8 @@
 
 package cart;
 
+import entity.Product;
+
 public class ShoppingCartItem {
     Object item;
     int quantity;
@@ -36,5 +38,22 @@ public class ShoppingCartItem {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public double getTotal(Product product) {
+
+        double amount = 0.0;
+
+        Product productDetails = (Product) this.getItem();
+
+        amount = (this.getQuantity() * productDetails.getPrice());
+
+        return roundOff(amount);
+    }
+
+    private double roundOff(double x) {
+        long val = Math.round(x * 100); // cents
+
+        return val / 100.0;
     }
 }

@@ -23,28 +23,31 @@ public class ShoppingCart {
         numberOfItems = 0;
     }
 
-    public void add(String productId, Product product, String quantity) {
+    public synchronized void add(String productId, Product product, String quantity) {
 
         // cast quantity as int
+/* better validation is required for this! parseInt throws NumberFormatException */
         int qty = Integer.parseInt(quantity);
 
-        if (items.containsKey(productId)) {
-            ShoppingCartItem scitem = (ShoppingCartItem) items.get(productId);
-            if (qty == 1) {
-                scitem.incrementQuantity();
+        if (qty > 0) {
+            if (items.containsKey(productId)) {
+                ShoppingCartItem scitem = (ShoppingCartItem) items.get(productId);
+                if (qty == 1) {
+                    scitem.incrementQuantity();
+                } else {
+                    scitem.setQuantity(scitem.getQuantity() + qty);
+                }
             } else {
-                scitem.setQuantity(scitem.getQuantity() + qty);
+                ShoppingCartItem newItem = new ShoppingCartItem(product);
+                if (qty > 1) {
+                    newItem.setQuantity(qty);
+                }
+                items.put(productId, newItem);
             }
-        } else {
-            ShoppingCartItem newItem = new ShoppingCartItem(product);
-            if (qty > 1) {
-                newItem.setQuantity(qty);
-            }
-            items.put(productId, newItem);
         }
     }
 
-    public void update(String productId, Product product, String quantity) {
+    public synchronized void update(String productId, Product product, String quantity) {
 
         // cast quantity as int
         int qty = Integer.parseInt(quantity);
@@ -57,21 +60,20 @@ public class ShoppingCart {
             } else {
                 // if quantity equals 0, remove from cart
                 Iterator iterator = (items.keySet()).iterator();
+
+                String keyMatch = "";
+                
                 while (iterator.hasNext()) {
                     String key = iterator.next().toString();
                     ShoppingCartItem value = items.get(key);
                     if (value.equals(scitem)) {
-                        //if value exists in the map then print
-                        items.remove(key);
+                        // retain key
+                        keyMatch = key;
                     }
                 } //end while loop
+
+                items.remove(keyMatch);
             }
-        } else {
-            ShoppingCartItem newItem = new ShoppingCartItem(product);
-            if (qty > 1) {
-                newItem.setQuantity(qty);
-            }
-            items.put(productId, newItem);
         }
     }
 
@@ -120,16 +122,6 @@ public class ShoppingCart {
 
             amount += (item.getQuantity() * productDetails.getPrice());
         }
-
-        return roundOff(amount);
-    }
-
-    public synchronized double getTotalPerItem(ShoppingCartItem item) {
-        double amount = 0.0;
-
-        Product productDetails = (Product) item.getItem();
-
-        amount = (item.getQuantity() * productDetails.getPrice());
 
         return roundOff(amount);
     }

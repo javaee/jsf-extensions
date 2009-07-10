@@ -18,8 +18,11 @@
 <div id="cartColumn">
 
     <c:choose>
-        <c:when test="${cart.numberOfItems != 0}">
+        <c:when test="${cart.numberOfItems > 1}">
             <p>Your shopping cart contains ${cart.numberOfItems} items.</p>
+        </c:when>
+        <c:when test="${cart.numberOfItems == 1}">
+            <p>Your shopping cart contains ${cart.numberOfItems} item.</p>
         </c:when>
         <c:otherwise>
             <p>Your shopping cart is empty.</p>
@@ -88,7 +91,7 @@
 
                         <%-- try to use cart.roundOff instead somehow: --%>
                         <%-- product.price * item.quantity * 100/100 --%>
-                        $ <c:out value="${cart.totalPerItem[item]}"/>
+                        $ <c:out value="${product.price * item.quantity * 100/100}"/>
                         <br>
                         <span class="smallText">( $ <c:out value="${product.price}"/> / unit )</span>
                     </td>

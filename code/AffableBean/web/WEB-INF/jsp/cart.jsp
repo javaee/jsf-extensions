@@ -13,6 +13,7 @@
 
 <c:set var="cart" value="${sessionScope.cart}"/>
 
+
 <%-- HTML markup starts below --%>
 
 <div id="cartColumn">
@@ -88,10 +89,7 @@
                         <c:out value="${product.name}"/>
                     </td>
                     <td class="${((iter.index % 2) == 0) ? 'even' : 'odd'}">
-
-                        <%-- try to use cart.roundOff instead somehow: --%>
-                        <%-- product.price * item.quantity * 100/100 --%>
-                        $ <c:out value="${product.price * item.quantity * 100/100}"/>
+                        $ <c:out value="${item.total}"/>
                         <br>
                         <span class="smallText">( $ <c:out value="${product.price}"/> / unit )</span>
                     </td>

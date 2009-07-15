@@ -12,7 +12,7 @@ body {
     width: 850px;
     position: relative;
     text-align: center;    /* required for IE */
-    margin: 30px auto;
+    margin: 20px auto;
     color: #444;
 }
 
@@ -25,19 +25,10 @@ hr {
 }
 
 table {
-    width: 600px;
     margin: 0 20px;
     border-spacing: 0;
     text-align: center;
     border: solid 1px #f5eabe;
-}
-
-tr {
-    height: 90px;
-}
-
-td {
-    width: 145px;
 }
 
 a {
@@ -55,6 +46,14 @@ a:visited {
 
 img {
     border: none;
+}
+
+input, select {
+    margin: 5px;
+}
+
+li {
+    margin: 10px 0;
 }
 
 
@@ -182,13 +181,9 @@ a span.cartMsg:hover {
 .categoryButton {
     margin: 15px 25px;
     line-height: 50px;
+    display: block;
     background-color: #d3ede8;
-}
-
-.categoryText {
-    color: inherit;
     font-size: x-large;
-    vertical-align: middle;
 }
 
 a.categoryText:hover {
@@ -196,9 +191,16 @@ a.categoryText:hover {
 }
 
 #productTable {
+    width: 600px;
+    
     /* styles to collaborate with rounded categoryLabel */
     position: relative;
     z-index: 1;
+}
+
+#productTable td {
+    width: 145px;
+    height: 90px;
 }
 
 #selectedCategory {
@@ -229,17 +231,64 @@ a.categoryText:hover {
     width: 750px;
 }
 
+#cartTable td {
+    width: 145px;
+    height: 90px;
+}
+
 .header {
     background-color: #c3e3e0;
     height: 30px;
 }
 
 
-/* styles specific to footer */
+/* checkout page styles */
+#checkoutTable {
+    width: 271px;
+    padding: 10px;
+    background-color: #f5eabe;
+    float: left;
+}
+
+#checkoutTable td {
+    vertical-align: top;
+    text-align: right;
+    line-height: 30px;
+    width: 100px;
+    margin: 5px;
+}
+
+#infoBox {
+    padding: 10px 120px 0 350px;
+}
+
+#priceBox {
+    padding: 10px;
+    border: 1px solid #c3e3e0;
+    background-color: #c3e3e0;
+}
+
+#priceBox td {
+    text-align: right;
+    padding: 5px;
+}
+
+.priceColumn {
+    width: 80px;
+    font-weight: bold;
+}
+
+.total {
+    border-top: 1px solid #444;
+}
+
+
+/* footer styles */
 #footer {
     width: 350px;
     height: 60px;
     clear: both;
+    padding-top: 10px;
 }
 
 .footerText {
@@ -247,9 +296,19 @@ a.categoryText:hover {
 }
 
 
+/* admin styles */
+#loginBox {
+    width: 300px;
+    margin: 0 auto 30px;
+    border: solid 1px #f5eabe;
+    background-color: #f5eabe;
+}
+
+
 /* general styles */
 #main {
     background: #f7f7e9;
+    padding-bottom: 10px;
 }
 
 .smallText {
@@ -277,4 +336,9 @@ a.categoryText:hover {
 
 .hMargin {
     margin: 0 30px;
+}
+
+.error {
+    color: #c00;
+    line-height: 50px;
 }

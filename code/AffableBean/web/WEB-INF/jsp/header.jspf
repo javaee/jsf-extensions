@@ -40,7 +40,7 @@
             <div id="header">
                 <div id="headerBar">
 
-<%--
+                    <%--
 <div align="left" style="margin-left:60%;">
     <strong>tests:</strong>
     <br>sessionScope.language = <c:out value="${sessionScope.language}" />

@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 Sun Microsystems, Inc.
+ * Copyright 2009 Sun Microsystems, Inc.
  * All rights reserved.  You may not modify, use,
  * reproduce, or distribute this software except in
  * compliance with  the terms of the License at:
@@ -10,7 +10,7 @@
 package exceptions;
 
 
-/** This application exception indicates that a book
+/** This application exception indicates that a product
  *  has not been found.
  */
 public class ProductNotFoundException extends Exception {

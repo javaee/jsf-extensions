@@ -40,8 +40,7 @@ public class ShoppingCartItem {
         this.quantity = quantity;
     }
 
-    public double getTotal(Product product) {
-
+    public double getTotal() {
         double amount = 0.0;
 
         Product productDetails = (Product) this.getItem();

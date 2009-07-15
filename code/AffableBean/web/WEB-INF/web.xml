@@ -11,11 +11,6 @@
         <servlet-class>dispatcher.Dispatcher</servlet-class>
     </servlet>
 
-    <servlet>
-        <servlet-name>LanguageChooser</servlet-name>
-        <servlet-class>dispatcher.LanguageChooser</servlet-class>
-    </servlet>
-
     <servlet-mapping>
         <servlet-name>Dispatcher</servlet-name>
         <url-pattern>/addToCart</url-pattern>
@@ -23,10 +18,6 @@
         <url-pattern>/updateCart</url-pattern>
         <url-pattern>/viewCart</url-pattern>
         <url-pattern>/checkout</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>LanguageChooser</servlet-name>
         <url-pattern>/languageChoice</url-pattern>
     </servlet-mapping>
 
@@ -55,14 +46,58 @@
     </resource-ref>
     -->
 
+    <error-page>
+        <error-code>404</error-code>
+        <location>/WEB-INF/jsp/error.jsp</location>
+    </error-page>
+
     <jsp-config>
         <jsp-property-group>
-            <url-pattern>*.jsp</url-pattern>
+            <url-pattern>/index.jsp</url-pattern>
+            <url-pattern>/WEB-INF/jsp/*</url-pattern>
             <include-prelude>/WEB-INF/jsp/header.jspf</include-prelude>
-        </jsp-property-group>
-        <jsp-property-group>
-            <url-pattern>*.jsp</url-pattern>
             <include-coda>/WEB-INF/jsp/footer.jspf</include-coda>
         </jsp-property-group>
     </jsp-config>
+
+    <security-constraint>
+        <display-name>Checkout</display-name>
+        <web-resource-collection>
+            <web-resource-name>Checkout</web-resource-name>
+            <url-pattern>/checkout</url-pattern>
+            <http-method>GET</http-method>
+            </web-resource-collection>
+        <user-data-constraint>
+            <description/>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
+
+    <security-constraint>
+        <display-name>Admin</display-name>
+        <web-resource-collection>
+            <web-resource-name>Affable Bean Administration</web-resource-name>
+            <url-pattern>/admin/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>adminUser</role-name>
+        </auth-constraint>
+        <user-data-constraint>
+            <transport-guarantee>NONE</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
+
+    <login-config>
+        <auth-method>FORM</auth-method>
+        <realm-name>file</realm-name>
+        <form-login-config>
+            <form-login-page>/admin/login.jsp</form-login-page>
+            <form-error-page>/admin/error.jsp</form-error-page>
+        </form-login-config>
+    </login-config>
+
+    <security-role>
+        <description>administration priviledges granted for shop catalog</description>
+        <role-name>adminUser</role-name>
+    </security-role>
 </web-app>

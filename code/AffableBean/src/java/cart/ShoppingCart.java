@@ -8,6 +8,7 @@
 package cart;
 
 import entity.Product;
+import exceptions.BadInputException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.HashMap;
@@ -23,11 +24,17 @@ public class ShoppingCart {
         numberOfItems = 0;
     }
 
-    public synchronized void add(String productId, Product product, String quantity) {
+    public synchronized void add(String productId, Product product, String quantity)
+            throws BadInputException {
 
-        // cast quantity as int
-/* better validation is required for this! parseInt throws NumberFormatException */
-        int qty = Integer.parseInt(quantity);
+        int qty = -1;
+
+        try {
+            // cast quantity as int
+            qty = Integer.parseInt(quantity);
+        } catch (NumberFormatException nfe) {
+            System.err.println("Input could not be parsed as Integer. " + nfe.getMessage());
+        }
 
         if (qty > 0) {
             if (items.containsKey(productId)) {
@@ -44,36 +51,49 @@ public class ShoppingCart {
                 }
                 items.put(productId, newItem);
             }
+        } else {
+            throw new BadInputException("Bad input: " + qty);
         }
     }
 
-    public synchronized void update(String productId, Product product, String quantity) {
+    public synchronized void update(String productId, Product product, String quantity)
+            throws BadInputException {
 
-        // cast quantity as int
-        int qty = Integer.parseInt(quantity);
+        int qty = -1;
 
-        if (items.containsKey(productId)) {
-            ShoppingCartItem scitem = (ShoppingCartItem) items.get(productId);
-            if (qty != 0) {
-                // set item quantity to new value
-                scitem.setQuantity(qty);
-            } else {
-                // if quantity equals 0, remove from cart
-                Iterator iterator = (items.keySet()).iterator();
+        try {
+            // cast quantity as int
+            qty = Integer.parseInt(quantity);
+        } catch (NumberFormatException nfe) {
+            System.err.println("Input could not be parsed as Integer. " + nfe.getMessage());
+        }
 
-                String keyMatch = "";
-                
-                while (iterator.hasNext()) {
-                    String key = iterator.next().toString();
-                    ShoppingCartItem value = items.get(key);
-                    if (value.equals(scitem)) {
-                        // retain key
-                        keyMatch = key;
-                    }
-                } //end while loop
+        if (qty >= 0) {
+            if (items.containsKey(productId)) {
+                ShoppingCartItem scitem = (ShoppingCartItem) items.get(productId);
+                if (qty != 0) {
+                    // set item quantity to new value
+                    scitem.setQuantity(qty);
+                } else {
+                    // if quantity equals 0, remove from cart
+                    Iterator iterator = (items.keySet()).iterator();
 
-                items.remove(keyMatch);
+                    String keyMatch = "";
+
+                    while (iterator.hasNext()) {
+                        String key = iterator.next().toString();
+                        ShoppingCartItem value = items.get(key);
+                        if (value.equals(scitem)) {
+                            // retain key
+                            keyMatch = key;
+                        }
+                    } //end while loop
+
+                    items.remove(keyMatch);
+                }
             }
+        } else {
+            throw new BadInputException("Bad input: " + qty);
         }
     }
 

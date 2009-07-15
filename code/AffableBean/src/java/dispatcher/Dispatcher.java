@@ -4,6 +4,7 @@ import cart.ShoppingCart;
 import database.AffableBeanDBAO;
 import entity.Category;
 import entity.Product;
+import exceptions.BadInputException;
 import exceptions.CategoryNotFoundException;
 import exceptions.ProductNotFoundException;
 import exceptions.ProductsNotFoundException;
@@ -27,7 +28,6 @@ public class Dispatcher extends HttpServlet {
     private Category selectedCategory;
     private List categoryProducts;
     private ShoppingCart cart;
-    private HttpSession session;
     private String requestedPath;
 
     @Override
@@ -48,7 +48,7 @@ public class Dispatcher extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        session = request.getSession();
+        HttpSession session = request.getSession();
         requestedPath = request.getServletPath();
         cart = (ShoppingCart) session.getAttribute("cart");
 
@@ -67,25 +67,28 @@ public class Dispatcher extends HttpServlet {
 
             if (categoryId != null) {
 
-                // get selected category
-                try {
-                    selectedCategory = affableBeanDBAO.getCategory(categoryId);
-                } catch (CategoryNotFoundException ex) {
-                    System.out.println("Unable to get category: " + ex.getMessage());
+                // synchronize HttpSession object to protect session attributes
+                synchronized (session) {
+                    // get selected category
+                    try {
+                        selectedCategory = affableBeanDBAO.getCategory(categoryId);
+                    } catch (CategoryNotFoundException cnfe) {
+                        System.err.println("Unable to get category. " + cnfe.getMessage());
+                    }
+
+                    // place selected category in session scope
+                    session.setAttribute("selectedCategory", selectedCategory);
+
+                    // get all products for selected category
+                    try {
+                        categoryProducts = affableBeanDBAO.getCategoryProducts(categoryId);
+                    } catch (ProductsNotFoundException pnfe) {
+                        System.err.println("Unable to get products. " + pnfe.getMessage());
+                    }
+
+                    // place category products in session scope
+                    session.setAttribute("categoryProducts", categoryProducts);
                 }
-
-                // place selected category in session scope
-                session.setAttribute("selectedCategory", selectedCategory);
-
-                // get all products for selected category
-                try {
-                    categoryProducts = affableBeanDBAO.getCategoryProducts(categoryId);
-                } catch (ProductsNotFoundException ex) {
-                    System.out.println("Unable to get products: " + ex.getMessage());
-                }
-
-                // place category products in request scope
-                session.setAttribute("categoryProducts", categoryProducts);
             }
 
             // if shopping cart page is requested
@@ -101,7 +104,28 @@ public class Dispatcher extends HttpServlet {
 
             // if checkout page is requested
         } else if (requestedPath.equals("/checkout")) {
+
             // TODO
+
+        } else if (requestedPath.equals("/languageChoice")) {
+
+            // change this!
+            requestedPath = "/category";
+
+            // get language choice
+            String language = request.getParameter("language");
+
+            // place in session scope
+            session.setAttribute("language", language);
+
+//        // return user from whence s/he came
+//        // note: this doesn't work - getting the referer isn't reliable
+//        String url = request.getHeader("Referer");
+//        System.out.println(url);
+//
+//        url = url.substring(url.lastIndexOf('/'));
+//        System.out.println(url);
+
         }
 
         // use RequestDispatcher to forward request internally
@@ -125,9 +149,14 @@ public class Dispatcher extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        session = request.getSession();
+        HttpSession session = request.getSession();
+
         requestedPath = request.getServletPath();
         cart = (ShoppingCart) session.getAttribute("cart");
+
+        // get user input from request
+        String productId = request.getParameter("productId");
+        String quantity = request.getParameter("quantity");
 
         Product product;
 
@@ -136,10 +165,6 @@ public class Dispatcher extends HttpServlet {
 
             requestedPath = "/category";
 
-            // get categoryId from request
-            String productId = request.getParameter("productId");
-            String quantity = request.getParameter("quantity");
-
             if (!productId.equals("") && !quantity.equals("")) {
 
                 try {
@@ -147,9 +172,13 @@ public class Dispatcher extends HttpServlet {
 
                     cart.add(productId, product, quantity);
 
-                } catch (ProductNotFoundException ex) {
+                } catch (BadInputException bne) {
 
-                    System.out.println("Unable to add product to cart: " + ex.getMessage());
+                    System.err.println("Unable to complete addToCart action. " + bne.getMessage());
+
+                } catch (ProductNotFoundException pnfe) {
+
+                    System.err.println("Unable to add product to cart. " + pnfe.getMessage());
                 }
             }
 
@@ -158,10 +187,6 @@ public class Dispatcher extends HttpServlet {
 
             requestedPath = "/cart";
 
-            // get categoryId from request
-            String productId = request.getParameter("productId");
-            String quantity = request.getParameter("quantity");
-
             if (!productId.equals("") && !quantity.equals("")) {
 
                 try {
@@ -169,13 +194,20 @@ public class Dispatcher extends HttpServlet {
 
                     cart.update(productId, product, quantity);
 
-                } catch (ProductNotFoundException ex) {
+                } catch (BadInputException bne) {
 
-                    System.out.println("Unable to update cart: " + ex.getMessage());
+                    System.err.println("Unable to complete updateCart action. " + bne.getMessage());
+
+                } catch (ProductNotFoundException pnfe) {
+
+                    System.err.println("Unable to update cart. " + pnfe.getMessage());
                 }
             }
+        } else if (requestedPath.equals("/purchase")) {
+
+            // TODO
         }
-        
+
         // use RequestDispatcher to forward request internally
         String url = "/WEB-INF/jsp" + requestedPath + ".jsp";
 

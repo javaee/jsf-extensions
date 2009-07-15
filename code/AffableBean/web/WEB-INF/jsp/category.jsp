@@ -16,17 +16,19 @@
 
     <c:forEach var="category" items="${affableBeanDB.categories}">
 
-        <div class="categoryButton rounded"
-
-             <c:if test="${category.name == selectedCategory.name}">
-                id="selectedCategory"
-             </c:if>>
-
-            <c:set var="url" value="category?${category.categoryId}"/>
-            <a href="${url}" class="categoryText">
-                <c:out value="${category.name}"/>
-            </a>
-        </div>
+        <c:choose>
+            <c:when test="${category.name == selectedCategory.name}">
+                <div class="categoryButton rounded" id="selectedCategory">
+                    <c:out value="${category.name}"/>
+                </div>
+            </c:when>
+            <c:otherwise>
+                <c:set var="url" value="category?${category.categoryId}"/>
+                <a href="${url}" class="categoryButton rounded">
+                    <c:out value="${category.name}"/>
+                </a>
+            </c:otherwise>
+        </c:choose>
 
     </c:forEach>
 
@@ -55,7 +57,7 @@
                 </td>
                 <td class="${((iter.index % 2) == 0) ? 'even' : 'odd'}">
 
-                    <form action="addToCart" method="post">
+                    <form action="<c:url value="addToCart" />" method="post">
                         <input type="hidden"
                                            name="productId"
                                            value="<c:out value="${product.productId}"/>">

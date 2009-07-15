@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 Sun Microsystems, Inc.
+ * Copyright 2009 Sun Microsystems, Inc.
  * All rights reserved.  You may not modify, use,
  * reproduce, or distribute this software except in
  * compliance with  the terms of the License at:
@@ -10,7 +10,8 @@
 package exceptions;
 
 
-/** This application exception indicates that an order cannot be completed.
+/** This application exception indicates that an order
+ *  cannot be completed.
  */
 public class OrderException extends Exception {
     public OrderException() {

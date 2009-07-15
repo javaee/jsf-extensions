@@ -10,14 +10,15 @@
 package exceptions;
 
 
-/** This application exception indicates that a book
- *  has not been found.
+/** This application exception indicates that user
+ *  input could not be properly interpreted as a number.
+ *
  */
-public class ProductsNotFoundException extends Exception {
-    public ProductsNotFoundException() {
+public class BadInputException extends Exception {
+    public BadInputException() {
     }
 
-    public ProductsNotFoundException(String msg) {
+    public BadInputException(String msg) {
         super(msg);
     }
 }

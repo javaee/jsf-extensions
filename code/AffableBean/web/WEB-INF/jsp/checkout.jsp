@@ -27,31 +27,40 @@
                 <td>first name:</td>
                 <td>
                     <input type="text"
-                                     size="20"
-                                     maxlength="30"
-                                     name="firstName">
+                           size="20"
+                           maxlength="30"
+                           name="firstName">
                 </td>
             </tr>
             <tr>
                 <td>last name:</td>
                 <td>
                     <input type="text"
-                                     size="20"
-                                     maxlength="30"
-                                     name="lastName">
+                           size="20"
+                           maxlength="30"
+                           name="lastName">
+                </td>
+            </tr>
+            <tr>
+                <td>telephone:</td>
+                <td>
+                    <input type="text"
+                           size="20"
+                           maxlength="30"
+                           name="phone">
                 </td>
             </tr>
             <tr>
                 <td>address:</td>
                 <td>
                     <input type="text"
-                                     size="20"
-                                     maxlength="30"
-                                     name="address1">
+                           size="20"
+                           maxlength="30"
+                           name="address1">
                     <input type="text"
-                                     size="20"
-                                     maxlength="30"
-                                     name="address2">
+                           size="20"
+                           maxlength="30"
+                           name="address2">
                     Prague <select>
                                <option>1</option>
                                <option>2</option>
@@ -76,10 +85,9 @@
                 <td>credit card:</td>
                 <td>
                     <input type="text"
-                                     size="19"
-                                     maxlength="19"
-                                     name="ccNumber"
-                                     disabled>
+                           size="19"
+                           maxlength="19"
+                           name="ccNumber">
                 </td>
             </tr>
             <tr>
@@ -94,7 +102,7 @@
 
         <ul>
             <li>Next-day delivery is guaranteed.</li>
-            <li>A $5.00 delivery surcharge is applied to all purchase orders.</li>
+            <li>A $3.00 delivery surcharge is applied to all purchase orders.</li>
         </ul>
 
         <table id="priceBox" class="rounded">
@@ -104,12 +112,12 @@
             </tr>
             <tr>
                 <td>delivery surcharge:</td>
-                <td class="priceColumn">$ 5.00</td>
+                <td class="priceColumn">$ 3.00</td>
             </tr>
             <tr></tr>
             <tr>
                 <td class="total">total:</td>
-                <td class="total priceColumn">$ <c:out value="${cart.total + 5}"/></td>
+                <td class="total priceColumn">$ <c:out value="${cart.total + 3.00}"/></td>
             </tr>
         </table>
     </div>

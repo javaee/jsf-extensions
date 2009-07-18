@@ -18,6 +18,7 @@
         <url-pattern>/updateCart</url-pattern>
         <url-pattern>/viewCart</url-pattern>
         <url-pattern>/checkout</url-pattern>
+        <url-pattern>/purchase</url-pattern>
         <url-pattern>/languageChoice</url-pattern>
     </servlet-mapping>
 

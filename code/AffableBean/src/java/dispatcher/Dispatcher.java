@@ -105,8 +105,9 @@ public class Dispatcher extends HttpServlet {
             // if checkout page is requested
         } else if (requestedPath.equals("/checkout")) {
 
-            // TODO
-
+            // forward to /WEB-INF/jsp/checkout.jsp
+            // switch to https protocol
+            
         } else if (requestedPath.equals("/languageChoice")) {
 
             // change this!
@@ -121,6 +122,9 @@ public class Dispatcher extends HttpServlet {
 //        // return user from whence s/he came
 //        // note: this doesn't work - getting the referer isn't reliable
 //        String url = request.getHeader("Referer");
+
+//        String url = request.getContextPath();  !try this!
+
 //        System.out.println(url);
 //
 //        url = url.substring(url.lastIndexOf('/'));
@@ -203,9 +207,19 @@ public class Dispatcher extends HttpServlet {
                     System.err.println("Unable to update cart. " + pnfe.getMessage());
                 }
             }
+
+            // if purchase action is called
         } else if (requestedPath.equals("/purchase")) {
 
-            // TODO
+            // extract user data from request
+            String name = request.getParameter("name");
+            String email = request.getParameter("email");
+            String phone = request.getParameter("phone");
+            String address = request.getParameter("address");
+            String cityRegion = request.getParameter("cityRegion");
+            String ccNumber = request.getParameter("ccNumber");
+
+            
         }
 
         // use RequestDispatcher to forward request internally

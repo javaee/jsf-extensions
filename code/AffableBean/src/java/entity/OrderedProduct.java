@@ -21,17 +21,17 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "ordered_product")
-@NamedQueries({@NamedQuery(name = "OrderedProduct.findAll", query = "SELECT o FROM OrderedProduct o"), @NamedQuery(name = "OrderedProduct.findByOrderId", query = "SELECT o FROM OrderedProduct o WHERE o.orderedProductPK.orderId = :orderId"), @NamedQuery(name = "OrderedProduct.findByProductId", query = "SELECT o FROM OrderedProduct o WHERE o.orderedProductPK.productId = :productId"), @NamedQuery(name = "OrderedProduct.findByQuantity", query = "SELECT o FROM OrderedProduct o WHERE o.quantity = :quantity")})
+@NamedQueries({@NamedQuery(name = "OrderedProduct.findAll", query = "SELECT o FROM OrderedProduct o"), @NamedQuery(name = "OrderedProduct.findByCustorderId", query = "SELECT o FROM OrderedProduct o WHERE o.orderedProductPK.custorderId = :custorderId"), @NamedQuery(name = "OrderedProduct.findByProductId", query = "SELECT o FROM OrderedProduct o WHERE o.orderedProductPK.productId = :productId"), @NamedQuery(name = "OrderedProduct.findByQuantity", query = "SELECT o FROM OrderedProduct o WHERE o.quantity = :quantity")})
 public class OrderedProduct implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected OrderedProductPK orderedProductPK;
     @Column(name = "quantity")
     private Short quantity;
-    @JoinColumn(name = "order_id", referencedColumnName = "order_id", insertable = false, updatable = false)
+    @JoinColumn(name = "custorder_id", referencedColumnName = "id", insertable = false, updatable = false)
     @ManyToOne(optional = false)
-    private Order1 order1;
-    @JoinColumn(name = "product_id", referencedColumnName = "product_id", insertable = false, updatable = false)
+    private CustomerOrder customerOrder;
+    @JoinColumn(name = "product_id", referencedColumnName = "id", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Product product;
 
@@ -42,8 +42,8 @@ public class OrderedProduct implements Serializable {
         this.orderedProductPK = orderedProductPK;
     }
 
-    public OrderedProduct(int orderId, int productId) {
-        this.orderedProductPK = new OrderedProductPK(orderId, productId);
+    public OrderedProduct(int custorderId, int productId) {
+        this.orderedProductPK = new OrderedProductPK(custorderId, productId);
     }
 
     public OrderedProductPK getOrderedProductPK() {
@@ -62,12 +62,12 @@ public class OrderedProduct implements Serializable {
         this.quantity = quantity;
     }
 
-    public Order1 getOrder1() {
-        return order1;
+    public CustomerOrder getCustomerOrder() {
+        return customerOrder;
     }
 
-    public void setOrder1(Order1 order1) {
-        this.order1 = order1;
+    public void setCustomerOrder(CustomerOrder customerOrder) {
+        this.customerOrder = customerOrder;
     }
 
     public Product getProduct() {

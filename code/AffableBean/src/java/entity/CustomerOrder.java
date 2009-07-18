@@ -6,6 +6,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
@@ -15,8 +16,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -29,9 +28,9 @@ import javax.persistence.TemporalType;
  * @author troy
  */
 @Entity
-@Table(name = "product")
-@NamedQueries({@NamedQuery(name = "Product.findAll", query = "SELECT p FROM Product p"), @NamedQuery(name = "Product.findById", query = "SELECT p FROM Product p WHERE p.id = :id"), @NamedQuery(name = "Product.findByName", query = "SELECT p FROM Product p WHERE p.name = :name"), @NamedQuery(name = "Product.findByPrice", query = "SELECT p FROM Product p WHERE p.price = :price"), @NamedQuery(name = "Product.findByLastUpdate", query = "SELECT p FROM Product p WHERE p.lastUpdate = :lastUpdate")})
-public class Product implements Serializable {
+@Table(name = "customer_order")
+@NamedQueries({@NamedQuery(name = "CustomerOrder.findAll", query = "SELECT c FROM CustomerOrder c"), @NamedQuery(name = "CustomerOrder.findById", query = "SELECT c FROM CustomerOrder c WHERE c.id = :id"), @NamedQuery(name = "CustomerOrder.findByCustomerId", query = "SELECT c FROM CustomerOrder c WHERE c.customerId = :customerId"), @NamedQuery(name = "CustomerOrder.findByAmount", query = "SELECT c FROM CustomerOrder c WHERE c.amount = :amount"), @NamedQuery(name = "CustomerOrder.findByCreateDate", query = "SELECT c FROM CustomerOrder c WHERE c.createDate = :createDate")})
+public class CustomerOrder implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,33 +38,28 @@ public class Product implements Serializable {
     @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
-    @Column(name = "name")
-    private String name;
+    @Column(name = "customer_id")
+    private int customerId;
+    @Column(name = "amount")
+    private BigDecimal amount;
     @Basic(optional = false)
-    @Column(name = "price")
-    private double price;
-    @Basic(optional = false)
-    @Column(name = "last_update")
+    @Column(name = "create_date")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date lastUpdate;
-    @JoinColumn(name = "category_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    private Category categoryId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
+    private Date createDate;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "customerOrder")
     private List<OrderedProduct> orderedProductList;
 
-    public Product() {
+    public CustomerOrder() {
     }
 
-    public Product(Integer id) {
+    public CustomerOrder(Integer id) {
         this.id = id;
     }
 
-    public Product(Integer id, String name, double price, Date lastUpdate) {
+    public CustomerOrder(Integer id, int customerId, Date createDate) {
         this.id = id;
-        this.name = name;
-        this.price = price;
-        this.lastUpdate = lastUpdate;
+        this.customerId = customerId;
+        this.createDate = createDate;
     }
 
     public Integer getId() {
@@ -76,36 +70,28 @@ public class Product implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public int getCustomerId() {
+        return customerId;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setCustomerId(int customerId) {
+        this.customerId = customerId;
     }
 
-    public double getPrice() {
-        return price;
+    public BigDecimal getAmount() {
+        return amount;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
     }
 
-    public Date getLastUpdate() {
-        return lastUpdate;
+    public Date getCreateDate() {
+        return createDate;
     }
 
-    public void setLastUpdate(Date lastUpdate) {
-        this.lastUpdate = lastUpdate;
-    }
-
-    public Category getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(Category categoryId) {
-        this.categoryId = categoryId;
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
 
     public List<OrderedProduct> getOrderedProductList() {
@@ -126,10 +112,10 @@ public class Product implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Product)) {
+        if (!(object instanceof CustomerOrder)) {
             return false;
         }
-        Product other = (Product) object;
+        CustomerOrder other = (CustomerOrder) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -138,7 +124,7 @@ public class Product implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.Product[id=" + id + "]";
+        return "entity.CustomerOrder[id=" + id + "]";
     }
 
 }

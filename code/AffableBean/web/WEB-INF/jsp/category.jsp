@@ -19,14 +19,18 @@
         <c:choose>
             <c:when test="${category.name == selectedCategory.name}">
                 <div class="categoryButton rounded" id="selectedCategory">
-                    <c:out value="${category.name}"/>
+                    <span class="categoryText">
+                        <fmt:message key="${category.name}"/>
+                    </span>
                 </div>
             </c:when>
             <c:otherwise>
-                <c:set var="url" value="category?${category.categoryId}"/>
-                <a href="${url}" class="categoryButton rounded">
-                    <c:out value="${category.name}"/>
-                </a>
+                <c:set var="url" value="category?${category.id}"/>
+                <div class="categoryButton rounded">
+                    <a href="${url}" class="categoryText">
+                        <fmt:message key="${category.name}"/>
+                    </a>
+                </div>
             </c:otherwise>
         </c:choose>
 
@@ -38,7 +42,7 @@
 
     <p id="categoryTitle">
         <span style="background-color: #f5eabe; padding: 7px; position: relative;"
-              class="rounded"><c:out value="${selectedCategory.name}" /></span>
+              class="rounded"><fmt:message key="${selectedCategory.name}" /></span>
     </p>
 
     <table id="productTable">
@@ -59,17 +63,17 @@
 
                     <form action="<c:url value="addToCart" />" method="post">
                         <input type="hidden"
-                                           name="productId"
-                                           value="<c:out value="${product.productId}"/>">
+                               name="productId"
+                               value="<c:out value="${product.id}"/>">
                         <input type="text"
-                                           maxlength="2"
-                                           size="2"
-                                           value="1"
-                                           name="quantity"
-                                           style="margin:5px">
+                               maxlength="2"
+                               size="2"
+                               value="1"
+                               name="quantity"
+                               style="margin:5px">
                         <input type="submit"
-                                           name="submit"
-                                           value="<fmt:message key="addToCart"/>">
+                               name="submit"
+                               value="<fmt:message key="addToCart"/>">
                     </form>
 
                 </td>

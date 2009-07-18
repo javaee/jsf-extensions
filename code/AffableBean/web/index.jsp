@@ -29,7 +29,7 @@
 
         <div class="categoryBox">
 
-            <c:set var="url" value="category?${category.categoryId}"/>
+            <c:set var="url" value="category?${category.id}"/>
             <a href="${url}">
 
                 <span class="categoryLabel">

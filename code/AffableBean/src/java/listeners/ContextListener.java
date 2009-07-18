@@ -27,7 +27,7 @@ public final class ContextListener implements ServletContextListener {
             AffableBeanDBAO affableBeanDBAO = new AffableBeanDBAO(emf);
             context.setAttribute("affableBeanDBAO", affableBeanDBAO);
         } catch (Exception ex) {
-            System.out.println(
+            System.err.println(
                     "Couldn't create AffableBean database bean: "
                     + ex.getMessage());
         }

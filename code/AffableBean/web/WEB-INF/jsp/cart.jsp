@@ -98,7 +98,7 @@
                         <form action="updateCart" method="post">
                             <input type="hidden"
                                                 name="productId"
-                                                value="<c:out value="${product.productId}"/>">
+                                                value="<c:out value="${product.id}"/>">
                             <input type="text"
                                                 maxlength="2"
                                                 size="2"

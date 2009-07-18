@@ -24,25 +24,25 @@
     <table id="checkoutTable" class="rounded">
         <form action="purchase" method="post">
             <tr>
-                <td>first name:</td>
+                <td>name:</td>
                 <td>
                     <input type="text"
                            size="20"
                            maxlength="30"
-                           name="firstName">
+                           name="name">
                 </td>
             </tr>
             <tr>
-                <td>last name:</td>
+                <td>email:</td>
                 <td>
                     <input type="text"
                            size="20"
                            maxlength="30"
-                           name="lastName">
+                           name="email">
                 </td>
             </tr>
             <tr>
-                <td>telephone:</td>
+                <td>phone:</td>
                 <td>
                     <input type="text"
                            size="20"
@@ -56,28 +56,25 @@
                     <input type="text"
                            size="20"
                            maxlength="30"
-                           name="address1">
-                    <input type="text"
-                           size="20"
-                           maxlength="30"
-                           name="address2">
-                    Prague <select>
-                               <option>1</option>
-                               <option>2</option>
-                               <option>3</option>
-                               <option>4</option>
-                               <option>5</option>
-                               <option>6</option>
-                               <option>7</option>
-                               <option>8</option>
-                               <option>9</option>
-                               <option>10</option>
-                               <option>11</option>
-                               <option>12</option>
-                               <option>13</option>
-                               <option>14</option>
-                               <option>15</option>
-                               <option>16</option>
+                           name="address">
+
+                    Prague <select name="cityRegion">
+                               <option value="1">1</option>
+                               <option value="2">2</option>
+                               <option value="3">3</option>
+                               <option value="4">4</option>
+                               <option value="5">5</option>
+                               <option value="6">6</option>
+                               <option value="7">7</option>
+                               <option value="8">8</option>
+                               <option value="9">9</option>
+                               <option value="10">10</option>
+                               <option value="11">11</option>
+                               <option value="12">12</option>
+                               <option value="13">13</option>
+                               <option value="14">14</option>
+                               <option value="15">15</option>
+                               <option value="16">16</option>
                            </select>
                 </td>
             </tr>
@@ -85,7 +82,7 @@
                 <td>credit card:</td>
                 <td>
                     <input type="text"
-                           size="19"
+                           size="20"
                            maxlength="19"
                            name="ccNumber">
                 </td>

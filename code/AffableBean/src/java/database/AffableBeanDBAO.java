@@ -57,7 +57,7 @@ public class AffableBeanDBAO {
         // PK for Category is of type Short, so convert categoryId to Short
         Short cid = Short.parseShort(categoryId);
 
-        c.setCategoryId(cid);
+        c.setId(cid);
 
         try {
 

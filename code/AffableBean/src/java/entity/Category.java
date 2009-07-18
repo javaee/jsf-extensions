@@ -28,14 +28,14 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "category")
-@NamedQueries({@NamedQuery(name = "Category.findAll", query = "SELECT c FROM Category c"), @NamedQuery(name = "Category.findByCategoryId", query = "SELECT c FROM Category c WHERE c.categoryId = :categoryId"), @NamedQuery(name = "Category.findByName", query = "SELECT c FROM Category c WHERE c.name = :name"), @NamedQuery(name = "Category.findByImagePath", query = "SELECT c FROM Category c WHERE c.imagePath = :imagePath"), @NamedQuery(name = "Category.findByLastUpdate", query = "SELECT c FROM Category c WHERE c.lastUpdate = :lastUpdate")})
+@NamedQueries({@NamedQuery(name = "Category.findAll", query = "SELECT c FROM Category c"), @NamedQuery(name = "Category.findById", query = "SELECT c FROM Category c WHERE c.id = :id"), @NamedQuery(name = "Category.findByName", query = "SELECT c FROM Category c WHERE c.name = :name"), @NamedQuery(name = "Category.findByImagePath", query = "SELECT c FROM Category c WHERE c.imagePath = :imagePath"), @NamedQuery(name = "Category.findByLastUpdate", query = "SELECT c FROM Category c WHERE c.lastUpdate = :lastUpdate")})
 public class Category implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "category_id")
-    private Short categoryId;
+    @Column(name = "id")
+    private Short id;
     @Basic(optional = false)
     @Column(name = "name")
     private String name;
@@ -52,23 +52,23 @@ public class Category implements Serializable {
     public Category() {
     }
 
-    public Category(Short categoryId) {
-        this.categoryId = categoryId;
+    public Category(Short id) {
+        this.id = id;
     }
 
-    public Category(Short categoryId, String name, String imagePath, Date lastUpdate) {
-        this.categoryId = categoryId;
+    public Category(Short id, String name, String imagePath, Date lastUpdate) {
+        this.id = id;
         this.name = name;
         this.imagePath = imagePath;
         this.lastUpdate = lastUpdate;
     }
 
-    public Short getCategoryId() {
-        return categoryId;
+    public Short getId() {
+        return id;
     }
 
-    public void setCategoryId(Short categoryId) {
-        this.categoryId = categoryId;
+    public void setId(Short id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -106,7 +106,7 @@ public class Category implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (categoryId != null ? categoryId.hashCode() : 0);
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
@@ -117,7 +117,7 @@ public class Category implements Serializable {
             return false;
         }
         Category other = (Category) object;
-        if ((this.categoryId == null && other.categoryId != null) || (this.categoryId != null && !this.categoryId.equals(other.categoryId))) {
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -125,7 +125,7 @@ public class Category implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.Category[categoryId=" + categoryId + "]";
+        return "entity.Category[id=" + id + "]";
     }
 
 }

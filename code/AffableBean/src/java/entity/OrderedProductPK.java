@@ -17,8 +17,8 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class OrderedProductPK implements Serializable {
     @Basic(optional = false)
-    @Column(name = "order_id")
-    private int orderId;
+    @Column(name = "custorder_id")
+    private int custorderId;
     @Basic(optional = false)
     @Column(name = "product_id")
     private int productId;
@@ -26,17 +26,17 @@ public class OrderedProductPK implements Serializable {
     public OrderedProductPK() {
     }
 
-    public OrderedProductPK(int orderId, int productId) {
-        this.orderId = orderId;
+    public OrderedProductPK(int custorderId, int productId) {
+        this.custorderId = custorderId;
         this.productId = productId;
     }
 
-    public int getOrderId() {
-        return orderId;
+    public int getCustorderId() {
+        return custorderId;
     }
 
-    public void setOrderId(int orderId) {
-        this.orderId = orderId;
+    public void setCustorderId(int custorderId) {
+        this.custorderId = custorderId;
     }
 
     public int getProductId() {
@@ -50,7 +50,7 @@ public class OrderedProductPK implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (int) orderId;
+        hash += (int) custorderId;
         hash += (int) productId;
         return hash;
     }
@@ -62,7 +62,7 @@ public class OrderedProductPK implements Serializable {
             return false;
         }
         OrderedProductPK other = (OrderedProductPK) object;
-        if (this.orderId != other.orderId) {
+        if (this.custorderId != other.custorderId) {
             return false;
         }
         if (this.productId != other.productId) {
@@ -73,7 +73,7 @@ public class OrderedProductPK implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.OrderedProductPK[orderId=" + orderId + ", productId=" + productId + "]";
+        return "entity.OrderedProductPK[custorderId=" + custorderId + ", productId=" + productId + "]";
     }
 
 }

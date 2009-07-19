@@ -85,7 +85,7 @@ li {
     float: left;
 }
 
-.cartMsg {
+.cartMsg, .cartQuantity {
     float: left;
     padding: 0 5px;
 }

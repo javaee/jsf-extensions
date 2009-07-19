@@ -32,9 +32,15 @@
             $(document).ready( function(){
                 $('.rounded').corners();
 
-                $("div.categoryButton").hover(function () {
+                $('div.categoryButton').hover(function () {
+                    $(this).effect('highlight', {color: '#b2d2d2'});
+                });
+
+    <%--
+                $("span.cartQuantity").load(function () {
                     $(this).effect("highlight");
                 });
+    --%>
             });
         </script>
 
@@ -119,7 +125,7 @@ Client browser requests languages in the following priority:
                             <img src="img/cart.gif" alt="shopping cart icon" id="cart">
                         </a>
 
-                        <span class="cartMsg">
+                        <span class="cartQuantity">
                           <%-- If 'numberOfItems' property doesn't exist, or if number of items
                                in cart is 0, output '0', otherwise output 'numberOfItems' --%>
                             <c:choose>

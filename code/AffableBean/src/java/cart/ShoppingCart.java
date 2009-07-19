@@ -24,35 +24,14 @@ public class ShoppingCart {
         numberOfItems = 0;
     }
 
-    public synchronized void add(String productId, Product product, String quantity)
-            throws BadInputException {
+    public synchronized void add(String productId, Product product) {
 
-        int qty = -1;
-
-        try {
-            // cast quantity as int
-            qty = Integer.parseInt(quantity);
-        } catch (NumberFormatException nfe) {
-            System.err.println("Input could not be parsed as Integer. " + nfe.getMessage());
-        }
-
-        if (qty > 0) {
-            if (items.containsKey(productId)) {
-                ShoppingCartItem scitem = (ShoppingCartItem) items.get(productId);
-                if (qty == 1) {
-                    scitem.incrementQuantity();
-                } else {
-                    scitem.setQuantity(scitem.getQuantity() + qty);
-                }
-            } else {
-                ShoppingCartItem newItem = new ShoppingCartItem(product);
-                if (qty > 1) {
-                    newItem.setQuantity(qty);
-                }
-                items.put(productId, newItem);
-            }
+        if (items.containsKey(productId)) {
+            ShoppingCartItem scitem = (ShoppingCartItem) items.get(productId);
+            scitem.incrementQuantity();
         } else {
-            throw new BadInputException("Bad input: " + qty);
+            ShoppingCartItem newItem = new ShoppingCartItem(product);
+            items.put(productId, newItem);
         }
     }
 

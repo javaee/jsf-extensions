@@ -65,12 +65,6 @@
                         <input type="hidden"
                                name="productId"
                                value="<c:out value="${product.id}"/>">
-                        <input type="text"
-                               maxlength="2"
-                               size="2"
-                               value="1"
-                               name="quantity"
-                               style="margin:5px">
                         <input type="submit"
                                name="submit"
                                value="<fmt:message key="addToCart"/>">

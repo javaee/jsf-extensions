@@ -169,16 +169,12 @@ public class Dispatcher extends HttpServlet {
 
             requestedPath = "/category";
 
-            if (!productId.equals("") && !quantity.equals("")) {
+            if (!productId.equals("")) {
 
                 try {
                     product = affableBeanDBAO.getProduct(productId);
 
-                    cart.add(productId, product, quantity);
-
-                } catch (BadInputException bne) {
-
-                    System.err.println("Unable to complete addToCart action. " + bne.getMessage());
+                    cart.add(productId, product);
 
                 } catch (ProductNotFoundException pnfe) {
 

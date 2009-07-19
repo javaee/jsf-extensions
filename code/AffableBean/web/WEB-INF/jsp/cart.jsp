@@ -97,17 +97,17 @@
 
                         <form action="updateCart" method="post">
                             <input type="hidden"
-                                                name="productId"
-                                                value="<c:out value="${product.id}"/>">
+                                   name="productId"
+                                   value="<c:out value="${product.id}"/>">
                             <input type="text"
-                                                maxlength="2"
-                                                size="2"
-                                                value="${item.quantity}"
-                                                name="quantity"
-                                                style="margin:5px">
+                                   maxlength="2"
+                                   size="2"
+                                   value="${item.quantity}"
+                                   name="quantity"
+                                   style="margin:5px">
                             <input type="submit"
-                                                name="submit"
-                                                value="update">
+                                   name="submit"
+                                   value="update">
                         </form>
 
                     </td>

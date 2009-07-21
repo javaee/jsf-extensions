@@ -60,7 +60,7 @@ li {
 /* styles for elements contained in the header, i.e.,
    shopping cart, language widget, and logo */
 #header {
-    background: url(../img/logo.png) no-repeat 25px 20px;
+    background: url(../img/stalk.png) no-repeat 28px 28px;
     width: 850px;
     height: 250px;
 }
@@ -74,7 +74,8 @@ li {
 #logoText {
     /* font styles apply to text within alt tags */
     font-family: 'American Typewriter', Courier, monospace;
-    margin-top: 35px;
+    margin: 20px 0 0 70px;
+    float: left;
     font-size: 50px;
     color: #333;
 }
@@ -172,7 +173,7 @@ a span.cartMsg:hover {
 
 #categoryTitle {
     float: right;
-    margin: -30px 120px 0 0;
+    margin: -30px 180px 0 0;
     font-size: x-large;
 }
 
@@ -184,11 +185,13 @@ a span.cartMsg:hover {
 .categoryButton {
     margin: 15px 22px;
     padding: 13px;
+    display: block;
     background-color: #d3ede8;
 }
 
-a.categoryText:hover {
+a.categoryButton:hover {
     text-decoration: none;
+    /* background-color: #b2d2d2; */
 }
 
 #productTable {

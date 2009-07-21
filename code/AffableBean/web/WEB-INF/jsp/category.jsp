@@ -26,11 +26,11 @@
             </c:when>
             <c:otherwise>
                 <c:set var="url" value="category?${category.id}"/>
-                <div class="categoryButton rounded">
-                    <a href="${url}" class="categoryText">
+                <a href="${url}" class="categoryButton rounded">
+                    <div class="categoryText">
                         <fmt:message key="${category.name}"/>
-                    </a>
-                </div>
+                    </div>
+                </a>
             </c:otherwise>
         </c:choose>
 

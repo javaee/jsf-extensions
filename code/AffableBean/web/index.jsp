@@ -32,12 +32,11 @@
             <c:set var="url" value="category?${category.id}"/>
             <a href="${url}">
 
-                <span class="categoryLabel">
-                    <c:out value="${category.name}"/>
-                </span>
+                <span class="categoryLabel"></span>
+                <span class="categoryLabelText"><fmt:message key="${category.name}"/></span>
 
                 <img src="<c:out value="${category.imagePath}"/>"
-                     alt="<c:out value="${category.name}"/>"
+                     alt="<fmt:message key="${category.name}"/>"
                      class="categoryImage">
             </a>
         </div>

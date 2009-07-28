@@ -32,9 +32,15 @@
             $(document).ready(function(){
                 $('.rounded').corners();
 
-                $('a.categoryButton').hover(function () {
-                    $(this).effect('highlight', {color: '#b2d2d2'}, 'slow');
-                });
+                $('a.categoryButton').hover(
+                    function () {$(this).animate({backgroundColor: '#b2d2d2'})},
+                    function () {$(this).animate({backgroundColor: '#d3ede8'})}
+                );
+
+                $('div.categoryBox').hover(
+                    function () {$(this.getElementsByTagName('span')[0]).animate({opacity: 0.3})},
+                    function () {$(this.getElementsByTagName('span')[0]).animate({opacity: 0.7})}
+                );
             });
         </script>
 

@@ -50,6 +50,7 @@ img {
 
 input, select {
     margin: 5px;
+    /*line-height: 30px;*/
 }
 
 li {
@@ -251,7 +252,7 @@ a.categoryButton:hover {
 
 /* checkout page styles */
 #checkoutTable {
-    width: 271px;
+    width: 340px;
     padding: 10px;
     background-color: #f5eabe;
     float: left;
@@ -260,13 +261,12 @@ a.categoryButton:hover {
 #checkoutTable td {
     vertical-align: top;
     text-align: right;
-    line-height: 30px;
-    width: 100px;
+    width: 80px;
     margin: 5px;
 }
 
 #infoBox {
-    padding: 10px 120px 0 350px;
+    padding: 10px 90px 0 400px;
 }
 
 #priceBox {
@@ -347,5 +347,5 @@ a.categoryButton:hover {
 
 .error {
     color: #c00;
-    line-height: 50px;
+    /* line-height: 50px; */
 }

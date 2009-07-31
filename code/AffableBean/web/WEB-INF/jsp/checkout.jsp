@@ -12,6 +12,42 @@
 <c:set var="cart" value="${sessionScope.cart}"/>
 
 
+<script src="js/jquery.validate.js" type="text/javascript"></script>
+
+<style type="text/css">
+    error { line-height: inherit; !important }
+    label { line-height: 30px; }
+    label.error { font-size: smaller; line-height: 20px; font-style: italic; }
+    input.error { border: 1px dotted; line-height: 20px; }
+</style>
+
+<script>
+
+    $(document).ready(function(){
+        $("#checkoutForm").validate({
+            rules: {
+                name: "required",
+                email: {
+                    required: true,
+                    email: true
+                },
+                phone: {
+                    required: true,
+                    minlength: 5
+                },
+                address: {
+                    required: true
+                },
+                creditcard: {
+                    required: true,
+                    creditcard: true
+                }
+            }
+        });
+    });
+</script>
+
+
 <%-- HTML markup starts below --%>
 
 <div id="cartColumn">
@@ -21,70 +57,79 @@
     <p>In order to purchase the items in your shopping cart, please provide us with
         the following information:</p>
 
-    <table id="checkoutTable" class="rounded">
-        <form action="purchase" method="post">
+    <form id="checkoutForm" action="purchase" method="post">
+        <table id="checkoutTable" class="rounded">
             <tr>
-                <td>name:</td>
+                <td><label for="name">name:</label></td>
                 <td>
                     <input type="text"
-                           size="20"
+                           size="28"
                            maxlength="30"
-                           name="name">
+                           name="name"
+                           id="name"
+                           class="required">
                 </td>
             </tr>
             <tr>
-                <td>email:</td>
+                <td><label for="email">email:</label></td>
                 <td>
                     <input type="text"
-                           size="20"
+                           size="28"
                            maxlength="30"
-                           name="email">
+                           name="email"
+                           id="email"
+                           class="email required">
                 </td>
             </tr>
             <tr>
-                <td>phone:</td>
+                <td><label for="phone">phone:</label></td>
                 <td>
                     <input type="text"
-                           size="20"
+                           size="28"
                            maxlength="30"
-                           name="phone">
+                           name="phone"
+                           id="phone">
                 </td>
             </tr>
             <tr>
-                <td>address:</td>
+                <td><label for="address">address:</label></td>
                 <td>
                     <input type="text"
-                           size="20"
+                           size="28"
                            maxlength="30"
-                           name="address">
+                           name="address"
+                           id="address">
 
+                    <br>
                     Prague <select name="cityRegion">
-                               <option value="1">1</option>
-                               <option value="2">2</option>
-                               <option value="3">3</option>
-                               <option value="4">4</option>
-                               <option value="5">5</option>
-                               <option value="6">6</option>
-                               <option value="7">7</option>
-                               <option value="8">8</option>
-                               <option value="9">9</option>
-                               <option value="10">10</option>
-                               <option value="11">11</option>
-                               <option value="12">12</option>
-                               <option value="13">13</option>
-                               <option value="14">14</option>
-                               <option value="15">15</option>
-                               <option value="16">16</option>
-                           </select>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        <option value="13">13</option>
+                        <option value="14">14</option>
+                        <option value="15">15</option>
+                        <option value="16">16</option>
+                    </select>
                 </td>
             </tr>
             <tr>
-                <td>credit card:</td>
+                <td><label for="creditcard">credit card:</label></td>
                 <td>
                     <input type="text"
-                           size="20"
+                           size="28"
                            maxlength="19"
-                           name="ccNumber">
+                           name="ccNumber"
+                           id="creditcard"
+                           class="creditcard">
                 </td>
             </tr>
             <tr>
@@ -92,8 +137,8 @@
                     <input type="submit" value="submit purchase">
                 </td>
             </tr>
-        </form>
-    </table>
+        </table>
+    </form>
 
     <div id="infoBox">
 

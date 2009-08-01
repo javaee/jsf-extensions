@@ -51,7 +51,8 @@
 
             <tr>
                 <td class="${((iter.index % 2) == 0) ? 'even' : 'odd'}">
-                    <c:out value="[ image ]"/>
+                    <img src="<c:out value="${product.imagePath}"/>"
+                        alt="<fmt:message key="${product.name}"/>">
                 </td>
                 <td class="${((iter.index % 2) == 0) ? 'even' : 'odd'}">
                     <c:out value="${product.name}"/>

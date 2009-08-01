@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS `customer` (
 -- Sample data for table `customer`
 --
 
-INSERT INTO `customer` VALUES(1, 'Fred', 'Savage',  '606-252-924', 'fsavage@gmail.com', 'Korunni 56', 2, '1234123412341234', '2009-04-04 20:39:01');
+INSERT INTO `customer` VALUES(1, 'Fred Savage', 'fsavage@gmail.com', '606-252-924', 'Korunni 56', 2, '1234123412341234', '2009-04-04 20:39:01');
 
 -- --------------------------------------------------------
 
@@ -108,6 +108,7 @@ CREATE TABLE `product` (
   `name` varchar(50) NOT NULL,
   `price` double NOT NULL,
   `category_id` tinyint(3) unsigned NOT NULL,
+  `image_path` varchar(100) NOT NULL,
   `last_update` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   PRIMARY KEY  (`id`),
   KEY `idx_category` (`category_id`)
@@ -117,22 +118,22 @@ CREATE TABLE `product` (
 -- Sample data for table `product`
 --
 
-INSERT INTO `product` VALUES(1, 'milk', 1.19, 1, '2009-04-04 20:39:01');
-INSERT INTO `product` VALUES(2, 'parmesan', 2.39, 1, '2009-04-04 20:39:02');
-INSERT INTO `product` VALUES(3, 'cheddar', 0.99, 1, '2009-04-04 20:39:02');
-INSERT INTO `product` VALUES(4, 'ice cream', 1.99, 1, '2009-04-04 20:39:02');
-INSERT INTO `product` VALUES(5, 'beef', 2.29, 2, '2009-04-04 20:39:02');
-INSERT INTO `product` VALUES(6, 'lamb', 3.49, 2, '2009-04-04 20:39:02');
-INSERT INTO `product` VALUES(7, 'paté', 4.09, 2, '2009-04-04 20:39:02');
-INSERT INTO `product` VALUES(8, 'sausages', 3.55, 2, '2009-04-04 20:39:02');
-INSERT INTO `product` VALUES(9, 'white loaf', 0.89, 3, '2009-04-04 20:39:02');
-INSERT INTO `product` VALUES(10, 'rye', 1.19, 3, '2009-04-04 20:39:02');
-INSERT INTO `product` VALUES(11, 'wholemeal loaf', 1.65, 3, '2009-04-04 20:39:02');
-INSERT INTO `product` VALUES(12, 'ciabatta', 2.39, 3, '2009-04-04 20:39:02');
-INSERT INTO `product` VALUES(13, 'apples', 0.29, 4, '2009-04-04 20:39:02');
-INSERT INTO `product` VALUES(14, 'bananas', 0.25, 4, '2009-04-04 20:39:02');
-INSERT INTO `product` VALUES(15, 'carrots', 0.19, 4, '2009-04-04 20:39:02');
-INSERT INTO `product` VALUES(16, 'turnips', 0.39, 4, '2009-04-04 20:39:02');
+INSERT INTO `product` VALUES(1, 'milk', 1.19, 1, 'img/productThumbs/blah.png', '2009-04-04 20:39:01');
+INSERT INTO `product` VALUES(2, 'parmesan', 2.39, 1, 'img/productThumbs/blah.png', '2009-04-04 20:39:02');
+INSERT INTO `product` VALUES(3, 'cheddar', 0.99, 1, 'img/productThumbs/blah.png', '2009-04-04 20:39:02');
+INSERT INTO `product` VALUES(4, 'ice cream', 1.99, 1, 'img/productThumbs/blah.png', '2009-04-04 20:39:02');
+INSERT INTO `product` VALUES(5, 'beef', 2.29, 2, 'img/productThumbs/blah.png', '2009-04-04 20:39:02');
+INSERT INTO `product` VALUES(6, 'lamb', 3.49, 2, 'img/productThumbs/blah.png', '2009-04-04 20:39:02');
+INSERT INTO `product` VALUES(7, 'paté', 4.09, 2, 'img/productThumbs/blah.png', '2009-04-04 20:39:02');
+INSERT INTO `product` VALUES(8, 'sausages', 3.55, 2, 'img/productThumbs/blah.png', '2009-04-04 20:39:02');
+INSERT INTO `product` VALUES(9, 'white loaf', 0.89, 3, 'img/productThumbs/blah.png', '2009-04-04 20:39:02');
+INSERT INTO `product` VALUES(10, 'rye', 1.19, 3, 'img/productThumbs/blah.png', '2009-04-04 20:39:02');
+INSERT INTO `product` VALUES(11, 'wholemeal loaf', 1.65, 3, 'img/productThumbs/blah.png', '2009-04-04 20:39:02');
+INSERT INTO `product` VALUES(12, 'ciabatta', 2.39, 3, 'img/productThumbs/blah.png', '2009-04-04 20:39:02');
+INSERT INTO `product` VALUES(13, 'apples', 0.29, 4, 'img/productThumbs/blah.png', '2009-04-04 20:39:02');
+INSERT INTO `product` VALUES(14, 'berries', 0.25, 4, 'img/productThumbs/berries.png', '2009-04-04 20:39:02');
+INSERT INTO `product` VALUES(15, 'carrots', 0.19, 4, 'img/productThumbs/blah.png', '2009-04-04 20:39:02');
+INSERT INTO `product` VALUES(16, 'turnips', 0.39, 4, 'img/productThumbs/blah.png', '2009-04-04 20:39:02');
 
 -- --------------------------------------------------------
 

@@ -30,7 +30,7 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "product")
-@NamedQueries({@NamedQuery(name = "Product.findAll", query = "SELECT p FROM Product p"), @NamedQuery(name = "Product.findById", query = "SELECT p FROM Product p WHERE p.id = :id"), @NamedQuery(name = "Product.findByName", query = "SELECT p FROM Product p WHERE p.name = :name"), @NamedQuery(name = "Product.findByPrice", query = "SELECT p FROM Product p WHERE p.price = :price"), @NamedQuery(name = "Product.findByLastUpdate", query = "SELECT p FROM Product p WHERE p.lastUpdate = :lastUpdate")})
+@NamedQueries({@NamedQuery(name = "Product.findAll", query = "SELECT p FROM Product p"), @NamedQuery(name = "Product.findById", query = "SELECT p FROM Product p WHERE p.id = :id"), @NamedQuery(name = "Product.findByName", query = "SELECT p FROM Product p WHERE p.name = :name"), @NamedQuery(name = "Product.findByPrice", query = "SELECT p FROM Product p WHERE p.price = :price"), @NamedQuery(name = "Product.findByImagePath", query = "SELECT p FROM Product p WHERE p.imagePath = :imagePath"), @NamedQuery(name = "Product.findByLastUpdate", query = "SELECT p FROM Product p WHERE p.lastUpdate = :lastUpdate")})
 public class Product implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -44,6 +44,9 @@ public class Product implements Serializable {
     @Basic(optional = false)
     @Column(name = "price")
     private double price;
+    @Basic(optional = false)
+    @Column(name = "image_path")
+    private String imagePath;
     @Basic(optional = false)
     @Column(name = "last_update")
     @Temporal(TemporalType.TIMESTAMP)
@@ -61,10 +64,11 @@ public class Product implements Serializable {
         this.id = id;
     }
 
-    public Product(Integer id, String name, double price, Date lastUpdate) {
+    public Product(Integer id, String name, double price, String imagePath, Date lastUpdate) {
         this.id = id;
         this.name = name;
         this.price = price;
+        this.imagePath = imagePath;
         this.lastUpdate = lastUpdate;
     }
 
@@ -90,6 +94,14 @@ public class Product implements Serializable {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 
     public Date getLastUpdate() {

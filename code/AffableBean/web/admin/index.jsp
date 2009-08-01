@@ -18,8 +18,8 @@
         <link rel="stylesheet" type="text/css" href="../css/affablebean.css">
         <link rel="shortcut icon" href="../img/favicon.ico">
 
-        <script src="../resources/jquery_1.2.6/jquery-1.2.6.js" type="text/javascript"></script>
-        <script src="../resources/jquery_1.2.6/jquery.corners.js" type="text/javascript"></script>
+        <script src="../js/jquery-1.3.2.js" type="text/javascript"></script>
+        <script src="../js/jquery.corners.js" type="text/javascript"></script>
 
         <script type="text/javascript">
             $(document).ready( function(){
@@ -35,7 +35,11 @@
             <div id="header">
                 <div id="headerBar"></div>
 
-                <a href="<c:url value="index.jsp"/>"><img src="../img/logoText.png" id="logoText" alt="the affable bean"></a>
+                <a href="<c:url value="../index.jsp"/>">
+                    <img src="../img/logo.png" alt="Affable Bean logo" style="float:left; margin-left: 30px; margin-top: -20px">
+                </a>
+
+                <img src="../img/logoText.png" id="logoText" alt="the affable bean">
             </div>
 
             <h2>admin console</h2>

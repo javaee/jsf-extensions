@@ -121,17 +121,17 @@ CREATE TABLE `product` (
 INSERT INTO `product` VALUES(1, 'milk', 1.19, 1, 'img/productThumbs/blah.png', '2009-04-04 20:39:01');
 INSERT INTO `product` VALUES(2, 'parmesan', 2.39, 1, 'img/productThumbs/blah.png', '2009-04-04 20:39:02');
 INSERT INTO `product` VALUES(3, 'cheddar', 0.99, 1, 'img/productThumbs/blah.png', '2009-04-04 20:39:02');
-INSERT INTO `product` VALUES(4, 'ice cream', 1.99, 1, 'img/productThumbs/blah.png', '2009-04-04 20:39:02');
+INSERT INTO `product` VALUES(4, 'iceCream', 1.99, 1, 'img/productThumbs/blah.png', '2009-04-04 20:39:02');
 INSERT INTO `product` VALUES(5, 'beef', 2.29, 2, 'img/productThumbs/blah.png', '2009-04-04 20:39:02');
 INSERT INTO `product` VALUES(6, 'lamb', 3.49, 2, 'img/productThumbs/blah.png', '2009-04-04 20:39:02');
 INSERT INTO `product` VALUES(7, 'paté', 4.09, 2, 'img/productThumbs/blah.png', '2009-04-04 20:39:02');
 INSERT INTO `product` VALUES(8, 'sausages', 3.55, 2, 'img/productThumbs/blah.png', '2009-04-04 20:39:02');
-INSERT INTO `product` VALUES(9, 'white loaf', 0.89, 3, 'img/productThumbs/blah.png', '2009-04-04 20:39:02');
+INSERT INTO `product` VALUES(9, 'whiteLoaf', 0.89, 3, 'img/productThumbs/blah.png', '2009-04-04 20:39:02');
 INSERT INTO `product` VALUES(10, 'rye', 1.19, 3, 'img/productThumbs/blah.png', '2009-04-04 20:39:02');
-INSERT INTO `product` VALUES(11, 'wholemeal loaf', 1.65, 3, 'img/productThumbs/blah.png', '2009-04-04 20:39:02');
+INSERT INTO `product` VALUES(11, 'wholemealLoaf', 1.65, 3, 'img/productThumbs/blah.png', '2009-04-04 20:39:02');
 INSERT INTO `product` VALUES(12, 'ciabatta', 2.39, 3, 'img/productThumbs/blah.png', '2009-04-04 20:39:02');
 INSERT INTO `product` VALUES(13, 'apples', 0.29, 4, 'img/productThumbs/blah.png', '2009-04-04 20:39:02');
-INSERT INTO `product` VALUES(14, 'berries', 0.25, 4, 'img/productThumbs/berries.png', '2009-04-04 20:39:02');
+INSERT INTO `product` VALUES(14, 'redCurrants', 0.25, 4, 'img/productThumbs/redCurrants.png', '2009-04-04 20:39:02');
 INSERT INTO `product` VALUES(15, 'carrots', 0.19, 4, 'img/productThumbs/blah.png', '2009-04-04 20:39:02');
 INSERT INTO `product` VALUES(16, 'turnips', 0.39, 4, 'img/productThumbs/blah.png', '2009-04-04 20:39:02');
 

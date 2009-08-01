@@ -4,6 +4,7 @@
     Author     : nbuser
 --%>
 
+<%@page contentType="text/html; charset=UTF-8"%> <%-- required for '€' sign --%>
 
 <jsp:useBean id="affableBeanDB" class="database.AffableBeanDB" scope="page" >
     <jsp:setProperty name="affableBeanDB" property="database" value="${affableBeanDBAO}" />
@@ -55,10 +56,10 @@
                         alt="<fmt:message key="${product.name}"/>">
                 </td>
                 <td class="${((iter.index % 2) == 0) ? 'even' : 'odd'}">
-                    <c:out value="${product.name}"/>
+                    <fmt:message key="${product.name}"/>
                 </td>
                 <td class="${((iter.index % 2) == 0) ? 'even' : 'odd'}">
-                    $ <c:out value="${product.price}"/> / unit
+                    € <c:out value="${product.price}"/> / unit
                 </td>
                 <td class="${((iter.index % 2) == 0) ? 'even' : 'odd'}">
 

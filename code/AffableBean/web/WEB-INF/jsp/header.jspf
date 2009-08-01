@@ -37,10 +37,20 @@
                     function () {$(this).animate({backgroundColor: '#d3ede8'})}
                 );
 
-                $('div.categoryBox').hover(
-                    function () {$(this.getElementsByTagName('span')[0]).animate({opacity: 0.3})},
-                    function () {$(this.getElementsByTagName('span')[0]).animate({opacity: 0.7})}
-                );
+                $('div.categoryBox').hover(over, out);
+
+                function over() {
+                    var span = this.getElementsByTagName('span');
+                    $(span[0]).animate({opacity: 0.3});
+                    $(span[1]).animate({color: 'white'});
+
+                }
+
+                function out() {
+                    var span = this.getElementsByTagName('span');
+                    $(span[0]).animate({opacity: 0.7});
+                    $(span[1]).animate({color: '#444'});
+                }
             });
         </script>
 

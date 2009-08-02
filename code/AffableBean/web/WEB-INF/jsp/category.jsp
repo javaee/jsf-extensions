@@ -53,7 +53,7 @@
             <tr>
                 <td class="${((iter.index % 2) == 0) ? 'even' : 'odd'}">
                     <img src="<c:out value="${product.imagePath}"/>"
-                        alt="<fmt:message key="${product.name}"/>">
+                        alt="image of <fmt:message key="${product.name}"/>">
                 </td>
                 <td class="${((iter.index % 2) == 0) ? 'even' : 'odd'}">
                     <fmt:message key="${product.name}"/>

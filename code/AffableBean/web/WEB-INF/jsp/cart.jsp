@@ -5,7 +5,7 @@
 --%>
 
 
-<%@page contentType="text/html; charset=UTF-8"%> <%-- required for 'proceed to checkout' arrow --%>
+<%@page contentType="text/html; charset=UTF-8"%> <%-- required for '➟' and '€' signs --%>
 
 <jsp:useBean id="affableBeanDB" class="database.AffableBeanDB" scope="page" >
     <jsp:setProperty name="affableBeanDB" property="database" value="${affableBeanDBAO}" />
@@ -66,7 +66,7 @@
 
     <c:if test="${cart.numberOfItems != 0}">
 
-        <h4 id="subtotal">subtotal: $ <c:out value="${cart.total}"/></h4>
+        <h4 id="subtotal">subtotal: € <c:out value="${cart.total}"/></h4>
 
         <table id="cartTable">
 
@@ -90,9 +90,9 @@
                         <fmt:message key="${product.name}"/>
                     </td>
                     <td class="${((iter.index % 2) == 0) ? 'even' : 'odd'}">
-                        $ <c:out value="${item.total}"/>
+                        € <c:out value="${item.total}"/>
                         <br>
-                        <span class="smallText">( $ <c:out value="${product.price}"/> / unit )</span>
+                        <span class="smallText">( € <c:out value="${product.price}"/> / unit )</span>
                     </td>
                     <td class="${((iter.index % 2) == 0) ? 'even' : 'odd'}">
 

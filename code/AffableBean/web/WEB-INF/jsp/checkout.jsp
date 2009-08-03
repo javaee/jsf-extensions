@@ -5,6 +5,8 @@
 --%>
 
 
+<%@page contentType="text/html; charset=UTF-8"%> <%-- required for '€' sign --%>
+
 <jsp:useBean id="affableBeanDB" class="database.AffableBeanDB" scope="page" >
     <jsp:setProperty name="affableBeanDB" property="database" value="${affableBeanDBAO}" />
 </jsp:useBean>
@@ -21,7 +23,7 @@
     input.error { border: 1px dotted; line-height: 20px; }
 </style>
 
-<script>
+<script type="text/javascript">
 
     $(document).ready(function(){
         $("#checkoutForm").validate({
@@ -144,22 +146,22 @@
 
         <ul>
             <li>Next-day delivery is guaranteed.</li>
-            <li>A $3.00 delivery surcharge is applied to all purchase orders.</li>
+            <li>A € 3.00 delivery surcharge is applied to all purchase orders.</li>
         </ul>
 
         <table id="priceBox" class="rounded">
             <tr>
                 <td>subtotal:</td>
-                <td class="priceColumn">$ <c:out value="${cart.total}"/></td>
+                <td class="priceColumn">€ <c:out value="${cart.total}"/></td>
             </tr>
             <tr>
                 <td>delivery surcharge:</td>
-                <td class="priceColumn">$ 3.00</td>
+                <td class="priceColumn">€ 3.00</td>
             </tr>
             <tr></tr>
             <tr>
                 <td class="total">total:</td>
-                <td class="total priceColumn">$ <c:out value="${cart.total + 3.00}"/></td>
+                <td class="total priceColumn">€ <c:out value="${cart.total + 3.00}"/></td>
             </tr>
         </table>
     </div>

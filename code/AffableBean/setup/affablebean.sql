@@ -118,22 +118,22 @@ CREATE TABLE `product` (
 -- Sample data for table `product`
 --
 
-INSERT INTO `product` VALUES(1, 'milk', 1.19, 1, 'img/productThumbs/blah.png', '2009-04-04 20:39:01');
+INSERT INTO `product` VALUES(1, 'milk', 1.19, 1, 'img/productThumbs/milk.png', '2009-04-04 20:39:01');
 INSERT INTO `product` VALUES(2, 'cheese', 2.39, 1, 'img/productThumbs/cheese.png', '2009-04-04 20:39:02');
-INSERT INTO `product` VALUES(3, 'cheddar', 0.99, 1, 'img/productThumbs/blah.png', '2009-04-04 20:39:02');
+INSERT INTO `product` VALUES(3, 'butter', 0.99, 1, 'img/productThumbs/butter.png', '2009-04-04 20:39:02');
 INSERT INTO `product` VALUES(4, 'eggs', 1.99, 1, 'img/productThumbs/eggs.png', '2009-04-04 20:39:02');
 INSERT INTO `product` VALUES(5, 'meatPatties', 2.29, 2, 'img/productThumbs/meatPatties.png', '2009-04-04 20:39:02');
-INSERT INTO `product` VALUES(6, 'lamb', 3.49, 2, 'img/productThumbs/blah.png', '2009-04-04 20:39:02');
-INSERT INTO `product` VALUES(7, 'paté', 4.09, 2, 'img/productThumbs/blah.png', '2009-04-04 20:39:02');
-INSERT INTO `product` VALUES(8, 'sausages', 3.55, 2, 'img/productThumbs/blah.png', '2009-04-04 20:39:02');
-INSERT INTO `product` VALUES(9, 'cookie', 0.89, 3, 'img/productThumbs/cookie.png', '2009-04-04 20:39:02');
-INSERT INTO `product` VALUES(10, 'bun', 1.19, 3, 'img/productThumbs/bun.png', '2009-04-04 20:39:02');
-INSERT INTO `product` VALUES(11, 'loaf', 1.65, 3, 'img/productThumbs/loaf.png', '2009-04-04 20:39:02');
-INSERT INTO `product` VALUES(12, 'bagel', 2.39, 3, 'img/productThumbs/bagel.png', '2009-04-04 20:39:02');
+INSERT INTO `product` VALUES(6, 'parmaHam', 3.49, 2, 'img/productThumbs/parmaHam.png', '2009-04-04 20:39:02');
+INSERT INTO `product` VALUES(7, 'chicken', 4.09, 2, 'img/productThumbs/chicken.png', '2009-04-04 20:39:02');
+INSERT INTO `product` VALUES(8, 'sausages', 3.55, 2, 'img/productThumbs/sausages.png', '2009-04-04 20:39:02');
+INSERT INTO `product` VALUES(9, 'loaf', 0.89, 3, 'img/productThumbs/loaf.png', '2009-04-04 20:39:02');
+INSERT INTO `product` VALUES(10, 'bagel', 1.19, 3, 'img/productThumbs/bagel.png', '2009-04-04 20:39:02');
+INSERT INTO `product` VALUES(11, 'bun', 1.65, 3, 'img/productThumbs/bun.png', '2009-04-04 20:39:02');
+INSERT INTO `product` VALUES(12, 'cookie', 2.39, 3, 'img/productThumbs/cookie.png', '2009-04-04 20:39:02');
 INSERT INTO `product` VALUES(13, 'corn', 0.29, 4, 'img/productThumbs/corn.png', '2009-04-04 20:39:02');
 INSERT INTO `product` VALUES(14, 'berries', 0.25, 4, 'img/productThumbs/berries.png', '2009-04-04 20:39:02');
-INSERT INTO `product` VALUES(15, 'watermelon', 0.19, 4, 'img/productThumbs/watermelon.png', '2009-04-04 20:39:02');
-INSERT INTO `product` VALUES(16, 'turnips', 0.39, 4, 'img/productThumbs/blah.png', '2009-04-04 20:39:02');
+INSERT INTO `product` VALUES(15, 'broccoli', 0.39, 4, 'img/productThumbs/broccoli.png', '2009-04-04 20:39:02');
+INSERT INTO `product` VALUES(16, 'watermelon', 0.19, 4, 'img/productThumbs/watermelon.png', '2009-04-04 20:39:02');
 
 -- --------------------------------------------------------
 

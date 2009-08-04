@@ -7,9 +7,10 @@ Before running the application,
 
 1.  Download MySQL from: http://dev.mysql.com/downloads/
 
-2.  Set up the database using 'root'/'root' as username/password.
+    The database configuration uses 'root'/'' as the default username/password.
+    This is used in the AffableBean project.
 
-3.  From the IDE's Services window, right-click the MySQL Server
+2.  From the IDE's Services window, right-click the MySQL Server
     node and choose Create Database.
 
 4.  In the Create Database dialog, type in 'affablebean' and select
@@ -34,10 +35,9 @@ Notes:
     The affablebean.sql script creates tables and sample data
     necessary for the application.
 
-    The sun-resources.xml file creates the 'jdbc/affableBean'
-    datasource, and 'affableBeanPool' connection pool on the
+    The sun-resources.xml file creates the 'jdbc/affablebean'
+    datasource, and 'affablebeanPool' connection pool on the
     server when the application is deployed.
 
     The application uses EclipseLink as the JPA provider, and
-    is being developed using NetBeans 6.7 with the default
-    installation of GlassFish v3 Prelude.
+    is being developed using NetBeans 6.7.1 with GlassFish v3 Preview.

@@ -130,7 +130,7 @@ Client browser requests languages in the following priority:
                     </div>
 
                     <div class="headerWidget">
-                        <a href="viewCart">
+                        <a href="<c:url value="viewCart"/>">
                             <span class="cartMsg">view cart</span>
                             <img src="img/cart.gif" alt="shopping cart icon" id="cart">
                         </a>

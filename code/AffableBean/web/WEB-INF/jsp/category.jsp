@@ -26,8 +26,7 @@
                 </div>
             </c:when>
             <c:otherwise>
-                <c:set var="url" value="category?${category.id}"/>
-                <a href="${url}" class="categoryButton rounded">
+                <a href="<c:url value="category?${category.id}"/>" class="rounded categoryButton">
                     <div class="categoryText">
                         <fmt:message key="${category.name}"/>
                     </div>
@@ -63,7 +62,7 @@
                 </td>
                 <td class="${((iter.index % 2) == 0) ? 'even' : 'odd'}">
 
-                    <form action="<c:url value="addToCart" />" method="post">
+                    <form action="<c:url value="addToCart"/>" method="post">
                         <input type="hidden"
                                name="productId"
                                value="<c:out value="${product.id}"/>">

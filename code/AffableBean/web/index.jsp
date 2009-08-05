@@ -29,8 +29,7 @@
 
         <div class="categoryBox">
 
-            <c:set var="url" value="category?${category.id}"/>
-            <a href="${url}">
+            <a href="<c:url value="category?${category.id}"/>">
 
                 <span class="categoryLabel"></span>
                 <span class="categoryLabelText"><fmt:message key="${category.name}"/></span>

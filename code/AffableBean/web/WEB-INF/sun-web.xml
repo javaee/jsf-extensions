@@ -11,9 +11,4 @@
     <role-name>adminUser</role-name>
     <group-name>affableBeanAdmin</group-name>
   </security-role-mapping>
-  <session-config>
-    <session-properties>
-      <property name="enableURLRewriting" value="true"/>
-    </session-properties>
-  </session-config>
 </sun-web-app>

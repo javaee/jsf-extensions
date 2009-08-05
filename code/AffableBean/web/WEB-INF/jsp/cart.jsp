@@ -60,7 +60,7 @@
 
         <%-- checkout widget --%>
         <c:if test="${cart.numberOfItems != 0}">
-            <a href="<c:url value="checkout" />" class="rounded bubble hMargin">proceed to checkout ➟</a>
+            <a href="<c:url value="checkout"/>" class="rounded bubble hMargin">proceed to checkout ➟</a>
         </c:if>
     </div>
 
@@ -96,7 +96,7 @@
                     </td>
                     <td class="${((iter.index % 2) == 0) ? 'even' : 'odd'}">
 
-                        <form action="updateCart" method="post">
+                        <form action="<c:url value="updateCart"/>" method="post">
                             <input type="hidden"
                                    name="productId"
                                    value="<c:out value="${product.id}"/>">

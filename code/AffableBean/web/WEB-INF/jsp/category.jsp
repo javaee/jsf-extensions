@@ -46,12 +46,12 @@
     </p>
 
     <table id="productTable">
-
+        
         <c:forEach var="product" items="${categoryProducts}" varStatus="iter">
 
             <tr>
                 <td class="${((iter.index % 2) == 0) ? 'even' : 'odd'}">
-                    <img src="<c:out value="${product.imagePath}"/>"
+                    <img src="<c:out value="${initParam.imagePath}${product.name}.png"/>"
                         alt="image of <fmt:message key="${product.name}"/>">
                 </td>
                 <td class="${((iter.index % 2) == 0) ? 'even' : 'odd'}">

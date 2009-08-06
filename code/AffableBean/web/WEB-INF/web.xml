@@ -22,6 +22,11 @@
         <url-pattern>/languageChoice</url-pattern>
     </servlet-mapping>
 
+    <context-param>
+        <param-name>imagePath</param-name>
+        <param-value>img/productThumbs/</param-value>
+    </context-param>
+
     <session-config>
         <session-timeout>
             30

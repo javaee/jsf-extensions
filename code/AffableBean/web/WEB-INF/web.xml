@@ -53,8 +53,13 @@
     -->
 
     <error-page>
+        <error-code>403</error-code>
+        <location>/WEB-INF/jsp/error/403.jspf</location>
+    </error-page>
+
+    <error-page>
         <error-code>404</error-code>
-        <location>/WEB-INF/jsp/error.jsp</location>
+        <location>/WEB-INF/jsp/error/404.jspf</location>
     </error-page>
 
     <jsp-config>
@@ -75,7 +80,7 @@
             </web-resource-collection>
         <user-data-constraint>
             <description/>
-            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+            <transport-guarantee>NONE</transport-guarantee> <!-- replace with CONFIDENTIAL and configure in GF -->
         </user-data-constraint>
     </security-constraint>
 

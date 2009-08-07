@@ -1,0 +1,9 @@
+<%--
+    Document   : 404 error
+    Created on : Aug 18, 2009, 7:07:03 PM
+    Author     : nbuser
+--%>
+
+<p class="error">
+    <fmt:message key="notFound"/>
+</p>

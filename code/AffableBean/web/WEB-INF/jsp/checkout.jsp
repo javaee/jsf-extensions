@@ -17,10 +17,9 @@
 <script src="js/jquery.validate.js" type="text/javascript"></script>
 
 <style type="text/css">
-    error { line-height: inherit; !important }
     label { line-height: 30px; }
+    error { line-height: inherit !important }
     label.error { font-size: smaller; line-height: 20px; font-style: italic; }
-    input.error { border: 1px dotted; line-height: 20px; }
 </style>
 
 <script type="text/javascript">
@@ -35,7 +34,8 @@
                 },
                 phone: {
                     required: true,
-                    minlength: 5
+                    number: true,
+                    minlength: 9
                 },
                 address: {
                     required: true
@@ -129,7 +129,7 @@
                     <input type="text"
                            size="28"
                            maxlength="19"
-                           name="ccNumber"
+                           name="creditcard"
                            id="creditcard"
                            class="creditcard">
                 </td>

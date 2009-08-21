@@ -54,20 +54,21 @@
 
     <error-page>
         <error-code>403</error-code>
-        <location>/WEB-INF/jsp/error/403.jspf</location>
+        <location>/WEB-INF/jspf/error/403.jspf</location>
     </error-page>
 
     <error-page>
         <error-code>404</error-code>
-        <location>/WEB-INF/jsp/error/404.jspf</location>
+        <location>/WEB-INF/jspf/error/404.jspf</location>
     </error-page>
 
     <jsp-config>
         <jsp-property-group>
             <url-pattern>/index.jsp</url-pattern>
             <url-pattern>/WEB-INF/jsp/*</url-pattern>
-            <include-prelude>/WEB-INF/jsp/header.jspf</include-prelude>
-            <include-coda>/WEB-INF/jsp/footer.jspf</include-coda>
+            <url-pattern>/WEB-INF/jspf/*</url-pattern>
+            <include-prelude>/WEB-INF/jspf/header.jspf</include-prelude>
+            <include-coda>/WEB-INF/jspf/footer.jspf</include-coda>
         </jsp-property-group>
     </jsp-config>
 

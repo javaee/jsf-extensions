@@ -170,6 +170,9 @@ public abstract class JspFacesTestCase extends JspTestCase
         return facesService.verifyExpectedOutput();
     }
 
+    public void verifyEqualsContractPositive(Object x, Object y, Object z) {
+        facesService.verifyEqualsContractPositive(x, y, z);
+    }
 
     public boolean verifyExpectedStringInOutput(String str) {
         return facesService.verifyExpectedStringInOutput(str);

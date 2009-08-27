@@ -58,6 +58,7 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import javax.faces.component.UIViewRoot;
 import javax.faces.event.PhaseId;
+import junit.framework.Assert;
 
 
 /**
@@ -104,6 +105,8 @@ public class FacesTestCaseService extends Object {
 
     protected FacesTestCase facesTestCase = null;
 
+    protected Assert assertVendor = null;
+
     protected FacesContextFactory facesContextFactory = null;
 
     protected FacesContext facesContext = null;
@@ -122,6 +125,7 @@ public class FacesTestCaseService extends Object {
 
     public FacesTestCaseService(FacesTestCase newFacesTestCase) {
         facesTestCase = newFacesTestCase;
+        assertVendor = (Assert) facesTestCase;
     }
 
 
@@ -266,6 +270,26 @@ public class FacesTestCaseService extends Object {
         }
         System.out.println("VERIFY:" + result);
         return result;
+    }
+
+    /**
+     * <p>verify that the objects passed as paremeters obey the general contract
+     * of equals(), as listed in Item 7 of Bloch's Effective Java.
+     */
+    public void verifyEqualsContractPositive(Object x, Object y, Object z) {
+
+        Assert.assertTrue(x.equals(x));
+        Assert.assertTrue(x.equals(y) && y.equals(x));
+        Assert.assertTrue(x.equals(y) && y.equals(z) && x.equals(z));
+        Assert.assertTrue(x.equals(y));
+        Assert.assertTrue(x.equals(y));
+        Assert.assertTrue(x.equals(y));
+        Assert.assertTrue(y.equals(z));
+        Assert.assertTrue(y.equals(z));
+        Assert.assertTrue(y.equals(z));
+        Assert.assertFalse(x.equals(null));
+        Assert.assertFalse(y.equals(null));
+        Assert.assertFalse(z.equals(null));
     }
 
 

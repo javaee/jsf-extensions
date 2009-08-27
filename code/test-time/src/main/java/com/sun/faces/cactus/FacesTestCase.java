@@ -79,4 +79,6 @@ public interface FacesTestCase {
     
     public String getTestRootDir();
 
+    public void verifyEqualsContractPositive(Object x, Object y, Object z);
+
 } // end of interface FacesTestCase

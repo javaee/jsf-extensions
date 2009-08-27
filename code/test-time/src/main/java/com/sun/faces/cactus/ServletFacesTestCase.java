@@ -175,6 +175,9 @@ public abstract class ServletFacesTestCase extends ServletTestCase
         return facesService.verifyExpectedOutput();
     }
 
+    public void verifyEqualsContractPositive(Object x, Object y, Object z) {
+        facesService.verifyEqualsContractPositive(x, y, z);
+    }
 
     public boolean isMember(String toTest, String[] set) {
         return facesService.isMember(toTest, set);

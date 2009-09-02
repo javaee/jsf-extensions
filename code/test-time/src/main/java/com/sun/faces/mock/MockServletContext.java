@@ -37,6 +37,7 @@ import java.net.URL;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Set;
+import java.util.HashSet;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
@@ -119,7 +120,7 @@ public class MockServletContext implements ServletContext {
     }
 
     public Set getResourcePaths(String path) {
-        throw new UnsupportedOperationException();
+       return new HashSet(0);
     }
 
     public Servlet getServlet(String name) throws ServletException {

@@ -69,7 +69,7 @@
                 <td><label for="name"><fmt:message key="customerName" />:</label></td>
                 <td>
                     <input type="text"
-                           size="28"
+                           size="30"
                            maxlength="30"
                            name="name"
                            id="name"
@@ -80,7 +80,7 @@
                 <td><label for="email"><fmt:message key="email" />:</label></td>
                 <td>
                     <input type="text"
-                           size="28"
+                           size="30"
                            maxlength="30"
                            name="email"
                            id="email"
@@ -91,7 +91,7 @@
                 <td><label for="phone"><fmt:message key="phone" />:</label></td>
                 <td>
                     <input type="text"
-                           size="28"
+                           size="30"
                            maxlength="30"
                            name="phone"
                            id="phone">
@@ -101,7 +101,7 @@
                 <td><label for="address"><fmt:message key="address" />:</label></td>
                 <td>
                     <input type="text"
-                           size="28"
+                           size="30"
                            maxlength="30"
                            name="address"
                            id="address">
@@ -131,7 +131,7 @@
                 <td><label for="creditcard"><fmt:message key="creditCard" />:</label></td>
                 <td>
                     <input type="text"
-                           size="28"
+                           size="30"
                            maxlength="19"
                            name="creditcard"
                            id="creditcard"

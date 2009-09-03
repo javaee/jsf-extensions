@@ -106,6 +106,7 @@ public class Dispatcher extends HttpServlet {
         } else if (userPath.equals("/checkout")) {
             // forward to /WEB-INF/jsp/checkout.jsp
             // switch to https protocol
+            
             // if user switches language
         } else if (userPath.equals("/languageChoice")) {
 

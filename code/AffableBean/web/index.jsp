@@ -5,7 +5,7 @@
 --%>
 
 
-<jsp:useBean id="affableBeanDB" class="database.AffableBeanDB" scope="page" >
+<jsp:useBean id="affableBeanDB" class="database.AffableBeanDB">
     <jsp:setProperty name="affableBeanDB" property="database" value="${affableBeanDBAO}" />
 </jsp:useBean>
 

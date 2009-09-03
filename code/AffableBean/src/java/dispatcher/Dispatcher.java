@@ -28,7 +28,7 @@ public class Dispatcher extends HttpServlet {
     private Category selectedCategory;
     private List categoryProducts;
     private ShoppingCart cart;
-    private String requestedPath;
+    private String userPath;
 
     @Override
     public void init() {
@@ -49,7 +49,7 @@ public class Dispatcher extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = request.getSession();
-        requestedPath = request.getServletPath();
+        userPath = request.getServletPath();
         cart = (ShoppingCart) session.getAttribute("cart");
 
         String clear;
@@ -60,7 +60,7 @@ public class Dispatcher extends HttpServlet {
         }
 
         // if category page is requested
-        if (requestedPath.equals("/category")) {
+        if (userPath.equals("/category")) {
 
             // get categoryId from request
             String categoryId = request.getQueryString();
@@ -92,9 +92,9 @@ public class Dispatcher extends HttpServlet {
             }
 
             // if shopping cart page is requested
-        } else if (requestedPath.equals("/viewCart")) {
+        } else if (userPath.equals("/viewCart")) {
 
-            requestedPath = "/cart";
+            userPath = "/cart";
 
             clear = request.getParameter("clear");
 
@@ -103,15 +103,11 @@ public class Dispatcher extends HttpServlet {
             }
 
             // if checkout page is requested
-        } else if (requestedPath.equals("/checkout")) {
-
+        } else if (userPath.equals("/checkout")) {
             // forward to /WEB-INF/jsp/checkout.jsp
             // switch to https protocol
-            
-        } else if (requestedPath.equals("/languageChoice")) {
-
-            // change this!
-            requestedPath = "/category";
+            // if user switches language
+        } else if (userPath.equals("/languageChoice")) {
 
             // get language choice
             String language = request.getParameter("language");
@@ -119,22 +115,23 @@ public class Dispatcher extends HttpServlet {
             // place in session scope
             session.setAttribute("language", language);
 
-//        // return user from whence s/he came
-//        // note: this doesn't work - getting the referer isn't reliable
-//        String url = request.getHeader("Referer");
+            String userView = (String) session.getAttribute("view");
 
-//        String url = request.getContextPath();  !try this!
-
-//        System.out.println(url);
-//
-//        url = url.substring(url.lastIndexOf('/'));
-//        System.out.println(url);
-
+            if (userView != null) {
+                // return user from whence s/he came
+                userPath = userView;
+            } else {
+                // if previous view cannot be determined, send user to welcome page
+                try {
+                    request.getRequestDispatcher("/index.jsp").forward(request, response);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
         }
 
         // use RequestDispatcher to forward request internally
-        String url = "/WEB-INF/jsp" + requestedPath + ".jsp";
-
+        String url = "/WEB-INF/jsp" + userPath + ".jsp";
         try {
             request.getRequestDispatcher(url).forward(request, response);
         } catch (Exception ex) {
@@ -155,7 +152,7 @@ public class Dispatcher extends HttpServlet {
 
         HttpSession session = request.getSession();
 
-        requestedPath = request.getServletPath();
+        userPath = request.getServletPath();
         cart = (ShoppingCart) session.getAttribute("cart");
 
         // get user input from request
@@ -165,9 +162,9 @@ public class Dispatcher extends HttpServlet {
         Product product;
 
         // if addToCart action is called
-        if (requestedPath.equals("/addToCart")) {
+        if (userPath.equals("/addToCart")) {
 
-            requestedPath = "/category";
+            userPath = "/category";
 
             if (!productId.equals("")) {
 
@@ -180,12 +177,13 @@ public class Dispatcher extends HttpServlet {
 
                     System.err.println("Unable to add product to cart. " + pnfe.getMessage());
                 }
+
             }
 
             // if updateCart action is called
-        } else if (requestedPath.equals("/updateCart")) {
+        } else if (userPath.equals("/updateCart")) {
 
-            requestedPath = "/cart";
+            userPath = "/cart";
 
             if (!productId.equals("") && !quantity.equals("")) {
 
@@ -202,10 +200,11 @@ public class Dispatcher extends HttpServlet {
 
                     System.err.println("Unable to update cart. " + pnfe.getMessage());
                 }
+
             }
 
             // if purchase action is called
-        } else if (requestedPath.equals("/purchase")) {
+        } else if (userPath.equals("/purchase")) {
 
             // extract user data from request
             String name = request.getParameter("name");
@@ -215,11 +214,11 @@ public class Dispatcher extends HttpServlet {
             String cityRegion = request.getParameter("cityRegion");
             String ccNumber = request.getParameter("ccNumber");
 
-            
+
         }
 
         // use RequestDispatcher to forward request internally
-        String url = "/WEB-INF/jsp" + requestedPath + ".jsp";
+        String url = "/WEB-INF/jsp" + userPath + ".jsp";
 
         try {
             request.getRequestDispatcher(url).forward(request, response);

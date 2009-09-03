@@ -7,9 +7,14 @@
 
 <%@page contentType="text/html; charset=UTF-8"%> <%-- required for '€' sign --%>
 
-<jsp:useBean id="affableBeanDB" class="database.AffableBeanDB" scope="page" >
+<jsp:useBean id="affableBeanDB" class="database.AffableBeanDB">
     <jsp:setProperty name="affableBeanDB" property="database" value="${affableBeanDBAO}" />
 </jsp:useBean>
+
+<%-- Set session-scoped variable to track the view user is coming from.
+     This is used by the language mechanism in the Dispatcher so that
+     users view the same page when switching between EN and CS. --%>
+<c:set var="view" value="/checkout" scope="session" />
 
 <c:set var="cart" value="${sessionScope.cart}"/>
 

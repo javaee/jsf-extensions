@@ -54,15 +54,14 @@
 
 <div id="cartColumn">
 
-    <h2>checkout</h2>
+    <h2><fmt:message key="checkout" /></h2>
 
-    <p>In order to purchase the items in your shopping cart, please provide us with
-        the following information:</p>
+    <p><fmt:message key="checkoutText" /></p>
 
     <form id="checkoutForm" action="purchase" method="post">
         <table id="checkoutTable" class="rounded">
             <tr>
-                <td><label for="name">name:</label></td>
+                <td><label for="name"><fmt:message key="customerName" />:</label></td>
                 <td>
                     <input type="text"
                            size="28"
@@ -73,7 +72,7 @@
                 </td>
             </tr>
             <tr>
-                <td><label for="email">email:</label></td>
+                <td><label for="email"><fmt:message key="email" />:</label></td>
                 <td>
                     <input type="text"
                            size="28"
@@ -84,7 +83,7 @@
                 </td>
             </tr>
             <tr>
-                <td><label for="phone">phone:</label></td>
+                <td><label for="phone"><fmt:message key="phone" />:</label></td>
                 <td>
                     <input type="text"
                            size="28"
@@ -94,7 +93,7 @@
                 </td>
             </tr>
             <tr>
-                <td><label for="address">address:</label></td>
+                <td><label for="address"><fmt:message key="address" />:</label></td>
                 <td>
                     <input type="text"
                            size="28"
@@ -103,7 +102,7 @@
                            id="address">
 
                     <br>
-                    Prague <select name="cityRegion">
+                    <fmt:message key="prague" /> <select name="cityRegion">
                         <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
@@ -124,7 +123,7 @@
                 </td>
             </tr>
             <tr>
-                <td><label for="creditcard">credit card:</label></td>
+                <td><label for="creditcard"><fmt:message key="creditCard" />:</label></td>
                 <td>
                     <input type="text"
                            size="28"
@@ -136,7 +135,7 @@
             </tr>
             <tr>
                 <td colspan="2">
-                    <input type="submit" value="submit purchase">
+                    <input type="submit" value="<fmt:message key="submitOrder" />">
                 </td>
             </tr>
         </table>
@@ -145,22 +144,22 @@
     <div id="infoBox">
 
         <ul>
-            <li>Next-day delivery is guaranteed.</li>
-            <li>A € 3.00 delivery surcharge is applied to all purchase orders.</li>
+            <li><fmt:message key="nextDayGuarantee" /></li>
+            <li><fmt:message key="deliveryFee" /></li>
         </ul>
 
         <table id="priceBox" class="rounded">
             <tr>
-                <td>subtotal:</td>
+                <td><fmt:message key="subtotal" />:</td>
                 <td class="priceColumn">€ <c:out value="${cart.total}"/></td>
             </tr>
             <tr>
-                <td>delivery surcharge:</td>
+                <td><fmt:message key="surcharge" />:</td>
                 <td class="priceColumn">€ 3.00</td>
             </tr>
             <tr></tr>
             <tr>
-                <td class="total">total:</td>
+                <td class="total"><fmt:message key="total" />:</td>
                 <td class="total priceColumn">€ <c:out value="${cart.total + 3.00}"/></td>
             </tr>
         </table>

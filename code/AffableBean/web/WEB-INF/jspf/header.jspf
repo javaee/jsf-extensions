@@ -131,7 +131,7 @@ Client browser requests languages in the following priority:
 
                     <div class="headerWidget">
                         <a href="<c:url value="viewCart"/>">
-                            <span class="cartMsg">view cart</span>
+                            <span class="cartMsg"><fmt:message key="cart" /></span>
                             <img src="img/cart.gif" alt="shopping cart icon" id="cart">
                         </a>
 
@@ -150,10 +150,10 @@ Client browser requests languages in the following priority:
                           <%-- If only one item in cart, output 'item', otherwise output 'items' --%>
                             <c:choose>
                                 <c:when test="${cart.numberOfItems == 1}">
-                                    item
+                                    <fmt:message key="item" />
                                 </c:when>
                                 <c:otherwise>
-                                    items
+                                    <fmt:message key="items" />
                                 </c:otherwise>
                             </c:choose>
                         </span>

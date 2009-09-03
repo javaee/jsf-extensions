@@ -98,8 +98,8 @@ a span.cartMsg:hover {
 }
 
 .headerWidget {
-    width: 160px;
-    margin: 20px 50px;
+    width: 185px;
+    margin: 20px 45px;
     font-size: small;
     float: right;
     line-height: 25px;
@@ -255,7 +255,7 @@ a.categoryButton:hover {
 
 /* checkout page styles */
 #checkoutTable {
-    width: 340px;
+    width: 342px;
     padding: 10px;
     background-color: #f5eabe;
     float: left;
@@ -264,7 +264,7 @@ a.categoryButton:hover {
 #checkoutTable td {
     vertical-align: top;
     text-align: right;
-    width: 80px;
+    width: 100px;
     margin: 5px;
 }
 

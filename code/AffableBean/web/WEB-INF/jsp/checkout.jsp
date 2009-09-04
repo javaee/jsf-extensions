@@ -1,7 +1,9 @@
-<%-- 
-    Document   : checkout
-    Created on : Jul 14, 2009, 11:46:38 PM
-    Author     : nbuser
+<%--
+ * Copyright 2009 Sun Microsystems, Inc.
+ * All rights reserved.  You may not modify, use,
+ * reproduce, or distribute this software except in
+ * compliance with  the terms of the License at:
+ * http://developer.sun.com/berkeley_license.html
 --%>
 
 
@@ -156,16 +158,16 @@
         <table id="priceBox" class="rounded">
             <tr>
                 <td><fmt:message key="subtotal" />:</td>
-                <td class="priceColumn">€ <c:out value="${cart.total}"/></td>
+                <td class="priceColumn">€ <c:out value="${cart.subtotal}"/></td>
             </tr>
             <tr>
                 <td><fmt:message key="surcharge" />:</td>
-                <td class="priceColumn">€ 3.00</td>
+                <td class="priceColumn">€ <c:out value="${initParam.deliverySurcharge}"/></td>
             </tr>
             <tr></tr>
             <tr>
                 <td class="total"><fmt:message key="total" />:</td>
-                <td class="total priceColumn">€ <c:out value="${cart.total + 3.00}"/></td>
+                <td class="total priceColumn">€ <c:out value="${cart.total}"/></td>
             </tr>
         </table>
     </div>

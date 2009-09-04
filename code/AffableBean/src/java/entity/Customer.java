@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package entity;
 
 import java.io.Serializable;
@@ -19,10 +14,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-/**
- *
- * @author troy
- */
+
 @Entity
 @Table(name = "customer")
 @NamedQueries({@NamedQuery(name = "Customer.findAll", query = "SELECT c FROM Customer c"), @NamedQuery(name = "Customer.findById", query = "SELECT c FROM Customer c WHERE c.id = :id"), @NamedQuery(name = "Customer.findByName", query = "SELECT c FROM Customer c WHERE c.name = :name"), @NamedQuery(name = "Customer.findByEmail", query = "SELECT c FROM Customer c WHERE c.email = :email"), @NamedQuery(name = "Customer.findByPhone", query = "SELECT c FROM Customer c WHERE c.phone = :phone"), @NamedQuery(name = "Customer.findByAddress", query = "SELECT c FROM Customer c WHERE c.address = :address"), @NamedQuery(name = "Customer.findByCityRegion", query = "SELECT c FROM Customer c WHERE c.cityRegion = :cityRegion"), @NamedQuery(name = "Customer.findByCcNumber", query = "SELECT c FROM Customer c WHERE c.ccNumber = :ccNumber"), @NamedQuery(name = "Customer.findByDateAccountCreated", query = "SELECT c FROM Customer c WHERE c.dateAccountCreated = :dateAccountCreated")})

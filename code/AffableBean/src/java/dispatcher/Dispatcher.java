@@ -1,3 +1,12 @@
+/*
+ * Copyright 2009 Sun Microsystems, Inc.
+ * All rights reserved.  You may not modify, use,
+ * reproduce, or distribute this software except in
+ * compliance with  the terms of the License at:
+ * http://developer.sun.com/berkeley_license.html
+ */
+
+
 package dispatcher;
 
 import cart.ShoppingCart;
@@ -10,16 +19,14 @@ import exceptions.ProductNotFoundException;
 import exceptions.ProductsNotFoundException;
 import java.io.IOException;
 import java.util.List;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-/**
- *
- * @author nbuser
- */
+
 public class Dispatcher extends HttpServlet {
 
 //    @Resource
@@ -29,13 +36,21 @@ public class Dispatcher extends HttpServlet {
     private List categoryProducts;
     private ShoppingCart cart;
     private String userPath;
+    private String surcharge;
 
     @Override
-    public void init() {
+    public void init(ServletConfig servletConfig) throws ServletException {
+
+        super.init(servletConfig);
+
+        // initializes the servlet with configuration information
+        surcharge = servletConfig.getServletContext().getInitParameter("deliverySurcharge");
 
         // gets DBAO instance from servlet context
         affableBeanDBAO = (AffableBeanDBAO) getServletContext().getAttribute("affableBeanDBAO");
     }
+
+
 
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -104,8 +119,12 @@ public class Dispatcher extends HttpServlet {
 
             // if checkout page is requested
         } else if (userPath.equals("/checkout")) {
+
+            // calculate total
+            cart.calculateTotal(surcharge);        
+
             // forward to /WEB-INF/jsp/checkout.jsp
-            // switch to https protocol
+            // switch to a secure channel
             
             // if user switches language
         } else if (userPath.equals("/languageChoice")) {

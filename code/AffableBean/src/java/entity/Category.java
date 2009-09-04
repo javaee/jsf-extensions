@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package entity;
 
 import java.io.Serializable;
@@ -22,10 +17,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-/**
- *
- * @author troy
- */
+
 @Entity
 @Table(name = "category")
 @NamedQueries({@NamedQuery(name = "Category.findAll", query = "SELECT c FROM Category c"), @NamedQuery(name = "Category.findById", query = "SELECT c FROM Category c WHERE c.id = :id"), @NamedQuery(name = "Category.findByName", query = "SELECT c FROM Category c WHERE c.name = :name"), @NamedQuery(name = "Category.findByImagePath", query = "SELECT c FROM Category c WHERE c.imagePath = :imagePath"), @NamedQuery(name = "Category.findByLastUpdate", query = "SELECT c FROM Category c WHERE c.lastUpdate = :lastUpdate")})

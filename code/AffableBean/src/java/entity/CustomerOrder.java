@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package entity;
 
 import java.io.Serializable;
@@ -23,10 +18,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-/**
- *
- * @author troy
- */
+
 @Entity
 @Table(name = "customer_order")
 @NamedQueries({@NamedQuery(name = "CustomerOrder.findAll", query = "SELECT c FROM CustomerOrder c"), @NamedQuery(name = "CustomerOrder.findById", query = "SELECT c FROM CustomerOrder c WHERE c.id = :id"), @NamedQuery(name = "CustomerOrder.findByCustomerId", query = "SELECT c FROM CustomerOrder c WHERE c.customerId = :customerId"), @NamedQuery(name = "CustomerOrder.findByAmount", query = "SELECT c FROM CustomerOrder c WHERE c.amount = :amount"), @NamedQuery(name = "CustomerOrder.findByCreateDate", query = "SELECT c FROM CustomerOrder c WHERE c.createDate = :createDate")})

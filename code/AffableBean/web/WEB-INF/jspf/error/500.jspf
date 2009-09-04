@@ -1,8 +1,11 @@
 <%--
-    Document   : 500 error
-    Created on : Sept 02, 2009, 12:07:03 AM
-    Author     : nbuser
+ * Copyright 2009 Sun Microsystems, Inc.
+ * All rights reserved.  You may not modify, use,
+ * reproduce, or distribute this software except in
+ * compliance with  the terms of the License at:
+ * http://developer.sun.com/berkeley_license.html
 --%>
+
 
 <p class="error">
     <fmt:message key="internalError"/>

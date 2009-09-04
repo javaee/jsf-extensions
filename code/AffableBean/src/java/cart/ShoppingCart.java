@@ -1,10 +1,12 @@
 /*
- * Copyright 2007 Sun Microsystems, Inc.
+ * Copyright 2009 Sun Microsystems, Inc.
  * All rights reserved.  You may not modify, use,
  * reproduce, or distribute this software except in
  * compliance with  the terms of the License at:
  * http://developer.sun.com/berkeley_license.html
  */
+
+
 package cart;
 
 import entity.Product;
@@ -14,14 +16,17 @@ import java.util.Iterator;
 import java.util.HashMap;
 import java.util.List;
 
+
 public class ShoppingCart {
 
     HashMap<String, ShoppingCartItem> items;
     int numberOfItems;
+    double total;
 
     public ShoppingCart() {
         items = new HashMap<String, ShoppingCartItem>();
         numberOfItems = 0;
+        total = 0;
     }
 
     public synchronized void add(String productId, Product product) {
@@ -112,7 +117,7 @@ public class ShoppingCart {
         return numberOfItems;
     }
 
-    public synchronized double getTotal() {
+    public synchronized double getSubtotal() {
         double amount = 0.0;
 
         for (Iterator i = getItems().iterator(); i.hasNext();) {
@@ -123,6 +128,20 @@ public class ShoppingCart {
         }
 
         return roundOff(amount);
+    }
+
+    public synchronized void calculateTotal(String surcharge) {
+        double s = Double.parseDouble(surcharge);
+        double amount = 0.0;
+
+        amount = getSubtotal();
+        amount = amount + s;
+
+        total = roundOff(amount);
+    }
+
+    public synchronized double getTotal() {
+        return total;
     }
 
     private double roundOff(double x) {

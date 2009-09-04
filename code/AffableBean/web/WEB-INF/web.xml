@@ -9,6 +9,7 @@
     <servlet>
         <servlet-name>Dispatcher</servlet-name>
         <servlet-class>dispatcher.Dispatcher</servlet-class>
+        <load-on-startup>1</load-on-startup>
     </servlet>
 
     <servlet-mapping>
@@ -23,8 +24,15 @@
     </servlet-mapping>
 
     <context-param>
+        <description>The relative image path relative to the application</description>
         <param-name>imagePath</param-name>
         <param-value>img/productThumbs/</param-value>
+    </context-param>
+
+    <context-param>
+        <description>The delivery surcharge applied to all orders</description>
+        <param-name>deliverySurcharge</param-name>
+        <param-value>3.00</param-value>
     </context-param>
 
     <session-config>
@@ -60,6 +68,11 @@
     <error-page>
         <error-code>404</error-code>
         <location>/WEB-INF/jspf/error/404.jspf</location>
+    </error-page>
+
+    <error-page>
+        <error-code>500</error-code>
+        <location>/WEB-INF/jspf/error/500.jspf</location>
     </error-page>
 
     <jsp-config>

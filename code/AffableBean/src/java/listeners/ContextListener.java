@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 Sun Microsystems, Inc.
+ * Copyright 2009 Sun Microsystems, Inc.
  * All rights reserved.  You may not modify, use,
  * reproduce, or distribute this software except in
  * compliance with the terms of the License at:
@@ -20,6 +20,7 @@ public final class ContextListener implements ServletContextListener {
     private EntityManagerFactory emf;
     private ServletContext context = null;
 
+    @Override
     public void contextInitialized(ServletContextEvent event) {
         context = event.getServletContext();
 
@@ -33,6 +34,7 @@ public final class ContextListener implements ServletContextListener {
         }
     }
 
+    @Override
     public void contextDestroyed(ServletContextEvent event) {
         context = event.getServletContext();
 

@@ -123,7 +123,7 @@ public class Dispatcher extends HttpServlet {
             // calculate total
             cart.calculateTotal(surcharge);        
 
-            // forward to /WEB-INF/jsp/checkout.jsp
+            // forward to /WEB-INF/view/checkout.jsp
             // switch to a secure channel
             
             // if user switches language
@@ -151,7 +151,7 @@ public class Dispatcher extends HttpServlet {
         }
 
         // use RequestDispatcher to forward request internally
-        String url = "/WEB-INF/jsp" + userPath + ".jsp";
+        String url = "/WEB-INF/view" + userPath + ".jsp";
         try {
             request.getRequestDispatcher(url).forward(request, response);
         } catch (Exception ex) {
@@ -238,7 +238,7 @@ public class Dispatcher extends HttpServlet {
         }
 
         // use RequestDispatcher to forward request internally
-        String url = "/WEB-INF/jsp" + userPath + ".jsp";
+        String url = "/WEB-INF/view" + userPath + ".jsp";
 
         try {
             request.getRequestDispatcher(url).forward(request, response);

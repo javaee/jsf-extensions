@@ -78,7 +78,7 @@
     <jsp-config>
         <jsp-property-group>
             <url-pattern>/index.jsp</url-pattern>
-            <url-pattern>/WEB-INF/jsp/*</url-pattern>
+            <url-pattern>/WEB-INF/view/*</url-pattern>
             <url-pattern>/WEB-INF/jspf/*</url-pattern>
             <include-prelude>/WEB-INF/jspf/header.jspf</include-prelude>
             <include-coda>/WEB-INF/jspf/footer.jspf</include-coda>

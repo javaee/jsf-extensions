@@ -22,6 +22,7 @@
 
 
 <script src="js/jquery.validate.js" type="text/javascript"></script>
+<script src="js/localization/messages_cs.js" type="text/javascript"></script>
 
 <style type="text/css">
     label { line-height: 30px; }
@@ -150,7 +151,9 @@
 
         <ul>
             <li><fmt:message key="nextDayGuarantee"/></li>
-            <li><fmt:message key="deliveryFee"/></li>
+            <li><fmt:message key="deliveryFee1"/>
+                <c:out value="${initParam.deliverySurcharge}"/>
+                <fmt:message key="deliveryFee2"/></li>
         </ul>
 
         <table id="priceBox" class="rounded">

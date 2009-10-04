@@ -12,7 +12,7 @@
 
 
 <%-- Set language based on user's choice --%>
-<c:if test="${sessionScope.language != null}">
+<c:if test="${param['language'] != null}">
     <fmt:setLocale value="${sessionScope.language}" scope="session" />
 </c:if>
 
@@ -59,75 +59,87 @@
         <title><fmt:message key="title" /></title>
     </head>
     <body>
+
+<%--
+	• Use case 1:
+            Locale determined by Accept-Language header (either en or cs chosen)
+
+	• Use case 2:
+            Neither en or cs found in Accept-Language header, so default bundle used
+
+	• Use case 3:
+            User changes language using the provided button
+
+        tests:
+        <c:out value="session locale: ${sessionScope['javax.servlet.jsp.jstl.fmt.locale.session']}" />
+        <br><c:out value="browser's preferred locale: ${pageContext.request.locale.language}"/>
+        <br><%= "request.getLocale(): " + request.getLocale() %>
+--%>
+
         <div id="main">
             <div id="header">
                 <div id="headerBar">
 
-<%--
-<div align="left" style="margin-left:60%;">
-    <strong>tests:</strong>
-    <br>sessionScope.language = <c:out value="${sessionScope.language}" />
-    <br>sessionScope.language ne 'cs' = <c:out value="${sessionScope.language ne 'cs'}" />
-    <br>sessionScope.language eq 'cs' = <c:out value="${sessionScope.language eq 'cs'}" />
-</div>
---%>
-
                     <div class="headerWidget">
 
-<%--
-
-Client browser requests languages in the following priority:
-
-    Use-case 1: 1.  cs
-                2.  en
-
-    Use-case 2: 1.  en  !! this is why you can't just have a cs bundle - browser will choose cs before default !!
-                2.  cs
-
-    Use-case 3: 1.  en
-
-    Use-case 4: 1.  cs
-
-    Use-case 5: [none]
-
---%>
-
                         <%-- Offer language choice to user --%>
+                        <c:choose>
+                          <%-- When 'language' session attribute hasn't been set,
+                               render language widget according to browser's preferred locale --%>
+                          <c:when test="${empty sessionScope.language}">
                             <c:choose>
-                                <c:when test="${sessionScope.language != 'cs'}">
-                                         <%-- ${sessionScope.language ne 'cs'} also works --%>
-
-<%-- This won't work! When client calls page w/o
-     making a selection, this test will always return
-     true, and the second test will always return false.
-
-     (i.e., testing use-case 4 above fails)
-
-     Here, it would be better to check for the actual
-     language by extracting it from the locale value --%>
-
-                                    <span class="rounded bubble">english</span>
-                                </c:when>
-                                <c:otherwise>
-                                    <c:url var="url" value="languageChoice">
-                                        <c:param name="language" value="en"/>
-                                    </c:url>
-                                    <a href="${url}">english</a>
-                                </c:otherwise>
+                              <c:when test="${pageContext.request.locale.language ne 'cs'}">
+                                <span class="rounded bubble">english</span>
+                              </c:when>
+                              <c:otherwise>
+                                <c:url var="url" value="chooseLanguage">
+                                  <c:param name="language" value="en"/>
+                                </c:url>
+                                <a href="${url}">english</a>
+                              </c:otherwise>
                             </c:choose> |
-                    
+
                             <c:choose>
-                                <c:when test="${sessionScope.language == 'cs'}">
-                                         <%-- ${sessionScope.language eq 'cs'} also works --%>
-                                    <span class="rounded bubble">česky</span>
-                                </c:when>
-                                <c:otherwise>
-                                    <c:url var="url" value="languageChoice">
-                                        <c:param name="language" value="cs"/>
-                                    </c:url>
-                                    <a href="${url}">česky</a>
-                                </c:otherwise>
+                              <c:when test="${pageContext.request.locale.language eq 'cs'}">
+                                <span class="rounded bubble">česky</span>
+                              </c:when>
+                              <c:otherwise>
+                                <c:url var="url" value="chooseLanguage">
+                                  <c:param name="language" value="cs"/>
+                                </c:url>
+                                <a href="${url}">česky</a>
+                              </c:otherwise>
                             </c:choose>
+
+                          </c:when>
+
+                          <%-- Otherwise, render widget according to 'language' session attribute --%>
+                          <c:otherwise>
+                            <c:choose>
+                              <c:when test="${sessionScope.language ne 'cs'}">
+                                <span class="rounded bubble">english</span>
+                              </c:when>
+                              <c:otherwise>
+                                <c:url var="url" value="chooseLanguage">
+                                  <c:param name="language" value="en"/>
+                                </c:url>
+                                <a href="${url}">english</a>
+                              </c:otherwise>
+                            </c:choose> |
+
+                            <c:choose>
+                              <c:when test="${sessionScope.language eq 'cs'}">
+                                <span class="rounded bubble">česky</span>
+                              </c:when>
+                              <c:otherwise>
+                                <c:url var="url" value="chooseLanguage">
+                                  <c:param name="language" value="cs"/>
+                                </c:url>
+                                <a href="${url}">česky</a>
+                              </c:otherwise>
+                            </c:choose>
+                          </c:otherwise>
+                        </c:choose>
 
                     </div>
 
@@ -161,8 +173,8 @@ Client browser requests languages in the following priority:
                         </span>
                     </div>
                 </div>
-                            
-                <a href="<c:url value="index.jsp"/>">
+
+                <a href="<c:url value="/"/>">
                     <img src="img/logo.png" alt="Affable Bean logo" style="float:left; margin-left: 30px; margin-top: -20px">
                 </a>
 

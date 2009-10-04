@@ -121,13 +121,13 @@ public class Dispatcher extends HttpServlet {
         } else if (userPath.equals("/checkout")) {
 
             // calculate total
-            cart.calculateTotal(surcharge);        
+            cart.calculateTotal(surcharge);
 
             // forward to /WEB-INF/view/checkout.jsp
             // switch to a secure channel
-            
+
             // if user switches language
-        } else if (userPath.equals("/languageChoice")) {
+        } else if (userPath.equals("/chooseLanguage")) {
 
             // get language choice
             String language = request.getParameter("language");

@@ -20,7 +20,7 @@
         <url-pattern>/viewCart</url-pattern>
         <url-pattern>/checkout</url-pattern>
         <url-pattern>/purchase</url-pattern>
-        <url-pattern>/languageChoice</url-pattern>
+        <url-pattern>/chooseLanguage</url-pattern>
     </servlet-mapping>
 
     <context-param>

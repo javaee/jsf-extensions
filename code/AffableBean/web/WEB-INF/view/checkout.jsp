@@ -22,7 +22,22 @@
 
 
 <script src="js/jquery.validate.js" type="text/javascript"></script>
-<script src="js/localization/messages_cs.js" type="text/javascript"></script>
+
+<%-- Add Czech field validation messages if 'cs' is the chosen locale --%>
+<c:choose>
+  <%-- When 'language' session attribute hasn't been set, check browser's preferred locale --%>
+  <c:when test="${empty sessionScope.language}">
+    <c:if test="${pageContext.request.locale.language eq 'cs'}">
+      <script src="js/localization/messages_cs.js" type="text/javascript"></script>
+    </c:if>
+  </c:when>
+  <%-- Otherwise, check 'language' session attribute --%>
+  <c:otherwise>
+    <c:if test="${sessionScope['javax.servlet.jsp.jstl.fmt.locale.session'] eq 'cs'}">
+      <script src="js/localization/messages_cs.js" type="text/javascript"></script>
+    </c:if>
+  </c:otherwise>
+</c:choose>
 
 <style type="text/css">
     label { line-height: 30px; }

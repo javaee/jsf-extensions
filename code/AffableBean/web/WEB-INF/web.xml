@@ -7,13 +7,13 @@
     </listener>
 
     <servlet>
-        <servlet-name>Dispatcher</servlet-name>
-        <servlet-class>dispatcher.Dispatcher</servlet-class>
+        <servlet-name>Controller</servlet-name>
+        <servlet-class>controller.ControllerServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>Dispatcher</servlet-name>
+        <servlet-name>Controller</servlet-name>
         <url-pattern>/addToCart</url-pattern>
         <url-pattern>/category</url-pattern>
         <url-pattern>/updateCart</url-pattern>
@@ -35,6 +35,11 @@
         <param-value>3.00</param-value>
     </context-param>
 
+    <context-param>
+        <param-name>javax.servlet.jsp.jstl.fmt.localizationContext</param-name>
+        <param-value>resources.messages</param-value>
+    </context-param>
+
     <session-config>
         <session-timeout>
             30
@@ -45,11 +50,6 @@
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
 
-    <context-param>
-        <param-name>javax.servlet.jsp.jstl.fmt.localizationContext</param-name>
-        <param-value>resources.messages</param-value>
-    </context-param>
-
     <!-- This is only needed for testing the datasource (TestDataSource.jsp)
     <resource-ref>
         <description>jdbc:mysql://localhost:3306/affablebean</description>
@@ -57,8 +57,7 @@
         <res-type>javax.sql.DataSource</res-type>
         <res-auth>Container</res-auth>
         <res-sharing-scope>Shareable</res-sharing-scope>
-    </resource-ref>
-    -->
+    </resource-ref> -->
 
     <error-page>
         <error-code>403</error-code>
@@ -91,7 +90,7 @@
             <web-resource-name>Checkout</web-resource-name>
             <url-pattern>/checkout</url-pattern>
             <http-method>GET</http-method>
-            </web-resource-collection>
+        </web-resource-collection>
         <user-data-constraint>
             <description/>
             <transport-guarantee>NONE</transport-guarantee> <!-- replace with CONFIDENTIAL and configure in GF -->

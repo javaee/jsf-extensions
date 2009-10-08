@@ -14,7 +14,7 @@
 </jsp:useBean>
 
 <%-- Set session-scoped variable to track the view user is coming from.
-     This is used by the language mechanism in the Dispatcher so that
+     This is used by the language mechanism in the Controller so that
      users view the same page when switching between EN and CS. --%>
 <c:set var="view" value="/checkout" scope="session"/>
 

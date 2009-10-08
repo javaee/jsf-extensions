@@ -2,12 +2,12 @@
  * Copyright 2009 Sun Microsystems, Inc.
  * All rights reserved.  You may not modify, use,
  * reproduce, or distribute this software except in
- * compliance with  the terms of the License at:
+ * compliance with the terms of the License at:
  * http://developer.sun.com/berkeley_license.html
  */
 
 
-package dispatcher;
+package controller;
 
 import cart.ShoppingCart;
 import database.AffableBeanDBAO;
@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 
-public class Dispatcher extends HttpServlet {
+public class ControllerServlet extends HttpServlet {
 
 //    @Resource
 //    private UserTransaction utx;

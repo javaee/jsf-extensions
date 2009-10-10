@@ -79,6 +79,33 @@
 
     <form id="checkoutForm" action="purchase" method="post">
         <table id="checkoutTable" class="rounded">
+            <c:if test="${!empty requestScope.errorMessage}">
+                <tr>
+                    <td colspan="2" style="text-align:left">
+                        <span class="errorMessage smallText"><fmt:message key="errorMessage"/><br>
+
+                            <c:if test="${!empty requestScope.nameError}">
+                                <span style="margin-left: 6em"><fmt:message key="nameError"/></span><br>
+                            </c:if>
+                            <c:if test="${!empty requestScope.emailError}">
+                                <span style="margin-left: 6em"><fmt:message key="emailError"/></span><br>
+                            </c:if>
+                            <c:if test="${!empty requestScope.phoneError}">
+                                <span style="margin-left: 6em"><fmt:message key="phoneError"/></span><br>
+                            </c:if>
+                            <c:if test="${!empty requestScope.addressError}">
+                                <span style="margin-left: 6em"><fmt:message key="addressError"/></span><br>
+                            </c:if>
+                            <c:if test="${!empty requestScope.cityRegionError}">
+                                <span style="margin-left: 6em"><fmt:message key="cityRegionError"/></span><br>
+                            </c:if>
+                            <c:if test="${!empty requestScope.ccNumberError}">
+                                <span style="margin-left: 6em"><fmt:message key="ccNumberError"/></span>
+                            </c:if>
+
+                        </span></td>
+                </tr>
+            </c:if>
             <tr>
                 <td><label for="name"><fmt:message key="customerName"/>:</label></td>
                 <td>
@@ -145,7 +172,7 @@
                 <td><input type="text"
                            size="30"
                            maxlength="19"
-                           name="creditcard"
+                           name="ccNumber"
                            id="creditcard"
                            class="creditcard">
                 </td>

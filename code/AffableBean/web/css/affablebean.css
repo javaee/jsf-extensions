@@ -357,5 +357,9 @@ a.categoryButton:hover {
 
 .error {
     color: #c00;
-    /* line-height: 50px; */
+}
+
+.errorMessage {
+    color: #c00;
+    font-style: italic;
 }

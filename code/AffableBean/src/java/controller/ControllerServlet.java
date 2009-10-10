@@ -234,6 +234,64 @@ public class ControllerServlet extends HttpServlet {
             String cityRegion = request.getParameter("cityRegion");
             String ccNumber = request.getParameter("ccNumber");
 
+            // perform validation
+            boolean errorMessage;
+            boolean nameError;
+            boolean emailError;
+            boolean phoneError;
+            boolean addressError;
+            boolean cityRegionError;
+            boolean ccNumberError;
+
+
+            if (name == null ||
+                name.equals("") ||
+                name.length() > 45) {
+                    errorMessage = true;
+                    nameError = true;
+                    request.setAttribute("nameError", nameError);
+            }
+            if (email == null ||
+                email.equals("") ||
+                !email.contains("@") ) {
+                    errorMessage = true;
+                    emailError = true;
+                    request.setAttribute("emailError", emailError);
+            }
+            if (phone == null ||
+                phone.equals("") ||
+                phone.length() > 9) {
+                    errorMessage = true;
+                    phoneError = true;
+                    request.setAttribute("phoneError", phoneError);
+            }
+            if (address == null ||
+                address.equals("") ||
+                address.length() > 45) {
+                    errorMessage = true;
+                    addressError = true;
+                    request.setAttribute("addressError", addressError);
+            }
+            if (cityRegion == null ||
+                cityRegion.equals("") ||
+                cityRegion.length() > 2) {
+                    errorMessage = true;
+                    cityRegionError = true;
+                    request.setAttribute("cityRegionError", cityRegionError);
+            }
+            if (ccNumber == null ||
+                ccNumber.equals("") ||
+                ccNumber.length() > 20) {
+                    errorMessage = true;
+                    ccNumberError = true;
+                    request.setAttribute("ccNumberError", ccNumberError);
+            }
+
+            // if validation error found, return user to checkout
+            if (errorMessage = true) {
+                request.setAttribute("errorMessage", errorMessage);
+                userPath = "/checkout";
+            }
 
         }
 

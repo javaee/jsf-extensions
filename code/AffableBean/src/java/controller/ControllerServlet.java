@@ -232,17 +232,16 @@ public class ControllerServlet extends HttpServlet {
             String phone = request.getParameter("phone");
             String address = request.getParameter("address");
             String cityRegion = request.getParameter("cityRegion");
-            String ccNumber = request.getParameter("ccNumber");
+            String ccNumber = request.getParameter("creditcard");
 
             // perform validation
-            boolean errorMessage;
+            boolean errorMessage = false;
             boolean nameError;
             boolean emailError;
             boolean phoneError;
             boolean addressError;
             boolean cityRegionError;
             boolean ccNumberError;
-
 
             if (name == null ||
                 name.equals("") ||
@@ -260,7 +259,7 @@ public class ControllerServlet extends HttpServlet {
             }
             if (phone == null ||
                 phone.equals("") ||
-                phone.length() > 9) {
+                phone.length() < 9) {
                     errorMessage = true;
                     phoneError = true;
                     request.setAttribute("phoneError", phoneError);
@@ -288,11 +287,14 @@ public class ControllerServlet extends HttpServlet {
             }
 
             // if validation error found, return user to checkout
-            if (errorMessage = true) {
+            if (errorMessage == true) {
                 request.setAttribute("errorMessage", errorMessage);
                 userPath = "/checkout";
-            }
+            // otherwise, save order to database
+            } else {
 
+                userPath = "/confirmation";
+            }
         }
 
         // use RequestDispatcher to forward request internally

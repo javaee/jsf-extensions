@@ -82,26 +82,26 @@
             <c:if test="${!empty requestScope.errorMessage}">
                 <tr>
                     <td colspan="2" style="text-align:left">
-                        <span class="errorMessage smallText"><fmt:message key="errorMessage"/><br>
+                        <span class="errorMessage smallText"><fmt:message key="errorMessage"/>
 
-                            <c:if test="${!empty requestScope.nameError}">
-                                <span style="margin-left: 6em"><fmt:message key="nameError"/></span><br>
-                            </c:if>
-                            <c:if test="${!empty requestScope.emailError}">
-                                <span style="margin-left: 6em"><fmt:message key="emailError"/></span><br>
-                            </c:if>
-                            <c:if test="${!empty requestScope.phoneError}">
-                                <span style="margin-left: 6em"><fmt:message key="phoneError"/></span><br>
-                            </c:if>
-                            <c:if test="${!empty requestScope.addressError}">
-                                <span style="margin-left: 6em"><fmt:message key="addressError"/></span><br>
-                            </c:if>
-                            <c:if test="${!empty requestScope.cityRegionError}">
-                                <span style="margin-left: 6em"><fmt:message key="cityRegionError"/></span><br>
-                            </c:if>
-                            <c:if test="${!empty requestScope.ccNumberError}">
-                                <span style="margin-left: 6em"><fmt:message key="ccNumberError"/></span>
-                            </c:if>
+                          <c:if test="${!empty requestScope.nameError}">
+                            <br><span class="indent"><fmt:message key="nameError"/></span>
+                          </c:if>
+                          <c:if test="${!empty requestScope.emailError}">
+                            <br><span class="indent"><fmt:message key="emailError"/></span>
+                          </c:if>
+                          <c:if test="${!empty requestScope.phoneError}">
+                            <br><span class="indent"><fmt:message key="phoneError"/></span>
+                          </c:if>
+                          <c:if test="${!empty requestScope.addressError}">
+                            <br><span class="indent"><fmt:message key="addressError"/></span>
+                          </c:if>
+                          <c:if test="${!empty requestScope.cityRegionError}">
+                            <br><span class="indent"><fmt:message key="cityRegionError"/></span>
+                          </c:if>
+                          <c:if test="${!empty requestScope.ccNumberError}">
+                            <br><span class="indent"><fmt:message key="ccNumberError"/></span>
+                          </c:if>
 
                         </span></td>
                 </tr>
@@ -113,7 +113,6 @@
                            size="30"
                            maxlength="30"
                            name="name"
-                           id="name"
                            class="required">
                 </td>
             </tr>
@@ -124,7 +123,6 @@
                            size="30"
                            maxlength="30"
                            name="email"
-                           id="email"
                            class="email required">
                 </td>
             </tr>
@@ -134,8 +132,7 @@
                     <input type="text"
                            size="30"
                            maxlength="30"
-                           name="phone"
-                           id="phone">
+                           name="phone">
                 </td>
             </tr>
             <tr>
@@ -143,11 +140,11 @@
                 <td><input type="text"
                            size="30"
                            maxlength="30"
-                           name="address"
-                           id="address">
+                           name="address">
 
                     <br>
-                    <fmt:message key="prague"/> <select name="cityRegion">
+                    <fmt:message key="prague"/>
+                    <select name="cityRegion">
                         <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
@@ -172,8 +169,7 @@
                 <td><input type="text"
                            size="30"
                            maxlength="19"
-                           name="ccNumber"
-                           id="creditcard"
+                           name="creditcard"
                            class="creditcard">
                 </td>
             </tr>

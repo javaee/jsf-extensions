@@ -40,26 +40,15 @@ a {
     text-decoration: underline;
 }
 
-a:hover {
-    text-decoration: none;
-}
+a:hover { text-decoration: none }
 
-a:visited {
-   color: inherit;
-}
+a:visited { color: inherit }
 
-img {
-    border: none;
-}
+img { border: none }
 
-input, select {
-    margin: 5px;
-    /*line-height: 30px;*/
-}
+input, select { margin: 5px }
 
-li {
-    margin: 10px 0;
-}
+li { margin: 10px 0 }
 
 
 /* styles for elements contained in the header, i.e.,
@@ -97,12 +86,9 @@ li {
 }
 
 /* Firefox - enables underline for shopping cart link */
-a span.cartMsg {
-    text-decoration: underline;
-}
-a span.cartMsg:hover {
-    text-decoration: none;
-}
+a span.cartMsg { text-decoration: underline }
+
+a span.cartMsg:hover { text-decoration: none }
 
 .headerWidget {
     width: 185px;
@@ -142,9 +128,7 @@ a span.cartMsg:hover {
 }
 
 /* Safari - disables underline for category boxes on index page */
-.categoryBox a:hover {
-    text-decoration: none;
-}
+.categoryBox a:hover { text-decoration: none }
 
 .categoryLabel {
     position: absolute;
@@ -201,10 +185,7 @@ a span.cartMsg:hover {
     background-color: #d3ede8;
 }
 
-a.categoryButton:hover {
-    text-decoration: none;
-    /* background-color: #b2d2d2; */
-}
+a.categoryButton:hover { text-decoration: none }
 
 #selectedCategory {
     background-color: #b2d2d2;
@@ -220,13 +201,9 @@ a.categoryButton:hover {
     z-index: 1;
 }
 
-#productTable tr {
-    height: 90px;
-}
+#productTable tr { height: 90px }
 
-#productTable td {
-    width: 145px;
-}
+#productTable td { width: 145px }
 
 
 /* shopping cart page styles */
@@ -241,13 +218,9 @@ a.categoryButton:hover {
     text-align: center;
 }
 
-#subtotal {
-    margin: 40px 0 20px 430px;
-}
+#subtotal { margin: 40px 0 20px 430px }
 
-#cartTable {
-    width: 750px;
-}
+#cartTable { width: 750px }
 
 #cartTable td {
     width: 145px;
@@ -275,9 +248,7 @@ a.categoryButton:hover {
     margin: 5px;
 }
 
-#infoBox {
-    padding: 10px 90px 0 400px;
-}
+#infoBox { padding: 10px 90px 0 400px }
 
 #priceBox {
     padding: 10px;
@@ -295,9 +266,7 @@ a.categoryButton:hover {
     font-weight: bold;
 }
 
-.total {
-    border-top: 1px solid #444;
-}
+.total { border-top: 1px solid #444 }
 
 
 /* footer styles */
@@ -308,9 +277,7 @@ a.categoryButton:hover {
     padding-top: 10px;
 }
 
-.footerText {
-    margin-top: 5px;
-}
+.footerText { margin-top: 5px }
 
 
 /* admin styles */
@@ -328,21 +295,13 @@ a.categoryButton:hover {
     padding-bottom: 10px;
 }
 
-.smallText {
-    font-size: small;
-}
+.smallText { font-size: small }
 
-.reallySmallText {
-    font-size: xx-small;
-}
+.reallySmallText { font-size: xx-small }
 
-.even {
-    background-color: #edf8f7;
-}
+.even { background-color: #edf8f7 }
 
-.odd {
-    background-color: #fff;
-}
+.odd { background-color: #fff }
 
 .bubble {
     font-weight: bold;
@@ -351,15 +310,13 @@ a.categoryButton:hover {
     color: inherit;
 }
 
-.hMargin {
-    margin: 0 30px;
-}
+.hMargin { margin: 0 30px }
 
-.error {
-    color: #c00;
-}
+.error { color: #c00 }
 
 .errorMessage {
     color: #c00;
     font-style: italic;
 }
+
+.indent { margin-left: 6em }

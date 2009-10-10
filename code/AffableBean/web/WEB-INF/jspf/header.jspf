@@ -10,6 +10,10 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
+<jsp:useBean id="affableBeanDB" class="database.AffableBeanDB">
+    <jsp:setProperty name="affableBeanDB" property="database" value="${affableBeanDBAO}" />
+</jsp:useBean>
+
 
 <%-- Set language based on user's choice --%>
 <c:if test="${param['language'] != null}">

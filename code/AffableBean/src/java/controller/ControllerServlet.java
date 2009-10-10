@@ -137,11 +137,11 @@ public class ControllerServlet extends HttpServlet {
 
             String userView = (String) session.getAttribute("view");
 
-            if (userView != null) {
+            if ((userView != null) && (!userView.equals("/index"))) {
                 // return user from whence s/he came
                 userPath = userView;
             } else {
-                // if previous view cannot be determined, send user to welcome page
+                // if previous view is index, or cannot be determined, send user to welcome page
                 try {
                     request.getRequestDispatcher("/index.jsp").forward(request, response);
                 } catch (Exception ex) {

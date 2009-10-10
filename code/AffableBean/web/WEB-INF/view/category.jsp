@@ -9,10 +9,6 @@
 
 <%@page contentType="text/html; charset=UTF-8"%> <%-- required for '€' sign --%>
 
-<jsp:useBean id="affableBeanDB" class="database.AffableBeanDB">
-    <jsp:setProperty name="affableBeanDB" property="database" value="${affableBeanDBAO}" />
-</jsp:useBean>
-
 <%-- Set session-scoped variable to track the view user is coming from.
      This is used by the language mechanism in the Controller so that
      users view the same page when switching between EN and CS. --%>

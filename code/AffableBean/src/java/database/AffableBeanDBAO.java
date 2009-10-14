@@ -9,6 +9,8 @@
 
 package database;
 
+import cart.ShoppingCart;
+import cart.ShoppingCartItem;
 import entity.*;
 import java.util.*;
 import exceptions.*;
@@ -20,6 +22,7 @@ public class AffableBeanDBAO {
     private EntityManager em;
 
     public AffableBeanDBAO(EntityManagerFactory emf) throws Exception {
+
         try {
             em = emf.createEntityManager();
         } catch (Exception ex) {
@@ -29,6 +32,7 @@ public class AffableBeanDBAO {
     }
 
     public void remove() {
+
         try {
             em.close();
         } catch (Exception ex) {
@@ -37,6 +41,7 @@ public class AffableBeanDBAO {
     }
 
     public List getCategories() throws CategoriesNotFoundException {
+
         try {
             return em.createNamedQuery("Category.findAll").getResultList();
         } catch (Exception ex) {
@@ -71,6 +76,12 @@ public class AffableBeanDBAO {
 
         try {
 
+//            // This works if there are no foreign keys (findByCategoryId named query exists)
+//            List<Product> productList =
+//                    em.createNamedQuery("Product.findByCategoryId").
+//                    setParameter("categoryId", c).
+//                    getResultList();
+
             // use EntityManager's createQuery method to create a query in JP QL
             List<Product> productList =
                     em.createQuery("SELECT p FROM Product p WHERE p.categoryId = :categoryId").
@@ -103,44 +114,72 @@ public class AffableBeanDBAO {
         return requestedProduct;
     }
 
-//    public void buyBooks(ShoppingCart cart) throws OrderException {
-//        Collection items = cart.getItems();
-//        Iterator i = items.iterator();
-//
-//        try {
-//            while (i.hasNext()) {
-//                ShoppingCartItem sci = (ShoppingCartItem) i.next();
-//                Book bd = (Book) sci.getItem();
-//                String id = bd.getBookId();
-//                int quantity = sci.getQuantity();
-//                buyBook(id, quantity);
-//            }
-//        } catch (Exception ex) {
-//            throw new OrderException("Commit failed: " + ex.getMessage());
-//        }
-//    }
-//
-//    public void buyBook(
-//        String bookId,
-//        int quantity) throws OrderException {
-//        try {
-//            Book requestedBook = em.find(Book.class, bookId);
-//
-//            if (requestedBook != null) {
-//                int inventory = requestedBook.getInventory();
+
+    public Customer processOrder(String name, String email, String phone, String address, String cityRegion, String ccNumber) {
+
+                Customer customer = new Customer();
+                    customer.setName(name);
+                    customer.setEmail(email);
+                    customer.setPhone(phone);
+                    customer.setAddress(address);
+                    customer.setCityRegion(cityRegion);
+                    customer.setCcNumber(ccNumber);
+
+                em.persist(customer);
+
+                return customer;
+                    
+    }
+
+    public void processOrder(Customer customer) {
+
+        em.persist(customer);
+
+        Customer testCustomer = em.find(Customer.class, 1);
+        testCustomer.setName("Jack Black");
+
+
+
+    }
+
+
+    public void buyProducts(ShoppingCart cart) throws OrderException {
+        List items = cart.getItems();
+        Iterator i = items.iterator();
+
+        try {
+            while (i.hasNext()) {
+                ShoppingCartItem sci = (ShoppingCartItem) i.next();
+                Product product = (Product) sci.getItem();
+                Integer id = product.getId();
+                int quantity = sci.getQuantity();
+                buyProduct(id, quantity);
+            }
+        } catch (Exception ex) {
+            throw new OrderException("Commit failed: " + ex.getMessage());
+        }
+    }
+
+    public void buyProduct(Integer productId, int quantity) throws OrderException {
+        try {
+            Product requestedProduct = em.find(Product.class, productId);
+
+//            if (requestedProduct != null) {
+//                int inventory = requestedProduct.getInventory();
 //
 //                if ((inventory - quantity) >= 0) {
 //                    int newInventory = inventory - quantity;
-//                    requestedBook.setInventory(newInventory);
+//                    requestedProduct.setInventory(newInventory);
 //                } else {
 //                    throw new OrderException(
-//                            "Not enough of " + bookId
+//                            "Not enough of " + productId
 //                            + " in stock to complete order.");
 //                }
 //            }
-//        } catch (Exception ex) {
-//            throw new OrderException(
-//                    "Couldn't purchase book: " + bookId + ex.getMessage());
-//        }
-//    }
+        } catch (Exception ex) {
+            throw new OrderException(
+                    "Couldn't purchase product: " + productId + ex.getMessage());
+        }
+    }
+
 }

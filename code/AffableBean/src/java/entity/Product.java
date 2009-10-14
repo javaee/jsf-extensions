@@ -1,8 +1,13 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
 package entity;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -19,10 +24,17 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-
+/**
+ *
+ * @author troy
+ */
 @Entity
 @Table(name = "product")
-@NamedQueries({@NamedQuery(name = "Product.findAll", query = "SELECT p FROM Product p"), @NamedQuery(name = "Product.findById", query = "SELECT p FROM Product p WHERE p.id = :id"), @NamedQuery(name = "Product.findByName", query = "SELECT p FROM Product p WHERE p.name = :name"), @NamedQuery(name = "Product.findByPrice", query = "SELECT p FROM Product p WHERE p.price = :price"), @NamedQuery(name = "Product.findByImagePath", query = "SELECT p FROM Product p WHERE p.imagePath = :imagePath"), @NamedQuery(name = "Product.findByLastUpdate", query = "SELECT p FROM Product p WHERE p.lastUpdate = :lastUpdate")})
+@NamedQueries({@NamedQuery(name = "Product.findAll", query = "SELECT p FROM Product p"), 
+               @NamedQuery(name = "Product.findById", query = "SELECT p FROM Product p WHERE p.id = :id"),
+               @NamedQuery(name = "Product.findByName", query = "SELECT p FROM Product p WHERE p.name = :name"),
+               @NamedQuery(name = "Product.findByPrice", query = "SELECT p FROM Product p WHERE p.price = :price"),
+               @NamedQuery(name = "Product.findByLastUpdate", query = "SELECT p FROM Product p WHERE p.lastUpdate = :lastUpdate")})
 public class Product implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -37,9 +49,6 @@ public class Product implements Serializable {
     @Column(name = "price")
     private double price;
     @Basic(optional = false)
-    @Column(name = "image_path")
-    private String imagePath;
-    @Basic(optional = false)
     @Column(name = "last_update")
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastUpdate;
@@ -47,7 +56,7 @@ public class Product implements Serializable {
     @ManyToOne(optional = false)
     private Category categoryId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
-    private List<OrderedProduct> orderedProductList;
+    private Collection<OrderedProduct> orderedProductCollection;
 
     public Product() {
     }
@@ -56,11 +65,10 @@ public class Product implements Serializable {
         this.id = id;
     }
 
-    public Product(Integer id, String name, double price, String imagePath, Date lastUpdate) {
+    public Product(Integer id, String name, double price, Date lastUpdate) {
         this.id = id;
         this.name = name;
         this.price = price;
-        this.imagePath = imagePath;
         this.lastUpdate = lastUpdate;
     }
 
@@ -88,14 +96,6 @@ public class Product implements Serializable {
         this.price = price;
     }
 
-    public String getImagePath() {
-        return imagePath;
-    }
-
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
-    }
-
     public Date getLastUpdate() {
         return lastUpdate;
     }
@@ -112,12 +112,12 @@ public class Product implements Serializable {
         this.categoryId = categoryId;
     }
 
-    public List<OrderedProduct> getOrderedProductList() {
-        return orderedProductList;
+    public Collection<OrderedProduct> getOrderedProductCollection() {
+        return orderedProductCollection;
     }
 
-    public void setOrderedProductList(List<OrderedProduct> orderedProductList) {
-        this.orderedProductList = orderedProductList;
+    public void setOrderedProductCollection(Collection<OrderedProduct> orderedProductCollection) {
+        this.orderedProductCollection = orderedProductCollection;
     }
 
     @Override

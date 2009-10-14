@@ -38,7 +38,7 @@
                 <span class="categoryLabel"></span>
                 <span class="categoryLabelText"><fmt:message key="${category.name}"/></span>
 
-                <img src="<c:out value="${category.imagePath}"/>"
+                <img src="<c:out value="${initParam.categoryImagePath}${category.name}.jpg"/>"
                      alt="<fmt:message key="${category.name}"/>"
                      class="categoryImage">
             </a>

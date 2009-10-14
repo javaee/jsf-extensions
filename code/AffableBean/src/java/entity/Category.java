@@ -1,8 +1,13 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
 package entity;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -17,10 +22,13 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-
+/**
+ *
+ * @author troy
+ */
 @Entity
 @Table(name = "category")
-@NamedQueries({@NamedQuery(name = "Category.findAll", query = "SELECT c FROM Category c"), @NamedQuery(name = "Category.findById", query = "SELECT c FROM Category c WHERE c.id = :id"), @NamedQuery(name = "Category.findByName", query = "SELECT c FROM Category c WHERE c.name = :name"), @NamedQuery(name = "Category.findByImagePath", query = "SELECT c FROM Category c WHERE c.imagePath = :imagePath"), @NamedQuery(name = "Category.findByLastUpdate", query = "SELECT c FROM Category c WHERE c.lastUpdate = :lastUpdate")})
+@NamedQueries({@NamedQuery(name = "Category.findAll", query = "SELECT c FROM Category c"), @NamedQuery(name = "Category.findById", query = "SELECT c FROM Category c WHERE c.id = :id"), @NamedQuery(name = "Category.findByName", query = "SELECT c FROM Category c WHERE c.name = :name"), @NamedQuery(name = "Category.findByLastUpdate", query = "SELECT c FROM Category c WHERE c.lastUpdate = :lastUpdate")})
 public class Category implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -32,14 +40,11 @@ public class Category implements Serializable {
     @Column(name = "name")
     private String name;
     @Basic(optional = false)
-    @Column(name = "image_path")
-    private String imagePath;
-    @Basic(optional = false)
     @Column(name = "last_update")
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastUpdate;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "categoryId")
-    private List<Product> productList;
+    private Collection<Product> productCollection;
 
     public Category() {
     }
@@ -48,10 +53,9 @@ public class Category implements Serializable {
         this.id = id;
     }
 
-    public Category(Short id, String name, String imagePath, Date lastUpdate) {
+    public Category(Short id, String name, Date lastUpdate) {
         this.id = id;
         this.name = name;
-        this.imagePath = imagePath;
         this.lastUpdate = lastUpdate;
     }
 
@@ -71,14 +75,6 @@ public class Category implements Serializable {
         this.name = name;
     }
 
-    public String getImagePath() {
-        return imagePath;
-    }
-
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
-    }
-
     public Date getLastUpdate() {
         return lastUpdate;
     }
@@ -87,12 +83,12 @@ public class Category implements Serializable {
         this.lastUpdate = lastUpdate;
     }
 
-    public List<Product> getProductList() {
-        return productList;
+    public Collection<Product> getProductCollection() {
+        return productCollection;
     }
 
-    public void setProductList(List<Product> productList) {
-        this.productList = productList;
+    public void setProductCollection(Collection<Product> productCollection) {
+        this.productCollection = productCollection;
     }
 
     @Override

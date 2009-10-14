@@ -24,9 +24,15 @@
     </servlet-mapping>
 
     <context-param>
-        <description>The relative image path relative to the application</description>
-        <param-name>imagePath</param-name>
+        <description>The relative path to product images</description>
+        <param-name>productImagePath</param-name>
         <param-value>img/productThumbs/</param-value>
+    </context-param>
+
+    <context-param>
+        <description>The relative path to category images</description>
+        <param-name>categoryImagePath</param-name>
+        <param-value>img/categories/</param-value>
     </context-param>
 
     <context-param>

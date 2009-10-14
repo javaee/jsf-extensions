@@ -5,31 +5,35 @@ The AffableBean application requires access to a MySQL database.
 
 Before running the application,
 
-1.  Download MySQL from: http://dev.mysql.com/downloads/
+ 1. Download MySQL from: http://dev.mysql.com/downloads/
 
     The database configuration uses 'root' / '' as the default username / password.
     This is used in the AffableBean project.
 
-2.  From the IDE's Services window, right-click the MySQL Server
+ 2. From the IDE's Services window, right-click the MySQL Server
     node and choose Create Database.
 
-4.  In the Create Database dialog, type in 'affablebean' and select
+ 3. In the Create Database dialog, type in 'affablebean' and select
     the 'Grant Full Access To *@localhost' option.
 
-5.  Click OK to exit the dialog.
+ 4. Click OK to exit the dialog.
 
-6.  Run the affablebean.sql script found in this directory.
-    To do so, double-click the affablebean.sql node to open it
-    in the IDE's SQL editor.
+ 5. Run the affablebean_schema.sql script found in this directory.
+    This script creates tables necessary for the application.
+    To do so, double-click the affablebean_schema.sql node to open
+    it in the IDE's SQL editor.
 
-7.  In the toolbar above the editor, make sure the connection
+ 6. In the toolbar above the editor, make sure the connection
     to the 'affablebean' database is selected:
 
     jdbc:mysql://localhost:3306/affablebean
 
-8.  Click the Run SQL button to run the script.
+ 7. Click the Run SQL button to run the script.
 
-9.  It is necessary to enable automatic driver deployment on the server.
+ 8. Also run the affablebean_sample_data.sql script found in this directory.
+    This script generates sample data necessary for the application.
+
+ 9. It is necessary to enable automatic driver deployment on the server.
     This is because the GF server doesn't contain the MySQL driver by default.
     Choose Tools > Servers, and select your server in the left pane. Then
     in the right pane, select the 'Enable JDBC Driver Deployment' option.
@@ -39,9 +43,6 @@ Before running the application,
 
 
 Notes:
-
-    The affablebean.sql script creates tables and sample data
-    necessary for the application.
 
     The sun-resources.xml file creates the 'jdbc/affablebean'
     datasource, and 'affablebeanPool' connection pool on the

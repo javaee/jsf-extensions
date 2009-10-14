@@ -4,7 +4,7 @@
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <jta-data-source>jdbc/affablebean</jta-data-source>
     <properties>
-      <property name="eclipselink.logging.level" value="FINE"/>
+      <property name="eclipselink.logging.level" value="FINEST"/>
     </properties>
   </persistence-unit>
 </persistence>

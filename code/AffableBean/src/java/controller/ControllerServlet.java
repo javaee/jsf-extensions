@@ -12,25 +12,30 @@ package controller;
 import cart.ShoppingCart;
 import database.AffableBeanDBAO;
 import entity.Category;
+import entity.Customer;
 import entity.Product;
 import exceptions.BadInputException;
 import exceptions.CategoryNotFoundException;
 import exceptions.ProductNotFoundException;
 import exceptions.ProductsNotFoundException;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
+import javax.annotation.Resource;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.transaction.UserTransaction;
 
 
 public class ControllerServlet extends HttpServlet {
 
-//    @Resource
-//    private UserTransaction utx;
+    @Resource
+    private UserTransaction utx;
+
     private AffableBeanDBAO affableBeanDBAO;
     private Category selectedCategory;
     private List categoryProducts;
@@ -292,7 +297,37 @@ public class ControllerServlet extends HttpServlet {
                 userPath = "/checkout";
             // otherwise, save order to database
             } else {
+//                Date currentDate = new Date();
+//
+//                Customer customer = new Customer();
+//                    customer.setName(name);
+//                    customer.setEmail(email);
+//                    customer.setPhone(phone);
+//                    customer.setAddress(address);
+//                    customer.setCityRegion(cityRegion);
+//                    customer.setCcNumber(ccNumber);
+//                    customer.setDateAccountCreated(currentDate);
+                    
+                try {
+                    utx.begin();
 
+                    affableBeanDBAO.processOrder(name, email, phone, address, cityRegion, ccNumber);
+
+                    utx.commit();
+
+                } catch (Exception ex) {
+                    System.out.println("Problem with saving customer details: " + ex.getMessage());
+                    try {
+                        utx.rollback();
+                        request.getRequestDispatcher("/WEB-INF/jspf/error/500.jspf").forward(request, response);
+                    } catch (Exception e) {
+                        System.out.println("Rollback failed: " + e.getMessage());
+                        e.printStackTrace();
+                    }
+                }
+
+                // order processed successfully
+                // send user to confirmation page
                 userPath = "/confirmation";
             }
         }

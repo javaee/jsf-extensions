@@ -12,7 +12,7 @@
 <%-- Set session-scoped variable to track the view user is coming from.
      This is used by the language mechanism in the Controller so that
      users view the same page when switching between EN and CS. --%>
-<c:set var="view" value="/cart" scope="session" />
+<c:set var="view" value="/cart" scope="session"/>
 
 <c:set var="cart" value="${sessionScope.cart}"/>
 
@@ -23,13 +23,13 @@
 
     <c:choose>
         <c:when test="${cart.numberOfItems > 1}">
-            <p><fmt:message key="yourCartContains" /> ${cart.numberOfItems} <fmt:message key="items" />.</p>
+            <p><fmt:message key="yourCartContains"/> ${cart.numberOfItems} <fmt:message key="items"/>.</p>
         </c:when>
         <c:when test="${cart.numberOfItems == 1}">
-            <p><fmt:message key="yourCartContains" /> ${cart.numberOfItems} <fmt:message key="item" />.</p>
+            <p><fmt:message key="yourCartContains"/> ${cart.numberOfItems} <fmt:message key="item"/>.</p>
         </c:when>
         <c:otherwise>
-            <p><fmt:message key="yourCartEmpty" /></p>
+            <p><fmt:message key="yourCartEmpty"/></p>
         </c:otherwise>
     </c:choose>
 
@@ -41,7 +41,7 @@
                 <c:param name="clear" value="true"/>
             </c:url>
 
-            <a href="${url}" class="rounded bubble hMargin"><fmt:message key="clearCart" /></a>
+            <a href="${url}" class="rounded bubble hMargin"><fmt:message key="clearCart"/></a>
         </c:if>
 
         <%-- continue shopping widget --%>
@@ -58,35 +58,35 @@
             </c:choose>
         </c:set>
 
-        <c:url var="url" value="${value}" />
-        <a href="${url}" class="rounded bubble hMargin"><fmt:message key="continueShopping" /></a>
+        <c:url var="url" value="${value}"/>
+        <a href="${url}" class="rounded bubble hMargin"><fmt:message key="continueShopping"/></a>
 
         <%-- checkout widget --%>
         <c:if test="${cart.numberOfItems != 0}">
-            <a href="<c:url value="checkout"/>" class="rounded bubble hMargin"><fmt:message key="proceedCheckout" /></a>
+            <a href="<c:url value="checkout"/>" class="rounded bubble hMargin"><fmt:message key="proceedCheckout"/></a>
         </c:if>
     </div>
 
     <c:if test="${cart.numberOfItems != 0}">
 
-        <h4 id="subtotal"><fmt:message key="subtotal" />: € <c:out value="${cart.subtotal}"/></h4>
+        <h4 id="subtotal"><fmt:message key="subtotal"/>: € <c:out value="${cart.subtotal}"/></h4>
 
         <table id="cartTable">
 
             <tr class="header">
-                <th><fmt:message key="product" /></th>
-                <th><fmt:message key="name" /></th>
-                <th><fmt:message key="price" /></th>
-                <th><fmt:message key="quantity" /></th>
+                <th><fmt:message key="product"/></th>
+                <th><fmt:message key="name"/></th>
+                <th><fmt:message key="price"/></th>
+                <th><fmt:message key="quantity"/></th>
             </tr>
 
             <c:forEach var="item" items="${cart.items}" varStatus="iter">
 
-                <c:set var="product" value="${item.item}" />
+                <c:set var="product" value="${item.item}"/>
 
                 <tr>
                     <td class="${((iter.index % 2) == 0) ? 'even' : 'odd'}">
-                        <img src="<c:out value="${product.imagePath}"/>"
+                        <img src="<c:out value="${initParam.productImagePath}${product.name}"/>.png"
                             alt="image of <fmt:message key="${product.name}"/>">
                     </td>
                     <td class="${((iter.index % 2) == 0) ? 'even' : 'odd'}">

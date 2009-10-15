@@ -59,7 +59,13 @@ li { margin: 10px 0 }
     height: 250px;
 }
 
-#headerBar {
+#logo {
+    float:left;
+    margin-left: 30px;
+    margin-top: -20px;
+}
+
+#widgetBar {
     float: right;
     width: 850px;
     height: 50px;
@@ -273,7 +279,7 @@ a.categoryButton:hover { text-decoration: none }
 #footer {
     width: 350px;
     height: 60px;
-    clear: both;
+    clear: left;
     padding-top: 10px;
 }
 
@@ -292,7 +298,7 @@ a.categoryButton:hover { text-decoration: none }
 /* general styles */
 #main {
     background: #f7f7e9;
-    padding-bottom: 10px;
+    /*padding-bottom: 10px;*/
 }
 
 .smallText { font-size: small }

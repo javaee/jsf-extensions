@@ -82,7 +82,7 @@
 
         <div id="main">
             <div id="header">
-                <div id="headerBar">
+                <div id="widgetBar">
 
                     <div class="headerWidget">
 
@@ -179,7 +179,7 @@
                 </div>
 
                 <a href="<c:url value="/"/>">
-                    <img src="img/logo.png" alt="Affable Bean logo" style="float:left; margin-left: 30px; margin-top: -20px">
+                    <img src="img/logo.png" id="logo" alt="Affable Bean logo">
                 </a>
 
                 <img src="img/logoText.png" id="logoText" alt="the affable bean">

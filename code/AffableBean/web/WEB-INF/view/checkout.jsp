@@ -150,7 +150,8 @@
                     <fmt:message key="prague"/>
                     <select name="cityRegion">
                       <c:forEach begin="1" end="10" var="regionNumber">
-                        <option value="${regionNumber}">${regionNumber}</option>
+                        <option value="${regionNumber}"
+                                <c:if test="${param.cityRegion eq regionNumber}">selected</c:if>>${regionNumber}</option>
                       </c:forEach>
                     </select>
                 </td>
@@ -161,7 +162,8 @@
                            size="30"
                            maxlength="19"
                            name="creditcard"
-                           class="creditcard">
+                           class="creditcard"
+                           value="${param.creditcard}">
                 </td>
             </tr>
             <tr>

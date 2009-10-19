@@ -10,7 +10,7 @@
             <div id="footer">
                 <br>
                 <hr>
-                <p class="reallySmallText footerText">
+                <p id="footerText" class="reallySmallText">
                     <a href="<c:url value="#"/>"><fmt:message key="privacy" /></a>
                     &nbsp;&nbsp;::&nbsp;&nbsp;
                     <a href="<c:url value="#"/>"><fmt:message key="contact" /></a>

@@ -127,9 +127,9 @@ a span.cartMsg:hover { text-decoration: none }
 
 .categoryBox {
     position: relative;
-    margin: 22px 15px;
-    height: 160px;
+    height: 176px;
     width: 210px;
+    margin: 21px 15px 6px;
     float: inherit;
 }
 
@@ -283,7 +283,7 @@ a.categoryButton:hover { text-decoration: none }
     padding-top: 10px;
 }
 
-.footerText { margin-top: 5px }
+#footerText { margin-top: 5px }
 
 
 /* admin styles */

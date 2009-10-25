@@ -45,7 +45,7 @@
 <div id="categoryRightColumn">
 
     <p id="categoryTitle">
-        <span style="background-color: #f5eabe; padding: 7px; position: relative;"
+        <span style="background-color: #f5eabe; padding: 7px;"
               class="rounded"><fmt:message key="${selectedCategory.name}" /></span>
     </p>
 

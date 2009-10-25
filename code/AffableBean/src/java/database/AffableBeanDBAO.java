@@ -19,22 +19,24 @@ import javax.persistence.*;
 
 public class AffableBeanDBAO {
 
-    private EntityManager em;
+        //    private EntityManager em;
+    private EntityManagerFactory emf;   //new
 
-    public AffableBeanDBAO(EntityManagerFactory emf) throws Exception {
+    public AffableBeanDBAO(EntityManagerFactory entityManagerFactory) throws Exception {
 
-        try {
-            em = emf.createEntityManager();
-        } catch (Exception ex) {
-            throw new Exception(
-                    "Couldn't open connection to database: " + ex.getMessage());
-        }
+        //        try {
+        //            em = emf.createEntityManager();
+        emf = entityManagerFactory;
+        //        } catch (Exception ex) {
+        //            throw new Exception(
+        //                    "Couldn't open connection to database: " + ex.getMessage());
+        //        }
     }
 
     public void remove() {
 
         try {
-            em.close();
+//            em.close();
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
@@ -42,6 +44,7 @@ public class AffableBeanDBAO {
 
     public List getCategories() throws CategoriesNotFoundException {
 
+        EntityManager em = emf.createEntityManager();
         try {
             return em.createNamedQuery("Category.findAll").getResultList();
         } catch (Exception ex) {
@@ -51,6 +54,8 @@ public class AffableBeanDBAO {
     }
 
     public Category getCategory(String categoryId) throws CategoryNotFoundException {
+
+        EntityManager em = emf.createEntityManager();
 
         // PK for Category is of type Short, so convert categoryId to Short
         Short catId = Short.parseShort(categoryId);
@@ -65,6 +70,8 @@ public class AffableBeanDBAO {
     }
 
     public List getCategoryProducts(String categoryId) throws ProductsNotFoundException {
+
+        EntityManager em = emf.createEntityManager();
 
         // Product entity requires Category instance for categoryId
         Category c = new Category();
@@ -104,6 +111,8 @@ public class AffableBeanDBAO {
 
     public Product getProduct(String productId) throws ProductNotFoundException {
 
+        EntityManager em = emf.createEntityManager();
+
         Integer pid = Integer.valueOf(productId);
         Product requestedProduct = em.find(Product.class, pid);
 
@@ -114,33 +123,37 @@ public class AffableBeanDBAO {
         return requestedProduct;
     }
 
-
     public Customer processOrder(String name, String email, String phone, String address, String cityRegion, String ccNumber) {
 
-                Customer customer = new Customer();
-                    customer.setName(name);
-                    customer.setEmail(email);
-                    customer.setPhone(phone);
-                    customer.setAddress(address);
-                    customer.setCityRegion(cityRegion);
-                    customer.setCcNumber(ccNumber);
+        EntityManager em = emf.createEntityManager();
 
-                em.persist(customer);
+        EntityTransaction et = em.getTransaction();
+        et.begin();
 
-                return customer;
-                    
-    }
-
-    public void processOrder(Customer customer) {
+        Customer customer = new Customer();
+        customer.setName(name);
+        customer.setEmail(email);
+        customer.setPhone(phone);
+        customer.setAddress(address);
+        customer.setCityRegion(cityRegion);
+        customer.setCcNumber(ccNumber);
 
         em.persist(customer);
 
-        Customer testCustomer = em.find(Customer.class, 1);
-        testCustomer.setName("Jack Black");
-
-
+        et.commit();
+        em.close();
+        return customer;
 
     }
+
+//    public void processOrder(Customer customer) {
+//
+//        em.persist(customer);
+//
+//        Customer testCustomer = em.find(Customer.class, 1);
+//        testCustomer.setName("Jack Black");
+//
+//    }
 
 
     public void buyProducts(ShoppingCart cart) throws OrderException {
@@ -161,6 +174,9 @@ public class AffableBeanDBAO {
     }
 
     public void buyProduct(Integer productId, int quantity) throws OrderException {
+
+        EntityManager em = emf.createEntityManager();
+
         try {
             Product requestedProduct = em.find(Product.class, productId);
 

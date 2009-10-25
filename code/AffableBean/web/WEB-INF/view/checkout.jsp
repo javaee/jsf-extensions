@@ -103,7 +103,8 @@
                             <br><span class="indent"><fmt:message key="ccNumberError"/></span>
                           </c:if>
 
-                        </span></td>
+                        </span>
+                    </td>
                 </tr>
             </c:if>
             <tr>

@@ -126,10 +126,9 @@ a span.cartMsg:hover { text-decoration: none }
 }
 
 .categoryBox {
-    position: relative;
     height: 176px;
-    width: 210px;
-    margin: 21px 15px 6px;
+    width: 212px;
+    margin: 21px 14px 6px;
     float: inherit;
 }
 
@@ -139,7 +138,6 @@ a span.cartMsg:hover { text-decoration: none }
 .categoryLabel {
     position: absolute;
     background-color: #fff;
-    /* filter: alpha(opacity=70); */
     opacity: 0.7;
     height: 40px;
     width: 210px;
@@ -174,9 +172,9 @@ a span.cartMsg:hover { text-decoration: none }
 }
 
 #categoryTitle {
-    float: right;
     margin: -30px 180px 0 0;
     font-size: x-large;
+    float: right;
 }
 
 .categoryText {

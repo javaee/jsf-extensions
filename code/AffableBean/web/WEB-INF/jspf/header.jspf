@@ -60,7 +60,7 @@
             });
         </script>
 
-        <title><fmt:message key="title" /></title>
+        <title><fmt:message key='title' /></title>
     </head>
     <body>
 
@@ -90,7 +90,7 @@
                         <c:choose>
                           <%-- When 'language' session attribute hasn't been set,
                                render language widget according to browser's preferred locale --%>
-                          <c:when test="${empty sessionScope.language}">
+                          <c:when test='${empty sessionScope.language}'>
                             <c:choose>
                               <c:when test="${pageContext.request.locale.language ne 'cs'}">
                                 <span class="rounded bubble">english</span>
@@ -148,7 +148,7 @@
                     </div>
 
                     <div class="headerWidget">
-                        <a href="<c:url value="viewCart"/>">
+                        <a href="<c:url value='viewCart'/>">
                             <span class="cartMsg"><fmt:message key="cart" /></span>
                             <img src="img/cart.gif" alt="shopping cart icon" id="cart">
                         </a>
@@ -178,7 +178,7 @@
                     </div>
                 </div>
 
-                <a href="<c:url value="/"/>">
+                <a href="<c:url value='/'/>">
                     <img src="img/logo.png" id="logo" alt="Affable Bean logo">
                 </a>
 

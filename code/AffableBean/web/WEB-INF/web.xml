@@ -12,6 +12,11 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
 
+    <servlet>
+        <servlet-name>NewServlet</servlet-name>
+        <servlet-class>controller.NewServlet</servlet-class>
+    </servlet>
+
     <servlet-mapping>
         <servlet-name>Controller</servlet-name>
         <url-pattern>/addToCart</url-pattern>
@@ -45,6 +50,11 @@
         <param-name>javax.servlet.jsp.jstl.fmt.localizationContext</param-name>
         <param-value>resources.messages</param-value>
     </context-param>
+
+    <servlet-mapping>
+        <servlet-name>NewServlet</servlet-name>
+        <url-pattern>/NewServlet</url-pattern>
+    </servlet-mapping>
 
     <session-config>
         <session-timeout>
@@ -84,7 +94,7 @@
         <jsp-property-group>
             <url-pattern>/index.jsp</url-pattern>
             <url-pattern>/WEB-INF/view/*</url-pattern>
-            <url-pattern>/WEB-INF/jspf/*</url-pattern>
+            <url-pattern>/WEB-INF/jspf/error/*</url-pattern>
             <include-prelude>/WEB-INF/jspf/header.jspf</include-prelude>
             <include-coda>/WEB-INF/jspf/footer.jspf</include-coda>
         </jsp-property-group>
@@ -125,7 +135,7 @@
             <form-error-page>/admin/error.jsp</form-error-page>
         </form-login-config>
     </login-config>
-
+    
     <security-role>
         <description>administration priviledges granted for shop catalog</description>
         <role-name>adminUser</role-name>

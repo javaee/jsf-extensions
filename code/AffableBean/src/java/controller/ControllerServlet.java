@@ -5,21 +5,17 @@
  * compliance with the terms of the License at:
  * http://developer.sun.com/berkeley_license.html
  */
-
-
 package controller;
 
 import cart.ShoppingCart;
 import database.AffableBeanDBAO;
 import entity.Category;
-import entity.Customer;
 import entity.Product;
 import exceptions.BadInputException;
 import exceptions.CategoryNotFoundException;
 import exceptions.ProductNotFoundException;
 import exceptions.ProductsNotFoundException;
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.ServletConfig;
@@ -30,12 +26,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.transaction.UserTransaction;
 
-
 public class ControllerServlet extends HttpServlet {
 
     @Resource
     private UserTransaction utx;
-
     private AffableBeanDBAO affableBeanDBAO;
     private Category selectedCategory;
     private List categoryProducts;
@@ -54,8 +48,6 @@ public class ControllerServlet extends HttpServlet {
         // gets DBAO instance from servlet context
         affableBeanDBAO = (AffableBeanDBAO) getServletContext().getAttribute("affableBeanDBAO");
     }
-
-
 
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -248,72 +240,61 @@ public class ControllerServlet extends HttpServlet {
             boolean cityRegionError;
             boolean ccNumberError;
 
-            if (name == null ||
-                name.equals("") ||
-                name.length() > 45) {
-                    errorMessage = true;
-                    nameError = true;
-                    request.setAttribute("nameError", nameError);
+            if (name == null
+                    || name.equals("")
+                    || name.length() > 45) {
+                errorMessage = true;
+                nameError = true;
+                request.setAttribute("nameError", nameError);
             }
-            if (email == null ||
-                email.equals("") ||
-                !email.contains("@") ) {
-                    errorMessage = true;
-                    emailError = true;
-                    request.setAttribute("emailError", emailError);
+            if (email == null
+                    || email.equals("")
+                    || !email.contains("@")) {
+                errorMessage = true;
+                emailError = true;
+                request.setAttribute("emailError", emailError);
             }
-            if (phone == null ||
-                phone.equals("") ||
-                phone.length() < 9) {
-                    errorMessage = true;
-                    phoneError = true;
-                    request.setAttribute("phoneError", phoneError);
+            if (phone == null
+                    || phone.equals("")
+                    || phone.length() < 9) {
+                errorMessage = true;
+                phoneError = true;
+                request.setAttribute("phoneError", phoneError);
             }
-            if (address == null ||
-                address.equals("") ||
-                address.length() > 45) {
-                    errorMessage = true;
-                    addressError = true;
-                    request.setAttribute("addressError", addressError);
+            if (address == null
+                    || address.equals("")
+                    || address.length() > 45) {
+                errorMessage = true;
+                addressError = true;
+                request.setAttribute("addressError", addressError);
             }
-            if (cityRegion == null ||
-                cityRegion.equals("") ||
-                cityRegion.length() > 2) {
-                    errorMessage = true;
-                    cityRegionError = true;
-                    request.setAttribute("cityRegionError", cityRegionError);
+            if (cityRegion == null
+                    || cityRegion.equals("")
+                    || cityRegion.length() > 2) {
+                errorMessage = true;
+                cityRegionError = true;
+                request.setAttribute("cityRegionError", cityRegionError);
             }
-            if (ccNumber == null ||
-                ccNumber.equals("") ||
-                ccNumber.length() > 20) {
-                    errorMessage = true;
-                    ccNumberError = true;
-                    request.setAttribute("ccNumberError", ccNumberError);
+            if (ccNumber == null
+                    || ccNumber.equals("")
+                    || ccNumber.length() > 20) {
+                errorMessage = true;
+                ccNumberError = true;
+                request.setAttribute("ccNumberError", ccNumberError);
             }
 
             // if validation error found, return user to checkout
             if (errorMessage == true) {
                 request.setAttribute("errorMessage", errorMessage);
                 userPath = "/checkout";
-            // otherwise, save order to database
+
+                // otherwise, save order to database
             } else {
-//                Date currentDate = new Date();
-//
-//                Customer customer = new Customer();
-//                    customer.setName(name);
-//                    customer.setEmail(email);
-//                    customer.setPhone(phone);
-//                    customer.setAddress(address);
-//                    customer.setCityRegion(cityRegion);
-//                    customer.setCcNumber(ccNumber);
-//                    customer.setDateAccountCreated(currentDate);
-                    
+
+                // OPTION 1 (RESOURCE_LOCAL) BELOW:
                 try {
-                    utx.begin();
 
-                    affableBeanDBAO.processOrder(name, email, phone, address, cityRegion, ccNumber);
-
-                    utx.commit();
+                  affableBeanDBAO.processOrder(name, email, phone, address, cityRegion, ccNumber);
 
                 } catch (Exception ex) {
                     System.out.println("Problem with saving customer details: " + ex.getMessage());
@@ -325,6 +306,39 @@ public class ControllerServlet extends HttpServlet {
                         e.printStackTrace();
                     }
                 }
+
+
+                // OPTION 2 (JTA) BELOW:
+//                try {
+//
+//                    Context ic = new InitialContext();
+//                    UserTransaction ut =
+//                            (UserTransaction) ic.lookup("java:comp/UserTransaction");
+//
+//                    ut.begin();
+//                    // access resources transactionally here
+//
+//                    // doesn't work!
+////                    affableBeanDBAO.processOrder(name, email, phone, address, cityRegion, ccNumber);
+//
+//                    Customer customer = new Customer();
+//                    customer.setName(name);
+//                    customer.setEmail(email);
+//                    customer.setPhone(phone);
+//                    customer.setAddress(address);
+//                    customer.setCityRegion(cityRegion);
+//                    customer.setCcNumber(ccNumber);
+//
+//                    EntityManager em = emf.createEntityManager();
+//
+//                    em.persist(customer);
+//                    ut.commit();
+//                    em.close();
+//
+//                } catch (Exception ex) {
+//                    System.err.println("Unable to process order. " + ex.getMessage());
+//                }
+
 
                 // order processed successfully
                 // send user to confirmation page

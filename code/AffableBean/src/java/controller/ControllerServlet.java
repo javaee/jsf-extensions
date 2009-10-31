@@ -8,7 +8,7 @@
 package controller;
 
 import cart.ShoppingCart;
-import database.AffableBeanDBAO;
+import database.AffableBeanDAO;
 import entity.Category;
 import entity.Product;
 import exceptions.BadInputException;
@@ -26,7 +26,7 @@ import javax.servlet.http.HttpSession;
 
 public class ControllerServlet extends HttpServlet {
 
-    private AffableBeanDBAO affableBeanDBAO = new AffableBeanDBAO();
+    private AffableBeanDAO affableBeanDAO = new AffableBeanDAO();
     private Category selectedCategory;
     private List categoryProducts;
     private ShoppingCart cart;
@@ -76,7 +76,7 @@ public class ControllerServlet extends HttpServlet {
                 synchronized (session) {
                     // get selected category
                     try {
-                        selectedCategory = affableBeanDBAO.getCategory(categoryId);
+                        selectedCategory = affableBeanDAO.getCategory(categoryId);
                     } catch (CategoryNotFoundException cnfe) {
                         System.err.println("Unable to get category. " + cnfe.getMessage());
                     }
@@ -86,7 +86,7 @@ public class ControllerServlet extends HttpServlet {
 
                     // get all products for selected category
                     try {
-                        categoryProducts = affableBeanDBAO.getCategoryProducts(categoryId);
+                        categoryProducts = affableBeanDAO.getCategoryProducts(categoryId);
                     } catch (ProductsNotFoundException pnfe) {
                         System.err.println("Unable to get products. " + pnfe.getMessage());
                     }
@@ -179,7 +179,7 @@ public class ControllerServlet extends HttpServlet {
             if (!productId.equals("")) {
 
                 try {
-                    product = affableBeanDBAO.getProduct(productId);
+                    product = affableBeanDAO.getProduct(productId);
 
                     cart.add(productId, product);
 
@@ -198,7 +198,7 @@ public class ControllerServlet extends HttpServlet {
             if (!productId.equals("") && !quantity.equals("")) {
 
                 try {
-                    product = affableBeanDBAO.getProduct(productId);
+                    product = affableBeanDAO.getProduct(productId);
 
                     cart.update(productId, product, quantity);
 
@@ -284,7 +284,7 @@ public class ControllerServlet extends HttpServlet {
             // otherwise, save order to database
             } else {
 
-                  affableBeanDBAO.processOrder(name, email, phone, address, cityRegion, ccNumber);
+                  affableBeanDAO.processOrder(name, email, phone, address, cityRegion, ccNumber);
 
                 // order processed successfully; send user to confirmation page
                 userPath = "/confirmation";

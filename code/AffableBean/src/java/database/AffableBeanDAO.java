@@ -17,11 +17,11 @@ import exceptions.*;
 import javax.persistence.*;
 
 
-public class AffableBeanDBAO {
+public class AffableBeanDAO {
 
     private EntityManagerFactory emf;
 
-    public AffableBeanDBAO() {
+    public AffableBeanDAO() {
         emf = Persistence.createEntityManagerFactory("AffableBeanPU");
     }
 
@@ -29,7 +29,10 @@ public class AffableBeanDBAO {
 
         EntityManager em = emf.createEntityManager();
         try {
-            return em.createNamedQuery("Category.findAll").getResultList();
+//            return em.createNamedQuery("Category.findAll").getResultList();
+
+              return em.createQuery("SELECT c FROM Category c").getResultList();
+
         } catch (Exception ex) {
             throw new CategoriesNotFoundException(
                     "Couldn't get categories: " + ex.getMessage());
@@ -121,21 +124,22 @@ public class AffableBeanDBAO {
     public Customer processOrder(String name, String email, String phone, String address, String cityRegion, String ccNumber) {
 
         EntityManager em = emf.createEntityManager();
-
         EntityTransaction et = em.getTransaction();
-        et.begin();
 
         Customer customer = new Customer();
-        customer.setName(name);
-        customer.setEmail(email);
-        customer.setPhone(phone);
-        customer.setAddress(address);
-        customer.setCityRegion(cityRegion);
-        customer.setCcNumber(ccNumber);
 
         try {
-            em.persist(customer);
+            et.begin();
 
+
+            customer.setName(name);
+            customer.setEmail(email);
+            customer.setPhone(phone);
+            customer.setAddress(address);
+            customer.setCityRegion(cityRegion);
+            customer.setCcNumber(ccNumber);
+
+            em.persist(customer);
             et.commit();
         } catch (PersistenceException pe) {
             et.rollback();
@@ -143,18 +147,9 @@ public class AffableBeanDBAO {
         } finally {
             em.close();
         }
+
         return customer;
-
     }
-
-//    public void processOrder(Customer customer) {
-//
-//        em.persist(customer);
-//
-//        Customer testCustomer = em.find(Customer.class, 1);
-//        testCustomer.setName("Jack Black");
-//
-//    }
 
 
     // TODO: buyProducts sounds like something what should happen in one transaction

@@ -20,6 +20,6 @@ public class AffableBeanDB {
 
     public List getCategories() throws CategoriesNotFoundException {
         // TODO: perhaps cache categories
-        return new AffableBeanDBAO().getCategories();
+        return new AffableBeanDAO().getCategories();
     }
 }

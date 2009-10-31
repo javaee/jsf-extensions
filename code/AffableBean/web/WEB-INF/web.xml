@@ -1,28 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 
-    <listener>
-        <description>adds database resource to application scope</description>
-        <listener-class>listeners.ContextListener</listener-class>
-    </listener>
-
     <servlet>
         <servlet-name>Controller</servlet-name>
         <servlet-class>controller.ControllerServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
 
-    <servlet>
-        <servlet-name>NewServlet</servlet-name>
-        <servlet-class>controller.NewServlet</servlet-class>
-    </servlet>
-
     <servlet-mapping>
         <servlet-name>Controller</servlet-name>
-        <url-pattern>/addToCart</url-pattern>
         <url-pattern>/category</url-pattern>
-        <url-pattern>/updateCart</url-pattern>
+        <url-pattern>/addToCart</url-pattern>
         <url-pattern>/viewCart</url-pattern>
+        <url-pattern>/updateCart</url-pattern>
         <url-pattern>/checkout</url-pattern>
         <url-pattern>/purchase</url-pattern>
         <url-pattern>/chooseLanguage</url-pattern>
@@ -50,11 +40,6 @@
         <param-name>javax.servlet.jsp.jstl.fmt.localizationContext</param-name>
         <param-value>resources.messages</param-value>
     </context-param>
-
-    <servlet-mapping>
-        <servlet-name>NewServlet</servlet-name>
-        <url-pattern>/NewServlet</url-pattern>
-    </servlet-mapping>
 
     <session-config>
         <session-timeout>

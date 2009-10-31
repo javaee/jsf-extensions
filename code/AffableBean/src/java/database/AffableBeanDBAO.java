@@ -19,27 +19,10 @@ import javax.persistence.*;
 
 public class AffableBeanDBAO {
 
-        //    private EntityManager em;
-    private EntityManagerFactory emf;   //new
+    private EntityManagerFactory emf;
 
-    public AffableBeanDBAO(EntityManagerFactory entityManagerFactory) throws Exception {
-
-        //        try {
-        //            em = emf.createEntityManager();
-        emf = entityManagerFactory;
-        //        } catch (Exception ex) {
-        //            throw new Exception(
-        //                    "Couldn't open connection to database: " + ex.getMessage());
-        //        }
-    }
-
-    public void remove() {
-
-        try {
-//            em.close();
-        } catch (Exception ex) {
-            System.out.println(ex.getMessage());
-        }
+    public AffableBeanDBAO() {
+        emf = Persistence.createEntityManagerFactory("AffableBeanPU");
     }
 
     public List getCategories() throws CategoriesNotFoundException {
@@ -50,6 +33,8 @@ public class AffableBeanDBAO {
         } catch (Exception ex) {
             throw new CategoriesNotFoundException(
                     "Couldn't get categories: " + ex.getMessage());
+        } finally {
+            em.close();
         }
     }
 
@@ -57,16 +42,20 @@ public class AffableBeanDBAO {
 
         EntityManager em = emf.createEntityManager();
 
-        // PK for Category is of type Short, so convert categoryId to Short
-        Short catId = Short.parseShort(categoryId);
-        Category requestedCategory = em.find(Category.class, catId);
+        try {
+            // PK for Category is of type Short, so convert categoryId to Short
+            Short catId = Short.parseShort(categoryId);
+            Category requestedCategory = em.find(Category.class, catId);
 
-        if (requestedCategory == null) {
-            throw new CategoryNotFoundException(
-                    "Couldn't get category: " + categoryId);
+            if (requestedCategory == null) {
+                throw new CategoryNotFoundException(
+                        "Couldn't get category: " + categoryId);
+            }
+
+            return requestedCategory;
+        } finally {
+            em.close();
         }
-
-        return requestedCategory;
     }
 
     public List getCategoryProducts(String categoryId) throws ProductsNotFoundException {
@@ -106,6 +95,8 @@ public class AffableBeanDBAO {
         } catch (Exception ex) {
             throw new ProductsNotFoundException(
                     "Could not get products: " + ex.getMessage());
+        } finally {
+            em.close();
         }
     }
 
@@ -113,14 +104,18 @@ public class AffableBeanDBAO {
 
         EntityManager em = emf.createEntityManager();
 
-        Integer pid = Integer.valueOf(productId);
-        Product requestedProduct = em.find(Product.class, pid);
+        try {
+            Integer pid = Integer.valueOf(productId);
+            Product requestedProduct = em.find(Product.class, pid);
 
-        if (requestedProduct == null) {
-            throw new ProductNotFoundException("Couldn't find product: " + productId);
+            if (requestedProduct == null) {
+                throw new ProductNotFoundException("Couldn't find product: " + productId);
+            }
+            return requestedProduct;
+        } finally {
+            em.close();
         }
 
-        return requestedProduct;
     }
 
     public Customer processOrder(String name, String email, String phone, String address, String cityRegion, String ccNumber) {
@@ -138,10 +133,16 @@ public class AffableBeanDBAO {
         customer.setCityRegion(cityRegion);
         customer.setCcNumber(ccNumber);
 
-        em.persist(customer);
+        try {
+            em.persist(customer);
 
-        et.commit();
-        em.close();
+            et.commit();
+        } catch (PersistenceException pe) {
+            et.rollback();
+            throw pe;
+        } finally {
+            em.close();
+        }
         return customer;
 
     }
@@ -156,6 +157,7 @@ public class AffableBeanDBAO {
 //    }
 
 
+    // TODO: buyProducts sounds like something what should happen in one transaction
     public void buyProducts(ShoppingCart cart) throws OrderException {
         List items = cart.getItems();
         Iterator i = items.iterator();

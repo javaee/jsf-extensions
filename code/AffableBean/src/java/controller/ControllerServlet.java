@@ -17,20 +17,16 @@ import exceptions.ProductNotFoundException;
 import exceptions.ProductsNotFoundException;
 import java.io.IOException;
 import java.util.List;
-import javax.annotation.Resource;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.transaction.UserTransaction;
 
 public class ControllerServlet extends HttpServlet {
 
-    @Resource
-    private UserTransaction utx;
-    private AffableBeanDBAO affableBeanDBAO;
+    private AffableBeanDBAO affableBeanDBAO = new AffableBeanDBAO();
     private Category selectedCategory;
     private List categoryProducts;
     private ShoppingCart cart;
@@ -44,9 +40,6 @@ public class ControllerServlet extends HttpServlet {
 
         // initializes the servlet with configuration information
         surcharge = servletConfig.getServletContext().getInitParameter("deliverySurcharge");
-
-        // gets DBAO instance from servlet context
-        affableBeanDBAO = (AffableBeanDBAO) getServletContext().getAttribute("affableBeanDBAO");
     }
 
     /**
@@ -288,60 +281,12 @@ public class ControllerServlet extends HttpServlet {
                 request.setAttribute("errorMessage", errorMessage);
                 userPath = "/checkout";
 
-                // otherwise, save order to database
+            // otherwise, save order to database
             } else {
-
-                // OPTION 1 (RESOURCE_LOCAL) BELOW:
-                try {
 
                   affableBeanDBAO.processOrder(name, email, phone, address, cityRegion, ccNumber);
 
-                } catch (Exception ex) {
-                    System.out.println("Problem with saving customer details: " + ex.getMessage());
-                    try {
-                        utx.rollback();
-                        request.getRequestDispatcher("/WEB-INF/jspf/error/500.jspf").forward(request, response);
-                    } catch (Exception e) {
-                        System.out.println("Rollback failed: " + e.getMessage());
-                        e.printStackTrace();
-                    }
-                }
-
-
-                // OPTION 2 (JTA) BELOW:
-//                try {
-//
-//                    Context ic = new InitialContext();
-//                    UserTransaction ut =
-//                            (UserTransaction) ic.lookup("java:comp/UserTransaction");
-//
-//                    ut.begin();
-//                    // access resources transactionally here
-//
-//                    // doesn't work!
-////                    affableBeanDBAO.processOrder(name, email, phone, address, cityRegion, ccNumber);
-//
-//                    Customer customer = new Customer();
-//                    customer.setName(name);
-//                    customer.setEmail(email);
-//                    customer.setPhone(phone);
-//                    customer.setAddress(address);
-//                    customer.setCityRegion(cityRegion);
-//                    customer.setCcNumber(ccNumber);
-//
-//                    EntityManager em = emf.createEntityManager();
-//
-//                    em.persist(customer);
-//                    ut.commit();
-//                    em.close();
-//
-//                } catch (Exception ex) {
-//                    System.err.println("Unable to process order. " + ex.getMessage());
-//                }
-
-
-                // order processed successfully
-                // send user to confirmation page
+                // order processed successfully; send user to confirmation page
                 userPath = "/confirmation";
             }
         }

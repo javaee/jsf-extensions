@@ -15,16 +15,11 @@ import java.util.List;
 
 public class AffableBeanDB {
 
-    private AffableBeanDBAO database = null;
-    
-    public AffableBeanDB() {
-    }
-
-    public void setDatabase(AffableBeanDBAO database) {
-        this.database = database;
-    }
+    // default constructor
+    public AffableBeanDB() {}
 
     public List getCategories() throws CategoriesNotFoundException {
-        return database.getCategories();
+        // TODO: perhaps cache categories
+        return new AffableBeanDBAO().getCategories();
     }
 }

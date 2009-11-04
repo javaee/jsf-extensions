@@ -7,12 +7,6 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
 
-    <servlet>
-        <servlet-name>Faces Servlet</servlet-name>
-        <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
-
     <servlet-mapping>
         <servlet-name>Controller</servlet-name>
         <url-pattern>/category</url-pattern>
@@ -23,11 +17,6 @@
         <url-pattern>/purchase</url-pattern>
         <url-pattern>/chooseLanguage</url-pattern>
     </servlet-mapping>
-
-    <context-param>
-        <param-name>javax.faces.PROJECT_STAGE</param-name>
-        <param-value>Development</param-value>
-    </context-param>
 
     <context-param>
         <description>The relative path to product images</description>
@@ -51,11 +40,6 @@
         <param-name>javax.servlet.jsp.jstl.fmt.localizationContext</param-name>
         <param-value>resources.messages</param-value>
     </context-param>
-
-    <servlet-mapping>
-        <servlet-name>Faces Servlet</servlet-name>
-        <url-pattern>/faces/*</url-pattern>
-    </servlet-mapping>
 
     <session-config>
         <session-timeout>

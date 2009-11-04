@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+
     <context-param>
         <param-name>javax.faces.PROJECT_STAGE</param-name>
         <param-value>Development</param-value>
     </context-param>
+
     <servlet>
         <servlet-name>Controller</servlet-name>
         <servlet-class>controller.ControllerServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
+
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
+
     <servlet-mapping>
         <servlet-name>Controller</servlet-name>
         <url-pattern>/category</url-pattern>
@@ -24,37 +28,45 @@
         <url-pattern>/purchase</url-pattern>
         <url-pattern>/chooseLanguage</url-pattern>
     </servlet-mapping>
+
     <context-param>
         <description>The relative path to product images</description>
         <param-name>productImagePath</param-name>
         <param-value>img/productThumbs/</param-value>
     </context-param>
+
     <context-param>
         <description>The relative path to category images</description>
         <param-name>categoryImagePath</param-name>
         <param-value>img/categories/</param-value>
     </context-param>
+
     <context-param>
         <description>The delivery surcharge applied to all orders</description>
         <param-name>deliverySurcharge</param-name>
         <param-value>3.00</param-value>
     </context-param>
+
     <context-param>
         <param-name>javax.servlet.jsp.jstl.fmt.localizationContext</param-name>
         <param-value>resources.messages</param-value>
     </context-param>
+
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>/faces/*</url-pattern>
     </servlet-mapping>
+
     <session-config>
         <session-timeout>
             30
         </session-timeout>
     </session-config>
+
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
+
     <!-- This is only needed for testing the datasource (TestDataSource.jsp)
     <resource-ref>
         <description>jdbc:mysql://localhost:3306/affablebean</description>
@@ -63,10 +75,12 @@
         <res-auth>Container</res-auth>
         <res-sharing-scope>Shareable</res-sharing-scope>
     </resource-ref> -->
+
     <error-page>
         <error-code>403</error-code>
         <location>/WEB-INF/jspf/error/403.jspf</location>
     </error-page>
+
     <error-page>
         <error-code>404</error-code>
         <location>/WEB-INF/jspf/error/404.jspf</location>
@@ -75,6 +89,7 @@
         <error-code>500</error-code>
         <location>/WEB-INF/jspf/error/500.jspf</location>
     </error-page>
+
     <jsp-config>
         <jsp-property-group>
             <url-pattern>/index.jsp</url-pattern>
@@ -84,6 +99,7 @@
             <include-coda>/WEB-INF/jspf/footer.jspf</include-coda>
         </jsp-property-group>
     </jsp-config>
+
     <security-constraint>
         <display-name>Checkout</display-name>
         <web-resource-collection>
@@ -97,6 +113,7 @@
             <!-- replace with CONFIDENTIAL and configure in GF -->
         </user-data-constraint>
     </security-constraint>
+
     <security-constraint>
         <display-name>Admin</display-name>
         <web-resource-collection>
@@ -110,6 +127,7 @@
             <transport-guarantee>NONE</transport-guarantee>
         </user-data-constraint>
     </security-constraint>
+
     <login-config>
         <auth-method>FORM</auth-method>
         <realm-name>file</realm-name>
@@ -118,6 +136,7 @@
             <form-error-page>/admin/error.jsp</form-error-page>
         </form-login-config>
     </login-config>
+
     <security-role>
         <description>administration priviledges granted for shop catalog</description>
         <role-name>adminUser</role-name>

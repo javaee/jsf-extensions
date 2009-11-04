@@ -10,11 +10,7 @@
 package cart;
 
 import entity.Product;
-import exceptions.BadInputException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 
 public class ShoppingCart {
@@ -40,17 +36,12 @@ public class ShoppingCart {
         }
     }
 
-    public synchronized void update(String productId, Product product, String quantity)
-            throws BadInputException {
+    public synchronized void update(String productId, Product product, String quantity) {
 
         int qty = -1;
 
-        try {
-            // cast quantity as int
-            qty = Integer.parseInt(quantity);
-        } catch (NumberFormatException nfe) {
-            System.err.println("Input could not be parsed as Integer. " + nfe.getMessage());
-        }
+        // cast quantity as int
+        qty = Integer.parseInt(quantity);
 
         if (qty >= 0) {
             if (items.containsKey(productId)) {
@@ -76,8 +67,6 @@ public class ShoppingCart {
                     items.remove(keyMatch);
                 }
             }
-        } else {
-            throw new BadInputException("Bad input: " + qty);
         }
     }
 
@@ -144,15 +133,15 @@ public class ShoppingCart {
         return total;
     }
 
-    private double roundOff(double x) {
-        long val = Math.round(x * 100); // cents
-
-        return val / 100.0;
-    }
-
     public synchronized void clear() {
         System.out.println("Clearing cart.");
         items.clear();
         numberOfItems = 0;
+    }
+
+    private double roundOff(double x) {
+        long val = Math.round(x * 100); // cents
+
+        return val / 100.0;
     }
 }

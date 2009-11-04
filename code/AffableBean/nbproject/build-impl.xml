@@ -126,7 +126,10 @@
         <condition property="do.tmp.war.package.with.custom.manifest">
             <and>
                 <isset property="has.custom.manifest"/>
-                <isfalse value="${directory.deployment.supported}"/>
+                <or>
+                    <isfalse value="${directory.deployment.supported}"/>
+                    <isset property="dist.ear.dir"/>
+                </or>
             </and>
         </condition>
         <condition property="do.tmp.war.package.without.custom.manifest">
@@ -134,11 +137,17 @@
                 <not>
                     <isset property="has.custom.manifest"/>
                 </not>
-                <isfalse value="${directory.deployment.supported}"/>
+                <or>
+                    <isfalse value="${directory.deployment.supported}"/>
+                    <isset property="dist.ear.dir"/>
+                </or>
             </and>
         </condition>
         <condition property="do.tmp.war.package">
-            <isfalse value="${directory.deployment.supported}"/>
+            <or>
+                <isfalse value="${directory.deployment.supported}"/>
+                <isset property="dist.ear.dir"/>
+            </or>
         </condition>
         <property name="build.meta.inf.dir" value="${build.web.dir}/META-INF"/>
         <condition else="" property="application.args.param" value="${application.args}">
@@ -161,12 +170,6 @@
         <property name="javadoc.encoding.used" value="${source.encoding}"/>
         <property name="includes" value="**"/>
         <property name="excludes" value=""/>
-        <condition else="" property="javac.compilerargs.jaxws" value="-Djava.endorsed.dirs='${jaxws.endorsed.dir}'">
-            <and>
-                <isset property="jaxws.endorsed.dir"/>
-                <available file="nbproject/jaxws-build.xml"/>
-            </and>
-        </condition>
         <property name="runmain.jvmargs" value=""/>
         <path id="endorsed.classpath.path" path="${endorsed.classpath}"/>
         <condition else="" property="endorsed.classpath.cmd.line.arg" value="-Xbootclasspath/p:'${toString:endorsed.classpath.path}'">
@@ -235,7 +238,7 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
                         <path path="@{classpath}"/>
                     </classpath>
                     <compilerarg line="${endorsed.classpath.cmd.line.arg}"/>
-                    <compilerarg line="${javac.compilerargs} ${javac.compilerargs.jaxws}"/>
+                    <compilerarg line="${javac.compilerargs}"/>
                     <customize/>
                 </javac>
             </sequential>
@@ -528,7 +531,10 @@ exists or setup the property manually. For example like this:
         <manifest file="${build.web.dir}/META-INF/MANIFEST.MF"/>
     </target>
     <target depends="init" name="library-inclusion-in-archive" unless="dist.ear.dir"/>
-    <target depends="init,compile,compile-jsps,-pre-dist,library-inclusion-in-manifest" if="do.tmp.war.package" name="do-ear-dist">
+    <target depends="init" if="dist.ear.dir" name="-clean-webinf-lib">
+        <delete dir="${build.web.dir}/WEB-INF/lib"/>
+    </target>
+    <target depends="init,-clean-webinf-lib,compile,compile-jsps,-pre-dist,library-inclusion-in-manifest" if="do.tmp.war.package" name="do-ear-dist">
         <dirname file="${dist.ear.war}" property="dist.jar.dir"/>
         <mkdir dir="${dist.jar.dir}"/>
         <jar compress="${jar.compress}" jarfile="${dist.ear.war}" manifest="${build.web.dir}/META-INF/MANIFEST.MF">
@@ -800,7 +806,7 @@ exists or setup the property manually. For example like this:
         <delete file="${test.report.file}"/>
         <!-- must exist, otherwise the XML formatter would fail -->
         <mkdir dir="${build.test.results.dir}"/>
-        <webproject1:debug args="${test.class}" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner" classpath="${ant.home}/lib/ant.jar:${ant.home}/lib/ant-junit.jar:${debug.test.classpath}">
+        <webproject1:debug args="${test.class}" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner" classpath="${ant.home}/lib/ant.jar:${ant.home}/lib/ant-junit.jar:${debug.test.classpath}:${j2ee.platform.embeddableejb.classpath}">
             <customize>
                 <arg value="showoutput=true"/>
                 <arg value="formatter=org.apache.tools.ant.taskdefs.optional.junit.BriefJUnitResultFormatter"/>

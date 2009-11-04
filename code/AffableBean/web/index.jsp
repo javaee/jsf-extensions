@@ -29,7 +29,7 @@
 
 <div id="indexRightColumn">
 
-    <c:forEach var='category' items='${affableBeanDB.categories}'>
+    <c:forEach var='category' items='${categories}'>
 
         <div class="categoryBox">
 

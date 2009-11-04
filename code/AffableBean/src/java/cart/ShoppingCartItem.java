@@ -13,6 +13,7 @@ import entity.Product;
 
 
 public class ShoppingCartItem {
+    
     Object item;
     int quantity;
 

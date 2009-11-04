@@ -8,25 +8,28 @@
 package controller;
 
 import cart.ShoppingCart;
-import database.AffableBeanDAO;
+import ejbs.CategoryFacade;
+import ejbs.CustomerFacade;
+import ejbs.ProductFacade;
 import entity.Category;
+import entity.Customer;
 import entity.Product;
-import exceptions.BadInputException;
-import exceptions.CategoryNotFoundException;
-import exceptions.ProductNotFoundException;
-import exceptions.ProductsNotFoundException;
 import java.io.IOException;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.*;
 
 public class ControllerServlet extends HttpServlet {
 
-    private AffableBeanDAO affableBeanDAO = new AffableBeanDAO();
+    @EJB
+    private CategoryFacade categoryFacade;
+    @EJB
+    private ProductFacade productFacade;
+    @EJB
+    private CustomerFacade customerFacade;
+    
     private Category selectedCategory;
     private List categoryProducts;
     private ShoppingCart cart;
@@ -40,6 +43,8 @@ public class ControllerServlet extends HttpServlet {
 
         // initializes the servlet with configuration information
         surcharge = servletConfig.getServletContext().getInitParameter("deliverySurcharge");
+
+        getServletContext().setAttribute("categories", categoryFacade.findAll());
     }
 
     /**
@@ -75,21 +80,13 @@ public class ControllerServlet extends HttpServlet {
                 // synchronize HttpSession object to protect session attributes
                 synchronized (session) {
                     // get selected category
-                    try {
-                        selectedCategory = affableBeanDAO.getCategory(categoryId);
-                    } catch (CategoryNotFoundException cnfe) {
-                        System.err.println("Unable to get category. " + cnfe.getMessage());
-                    }
+                    selectedCategory = categoryFacade.find(Short.parseShort(categoryId));
 
                     // place selected category in session scope
                     session.setAttribute("selectedCategory", selectedCategory);
 
                     // get all products for selected category
-                    try {
-                        categoryProducts = affableBeanDAO.getCategoryProducts(categoryId);
-                    } catch (ProductsNotFoundException pnfe) {
-                        System.err.println("Unable to get products. " + pnfe.getMessage());
-                    }
+                    categoryProducts = productFacade.findForCategory(selectedCategory);
 
                     // place category products in session scope
                     session.setAttribute("categoryProducts", categoryProducts);
@@ -178,15 +175,9 @@ public class ControllerServlet extends HttpServlet {
 
             if (!productId.equals("")) {
 
-                try {
-                    product = affableBeanDAO.getProduct(productId);
+                product = productFacade.find(Integer.parseInt(productId));
 
-                    cart.add(productId, product);
-
-                } catch (ProductNotFoundException pnfe) {
-
-                    System.err.println("Unable to add product to cart. " + pnfe.getMessage());
-                }
+                cart.add(productId, product);
 
             }
 
@@ -197,20 +188,8 @@ public class ControllerServlet extends HttpServlet {
 
             if (!productId.equals("") && !quantity.equals("")) {
 
-                try {
-                    product = affableBeanDAO.getProduct(productId);
-
-                    cart.update(productId, product, quantity);
-
-                } catch (BadInputException bne) {
-
-                    System.err.println("Unable to complete updateCart action. " + bne.getMessage());
-
-                } catch (ProductNotFoundException pnfe) {
-
-                    System.err.println("Unable to update cart. " + pnfe.getMessage());
-                }
-
+                product = productFacade.find(Integer.parseInt(productId));
+                cart.update(productId, product, quantity);
             }
 
             // if purchase action is called
@@ -284,9 +263,10 @@ public class ControllerServlet extends HttpServlet {
             // otherwise, save order to database
             } else {
 
-                  affableBeanDAO.processOrder(name, email, phone, address, cityRegion, ccNumber);
+                  processOrder(name, email, phone, address, cityRegion, ccNumber);
 
-                // order processed successfully; send user to confirmation page
+                // order processed successfully
+                // send user to confirmation page
                 userPath = "/confirmation";
             }
         }
@@ -300,4 +280,19 @@ public class ControllerServlet extends HttpServlet {
             ex.printStackTrace();
         }
     }
+
+    public Customer processOrder(String name, String email, String phone, String address, String cityRegion, String ccNumber) {
+
+        Customer customer = new Customer();
+        customer.setName(name);
+        customer.setEmail(email);
+        customer.setPhone(phone);
+        customer.setAddress(address);
+        customer.setCityRegion(cityRegion);
+        customer.setCcNumber(ccNumber);
+
+        customerFacade.create(customer);
+        return customer;
+    }
+
 }

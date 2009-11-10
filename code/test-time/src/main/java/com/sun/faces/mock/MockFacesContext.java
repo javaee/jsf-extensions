@@ -355,7 +355,7 @@ public class MockFacesContext extends FacesContext {
 	validationFailed = true;
     }
 
-    public boolean getValidationFailed() {
+    public boolean isValidationFailed() {
 	return validationFailed;
     }
 

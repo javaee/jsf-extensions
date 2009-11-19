@@ -35,7 +35,7 @@ import java.util.Map;
 import javax.faces.el.EvaluationException;
 import javax.faces.el.PropertyNotFoundException;
 import javax.faces.el.PropertyResolver;
-import com.sun.org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.beanutils.PropertyUtils;
 
 
 /**

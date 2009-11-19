@@ -35,7 +35,7 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import javax.faces.FacesException;
 import javax.servlet.jsp.jstl.sql.Result;
-import com.sun.org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.beanutils.PropertyUtils;
 
 
 /**

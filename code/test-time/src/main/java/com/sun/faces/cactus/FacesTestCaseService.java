@@ -508,6 +508,15 @@ public class FacesTestCaseService extends Object {
         getFacesContext().getExternalContext().setRequest(oldRequest);
     }
 
+    public void setModificationTime(String relativePath, long modTime) {
+        String basePath = System.getProperty("explodedWarDir");
+        if (null == basePath || 0 == basePath.length()) {
+            throw new IllegalArgumentException("SystemProperty \'\'explodedWarDir\'\' not set or set to empty value.  Please set this value to be the fully qualified local file path to the exploded test war.");
+        }
+        File toMod = new File(basePath, relativePath);
+        toMod.setLastModified(modTime);
+    }
+
     private void initFacesContext() {
         HttpServletResponse response;
         if (facesTestCase.sendResponseToFile()) {

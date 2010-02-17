@@ -2,66 +2,40 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
 
+DROP SCHEMA IF EXISTS `affablebean` ;
 CREATE SCHEMA IF NOT EXISTS `affablebean` DEFAULT CHARACTER SET utf8 ;
 USE `affablebean`;
-
--- -----------------------------------------------------
--- Table `affablebean`.`category`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `affablebean`.`category` ;
-
-CREATE  TABLE IF NOT EXISTS `category` (
-  `id` TINYINT(3) UNSIGNED NOT NULL AUTO_INCREMENT ,
-  `name` VARCHAR(50) NOT NULL ,
-  `last_update` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP ,
-  PRIMARY KEY (`id`) )
-ENGINE = InnoDB
-AUTO_INCREMENT = 5
-DEFAULT CHARACTER SET = utf8
-COMMENT = 'contains product categories, e.g., dairy, meats, etc.';
-
 
 -- -----------------------------------------------------
 -- Table `affablebean`.`customer`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `affablebean`.`customer` ;
 
-CREATE  TABLE IF NOT EXISTS `customer` (
-  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT ,
-  `name` VARCHAR(50) NOT NULL ,
-  `email` VARCHAR(50) NOT NULL ,
-  `phone` VARCHAR(50) NOT NULL ,
-  `address` VARCHAR(50) NOT NULL ,
+CREATE  TABLE IF NOT EXISTS `affablebean`.`customer` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
+  `name` VARCHAR(45) NOT NULL ,
+  `email` VARCHAR(45) NOT NULL ,
+  `phone` VARCHAR(45) NOT NULL ,
+  `address` VARCHAR(45) NOT NULL ,
   `city_region` VARCHAR(2) NOT NULL ,
   `cc_number` VARCHAR(16) NOT NULL ,
-  `date_account_created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
+  `date_created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB
-AUTO_INCREMENT = 2
-DEFAULT CHARACTER SET = utf8
 COMMENT = 'maintains customer details';
 
 
 -- -----------------------------------------------------
--- Table `affablebean`.`customer_order`
+-- Table `affablebean`.`category`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `affablebean`.`customer_order` ;
+DROP TABLE IF EXISTS `affablebean`.`category` ;
 
-CREATE  TABLE IF NOT EXISTS `customer_order` (
-  `id` MEDIUMINT(8) UNSIGNED NOT NULL AUTO_INCREMENT ,
-  `amount` DECIMAL(5,2) NOT NULL DEFAULT 0 ,
-  `create_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
-  `customer_id` INT(10) UNSIGNED NOT NULL ,
-  PRIMARY KEY (`id`) ,
-  INDEX `fk_customer_order_customer` (`customer_id` ASC) ,
-  CONSTRAINT `fk_customer_order_customer`
-    FOREIGN KEY (`customer_id` )
-    REFERENCES `customer` (`id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+CREATE  TABLE IF NOT EXISTS `affablebean`.`category` (
+  `id` TINYINT UNSIGNED NOT NULL AUTO_INCREMENT ,
+  `name` VARCHAR(45) NOT NULL ,
+  PRIMARY KEY (`id`) )
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COMMENT = 'maintains customer order details';
+COMMENT = 'contains product categories, e.g., dairy, meats, etc.';
 
 
 -- -----------------------------------------------------
@@ -69,57 +43,67 @@ COMMENT = 'maintains customer order details';
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `affablebean`.`product` ;
 
-CREATE  TABLE IF NOT EXISTS `product` (
-  `id` MEDIUMINT(8) UNSIGNED NOT NULL AUTO_INCREMENT ,
-  `name` VARCHAR(50) NOT NULL ,
-  `price` DOUBLE NOT NULL ,
+CREATE  TABLE IF NOT EXISTS `affablebean`.`product` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
+  `name` VARCHAR(45) NOT NULL ,
+  `price` DECIMAL(5,2) NOT NULL ,
   `last_update` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP ,
-  `category_id` TINYINT(3) UNSIGNED NOT NULL ,
+  `category_id` TINYINT UNSIGNED NOT NULL ,
   PRIMARY KEY (`id`) ,
   INDEX `fk_product_category` (`category_id` ASC) ,
   CONSTRAINT `fk_product_category`
     FOREIGN KEY (`category_id` )
-    REFERENCES `category` (`id` )
+    REFERENCES `affablebean`.`category` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-AUTO_INCREMENT = 17
-DEFAULT CHARACTER SET = utf8
 COMMENT = 'contains product details';
 
 
 -- -----------------------------------------------------
--- Table `affablebean`.`ordered_product`
+-- Table `affablebean`.`order`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `affablebean`.`ordered_product` ;
+DROP TABLE IF EXISTS `affablebean`.`order` ;
 
-CREATE  TABLE IF NOT EXISTS `ordered_product` (
-  `quantity` SMALLINT(6) NOT NULL DEFAULT '1' ,
-  `customer_order_id` MEDIUMINT(8) UNSIGNED NOT NULL ,
-  `product_id` MEDIUMINT(8) UNSIGNED NOT NULL ,
-  `customer_id` INT(10) UNSIGNED NOT NULL ,
-  PRIMARY KEY (`customer_order_id`, `product_id`) ,
-  INDEX `fk_ordered_product_customer_order` (`customer_order_id` ASC) ,
-  INDEX `fk_ordered_product_product` (`product_id` ASC) ,
-  INDEX `fk_ordered_product_customer` (`customer_id` ASC) ,
-  CONSTRAINT `fk_ordered_product_customer_order`
-    FOREIGN KEY (`customer_order_id` )
-    REFERENCES `customer_order` (`id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_ordered_product_product`
-    FOREIGN KEY (`product_id` )
-    REFERENCES `product` (`id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_ordered_product_customer`
+CREATE  TABLE IF NOT EXISTS `affablebean`.`order` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
+  `amount` DECIMAL(6,2) NOT NULL ,
+  `date_created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
+  `customer_id` INT UNSIGNED NOT NULL ,
+  PRIMARY KEY (`id`) ,
+  INDEX `fk_order_customer` (`customer_id` ASC) ,
+  CONSTRAINT `fk_order_customer`
     FOREIGN KEY (`customer_id` )
-    REFERENCES `customer` (`id` )
+    REFERENCES `affablebean`.`customer` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COMMENT = 'contains details for an individual product type in an order';
+COMMENT = 'maintains customer order details';
+
+
+-- -----------------------------------------------------
+-- Table `affablebean`.`order_has_product`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `affablebean`.`order_has_product` ;
+
+CREATE  TABLE IF NOT EXISTS `affablebean`.`order_has_product` (
+  `order_id` INT UNSIGNED NOT NULL ,
+  `product_id` INT UNSIGNED NOT NULL ,
+  `quantity` VARCHAR(4) NOT NULL DEFAULT '1' ,
+  PRIMARY KEY (`order_id`, `product_id`) ,
+  INDEX `fk_order_has_product_order` (`order_id` ASC) ,
+  INDEX `fk_order_has_product_product` (`product_id` ASC) ,
+  CONSTRAINT `fk_order_has_product_order`
+    FOREIGN KEY (`order_id` )
+    REFERENCES `affablebean`.`order` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_order_has_product_product`
+    FOREIGN KEY (`product_id` )
+    REFERENCES `affablebean`.`product` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
 
 
 

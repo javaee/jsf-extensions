@@ -28,7 +28,16 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "customer")
-@NamedQueries({@NamedQuery(name = "Customer.findAll", query = "SELECT c FROM Customer c"), @NamedQuery(name = "Customer.findById", query = "SELECT c FROM Customer c WHERE c.id = :id"), @NamedQuery(name = "Customer.findByName", query = "SELECT c FROM Customer c WHERE c.name = :name"), @NamedQuery(name = "Customer.findByEmail", query = "SELECT c FROM Customer c WHERE c.email = :email"), @NamedQuery(name = "Customer.findByPhone", query = "SELECT c FROM Customer c WHERE c.phone = :phone"), @NamedQuery(name = "Customer.findByAddress", query = "SELECT c FROM Customer c WHERE c.address = :address"), @NamedQuery(name = "Customer.findByCityRegion", query = "SELECT c FROM Customer c WHERE c.cityRegion = :cityRegion"), @NamedQuery(name = "Customer.findByCcNumber", query = "SELECT c FROM Customer c WHERE c.ccNumber = :ccNumber"), @NamedQuery(name = "Customer.findByDateAccountCreated", query = "SELECT c FROM Customer c WHERE c.dateAccountCreated = :dateAccountCreated")})
+@NamedQueries({
+    @NamedQuery(name = "Customer.findAll", query = "SELECT c FROM Customer c"),
+    @NamedQuery(name = "Customer.findById", query = "SELECT c FROM Customer c WHERE c.id = :id"),
+    @NamedQuery(name = "Customer.findByName", query = "SELECT c FROM Customer c WHERE c.name = :name"),
+    @NamedQuery(name = "Customer.findByEmail", query = "SELECT c FROM Customer c WHERE c.email = :email"),
+    @NamedQuery(name = "Customer.findByPhone", query = "SELECT c FROM Customer c WHERE c.phone = :phone"),
+    @NamedQuery(name = "Customer.findByAddress", query = "SELECT c FROM Customer c WHERE c.address = :address"),
+    @NamedQuery(name = "Customer.findByCityRegion", query = "SELECT c FROM Customer c WHERE c.cityRegion = :cityRegion"),
+    @NamedQuery(name = "Customer.findByCcNumber", query = "SELECT c FROM Customer c WHERE c.ccNumber = :ccNumber"),
+    @NamedQuery(name = "Customer.findByDateCreated", query = "SELECT c FROM Customer c WHERE c.dateCreated = :dateCreated")})
 public class Customer implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -55,11 +64,9 @@ public class Customer implements Serializable {
     @Column(name = "cc_number")
     private String ccNumber;
     @Basic(optional = false)
-    @Column(name = "date_account_created")
+    @Column(name = "date_created")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date dateAccountCreated;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "customerId")
-    private Collection<OrderedProduct> orderedProductCollection;
+    private Date dateCreated;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "customerId")
     private Collection<CustomerOrder> customerOrderCollection;
 
@@ -70,7 +77,7 @@ public class Customer implements Serializable {
         this.id = id;
     }
 
-    public Customer(Integer id, String name, String email, String phone, String address, String cityRegion, String ccNumber, Date dateAccountCreated) {
+    public Customer(Integer id, String name, String email, String phone, String address, String cityRegion, String ccNumber, Date dateCreated) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -78,7 +85,7 @@ public class Customer implements Serializable {
         this.address = address;
         this.cityRegion = cityRegion;
         this.ccNumber = ccNumber;
-        this.dateAccountCreated = dateAccountCreated;
+        this.dateCreated = dateCreated;
     }
 
     public Integer getId() {
@@ -137,20 +144,12 @@ public class Customer implements Serializable {
         this.ccNumber = ccNumber;
     }
 
-    public Date getDateAccountCreated() {
-        return dateAccountCreated;
+    public Date getDateCreated() {
+        return dateCreated;
     }
 
-    public void setDateAccountCreated(Date dateAccountCreated) {
-        this.dateAccountCreated = dateAccountCreated;
-    }
-
-    public Collection<OrderedProduct> getOrderedProductCollection() {
-        return orderedProductCollection;
-    }
-
-    public void setOrderedProductCollection(Collection<OrderedProduct> orderedProductCollection) {
-        this.orderedProductCollection = orderedProductCollection;
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
     }
 
     public Collection<CustomerOrder> getCustomerOrderCollection() {

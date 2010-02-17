@@ -6,6 +6,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
@@ -30,7 +31,12 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "product")
-@NamedQueries({@NamedQuery(name = "Product.findAll", query = "SELECT p FROM Product p"), @NamedQuery(name = "Product.findById", query = "SELECT p FROM Product p WHERE p.id = :id"), @NamedQuery(name = "Product.findByName", query = "SELECT p FROM Product p WHERE p.name = :name"), @NamedQuery(name = "Product.findByPrice", query = "SELECT p FROM Product p WHERE p.price = :price"), @NamedQuery(name = "Product.findByLastUpdate", query = "SELECT p FROM Product p WHERE p.lastUpdate = :lastUpdate")})
+@NamedQueries({
+    @NamedQuery(name = "Product.findAll", query = "SELECT p FROM Product p"),
+    @NamedQuery(name = "Product.findById", query = "SELECT p FROM Product p WHERE p.id = :id"),
+    @NamedQuery(name = "Product.findByName", query = "SELECT p FROM Product p WHERE p.name = :name"),
+    @NamedQuery(name = "Product.findByPrice", query = "SELECT p FROM Product p WHERE p.price = :price"),
+    @NamedQuery(name = "Product.findByLastUpdate", query = "SELECT p FROM Product p WHERE p.lastUpdate = :lastUpdate")})
 public class Product implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -43,16 +49,16 @@ public class Product implements Serializable {
     private String name;
     @Basic(optional = false)
     @Column(name = "price")
-    private double price;
+    private BigDecimal price;
     @Basic(optional = false)
     @Column(name = "last_update")
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastUpdate;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
+    private Collection<OrderHasProduct> orderHasProductCollection;
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Category categoryId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
-    private Collection<OrderedProduct> orderedProductCollection;
 
     public Product() {
     }
@@ -61,7 +67,7 @@ public class Product implements Serializable {
         this.id = id;
     }
 
-    public Product(Integer id, String name, double price, Date lastUpdate) {
+    public Product(Integer id, String name, BigDecimal price, Date lastUpdate) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -84,11 +90,11 @@ public class Product implements Serializable {
         this.name = name;
     }
 
-    public double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
@@ -100,20 +106,20 @@ public class Product implements Serializable {
         this.lastUpdate = lastUpdate;
     }
 
+    public Collection<OrderHasProduct> getOrderHasProductCollection() {
+        return orderHasProductCollection;
+    }
+
+    public void setOrderHasProductCollection(Collection<OrderHasProduct> orderHasProductCollection) {
+        this.orderHasProductCollection = orderHasProductCollection;
+    }
+
     public Category getCategoryId() {
         return categoryId;
     }
 
     public void setCategoryId(Category categoryId) {
         this.categoryId = categoryId;
-    }
-
-    public Collection<OrderedProduct> getOrderedProductCollection() {
-        return orderedProductCollection;
-    }
-
-    public void setOrderedProductCollection(Collection<OrderedProduct> orderedProductCollection) {
-        this.orderedProductCollection = orderedProductCollection;
     }
 
     @Override

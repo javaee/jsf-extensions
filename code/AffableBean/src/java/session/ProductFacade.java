@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package ejbs;
+package session;
 
 import entity.Category;
 import entity.Product;
@@ -15,7 +15,7 @@ import javax.persistence.Query;
 
 /**
  *
- * @author david
+ * @author troy
  */
 @Stateless
 public class ProductFacade {
@@ -34,7 +34,7 @@ public class ProductFacade {
         em.remove(em.merge(product));
     }
 
-    public Product find(int id) {
+    public Product find(Object id) {
         return em.find(Product.class, id);
     }
 
@@ -42,6 +42,7 @@ public class ProductFacade {
         return em.createQuery("select object(o) from Product as o").getResultList();
     }
 
+    // manually created
     public List<Product> findForCategory(Category category) {
         return em.createQuery("SELECT p FROM Product p WHERE p.categoryId = :categoryId").
                setParameter("categoryId", category).getResultList();

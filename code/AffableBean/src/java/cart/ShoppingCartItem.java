@@ -43,11 +43,11 @@ public class ShoppingCartItem {
     }
 
     public double getTotal() {
-        double amount = 0.0;
+        double amount = 0.00;
 
         Product productDetails = (Product) this.getItem();
 
-        amount = (this.getQuantity() * productDetails.getPrice());
+        amount = (this.getQuantity() * productDetails.getPrice().doubleValue());
 
         return roundOff(amount);
     }

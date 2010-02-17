@@ -8,9 +8,9 @@
 package controller;
 
 import cart.ShoppingCart;
-import ejbs.CategoryFacade;
-import ejbs.CustomerFacade;
-import ejbs.ProductFacade;
+import session.CategoryFacade;
+import session.CustomerFacade;
+import session.ProductFacade;
 import entity.Category;
 import entity.Customer;
 import entity.Product;

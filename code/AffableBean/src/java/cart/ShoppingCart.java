@@ -107,13 +107,13 @@ public class ShoppingCart {
     }
 
     public synchronized double getSubtotal() {
-        double amount = 0.0;
+        double amount = 0.00;
 
         for (Iterator i = getItems().iterator(); i.hasNext();) {
             ShoppingCartItem item = (ShoppingCartItem) i.next();
             Product productDetails = (Product) item.getItem();
 
-            amount += (item.getQuantity() * productDetails.getPrice());
+            amount += (item.getQuantity() * productDetails.getPrice().doubleValue());
         }
 
         return roundOff(amount);
@@ -121,7 +121,7 @@ public class ShoppingCart {
 
     public synchronized void calculateTotal(String surcharge) {
         double s = Double.parseDouble(surcharge);
-        double amount = 0.0;
+        double amount = 0.00;
 
         amount = getSubtotal();
         amount = amount + s;

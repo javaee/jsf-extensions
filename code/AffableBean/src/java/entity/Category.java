@@ -7,7 +7,6 @@ package entity;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -19,8 +18,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 /**
  *
@@ -28,7 +25,10 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "category")
-@NamedQueries({@NamedQuery(name = "Category.findAll", query = "SELECT c FROM Category c"), @NamedQuery(name = "Category.findById", query = "SELECT c FROM Category c WHERE c.id = :id"), @NamedQuery(name = "Category.findByName", query = "SELECT c FROM Category c WHERE c.name = :name"), @NamedQuery(name = "Category.findByLastUpdate", query = "SELECT c FROM Category c WHERE c.lastUpdate = :lastUpdate")})
+@NamedQueries({
+    @NamedQuery(name = "Category.findAll", query = "SELECT c FROM Category c"),
+    @NamedQuery(name = "Category.findById", query = "SELECT c FROM Category c WHERE c.id = :id"),
+    @NamedQuery(name = "Category.findByName", query = "SELECT c FROM Category c WHERE c.name = :name")})
 public class Category implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -39,10 +39,6 @@ public class Category implements Serializable {
     @Basic(optional = false)
     @Column(name = "name")
     private String name;
-    @Basic(optional = false)
-    @Column(name = "last_update")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date lastUpdate;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "categoryId")
     private Collection<Product> productCollection;
 
@@ -53,10 +49,9 @@ public class Category implements Serializable {
         this.id = id;
     }
 
-    public Category(Short id, String name, Date lastUpdate) {
+    public Category(Short id, String name) {
         this.id = id;
         this.name = name;
-        this.lastUpdate = lastUpdate;
     }
 
     public Short getId() {
@@ -73,14 +68,6 @@ public class Category implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Date getLastUpdate() {
-        return lastUpdate;
-    }
-
-    public void setLastUpdate(Date lastUpdate) {
-        this.lastUpdate = lastUpdate;
     }
 
     public Collection<Product> getProductCollection() {

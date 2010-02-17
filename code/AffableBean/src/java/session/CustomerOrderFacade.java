@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package ejbs;
+package session;
 
 import entity.CustomerOrder;
 import java.util.List;
@@ -14,7 +14,7 @@ import javax.persistence.Query;
 
 /**
  *
- * @author david
+ * @author troy
  */
 @Stateless
 public class CustomerOrderFacade {

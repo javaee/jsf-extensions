@@ -15,28 +15,28 @@ import javax.persistence.Embeddable;
  * @author troy
  */
 @Embeddable
-public class OrderedProductPK implements Serializable {
+public class OrderHasProductPK implements Serializable {
     @Basic(optional = false)
-    @Column(name = "customer_order_id")
-    private int customerOrderId;
+    @Column(name = "order_id")
+    private int orderId;
     @Basic(optional = false)
     @Column(name = "product_id")
     private int productId;
 
-    public OrderedProductPK() {
+    public OrderHasProductPK() {
     }
 
-    public OrderedProductPK(int customerOrderId, int productId) {
-        this.customerOrderId = customerOrderId;
+    public OrderHasProductPK(int orderId, int productId) {
+        this.orderId = orderId;
         this.productId = productId;
     }
 
-    public int getCustomerOrderId() {
-        return customerOrderId;
+    public int getOrderId() {
+        return orderId;
     }
 
-    public void setCustomerOrderId(int customerOrderId) {
-        this.customerOrderId = customerOrderId;
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
     }
 
     public int getProductId() {
@@ -50,7 +50,7 @@ public class OrderedProductPK implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (int) customerOrderId;
+        hash += (int) orderId;
         hash += (int) productId;
         return hash;
     }
@@ -58,11 +58,11 @@ public class OrderedProductPK implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof OrderedProductPK)) {
+        if (!(object instanceof OrderHasProductPK)) {
             return false;
         }
-        OrderedProductPK other = (OrderedProductPK) object;
-        if (this.customerOrderId != other.customerOrderId) {
+        OrderHasProductPK other = (OrderHasProductPK) object;
+        if (this.orderId != other.orderId) {
             return false;
         }
         if (this.productId != other.productId) {
@@ -73,7 +73,7 @@ public class OrderedProductPK implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.OrderedProductPK[customerOrderId=" + customerOrderId + ", productId=" + productId + "]";
+        return "entity.OrderHasProductPK[orderId=" + orderId + ", productId=" + productId + "]";
     }
 
 }

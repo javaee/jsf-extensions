@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package ejbs;
+package session;
 
 import entity.Category;
 import java.util.List;
@@ -14,7 +14,7 @@ import javax.persistence.Query;
 
 /**
  *
- * @author david
+ * @author troy
  */
 @Stateless
 public class CategoryFacade {
@@ -33,7 +33,7 @@ public class CategoryFacade {
         em.remove(em.merge(category));
     }
 
-    public Category find(short id) {
+    public Category find(Object id) {
         return em.find(Category.class, id);
     }
 

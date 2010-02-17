@@ -30,8 +30,12 @@ import javax.persistence.TemporalType;
  * @author troy
  */
 @Entity
-@Table(name = "customer_order")
-@NamedQueries({@NamedQuery(name = "CustomerOrder.findAll", query = "SELECT c FROM CustomerOrder c"), @NamedQuery(name = "CustomerOrder.findById", query = "SELECT c FROM CustomerOrder c WHERE c.id = :id"), @NamedQuery(name = "CustomerOrder.findByAmount", query = "SELECT c FROM CustomerOrder c WHERE c.amount = :amount"), @NamedQuery(name = "CustomerOrder.findByCreateDate", query = "SELECT c FROM CustomerOrder c WHERE c.createDate = :createDate")})
+@Table(name = "order")
+@NamedQueries({
+    @NamedQuery(name = "CustomerOrder.findAll", query = "SELECT c FROM CustomerOrder c"),
+    @NamedQuery(name = "CustomerOrder.findById", query = "SELECT c FROM CustomerOrder c WHERE c.id = :id"),
+    @NamedQuery(name = "CustomerOrder.findByAmount", query = "SELECT c FROM CustomerOrder c WHERE c.amount = :amount"),
+    @NamedQuery(name = "CustomerOrder.findByDateCreated", query = "SELECT c FROM CustomerOrder c WHERE c.dateCreated = :dateCreated")})
 public class CustomerOrder implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -43,11 +47,11 @@ public class CustomerOrder implements Serializable {
     @Column(name = "amount")
     private BigDecimal amount;
     @Basic(optional = false)
-    @Column(name = "create_date")
+    @Column(name = "date_created")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date createDate;
+    private Date dateCreated;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "customerOrder")
-    private Collection<OrderedProduct> orderedProductCollection;
+    private Collection<OrderHasProduct> orderHasProductCollection;
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Customer customerId;
@@ -59,10 +63,10 @@ public class CustomerOrder implements Serializable {
         this.id = id;
     }
 
-    public CustomerOrder(Integer id, BigDecimal amount, Date createDate) {
+    public CustomerOrder(Integer id, BigDecimal amount, Date dateCreated) {
         this.id = id;
         this.amount = amount;
-        this.createDate = createDate;
+        this.dateCreated = dateCreated;
     }
 
     public Integer getId() {
@@ -81,20 +85,20 @@ public class CustomerOrder implements Serializable {
         this.amount = amount;
     }
 
-    public Date getCreateDate() {
-        return createDate;
+    public Date getDateCreated() {
+        return dateCreated;
     }
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
     }
 
-    public Collection<OrderedProduct> getOrderedProductCollection() {
-        return orderedProductCollection;
+    public Collection<OrderHasProduct> getOrderHasProductCollection() {
+        return orderHasProductCollection;
     }
 
-    public void setOrderedProductCollection(Collection<OrderedProduct> orderedProductCollection) {
-        this.orderedProductCollection = orderedProductCollection;
+    public void setOrderHasProductCollection(Collection<OrderHasProduct> orderHasProductCollection) {
+        this.orderHasProductCollection = orderHasProductCollection;
     }
 
     public Customer getCustomerId() {

@@ -17,34 +17,25 @@ INSERT INTO `category` (name) VALUES ('dairy'),('meats'),('bakery'),('fruitVeg')
 
 
 --
--- Sample data for table `customer`
---
-
--- INSERT INTO `customer` VALUES(NULL, 'Derek Mosley', 'd.mosley@gmail.com', '606-252-924', 'Korunní 56', 2, '1234123412341234', NOW());
--- INSERT INTO affablebean.customer (`name`, email, phone, address, city_region, cc_number, date_created)
---       VALUES ('Derek Mosley', 'd.mosley@gmail.com', '606-252-924', 'Korunní 56', '2', '1234123412341234', DEFAULT)
-
-
---
 -- Sample data for table `product`
 --
 
-INSERT INTO `product` VALUES (NULL, 'milk', 1.19, NOW(), 1);
-INSERT INTO `product` VALUES (NULL, 'cheese', 2.39, NOW(), 1);
-INSERT INTO `product` VALUES (NULL, 'butter', 0.99, NOW(), 1);
-INSERT INTO `product` VALUES (NULL, 'eggs', 1.99, NOW(), 1);
+INSERT INTO `product` (`name`, price, category_id) VALUES ('milk', 1.19, 1);
+INSERT INTO `product` (`name`, price, category_id) VALUES ('cheese', 2.39, 1);
+INSERT INTO `product` (`name`, price, category_id) VALUES ('butter', 0.99, 1);
+INSERT INTO `product` (`name`, price, category_id) VALUES ('eggs', 1.99, 1);
 
-INSERT INTO `product` VALUES (NULL, 'meatPatties', 2.29, NOW(), 2);
-INSERT INTO `product` VALUES (NULL, 'parmaHam', 3.49, NOW(), 2);
-INSERT INTO `product` VALUES (NULL, 'chicken', 4.09, NOW(), 2);
-INSERT INTO `product` VALUES (NULL, 'sausages', 3.55, NOW(), 2);
+INSERT INTO `product` (`name`, price, category_id) VALUES ('meatPatties', 2.29, 2);
+INSERT INTO `product` (`name`, price, category_id) VALUES ('parmaHam', 3.49, 2);
+INSERT INTO `product` (`name`, price, category_id) VALUES ('chicken', 4.09, 2);
+INSERT INTO `product` (`name`, price, category_id) VALUES ('sausages', 3.55, 2);
 
-INSERT INTO `product` VALUES (NULL, 'loaf', 0.89, NOW(), 3);
-INSERT INTO `product` VALUES (NULL, 'bagel', 1.19, NOW(), 3);
-INSERT INTO `product` VALUES (NULL, 'bun', 1.65, NOW(), 3);
-INSERT INTO `product` VALUES (NULL, 'cookie', 2.39, NOW(), 3);
+INSERT INTO `product` (`name`, price, category_id) VALUES ('loaf', 0.89, 3);
+INSERT INTO `product` (`name`, price, category_id) VALUES ('bagel', 1.19, 3);
+INSERT INTO `product` (`name`, price, category_id) VALUES ('bun', 1.65, 3);
+INSERT INTO `product` (`name`, price, category_id) VALUES ('cookie', 2.39, 3);
 
-INSERT INTO `product` VALUES (NULL, 'corn', 0.29, NOW(), 4);
-INSERT INTO `product` VALUES (NULL, 'berries', 0.25, NOW(), 4);
-INSERT INTO `product` VALUES (NULL, 'broccoli', 0.39, NOW(), 4);
-INSERT INTO `product` VALUES (NULL, 'watermelon', 0.19, NOW(), 4);
+INSERT INTO `product` (`name`, price, category_id) VALUES ('corn', 0.29, 4);
+INSERT INTO `product` (`name`, price, category_id) VALUES ('berries', 0.25, 4);
+INSERT INTO `product` (`name`, price, category_id) VALUES ('broccoli', 0.39, 4);
+INSERT INTO `product` (`name`, price, category_id) VALUES ('watermelon', 0.19, 4);

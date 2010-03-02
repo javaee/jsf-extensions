@@ -55,8 +55,8 @@
 
             <tr>
                 <td class="${((iter.index % 2) == 0) ? 'even' : 'odd'}">
-                    <img src="<c:out value="${initParam.productImagePath}${product.name}.png"/>"
-                        alt="image of <fmt:message key="${product.name}"/>">
+                    <img src="<c:out value='${initParam.productImagePath}${product.name}.png'/>"
+                        alt="image of <fmt:message key='${product.name}'/>">
                 </td>
                 <td class="${((iter.index % 2) == 0) ? 'even' : 'odd'}">
                     <fmt:message key="${product.name}"/>
@@ -66,13 +66,13 @@
                 </td>
                 <td class="${((iter.index % 2) == 0) ? 'even' : 'odd'}">
 
-                    <form action="<c:url value="addToCart"/>" method="post">
+                    <form action="<c:url value='addToCart'/>" method="post">
                         <input type="hidden"
                                name="productId"
-                               value="<c:out value="${product.id}"/>">
+                               value="<c:out value='${product.id}'/>">
                         <input type="submit"
                                name="submit"
-                               value="<fmt:message key="addToCart"/>">
+                               value="<fmt:message key='addToCart'/>">
                     </form>
 
                 </td>

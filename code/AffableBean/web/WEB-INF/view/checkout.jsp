@@ -169,7 +169,7 @@
             </tr>
             <tr>
                 <td colspan="2">
-                    <input type="submit" value="<fmt:message key="submitOrder"/>">
+                    <input type="submit" value="<fmt:message key='submitOrder'/>">
                 </td>
             </tr>
         </table>

@@ -2,7 +2,7 @@
  * Copyright 2009 Sun Microsystems, Inc.
  * All rights reserved.  You may not modify, use,
  * reproduce, or distribute this software except in
- * compliance with  the terms of the License at:
+ * compliance with the terms of the License at:
  * http://developer.sun.com/berkeley_license.html
  */
 
@@ -13,12 +13,12 @@ import entity.Product;
 
 
 public class ShoppingCartItem {
-    
+
     Object item;
     int quantity;
 
-    public ShoppingCartItem(Object anItem) {
-        item = anItem;
+    public ShoppingCartItem(Object item) {
+        this.item = item;
         quantity = 1;
     }
 

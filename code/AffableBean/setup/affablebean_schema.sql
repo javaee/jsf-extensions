@@ -76,7 +76,7 @@ CREATE  TABLE IF NOT EXISTS `affablebean`.`order` (
     FOREIGN KEY (`customer_id` )
     REFERENCES `affablebean`.`customer` (`id` )
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON UPDATE CASCADE)
 ENGINE = InnoDB
 COMMENT = 'maintains customer order details';
 

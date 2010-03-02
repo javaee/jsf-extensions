@@ -80,9 +80,9 @@
                 <th><fmt:message key="quantity"/></th>
             </tr>
 
-            <c:forEach var="item" items="${cart.items}" varStatus="iter">
+            <c:forEach var="itemMap" items="${cart.items}" varStatus="iter">
 
-                <c:set var="product" value="${item.item}"/>
+                <c:set var="product" value="${itemMap.value.item}"/>
 
                 <tr>
                     <td class="${((iter.index % 2) == 0) ? 'even' : 'odd'}">
@@ -93,7 +93,7 @@
                         <fmt:message key="${product.name}"/>
                     </td>
                     <td class="${((iter.index % 2) == 0) ? 'even' : 'odd'}">
-                        € <c:out value="${item.total}"/>
+                        € <c:out value="${itemMap.value.total}"/>
                         <br>
                         <span class="smallText">( € <c:out value="${product.price}"/> / unit )</span>
                     </td>
@@ -106,7 +106,7 @@
                             <input type="text"
                                    maxlength="2"
                                    size="2"
-                                   value="${item.quantity}"
+                                   value="${itemMap.value.quantity}"
                                    name="quantity"
                                    style="margin:5px">
                             <input type="submit"

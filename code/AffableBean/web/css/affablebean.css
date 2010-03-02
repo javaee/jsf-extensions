@@ -97,7 +97,7 @@ a span.cartMsg { text-decoration: underline }
 a span.cartMsg:hover { text-decoration: none }
 
 .headerWidget {
-    width: 185px;
+    width: 190px;  /* changed from 185 */
     margin: 20px 45px;
     font-size: small;
     float: right;

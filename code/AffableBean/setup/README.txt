@@ -45,14 +45,14 @@ Before running the application,
 Notes:
 
     The sun-resources.xml file creates the 'jdbc/affablebean'
-    datasource, and 'affablebeanPool' connection pool on the
+    data source, and 'affablebeanPool' connection pool on the
     server when the application is deployed.
 
-    *The server may need to be restarted for the datasource and
+    *The server may need to be restarted for the data source and
     connection pool settings to take effect.*
 
-    The application uses EclipseLink as the JPA provider, and
-    is being developed using NetBeans 6.8 dev with GlassFish v3.
+    The application uses EclipseLink as the persistence provider, and
+    is being developed using NetBeans 6.8 and 6.9 dev with GlassFish v3.
 
     It is possible to run the application on GlassFish v2.1. To
     do so, make the following changes:

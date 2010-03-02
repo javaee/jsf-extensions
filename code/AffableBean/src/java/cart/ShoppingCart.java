@@ -22,10 +22,10 @@ public class ShoppingCart {
     public ShoppingCart() {
         items = new HashMap<String, ShoppingCartItem>();
         numberOfItems = 0;
-        total = 0;
+        total = 0.00;
     }
 
-    public synchronized void add(String productId, Product product) {
+    public synchronized void addItem(String productId, Product product) {
 
         if (items.containsKey(productId)) {
             ShoppingCartItem scitem = (ShoppingCartItem) items.get(productId);
@@ -83,12 +83,17 @@ public class ShoppingCart {
         }
     }
 
-    public synchronized List<ShoppingCartItem> getItems() {
-        List<ShoppingCartItem> results = new ArrayList<ShoppingCartItem>();
-        results.addAll(this.items.values());
+    public synchronized HashMap<String, ShoppingCartItem> getItems() {
 
-        return results;
+        return items;
     }
+
+//    public synchronized List<ShoppingCartItem> getItems() {
+//        List<ShoppingCartItem> results = new ArrayList<ShoppingCartItem>();
+//        results.addAll(this.items.values());
+//
+//        return results;
+//    }
 
     @Override
     protected void finalize() throws Throwable {
@@ -98,8 +103,11 @@ public class ShoppingCart {
     public synchronized int getNumberOfItems() {
         numberOfItems = 0;
 
-        for (Iterator i = getItems().iterator(); i.hasNext();) {
-            ShoppingCartItem item = (ShoppingCartItem) i.next();
+        Iterator it = items.keySet().iterator();
+
+        while(it.hasNext()) {
+            Object productId = it.next();
+            ShoppingCartItem item = (ShoppingCartItem) items.get(productId.toString());
             numberOfItems += item.getQuantity();
         }
 
@@ -109,8 +117,11 @@ public class ShoppingCart {
     public synchronized double getSubtotal() {
         double amount = 0.00;
 
-        for (Iterator i = getItems().iterator(); i.hasNext();) {
-            ShoppingCartItem item = (ShoppingCartItem) i.next();
+        Iterator it = items.keySet().iterator();
+
+        while(it.hasNext()) {
+            Object productId = it.next();
+            ShoppingCartItem item = (ShoppingCartItem) items.get(productId.toString());
             Product productDetails = (Product) item.getItem();
 
             amount += (item.getQuantity() * productDetails.getPrice().doubleValue());

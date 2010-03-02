@@ -9,17 +9,21 @@ package controller;
 
 import cart.ShoppingCart;
 import session.CategoryFacade;
-import session.CustomerFacade;
 import session.ProductFacade;
+import session.PlaceOrderLocal;
 import entity.Category;
-import entity.Customer;
 import entity.Product;
 import java.io.IOException;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.*;
 import javax.servlet.http.*;
+
+@WebServlet(name="Controller",
+            urlPatterns={"/category", "/addToCart", "/viewCart", "/updateCart", "/checkout", "/purchase", "/chooseLanguage"},
+            loadOnStartup=1)
 
 public class ControllerServlet extends HttpServlet {
 
@@ -28,8 +32,8 @@ public class ControllerServlet extends HttpServlet {
     @EJB
     private ProductFacade productFacade;
     @EJB
-    private CustomerFacade customerFacade;
-    
+    private PlaceOrderLocal placeOrder;
+
     private Category selectedCategory;
     private List categoryProducts;
     private ShoppingCart cart;
@@ -77,20 +81,17 @@ public class ControllerServlet extends HttpServlet {
 
             if (categoryId != null) {
 
-                // synchronize HttpSession object to protect session attributes
-                synchronized (session) {
-                    // get selected category
-                    selectedCategory = categoryFacade.find(Short.parseShort(categoryId));
+                // get selected category
+                selectedCategory = categoryFacade.find(Short.parseShort(categoryId));
 
-                    // place selected category in session scope
-                    session.setAttribute("selectedCategory", selectedCategory);
+                // place selected category in session scope
+                session.setAttribute("selectedCategory", selectedCategory);
 
-                    // get all products for selected category
-                    categoryProducts = productFacade.findForCategory(selectedCategory);
+                // get all products for selected category
+                categoryProducts = productFacade.findForCategory(selectedCategory);
 
-                    // place category products in session scope
-                    session.setAttribute("categoryProducts", categoryProducts);
-                }
+                // place category products in session scope
+                session.setAttribute("categoryProducts", categoryProducts);
             }
 
             // if shopping cart page is requested
@@ -177,7 +178,7 @@ public class ControllerServlet extends HttpServlet {
 
                 product = productFacade.find(Integer.parseInt(productId));
 
-                cart.add(productId, product);
+                cart.addItem(productId, product);
 
             }
 
@@ -203,7 +204,7 @@ public class ControllerServlet extends HttpServlet {
             String cityRegion = request.getParameter("cityRegion");
             String ccNumber = request.getParameter("creditcard");
 
-            // perform validation
+            // perform simple validation
             boolean errorMessage = false;
             boolean nameError;
             boolean emailError;
@@ -263,11 +264,17 @@ public class ControllerServlet extends HttpServlet {
             // otherwise, save order to database
             } else {
 
-                  processOrder(name, email, phone, address, cityRegion, ccNumber);
+                boolean success;
+                success = placeOrder.placeOrder(name, email, phone, address, cityRegion, ccNumber, cart);
 
-                // order processed successfully
+                // if order processed successfully
                 // send user to confirmation page
-                userPath = "/confirmation";
+                if (success) {
+                    userPath = "/confirmation";
+                // otherwise, send back to checkout page
+                } else {
+                    userPath = "/checkout";
+                }
             }
         }
 
@@ -280,19 +287,4 @@ public class ControllerServlet extends HttpServlet {
             ex.printStackTrace();
         }
     }
-
-    public Customer processOrder(String name, String email, String phone, String address, String cityRegion, String ccNumber) {
-
-        Customer customer = new Customer();
-        customer.setName(name);
-        customer.setEmail(email);
-        customer.setPhone(phone);
-        customer.setAddress(address);
-        customer.setCityRegion(cityRegion);
-        customer.setCcNumber(ccNumber);
-
-        customerFacade.create(customer);
-        return customer;
-    }
-
 }

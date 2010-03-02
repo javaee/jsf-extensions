@@ -23,7 +23,7 @@
         <h2>data from affablebean.category:</h2>
 
         <%-- Use Database > DB Report in the Palette --%>
-        <sql:query var="result" dataSource="jdbc/affableBean">
+        <sql:query var="result" dataSource="jdbc/affablebean">
             SELECT * FROM category
         </sql:query>
 

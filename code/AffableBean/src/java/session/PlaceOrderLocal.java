@@ -23,5 +23,5 @@ public interface PlaceOrderLocal {
 
     public CustomerOrder addOrder(Customer customer, ShoppingCart cart);
 
-    public void addOrderedItems(ShoppingCart cart, CustomerOrder order);
+    public void addOrderedItems(CustomerOrder order, ShoppingCart cart);
 }

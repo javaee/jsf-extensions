@@ -9,11 +9,10 @@ import cart.ShoppingCartItem;
 import entity.Customer;
 import entity.CustomerOrder;
 import entity.OrderHasProduct;
-import entity.Product;
+import entity.OrderHasProductPK;
 import java.math.BigDecimal;
 import java.util.Iterator;
 import javax.annotation.Resource;
-import javax.ejb.EJB;
 import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -36,16 +35,13 @@ public class PlaceOrder implements PlaceOrderLocal {
     @Resource
     private SessionContext context;
 
-    @EJB
-    private ProductFacade productFacade;
-
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public boolean placeOrder(String name, String email, String phone, String address, String cityRegion, String ccNumber, ShoppingCart cart) {
 
         try {
             Customer customer = addCustomer(name, email, phone, address, cityRegion, ccNumber);
             CustomerOrder order = addOrder(customer, cart);
-//            addOrderedItems(cart, order);
+            addOrderedItems(order, cart);
             return true;
         } catch (Exception e) {
             context.setRollbackOnly();
@@ -79,29 +75,30 @@ public class PlaceOrder implements PlaceOrderLocal {
         return order;
     }
 
-    public void addOrderedItems(ShoppingCart cart, CustomerOrder order) {
+    public void addOrderedItems(CustomerOrder order, ShoppingCart cart) {
+
+//        int orderId = order.getId();      // currently returns null
         
         Iterator it = cart.getItems().keySet().iterator();
 
         // iterate through shopping cart and add items to OrderHasProduct
         while(it.hasNext()) {
 
-            OrderHasProduct orderedItem = new OrderHasProduct();
+            // set up primary key object
+            OrderHasProductPK orderedItemPK = new OrderHasProductPK();
+            orderedItemPK.setOrderId(1);   // orderedItemPK.setOrderId(orderId);
+            String s = (String)it.next();
+            int productId = Integer.parseInt(s);
+            orderedItemPK.setProductId(productId);
 
-            // set order id
-            orderedItem.setCustomerOrder(order);
-
-            // set product id
-            Object productId = it.next();
-            Product product = productFacade.find(Integer.parseInt((String) productId));
-            orderedItem.setProduct(product);
+            // create ordered item using PK object
+            OrderHasProduct orderedItem = new OrderHasProduct(orderedItemPK);
 
             // set quantity
-            ShoppingCartItem item = (ShoppingCartItem) cart.getItems().get(productId.toString());
+            ShoppingCartItem item = (ShoppingCartItem) cart.getItems().get(String.valueOf(productId));
             orderedItem.setQuantity(String.valueOf(item.getQuantity()));
 
             em.persist(orderedItem);
-
         }
     }
 }

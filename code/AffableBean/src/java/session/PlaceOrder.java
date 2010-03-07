@@ -71,24 +71,24 @@ public class PlaceOrder implements PlaceOrderLocal {
         order.setAmount(BigDecimal.valueOf(cart.getTotal()));
 
         em.persist(order);
-
         return order;
     }
 
     public void addOrderedItems(CustomerOrder order, ShoppingCart cart) {
 
-//        int orderId = order.getId();      // currently returns null
-        
+        em.flush();
+
         Iterator it = cart.getItems().keySet().iterator();
 
         // iterate through shopping cart and add items to OrderHasProduct
         while(it.hasNext()) {
 
-            // set up primary key object
-            OrderHasProductPK orderedItemPK = new OrderHasProductPK();
-            orderedItemPK.setOrderId(1);   // orderedItemPK.setOrderId(orderId);
             String s = (String)it.next();
             int productId = Integer.parseInt(s);
+
+            // set up primary key object
+            OrderHasProductPK orderedItemPK = new OrderHasProductPK();
+            orderedItemPK.setOrderId(order.getId());
             orderedItemPK.setProductId(productId);
 
             // create ordered item using PK object

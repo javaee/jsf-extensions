@@ -47,12 +47,12 @@
         </session-timeout>
     </session-config>
 
-<!--    <welcome-file-list>
+<!--<welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>-->
 
-     <!--This is only needed for testing the datasource (TestDataSource.jsp)-->
-<!--    <resource-ref>
+    <!--This is only needed for testing the datasource (TestDataSource.jsp)-->
+<!--<resource-ref>
         <description>jdbc:mysql://localhost:3306/affablebean</description>
         <res-ref-name>jdbc/affablebean</res-ref-name>
         <res-type>javax.sql.DataSource</res-type>

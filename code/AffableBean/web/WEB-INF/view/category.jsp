@@ -7,8 +7,6 @@
 --%>
 
 
-<%@page contentType="text/html; charset=UTF-8"%> <%-- required for '€' sign --%>
-
 <%-- Set session-scoped variable to track the view user is coming from.
      This is used by the language mechanism in the Controller so that
      users view the same page when switching between EN and CS. --%>
@@ -62,7 +60,7 @@
                     <fmt:message key="${product.name}"/>
                 </td>
                 <td class="${((iter.index % 2) == 0) ? 'even' : 'odd'}">
-                    € <c:out value="${product.price}"/> / unit
+                    &euro; <c:out value="${product.price}"/> / unit
                 </td>
                 <td class="${((iter.index % 2) == 0) ? 'even' : 'odd'}">
 

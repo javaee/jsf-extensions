@@ -7,8 +7,6 @@
 --%>
 
 
-<%@page contentType="text/html; charset=UTF-8"%> <%-- required for '€' sign --%>
-
 <%-- Set session-scoped variable to track the view user is coming from.
      This is used by the language mechanism in the Controller so that
      users view the same page when switching between EN and CS. --%>
@@ -187,16 +185,16 @@
         <table id="priceBox" class="rounded">
             <tr>
                 <td><fmt:message key="subtotal"/>:</td>
-                <td class="priceColumn">€ <c:out value="${cart.subtotal}"/></td>
+                <td class="priceColumn">&euro; <c:out value="${cart.subtotal}"/></td>
             </tr>
             <tr>
                 <td><fmt:message key="surcharge"/>:</td>
-                <td class="priceColumn">€ <c:out value="${initParam.deliverySurcharge}"/></td>
+                <td class="priceColumn">&euro; <c:out value="${initParam.deliverySurcharge}"/></td>
             </tr>
             <tr></tr>
             <tr>
                 <td class="total"><fmt:message key="total"/>:</td>
-                <td class="total priceColumn">€ <c:out value="${cart.total}"/></td>
+                <td class="total priceColumn">&euro; <c:out value="${cart.total}"/></td>
             </tr>
         </table>
     </div>

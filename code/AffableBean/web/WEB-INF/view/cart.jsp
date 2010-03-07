@@ -7,8 +7,6 @@
 --%>
 
 
-<%@page contentType="text/html; charset=UTF-8"%> <%-- required for '➟' and '€' signs --%>
-
 <%-- Set session-scoped variable to track the view user is coming from.
      This is used by the language mechanism in the Controller so that
      users view the same page when switching between EN and CS. --%>
@@ -69,7 +67,7 @@
 
     <c:if test="${cart.numberOfItems != 0}">
 
-        <h4 id="subtotal"><fmt:message key="subtotal"/>: € <c:out value="${cart.subtotal}"/></h4>
+        <h4 id="subtotal"><fmt:message key="subtotal"/>: &euro; <c:out value="${cart.subtotal}"/></h4>
 
         <table id="cartTable">
 
@@ -93,9 +91,9 @@
                         <fmt:message key="${product.name}"/>
                     </td>
                     <td class="${((iter.index % 2) == 0) ? 'even' : 'odd'}">
-                        € <c:out value="${itemMap.value.total}"/>
+                        &euro; <c:out value="${itemMap.value.total}"/>
                         <br>
-                        <span class="smallText">( € <c:out value="${product.price}"/> / unit )</span>
+                        <span class="smallText">( &euro; <c:out value="${product.price}"/> / unit )</span>
                     </td>
                     <td class="${((iter.index % 2) == 0) ? 'even' : 'odd'}">
 

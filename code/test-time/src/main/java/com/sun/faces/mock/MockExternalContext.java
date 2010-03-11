@@ -214,7 +214,7 @@ public class MockExternalContext extends ExternalContext {
 	if (name.equals(javax.faces.webapp.FacesServlet.LIFECYCLE_ID_ATTR)) {
 	    return null;
 	}
-        throw new UnsupportedOperationException();
+        return null;
     }
 
 

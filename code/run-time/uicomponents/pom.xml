@@ -141,8 +141,8 @@
   </dependencies>
 
   <reporting>
+    <excludeDefaults>true</excludeDefaults>
     <plugins>
-      <excludeDefaults>true</excludeDefaults>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-project-info-reports-plugin</artifactId>

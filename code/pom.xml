@@ -90,11 +90,6 @@
       </exclusions>
       <scope>provided</scope>
     </dependency>  
-    <dependency>
-      <groupId>com.sun.faces.extensions</groupId>
-      <artifactId>jsf-extensions-dynamic-faces</artifactId>
-      <version>${jar.full.version}</version>
-    </dependency>
   </dependencies>
   <reporting>
     <plugins>
@@ -140,6 +135,14 @@
 	<module>run-time/samples/dynafaces-getting-started</module>
       </modules>
     </profile>
+    <profile>
+      <id>test-time</id>
+      <modules>
+	<module>maven/master-pom</module>
+	<module>test-time</module>
+      </modules>
+    </profile>
+
     <profile>
       <id>flash</id>
       <modules>

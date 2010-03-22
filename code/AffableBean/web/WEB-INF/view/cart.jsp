@@ -33,7 +33,7 @@
 
     <div id="actionBar">
         <%-- clear cart widget --%>
-        <c:if test="${cart.numberOfItems != 0}">
+        <c:if test="${!empty cart && cart.numberOfItems != 0}">
 
             <c:url var="url" value="viewCart">
                 <c:param name="clear" value="true"/>
@@ -60,12 +60,12 @@
         <a href="${url}" class="rounded bubble hMargin"><fmt:message key="continueShopping"/></a>
 
         <%-- checkout widget --%>
-        <c:if test="${cart.numberOfItems != 0}">
+        <c:if test="${!empty cart && cart.numberOfItems != 0}">
             <a href="<c:url value="checkout"/>" class="rounded bubble hMargin"><fmt:message key="proceedCheckout"/></a>
         </c:if>
     </div>
 
-    <c:if test="${cart.numberOfItems != 0}">
+    <c:if test="${!empty cart && cart.numberOfItems != 0}">
 
         <h4 id="subtotal"><fmt:message key="subtotal"/>: &euro; <c:out value="${cart.subtotal}"/></h4>
 

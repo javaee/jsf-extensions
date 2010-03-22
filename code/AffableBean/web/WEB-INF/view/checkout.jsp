@@ -75,6 +75,10 @@
 
     <p><fmt:message key="checkoutText"/></p>
 
+    <c:if test="${!empty requestScope.orderFailure}">
+        <p class="errorMessage"><fmt:message key="orderFailureError"/></p>
+    </c:if>
+
     <form id="checkoutForm" action="purchase" method="post">
         <table id="checkoutTable" class="rounded">
             <c:if test="${!empty requestScope.errorMessage}">

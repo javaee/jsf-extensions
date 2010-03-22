@@ -70,18 +70,18 @@ public class ShoppingCart {
         }
     }
 
-    public synchronized void remove(String bookId) {
-        if (items.containsKey(bookId)) {
-            ShoppingCartItem scitem = (ShoppingCartItem) items.get(bookId);
-            scitem.decrementQuantity();
-
-            if (scitem.getQuantity() <= 0) {
-                items.remove(bookId);
-            }
-
-            numberOfItems--;
-        }
-    }
+//    public synchronized void remove(String bookId) {
+//        if (items.containsKey(bookId)) {
+//            ShoppingCartItem scitem = (ShoppingCartItem) items.get(bookId);
+//            scitem.decrementQuantity();
+//
+//            if (scitem.getQuantity() <= 0) {
+//                items.remove(bookId);
+//            }
+//
+//            numberOfItems--;
+//        }
+//    }
 
     public synchronized HashMap<String, ShoppingCartItem> getItems() {
 
@@ -95,10 +95,10 @@ public class ShoppingCart {
 //        return results;
 //    }
 
-    @Override
-    protected void finalize() throws Throwable {
-        items.clear();
-    }
+//    @Override
+//    protected void finalize() throws Throwable {
+//        items.clear();
+//    }
 
     public synchronized int getNumberOfItems() {
         numberOfItems = 0;
@@ -145,7 +145,6 @@ public class ShoppingCart {
     }
 
     public synchronized void clear() {
-        System.out.println("Clearing cart.");
         items.clear();
         numberOfItems = 0;
     }

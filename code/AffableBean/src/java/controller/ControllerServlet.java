@@ -66,12 +66,11 @@ public class ControllerServlet extends HttpServlet {
         userPath = request.getServletPath();
         cart = (ShoppingCart) session.getAttribute("cart");
 
-        String clear;
-
-        if (cart == null) {
-            cart = new ShoppingCart();
-            session.setAttribute("cart", cart);
-        }
+//
+//        if (cart == null) {
+//            cart = new ShoppingCart();
+//            session.setAttribute("cart", cart);
+//        }
 
         // if category page is requested
         if (userPath.equals("/category")) {
@@ -99,7 +98,7 @@ public class ControllerServlet extends HttpServlet {
 
             userPath = "/cart";
 
-            clear = request.getParameter("clear");
+            String clear = request.getParameter("clear");
 
             if ((clear != null) && clear.equals("true")) {
                 cart.clear();
@@ -173,6 +172,11 @@ public class ControllerServlet extends HttpServlet {
 
         // if addToCart action is called
         if (userPath.equals("/addToCart")) {
+
+            if (cart == null) {
+                cart = new ShoppingCart();
+                session.setAttribute("cart", cart);
+            }
 
             userPath = "/category";
 
@@ -273,9 +277,14 @@ public class ControllerServlet extends HttpServlet {
                 // send user to confirmation page
                 if (success) {
                     userPath = "/confirmation";
-                // otherwise, send back to checkout page
+
+                    // empty shopping cart
+                    cart.clear();
+
+                // otherwise, send back to checkout page and display error
                 } else {
                     userPath = "/checkout";
+                    request.setAttribute("orderFailure", success);
                 }
             }
         }

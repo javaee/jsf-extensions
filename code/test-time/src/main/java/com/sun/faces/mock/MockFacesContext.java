@@ -71,6 +71,7 @@ public class MockFacesContext extends FacesContext {
     private Map<Object, Object> attributes = null;
     private PartialViewContext partialView = new MockPartialViewContext();
 
+    private boolean released;
 
     // ------------------------------------------------------------ Constructors
 
@@ -280,6 +281,12 @@ public class MockFacesContext extends FacesContext {
 
     }
 
+    @Override
+    public boolean isReleased() {
+        return released;
+    }
+
+
     private ExceptionHandler exceptionHandler =
           new PreJsf2ExceptionHandlerFactory().getExceptionHandler();
 
@@ -319,6 +326,7 @@ public class MockFacesContext extends FacesContext {
 
 
     public void release() {
+        released = true;
         application = null;
         externalContext = null;
         locale = null;

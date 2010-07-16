@@ -247,6 +247,12 @@ public class MockExternalContext extends ExternalContext {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @Override
+    public void setSessionMaxInactiveInterval(int interval) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+	
+
     
 
     public Map getInitParameterMap() {
@@ -268,6 +274,10 @@ public class MockExternalContext extends ExternalContext {
         throw new UnsupportedOperationException();
     }
 
+    @Override
+    public int getSessionMaxInactiveInterval() {
+        throw new UnsupportedOperationException();
+    }
 
     public String encodeActionURL(String sb) {
         throw new UnsupportedOperationException();
@@ -313,6 +323,8 @@ public class MockExternalContext extends ExternalContext {
     public String getRemoteUser() {
         return (((HttpServletRequest) request).getRemoteUser());
     }
+
+
 
     public java.security.Principal getUserPrincipal() {
         return (((HttpServletRequest) request).getUserPrincipal());

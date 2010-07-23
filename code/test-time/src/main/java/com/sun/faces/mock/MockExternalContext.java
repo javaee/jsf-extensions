@@ -252,8 +252,10 @@ public class MockExternalContext extends ExternalContext {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 	
-
-    
+    @Override
+    public boolean isSecure() {
+	throw new UnsupportedOperationException("Not supported yet.");
+    }    
 
     public Map getInitParameterMap() {
         throw new UnsupportedOperationException();

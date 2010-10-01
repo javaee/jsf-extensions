@@ -98,7 +98,9 @@ public class CompareFiles {
 
         while (null != newLine && null != oldLine) {
             if (!newLine.equals(oldLine)) {
-
+                if (oldLine.contains("javax.faces.Token")) {
+                    break;
+                }
                 if (null != oldLinesToIgnore && oldLinesToIgnore.size() > 0) {
                     // go thru the list of oldLinesToIgnore and see if
                     // the current oldLine matches any of them.

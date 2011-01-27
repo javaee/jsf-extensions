@@ -148,26 +148,34 @@ public class FacesTestCaseService extends Object {
 
 
     public void setUp() {
+        FacesContext oldContext = FacesContext.getCurrentInstance();
+        if (null != oldContext) {
+            oldContext.release();
+        }
+        this.servletContext = facesTestCase.getConfig().getServletContext();
+
         HttpServletResponse response = null;
         TestingUtil.setUnitTestModeEnabled(true);
 
         // Since we run using tomcat's deploy targets, we must obtain the
         // absolute path to where we are to write our output files.
         String testRootDir =
-              facesTestCase.getConfig().getServletContext().getInitParameter(
+              this.servletContext.getInitParameter(
                     "testRootDir");
 
         assert (null != testRootDir);
         facesTestCase.setTestRootDir(testRootDir);
 
         this.configureListener = new ConfigureListener();
-        this.servletContext = facesTestCase.getConfig().getServletContext();
         ServletContextEvent e = new ServletContextEvent(this.servletContext);
 
         // make sure this gets called once per ServletContext instance.
         if (null == (servletContext.getAttribute(FacesServlet.CONFIG_FILES_ATTR))) {
             System.out.println("INVOKING CONFIGLISTENER");
+            configureListener.contextDestroyed(e);
+            FactoryFinder.releaseFactories();
             configureListener.contextInitialized(e);
+            FacesContext.getCurrentInstance().release();
         }
 
         initFacesContext();
@@ -194,13 +202,13 @@ public class FacesTestCaseService extends Object {
 
     public void tearDown() {
         // make sure this gets called!
-        if (facesTestCase.getConfig().getServletContext() != null) {
-            facesTestCase.getConfig().getServletContext()
+        if (this.servletContext != null) {
+            this.servletContext
                   .removeAttribute(RIConstants.HTML_BASIC_RENDER_KIT);
         }
 
         ServletContextEvent e =
-              new ServletContextEvent(servletContext);
+              new ServletContextEvent(this.servletContext);
         configureListener.contextDestroyed(e);
 
         // make sure session is not null. It will null in case release
@@ -444,7 +452,7 @@ public class FacesTestCaseService extends Object {
         final String paramVal = paramValue;
 
         // clear out the attr that was set in the servletcontext attr set.
-        facesTestCase.getConfig().getServletContext().removeAttribute(
+        this.servletContext.removeAttribute(
               FacesServlet.CONFIG_FILES_ATTR);
         ApplicationAssociate.clearInstance(
               FacesContext.getCurrentInstance().getExternalContext());
@@ -456,7 +464,7 @@ public class FacesTestCaseService extends Object {
         // servletContext.getInitParameter() to relfect the call.
 
         ServletContextWrapper sc =
-              new ServletContextWrapper(servletContext) {
+              new ServletContextWrapper(this.servletContext) {
                   public String getInitParameter(String theName) {
                       if (null != theName &&
                           theName.equals(FacesServlet.CONFIG_FILES_ATTR)) {
@@ -473,7 +481,7 @@ public class FacesTestCaseService extends Object {
         ServletContextEvent e =
               new ServletContextEvent(sc);
         ApplicationAssociate.setCurrentInstance(null);
-        configureListener.contextDestroyed(new ServletContextEvent(servletContext));
+        configureListener.contextDestroyed(new ServletContextEvent(this.servletContext));
         servletContext = sc;
 
         configureListener = new ConfigureListener();
@@ -535,8 +543,7 @@ public class FacesTestCaseService extends Object {
         facesContextFactory = (FacesContextFactory)
               FactoryFinder.getFactory(FactoryFinder.FACES_CONTEXT_FACTORY);
         facesContext =
-              facesContextFactory.getFacesContext(facesTestCase.getConfig().
-                    getServletContext(),
+              facesContextFactory.getFacesContext(this.servletContext,
                                                   facesTestCase.getRequest(),
                                                   response, lifecycle);
     }

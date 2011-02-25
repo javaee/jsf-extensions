@@ -340,6 +340,7 @@ public class MockFacesContext extends FacesContext {
 	    attributes = null;
 	}
         root = null;
+	setCurrentInstance(null);
     }
 
 

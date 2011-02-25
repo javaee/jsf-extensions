@@ -30,6 +30,7 @@
 package com.sun.faces.htmlunit;
 
 
+import com.gargoylesoftware.htmlunit.CookieManager;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.WebRequestSettings;
 import com.gargoylesoftware.htmlunit.WebResponse;
@@ -41,14 +42,13 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-import org.apache.commons.httpclient.Cookie;
-import org.apache.commons.httpclient.HttpState;
 
 import java.net.URL;
 import java.util.Iterator;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Set;
 
 
 /**
@@ -89,9 +89,6 @@ public abstract class HtmlUnitFacesTestCase extends TestCase {
     // The URL for our test application
     protected URL domainURL = null;
 
-    // The HttpState for our domain URL
-    protected HttpState state = null;
-
 
     // ---------------------------------------------------- Overall Test Methods
 
@@ -110,8 +107,6 @@ public abstract class HtmlUnitFacesTestCase extends TestCase {
         WebRequestSettings settings = new WebRequestSettings(domainURL);
         WebResponse response = client.getWebConnection().getResponse(settings);
         
-        state = client.getWebConnection().getState();
-
     }
 
 
@@ -130,7 +125,6 @@ public abstract class HtmlUnitFacesTestCase extends TestCase {
 
         client = null;
         domainURL = null;
-        state = null;
 
     }
 
@@ -254,33 +248,10 @@ public abstract class HtmlUnitFacesTestCase extends TestCase {
 
 
     protected boolean clearAllCookies() {
-        if (null == state) {
-            state = client.getWebConnection().getState();
-            if (null == state) {
-                return false;
-            }
-        }
-
-        Cookie[] cookies = state.getCookies();
-        if (null == cookies) {
-            return false;
-        }
-        java.util.Date exp = null;
-        long
-            curTime = System.currentTimeMillis(),
-            latestTime = curTime;
-        // find the freshest cookie
-        for (int i = 0, len = cookies.length; i < len; i++) {
-            if (null != (exp = cookies[i].getExpiryDate())) {
-                curTime = exp.getTime();
-                if (latestTime < curTime) {
-                    curTime = latestTime;
-                }
-            }
-        }
-        boolean result =
-            state.purgeExpiredCookies(new java.util.Date(latestTime));
-        return result;
+        CookieManager cm = client.getCookieManager();
+        cm.clearCookies();
+        
+        return true;
     }
 
 
@@ -356,14 +327,14 @@ public abstract class HtmlUnitFacesTestCase extends TestCase {
      */
     protected List getAllElementsOfGivenClass(HtmlElement root, List list,
                                               Class matchClass) {
-        Iterator iter = null;
+        Iterator<HtmlElement> iter = null;
         if (null == root) {
             return list;
         }
         if (null == list) {
             list = new ArrayList();
         }
-        iter = root.getAllHtmlChildElements();
+        iter = root.getAllHtmlChildElements().iterator();
         while (iter.hasNext()) {
             getAllElementsOfGivenClass((HtmlElement) iter.next(), list,
                                        matchClass);

@@ -1,7 +1,12 @@
 package javax.faces.plugin;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.faces.application.Resource;
+import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
+
 
 
 public abstract class PluginManager<T extends Plugin>  {
@@ -22,16 +27,33 @@ public abstract class PluginManager<T extends Plugin>  {
 			this.loader=loader;							
 	}
 
-	public void load() throws Exception {
+	@PostConstruct
+	public void load()  {
 		
+		try {
+			
+			ServletContext context=(ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+			String realPath=context.getRealPath("/");
+			Manage manage=getClass().getAnnotation(Manage.class);
+			Folder pluginFolder=new Folder(realPath+File.separator+manage.folder());
+			for(Folder folder : pluginFolder.getSubFolders()) {
+				Document metadata=new Document(folder+File.separator+manage.metadata());
+				if(metadata.exists()) {
+					T plugin=load(metadata);
+					plugin.setMetadata(metadata);
+					add(plugin);
+				}
+			} 
+		}
+		catch(Exception e) {
+			
+		}
 	}
 	
 	public T load(Resource metadata) throws Exception{
 		
-			T plugin=loader.load(metadata);
-			plugin.setMetadata(metadata);
-			return plugin;
-			
+			return loader.load(metadata);
+						
 	}
 	
 	public void add(T plugin) {

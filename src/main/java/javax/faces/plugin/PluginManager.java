@@ -4,11 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.Resource;
+import javax.faces.bean.ApplicationScoped;
+import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 
 
 
+@ApplicationScoped
+@ManagedBean(eager=true)
 public abstract class PluginManager<T extends Plugin>  {
 
 	protected  final List<T> 	plugins;

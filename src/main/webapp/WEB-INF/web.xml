@@ -11,7 +11,6 @@
  <servlet>
  <servlet-name>Faces Servlet</servlet-name>
  <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
- <load-on-startup>2</load-on-startup>
 </servlet>
 
 <servlet-mapping>

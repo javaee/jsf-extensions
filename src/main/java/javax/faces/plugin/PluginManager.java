@@ -1,9 +1,9 @@
 package javax.faces.plugin;
 import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.application.Resource;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
@@ -43,9 +43,11 @@ public abstract class PluginManager<T extends Plugin>  {
 			for(Folder folder : pluginFolder.getSubFolders()) {
 				Document metadata=new Document(folder+File.separator+manage.metadata());
 				if(metadata.exists()) {
-					T plugin=load(metadata);
-					plugin.setMetadata(metadata);
-					add(plugin);
+					T plugin=load(metadata.getInputStream());
+					if(plugin!=null) {
+						plugin.setMetadata(metadata);
+						add(plugin);
+					}
 				}
 			} 
 		}
@@ -54,9 +56,9 @@ public abstract class PluginManager<T extends Plugin>  {
 		}
 	}
 	
-	public T load(Resource metadata) throws Exception{
+	public T load(InputStream stream) throws Exception{
 		
-			return loader.load(metadata);
+			return loader.load(stream);
 						
 	}
 	

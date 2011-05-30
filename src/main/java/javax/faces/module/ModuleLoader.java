@@ -1,12 +1,13 @@
 package javax.faces.module;
 
-import javax.faces.application.Resource;
+import java.io.InputStream;
+
 import javax.faces.plugin.PluginLoader;
 
 public class ModuleLoader implements PluginLoader<Module> {
 
 	@Override
-	public Module load(Resource metadata) throws Exception {
+	public Module load(InputStream stream) throws Exception {
 		
 		return null;
 	}

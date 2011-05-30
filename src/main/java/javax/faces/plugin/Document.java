@@ -4,13 +4,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
-import java.util.Map;
-import javax.faces.application.Resource;
-import javax.faces.context.FacesContext;
 
 
-public final class Document extends Resource  {
+
+public class Document   {
 
 	private final File file;
 		
@@ -21,7 +18,8 @@ public final class Document extends Resource  {
 	
 	public Document(String file) {
 		
-		this(new File(file));
+		this.file=new File(file);
+		
 	}
 
 	
@@ -31,36 +29,15 @@ public final class Document extends Resource  {
 		
 	}
 	
-
 	public boolean exists() {
 		
 		return file.exists();
 		
 	}
-
-
-	@Override
-	public String getRequestPath() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<String, String> getResponseHeaders() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public URL getURL() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean userAgentNeedsUpdate(FacesContext arg0) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 	
+	public String toString() {
+		
+		return file.toString();
+		
+	}
 }

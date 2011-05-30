@@ -1,6 +1,5 @@
 package javax.faces.plugin;
 
-import javax.faces.application.Resource;
 
 
 
@@ -11,12 +10,10 @@ public abstract class Plugin  {
 	protected String description="";
 	protected String creationDate="";
 	protected String version="1.0";
-	protected String license="";
 	protected String author="";
 	protected String authorEmail="";
 	protected String authorUrl="";
-    protected Resource metadata;
-    
+    protected Document metadata;
     
 	public String getId() {
 		return id;
@@ -58,14 +55,6 @@ public abstract class Plugin  {
 		this.version = version;
 	}
 
-	public String getLicense() {
-		return license;
-	}
-
-	public void setLicense(String license) {
-		this.license = license;
-	}
-
 	public String toString() {
 		
 		return name;		
@@ -95,12 +84,13 @@ public abstract class Plugin  {
 		this.authorUrl = authorUrl;
 	}
 
-	public Resource getMetadata() {
+	public Document getMetadata() {
 		return metadata;
 	}
 
-	public void setMetadata(Resource metadata) {
+	public void setMetadata(Document metadata) {
 		this.metadata = metadata;
 	}
+	
 	
 }

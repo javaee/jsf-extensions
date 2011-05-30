@@ -14,5 +14,5 @@ public @interface Manage {
 	
 	String folder();
 	String metadata();
-	
+
 }

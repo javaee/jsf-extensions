@@ -13,8 +13,8 @@ public abstract class Plugin  {
 	protected String author="";
 	protected String authorEmail="";
 	protected String authorUrl="";
-    protected Document metadata;
     
+	
 	public String getId() {
 		return id;
 	}
@@ -82,15 +82,6 @@ public abstract class Plugin  {
 
 	public void setAuthorUrl(String authorUrl) {
 		this.authorUrl = authorUrl;
-	}
-
-	public Document getMetadata() {
-		return metadata;
-	}
-
-	public void setMetadata(Document metadata) {
-		this.metadata = metadata;
-	}
-	
+	}	
 	
 }

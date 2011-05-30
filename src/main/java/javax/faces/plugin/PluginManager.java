@@ -45,7 +45,6 @@ public abstract class PluginManager<T extends Plugin>  {
 				if(metadata.exists()) {
 					T plugin=load(metadata.getInputStream());
 					if(plugin!=null) {
-						plugin.setMetadata(metadata);
 						add(plugin);
 					}
 				}

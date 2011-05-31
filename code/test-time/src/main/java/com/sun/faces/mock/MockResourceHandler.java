@@ -67,11 +67,11 @@ public class MockResourceHandler extends ResourceHandler {
     }
 
     public boolean isResourceRequest(FacesContext context) {
-        throw new UnsupportedOperationException();
+        return false;
     }
     
     public boolean libraryExists(String libraryName) {
-        throw new UnsupportedOperationException();
+        return true;
     }
 
     public String getRendererTypeForResourceName(String resourceName) {

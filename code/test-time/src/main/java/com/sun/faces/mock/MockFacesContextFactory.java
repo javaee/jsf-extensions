@@ -31,9 +31,15 @@ package com.sun.faces.mock;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
+import javax.faces.application.Application;
+import javax.faces.application.ApplicationFactory;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContextFactory;
 import javax.faces.context.FacesContext;
 import javax.faces.lifecycle.Lifecycle;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 
 public class MockFacesContextFactory extends FacesContextFactory {
     public MockFacesContextFactory(FacesContextFactory oldImpl) {
@@ -45,7 +51,19 @@ public class MockFacesContextFactory extends FacesContextFactory {
     public FacesContext getFacesContext(Object context, Object request,
 					Object response, 
 					Lifecycle lifecycle) throws FacesException {
-	return new MockFacesContext();
+	MockFacesContext result = new MockFacesContext();
+        
+        ExternalContext externalContext =
+                new MockExternalContext((ServletContext) context, 
+                (ServletRequest) request, (ServletResponse) response);
+        result.setExternalContext(externalContext);
+        ApplicationFactory applicationFactory = (ApplicationFactory)
+                FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+        Application application = (MockApplication) applicationFactory.getApplication();
+        result.setApplication(application);
+        
+        
+        return result;
     }
 }
 

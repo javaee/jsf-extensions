@@ -46,6 +46,7 @@ public class MockHttpServletResponse implements HttpServletResponse {
 
     private String encoding = "ISO-8859-1";
     private String contentType = "text/html";
+    private int status;
 
 
     // -------------------------------------------- HttpServletResponse Methods
@@ -97,12 +98,12 @@ public class MockHttpServletResponse implements HttpServletResponse {
 
 
     public void sendError(int status) {
-        throw new UnsupportedOperationException();
+        this.status = status;
     }
 
 
     public void sendError(int status, String message) {
-        throw new UnsupportedOperationException();
+        this.status = status;
     }
 
 
@@ -127,12 +128,12 @@ public class MockHttpServletResponse implements HttpServletResponse {
 
 
     public void setStatus(int status) {
-        throw new UnsupportedOperationException();
+        this.status = status;
     }
 
 
     public void setStatus(int status, String message) {
-        throw new UnsupportedOperationException();
+        this.status = status;
     }
 
 
@@ -164,6 +165,10 @@ public class MockHttpServletResponse implements HttpServletResponse {
 
     public ServletOutputStream getOutputStream() throws IOException {
         throw new UnsupportedOperationException();
+    }
+    
+    public int getStatus() {
+        return status;
     }
 
 

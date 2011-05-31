@@ -109,7 +109,7 @@ public abstract class HtmlUnitFacesTestCase extends TestCase {
     protected HtmlPage lastpage = null;
 
     // Possible containers - these should be the uppercase values of the possible container values in build.properties
-    protected enum Container { GLASSFISH, GLASSFISHV3PRELUDE, GLASSFISHV3, GLASSFISHV3_1, GLASSFISHV3_1_NO_CLUSTER, TOMCAT6, TOMCAT7 }
+    protected enum Container { GLASSFISH, GLASSFISHV3PRELUDE, GLASSFISHV3, GLASSFISHV3_1, GLASSFISHV3_1_NO_CLUSTER, TOMCAT6, TOMCAT7, WLS_10_3_4_NO_CLUSTER }
 
     // Per-container exclusions
     protected Map<Container, Vector<String>> exclusions = null;
@@ -176,6 +176,10 @@ public abstract class HtmlUnitFacesTestCase extends TestCase {
         // Add an ajax controller to synchronize all ajax calls
         client.setAjaxController(new NicelyResynchronizingAjaxController());
         domainURL = getURL("/");
+        System.out.println("Connecting to: " + domainURL.toExternalForm());
+        System.out.flush();
+        System.err.println("Connecting to: " + domainURL.toExternalForm());
+        System.err.flush();
         WebRequestSettings settings = new WebRequestSettings(domainURL);
         if (null != proxyHost && null != proxyPort) {
             settings.setProxyHost(proxyHost);

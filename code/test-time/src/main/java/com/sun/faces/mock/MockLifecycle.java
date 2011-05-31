@@ -30,9 +30,11 @@
 package com.sun.faces.mock;
 
 import javax.faces.FacesException;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseListener;
 import javax.faces.lifecycle.Lifecycle;
+import javax.servlet.http.HttpServletResponse;
 
 
 public class MockLifecycle extends Lifecycle {
@@ -50,7 +52,7 @@ public class MockLifecycle extends Lifecycle {
 
 
     public void execute(FacesContext context) throws FacesException {
-        throw new UnsupportedOperationException();
+        
     }
 
 
@@ -64,7 +66,16 @@ public class MockLifecycle extends Lifecycle {
 
 
     public void render(FacesContext context) throws FacesException {
-        throw new UnsupportedOperationException();
+        if (null != context) {
+            ExternalContext extContext = context.getExternalContext();
+            if (null != extContext) {
+                Object response = extContext.getResponse();
+                if (response instanceof MockHttpServletResponse) {
+                    ((MockHttpServletResponse)response).setStatus(HttpServletResponse.SC_OK);
+                }
+            }
+        }
+
     }
 
 

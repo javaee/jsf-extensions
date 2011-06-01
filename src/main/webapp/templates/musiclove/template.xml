@@ -1,0 +1,12 @@
+<template>
+
+<name>MusicLove</name>
+<creationDate>06/26/08</creationDate>
+<author>Black iD Solutions</author>
+<authorEmail>blackid@blackidsolutions.com</authorEmail>
+<authorUrl>http://www.blackidsolutions.com</authorUrl>
+<copyright>BlackIdSolutions</copyright>
+<version>1.0.0</version>
+<description>MusicLove</description>
+
+</template>

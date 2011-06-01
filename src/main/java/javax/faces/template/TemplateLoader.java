@@ -24,6 +24,7 @@ public class TemplateLoader implements PluginLoader<Template>{
 		digester.addBeanPropertySetter("template/license");
 		digester.addBeanPropertySetter("template/description");
 	}
+	
 	@Override
 	public Template load(InputStream stream) throws Exception {
 		

@@ -1,0 +1,302 @@
+body {
+	margin: 0px;
+	padding:0px;
+	background: #000000;
+}
+body, td, th {
+	font-family: Tahoma, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #FFFFFF;
+	line-height: 160%;
+}
+h1, h4, h5, h6 {
+	font-size: 12px;
+	color: #fff;
+	font-weight: normal;
+}
+h4 {
+	font-size: 11px;
+	font-weight: bold;
+	margin: 0;
+	padding: 0;
+	color: #FF9900;
+	margin-left: 2px;
+}
+h2 {
+	color: #1F6BB2;
+	font-weight: normal;
+	font-size: 30px;
+	text-transform: uppercase;
+	margin:0;
+	padding:0;
+	font-family: Arial, Helvetica, sans-serif;
+	line-height: 32px;
+}
+h3 {
+	color: #990000;
+	font-weight: normal;
+	font-size: 12px;
+	text-transform: none;
+	margin-bottom: 10px;
+	padding-top: 0;
+	margin-top: 0;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+a {
+	color: #1F6BB2;
+}
+a:hover {
+	color: #FFF;
+}
+.container {
+	width: 950px;
+	margin: 0 auto;
+}
+#contentarea {
+	width: 950px;
+	clear: left;
+	margin-top: 0;
+	float: left;
+	padding-bottom: 30px;
+	background:#151515;
+}
+#top {
+	width: 100%;
+	height: 90px;
+}
+#top-cover {
+	width: 950px;
+	margin: 0 auto;
+}
+#logo {
+	width: 200px;
+	float: left;
+	margin-top: 15px;
+	margin-left: 5px;
+}
+#header {
+	width: 950px;
+	float: left;
+	display: inline-block;
+	margin-bottom: 20px;
+}
+#content {
+	width: 630px;
+	float: left;
+	margin-top: 20px;
+	margin-left: 20px;
+}
+#content2 {
+	width: 850px;
+	float: left;
+	margin-top: 20px;
+	margin-left: 20px;
+}
+#right {
+	width: 255px;
+	float: right;
+	padding-bottom: 70px;
+	margin-top: 20px;
+	color: #666;
+	margin-right:15px;
+}
+#right .moduletable {
+	margin-bottom: 20px;
+}
+#bottom {
+	width: 950px;
+	clear: left;
+	float: left;
+	color: #666;
+	background:#151515;
+	padding:0 0 20px;
+}
+#right h3, #bottom h3 {
+	margin: 0px;
+	font-weight: bold;
+	color: #1F6BB2;
+	font-size: 18px;
+	font-family:"Trebuchet MS", Tahoma, Arial, Helvetica, Sans-serif;
+	border-bottom:5px solid #242424;
+	padding:0 0 5px 0;
+}
+#user1 {
+	width: 285px;
+	float: left;
+	margin-left: 15px;
+}
+#user1 .moduletable {
+	margin-bottom: 5px;
+	padding-bottom: 5px;
+}
+#user1 p {
+	margin: 0;
+	padding: 0;
+	margin-left: 2px;
+}
+#user1 a {
+	color: #FF9900;
+}
+#user2 {
+	width: 285px;
+	float: left;
+	margin-left: 50px;
+}
+#user2 li {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	list-style-image: none;
+	text-transform: none;
+	line-height: 18px;
+}
+#user2 a {
+	color: #666;
+	margin-left: 2px;
+	font-size: 11px;
+}
+#user3 {
+	width: 285px;
+	float: right;
+	margin-right: 10px;
+}
+#footer {
+	clear: left;
+	float: left;
+	width: 950px;
+	text-align: left;
+	font-size: 9px;
+	padding: 10px 0 30px 10px;
+	color: #666;
+}
+#footer a {
+	color: #666;
+}
+#footer .moduletable {
+	width: 880px;
+	margin: 0 auto;
+	margin-top: 3px;
+}
+h2.contentheading, h2.componentheading {
+	margin-bottom: 20px;
+	margin-top: 10px;
+}
+.clear {
+	clear: both;
+}
+/* COMMON TAGS */
+.modifydate {
+	color: #C0C0C0;
+}
+.author {
+	color: #C0C0C0;
+}
+.createdate {
+	color: #C0C0C0;
+}
+.contenttoc {
+	margin: 5px;
+}
+ul {
+	margin: 2px;
+	padding: 6px;
+	padding-left: 15px;
+}
+li {
+	padding-left: 1px;
+	line-height: 150%;
+}
+ul.arrow1 li, ul.arrow2 li {
+	padding-left: 5px;
+	padding-bottom: 2px;
+	padding-top: 2px;
+}
+.buttons {
+	float:right;
+	width:85px;
+}
+.buttons .buttonheading {
+	float:left;
+}
+.buttons img {
+	border: 0;
+}
+fieldset {
+	border: none;
+}
+textarea, input {
+	border: solid 1px #ccc;
+	color: #666;
+}
+.button {
+	background: none;
+	border: solid 1px #ccc;
+	color: #990000;
+}
+/* Poll Module Styles */
+
+.poll-radio {
+	padding:0;
+	float:left;
+	clear:left;
+	text-align:left;
+}
+.poll-option {
+	float:left;
+	padding-bottom:6px;
+	padding-top: 3px;
+	width:85%;
+	margin-left: 2px;
+}
+.poll h3 {
+	border:none;
+}
+.author, .createdate, .modifydate, .buttons {
+	display:none
+}
+#menu {
+	float: right;
+	width:650px;
+	height: 61px;
+	margin-top:30px;
+	margin-right: 10px;
+}
+#menu ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	margin-left: -11px;
+	float: right;
+}
+#menu li {
+	list-style: none;
+	float: left;
+	font-weight: normal;
+	font-size: 14px;
+	padding-right: 20px;
+	padding-left: 20px;
+	padding-top: 2px;
+	line-height: 26px;
+	text-transform: uppercase;
+	font-family: Candara, Arial, Helvetica, sans-serif;
+}
+#menu li a {
+	display: block;
+	padding: 0;
+	font-weight: normal;
+	text-decoration: none;
+	color: #fff;
+}
+#menu li:hover, #menu li.hover {
+	position: static;
+}
+#menu li a:hover, #menu li.active a {
+	color: #1F6BB2;
+	background-position: center;
+}
+html>body #menu li a {
+	width: auto;
+}
+.spotlight {
+	padding:15px 15px 0 15px;
+}

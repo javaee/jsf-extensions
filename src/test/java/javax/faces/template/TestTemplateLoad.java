@@ -1,21 +1,20 @@
 package javax.faces.template;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
-
-import javax.faces.plugin.Document;
 import javax.faces.template.Template;
 import javax.faces.template.TemplateLoader;
-
 import junit.framework.TestCase;
 
 public class TestTemplateLoad extends TestCase{
 
 	public void testLoad() throws IOException, Exception {
 	
-		Document document=new Document("src/test/resources/template.xml");
-		assertEquals(true,document.exists());
+		File file =new File("src/test/resources/template.xml");
+		assertEquals(true,file.exists());
 		TemplateLoader loader=new TemplateLoader();
-		Template template=loader.load(document.getInputStream());
+		Template template=loader.load(new FileInputStream(file));
 		assertNotNull(template);
 		assertEquals("Roses", template.getName());
 		assertEquals("1.0",template.getVersion());

@@ -1,0 +1,75 @@
+    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
+    <html xmlns="http://www.w3.org/1999/xhtml"  
+      xmlns:h="http://java.sun.com/jsf/html"  
+      xmlns:ui="http://java.sun.com/jsf/facelets">  
+       <h:head>  
+       <h:outputStylesheet library="css" name="template.css"/>  
+    </h:head>  
+    <h:body>  
+              
+              <!-- start header -->
+<div id="header">
+	<div id="menu">
+		<ui:insert name="menu">
+		   your menu here
+		</ui:insert>
+	</div>
+</div>
+<div id="logo">
+	<h1><h:link value="Joomswanky"/></h1>
+	
+</div>
+
+<!-- start page -->
+<div id="page">
+
+	<!-- start content -->
+	<div id="content2">
+        <div id="content">
+		<ui:insert name="content">
+		  your content here
+		</ui:insert>
+	</div>   
+	</div>
+
+	
+	<div class="clear"></div>
+</div>
+<!-- end page -->
+<hr />
+<!-- start footer -->
+<div id="footer">
+	<div id="footer-inner">
+    	<div id="twocols"> 
+			<div id="maincol" >
+			<div id="user1">
+				<ui:insert name="user1"/>
+			</div>
+			</div>
+			<div id="rightcol" >
+			<div id="user1">
+				<ui:insert name="user2"/>
+			</div>
+			
+			</div>
+            <div class="clear"></div>
+		</div> 
+		<div id="leftcol" >
+		
+		<div id="top">
+				<ui:insert name="top"/>
+	    </div>
+			
+		
+		</div>
+        <div class="clear"></div>
+     </div>
+</div>
+<div id="footer2">
+	
+</div>
+<!-- end footer -->
+ 
+          
+    </h:body>  
+</html>  

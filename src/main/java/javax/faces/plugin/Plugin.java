@@ -5,7 +5,6 @@ package javax.faces.plugin;
 
 public abstract class Plugin  {
 
-	protected String id;
 	protected String name="";
 	protected String description="";
 	protected String creationDate="";
@@ -13,16 +12,11 @@ public abstract class Plugin  {
 	protected String author="";
 	protected String authorEmail="";
 	protected String authorUrl="";
+    protected Folder folder;
     
 	
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
+    
+    
 	public String getName() {
 		return name;
 	}
@@ -82,6 +76,18 @@ public abstract class Plugin  {
 
 	public void setAuthorUrl(String authorUrl) {
 		this.authorUrl = authorUrl;
+	}
+
+	public Folder getFolder() {
+		return folder;
+	}
+
+	public void setFolder(Folder folder) {
+		this.folder = folder;
 	}	
 	
+	public String getId() {
+		return folder.getName();
+	}
+
 }

@@ -5,14 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ApplicationScoped;
-import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 
 
 
 @ApplicationScoped
-@ManagedBean(eager=true)
 public abstract class PluginManager<T extends Plugin>  {
 
 	protected  final List<T> 	plugins;
@@ -45,10 +43,12 @@ public abstract class PluginManager<T extends Plugin>  {
 				if(metadata.exists()) {
 					T plugin=load(metadata.getInputStream());
 					if(plugin!=null) {
+						plugin.setFolder(folder);
 						add(plugin);
 					}
 				}
 			} 
+			
 		}
 		catch(Exception e) {
 			
@@ -75,6 +75,15 @@ public abstract class PluginManager<T extends Plugin>  {
 	public List<T> getPlugins() {
 		
 			return plugins;
+	}
+	
+	public T get(String id) {
+		
+		for(T plugin : plugins) {
+			if(plugin.getId().equalsIgnoreCase(id))
+				return plugin;
+		}
+		return null;
 	}
 
 	public PluginLoader<T> getLoader() {

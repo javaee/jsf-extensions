@@ -1,0 +1,629 @@
+/*
+Design by Free CSS Templates
+http://www.freecsstemplates.org
+Released for free under a Creative Commons Attribution 2.5 License
+*/
+
+* {
+	margin: 0;
+	padding: 0;
+}
+
+
+
+body, th, td, input, textarea {
+	text-align: justify;
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #666666;
+}
+
+body {
+	background: url(img01.jpg?ln=images) repeat-x top left;
+	text-align: center;
+}
+
+form {
+}
+
+
+fieldset {
+border: none;
+}
+
+input, textarea {
+	font-weight: bold;
+}
+
+input.text {
+	padding: 2px 5px;
+	background: #F8FAEB;
+	border-top: 1px solid #4D5719;
+	border-left: 1px solid #4D5719;
+	border-right: 1px solid #626456;
+	border-bottom: 1px solid #626456;
+}
+
+input.button {
+	background: #3C7BCF;
+	border-top: 1px solid #3C7BCF;
+	border-left: 1px solid #3C7BCF;
+	border-right: 1px solid #3C7BCF;
+	border-bottom: 1px solid #3C7BCF;
+	color: #FFFFFF;
+}
+
+input, label
+{
+	margin-bottom: 5px;
+}
+
+h1, h2, h3 {
+	margin-top: 1.5em;
+	color: #B10961;
+	text-align: left;
+}
+
+h1 {
+	letter-spacing: -.075em;
+	font-size: 3em;
+}
+
+h1.componentheading
+{
+	margin: 0 0 0 0;
+	font-size: 13px;
+	background: #BB096B;
+	padding: 4px 15px 4px 10px;
+	text-transform: uppercase;
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: bold;
+	color: #FFFFFF;
+	letter-spacing: -.05em;
+}
+
+
+h2 {
+	letter-spacing: -.05em;
+	text-transform: uppercase;
+	font-size: 1.1em;
+	font-weight: bold;
+	color: #B10961;
+}
+
+h3 {
+	font-size: 1em;
+}
+
+p, ul, ol {
+	margin-top: 0.5em;
+	margin-bottom: 1em;
+	line-height: 1.8em;
+
+}
+
+ul, ol {
+	margin-left: 1em;
+}
+
+blockquote {
+	margin-left: 3em;
+	margin-right: 3em;
+}
+
+a {
+	text-decoration: none;
+	color: #75043D;
+}
+
+a:hover {
+	border: none;
+}
+
+h1 a, h2 a, h3 a {
+	border: none;
+	text-decoration: none;
+	color: #B10961;
+}
+
+h1 a:hover, h2 a:hover, h3 a:hover {
+	background: none;
+	color: #B10961;
+}
+
+hr {
+	display: none;
+}
+
+/* Wrapper */
+
+#wrapper {
+}
+
+/* Header */
+
+#header {
+	width: 900px;
+	margin: 0 auto;
+	background: url(img01.jpg?ln=images) no-repeat top left;
+	
+}
+
+#menu {
+	height: 47px;
+	width: 976px;
+	border-left: #58032F 1px solid;
+}
+
+#menu ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	line-height: normal;
+}
+
+#menu li {
+	float: left;	
+}
+
+#menu a {
+	display: block;
+	float: left;
+	padding: 15px 30px 16px 30px;
+	letter-spacing: -1px;
+	text-decoration: none;
+	text-transform: uppercase;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	font-weight: bold;
+	border-right: #58032F 1px solid;
+	color: #FFFFFF;
+}
+
+#menu a:hover {
+	background: #770444;
+	color: #FFFFFF;
+}
+
+#menu li#current a {
+	background: #770444;
+	padding: 15px 30px 16px 30px;
+	color: #FFFFFF;
+}
+
+
+#search {
+	float: right;
+	width: 260px;
+	margin: 0px;
+	padding-top: 7px;
+}
+
+#search fieldset {
+	border: none;
+}
+
+#search #s {
+	width: 160px;
+}
+
+#search #x {
+	width: 80px;
+}
+
+/* Logo */
+
+#logo {
+	width: 900px;
+	height: 261px;
+	margin: 0 auto;
+	background: url(img02.jpg?ln=images) no-repeat left top;
+}
+
+#logo h1, #logo h2 {
+	margin: 0;
+	padding: 0;
+	text-transform: lowercase;
+}
+
+#logo h1 {
+	padding: 90px 5px 0 0px;
+	font-size: 48px;
+	color: #FFFFFF;
+}
+
+#logo h2 {
+	padding: 0px 0 0 0px;
+	text-transform: uppercase;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	color: #BD0A70;
+}
+
+#logo h2 a{
+	color: #BD0A70;
+}
+
+#logo p {
+	clear: left;
+	margin: 0;
+	padding: 0 0 0 20px;
+	line-height: normal;
+	font-size: 1.2em;
+	font-weight: bold;
+	color: #C2C5B1;
+}
+
+#logo a {
+	color: #FFFFFF;
+}
+
+/* Page */
+
+#page {
+	width: 900px;
+	margin: 0 auto;
+	padding-top: 30px;
+	border-top: none;
+	text-align: justify;
+}
+
+/* Content */
+
+#content {
+	float: left;
+	width: 420px;
+}
+
+#content1 {
+	float: left;
+	width: 650px;
+}
+
+
+#content2 {
+	float: left;
+	width: 100%;
+}
+
+
+.post {
+	margin-right: 25px;
+}
+
+.post .title, .contentheading {
+	margin: 0;
+	font-weight: normal;
+}
+
+.post h1.title, h2.contentheading {
+	padding: 25px 0  5px 0px;
+	font-size: 30px;
+	font-family: Arial, Helvetica, sans-serif;
+	text-transform: lowercase;
+}
+
+.post .entry {
+	padding: 0 0 30px 0px;
+	line-height: 1.8em;
+	font-size: 1.1em;
+	
+}
+
+.post .meta {
+	margin: 0;
+	padding: 0px 0px 0px 0px;
+	text-transform: uppercase;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: #888;
+}
+
+.post .meta a {
+	color: #75043D;
+}
+
+.post .links {
+	margin: 0;
+	padding: 0px 0px 15px 15px;
+}
+
+.post .tags {
+	margin: 0;
+	background: #eee;
+	padding: 5px 10px 5px 15px;
+	text-transform: uppercase;
+	font-size: 10px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: bold;
+	
+}
+
+.post .links a, .post .tags a {
+	border: none;
+}
+
+/* Sidebars */
+
+.sidebar {
+	float: left;
+}
+
+.sidebar h3
+{
+	letter-spacing: -.05em;
+	text-transform: uppercase;
+	font-size: 1.3em;
+	font-weight: bold;
+	color: #B10961;
+	padding: 0px 0px 5px 0px;
+
+}
+
+.sidebar ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.sidebar li {
+	margin-bottom: 0.5em;
+}
+
+.sidebar li ul {
+}
+
+.sidebar li li {
+	margin: 0;
+}
+
+.sidebar li h2 {
+	margin: 0 0 10px 0;
+	font-family: Arial, Helvetica, sans-serif;
+	color: #B10961;
+}
+
+
+
+
+
+#sidebar1 {
+	width: 210px;
+	padding: 0px 20px 20px 20px;
+	background: #eee;
+	margin-bottom: 20px;
+}
+
+
+#sidebar1 h3
+{
+	margin: 0;
+	background: #BB096B;
+	padding: 3px 15px 3px 10px;
+	text-transform: uppercase;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: bold;
+	color: #FFFFFF;
+	margin: 1.5em 0em 0.8em 0em;
+}
+
+#sidebar2 {
+	width: 180px;
+	padding: 0px 20px 0px 20px;
+}
+
+#sidebar2 li h2 {
+	margin: 0 0 1em 0;
+	padding: 15px 0  0 0px;
+	height: 20px;
+}
+
+#sidebar2 li ul {
+	line-height: normal;
+}
+
+#sidebar2 li li {
+	padding: 5px;
+	font-size: 10px;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+#sidebar2 li a {
+	background: url(img04.gif?ln=images) no-repeat left 50%;
+	border: none;
+	padding-left: 10px;
+	text-transform: uppercase;
+}
+
+#sidebar2 li a:hover {
+	border: none;
+	padding-left: 10px;
+}
+
+
+
+/* Footer */
+
+#footer {
+	background: #000000;
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+
+#footer-inner {
+	width:900px;
+	margin: 0 auto;
+	background: #000000;
+	text-align: left;
+}
+
+#footer p {
+	text-transform: uppercase;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: #FFFFFF;
+}
+
+#footer a {
+	background: #BB096B;
+	padding: 2px 7px;
+	color: #FFFFFF;
+}
+
+
+#leftcol{
+ width:45%; 
+ float:left; 
+ position:relative; 
+
+ }
+ 
+#twocols{
+ width:50%; 
+ float:right; 
+ position:relative; 
+  }
+ 
+#rightcol{
+ width:50%; 
+ float:right; 
+ position:relative; 
+
+ }
+ 
+#maincol{
+ float: left; 
+ display:inline; 
+ position: relative; 
+ width:50%; 
+ }
+ 
+
+ 
+
+#footer2 {
+	background: #BB096B;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	color: #000;
+	text-align: center;
+}
+
+
+
+#footer2 a{
+	background: none;
+	color: #fff;
+
+}
+
+
+
+
+
+
+
+
+
+p.buttonheading
+{
+	float: right;
+}
+
+a img
+{
+	border: none;
+}
+
+.leading
+{
+	background-color:#FFEFF8;
+	border: 1px solid #FFDFF1;
+	margin-top: 25px;
+	padding-bottom:10px;
+	padding-right: 20px;
+	padding-left:20px;
+	padding-bottom: 25px;
+}
+
+
+
+
+.leading .tags
+{
+	background: none;
+}
+
+a.readon
+{
+	color: #666;
+}
+
+div.bannerheader
+{
+	margin-bottom: 10px;
+	font-weight: bold;
+}
+
+div.banneritem_text
+{
+	margin-bottom: 10px;
+}
+
+
+.clear
+{
+	clear: both;
+	height:0px;
+	line-height: 0px;
+	font-size: 0px;
+}
+
+
+
+fieldset.login label
+{
+ width: 60px;
+ display: block;
+ float: left;
+}
+
+fieldset.login input
+{
+ width: 140px;
+ display: block;
+ float: right;
+}
+
+
+ul.latestnews, ul.mostread
+{
+	list-style: none;
+	margin:5px 0 0 0;
+	padding:0;
+}
+
+ul.latestnews li, ul.mostread li
+{
+	margin:0px 0px 6px 0px;
+}
+
+
+ul.pagination {
+list-style-type:none;
+margin:10px 0px;
+padding:4px 0px;
+text-align:center;
+background-color: #EEE;
+}
+
+ul.pagination li {
+display:inline;
+padding:2px 5px 0;
+text-align:left;
+}
+
+ul.pagination li a {
+padding:2px;
+}

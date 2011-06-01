@@ -1,0 +1,64 @@
+    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
+    <html xmlns="http://www.w3.org/1999/xhtml"  
+      xmlns:h="http://java.sun.com/jsf/html"  
+      xmlns:ui="http://java.sun.com/jsf/facelets">  
+       <h:head>  
+           <h:outputStylesheet library="css" name="template.css"/>  
+    </h:head>  
+   <h:body id="page_bg">
+	<div id="bg1">
+	<div id="container">
+   		<div id="header">
+        	<div id="title-container">
+            	<div id="title">
+                    <h:link value="Roses"/>
+                </div>
+            </div>
+            <div id="stars"></div>
+            <div id="newsflash-container">
+            	<div id="newsflash">
+					
+				</div>
+            </div>
+        </div>	
+        <div class="spacer"></div>
+		<div id="contents">
+				<div id="column1_container">
+					<div id="column1">
+                    	
+					<div id="menu">
+						<ui:insert name="menu"/>
+					</div>			
+                        				
+					</div>
+				</div>
+			
+            
+				<div id="column2_container_full">
+                	<div id="column2">
+                    
+						<div class="spacer"></div>
+							<div id="content">
+								<ui:insert name="content"/>
+						</div>
+					</div>
+            	</div>
+                
+        	<div class="spacer"></div>                        
+		</div>
+		<div class="spacer"></div>
+		<div id="footer">
+        	<div id="footer-core">
+                <div id="footer1">
+						<ui:insert name="footer"/>
+					</div>
+            </div>
+			<div class="copyr"><a href="http://joomla-best-templates.com" target="_blank">joomla-best-templates.com</a></div>
+			<div class="spacer"></div>
+		</div>
+        
+    </div>
+    </div>
+
+</h:body>
+</html>  

@@ -1,0 +1,52 @@
+    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
+    <html xmlns="http://www.w3.org/1999/xhtml"  
+      xmlns:h="http://java.sun.com/jsf/html"  
+      xmlns:ui="http://java.sun.com/jsf/facelets">  
+       <h:head>  
+           <h:outputStylesheet library="css" name="template.css"/>  
+    </h:head>  
+    <h:body>  
+              
+<div id="top">
+  <div id="top-cover">
+    <div id="logo"><a href="$path"><h:graphicImage library="images" name="logo.png" /></a></div>
+    <div id="menu">
+      <ui:insert name="menu">
+         your menu here
+      </ui:insert>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div id="contentarea">
+  <div class="spotlight">
+  <h:graphicImage library="images" name="spotlight.jpg" />
+  </div>
+   <div id="content">
+    <ui:insert name="content">
+        your content here
+    </ui:insert>
+    </div>
+  </div>
+  <div id="bottom">
+      <div id="user1">
+        <ui:insert name="user1"/>
+      </div>
+      <div id="user2">
+        <ui:insert name="user2"/>
+      </div>
+      <div id="user3">
+        <ui:insert name="user3"/>
+      </div>
+        
+  </div>
+  <div id="footer">
+    <p>Copyright &copy; $it.name All Rights Reserved. Powered by <a href="http://www.joomla.org">Joomla!</a> <a href="http://validator.w3.org/check/referer">XHTML</a> and <a href="http://jigsaw.w3.org/css-validator/check/referer">CSS</a>.
+      <!-- You CAN NOT remove (or unreadable) those links without permission. Removing the link and template sponsor Please visit themesjoomla.com or contact with e-mail (webmaster@themesjoomla.com) If you don't want to link back to themesjoomla.com, you can always pay a link removal donation. This will allow you to use the template link free on one domain name. Also, kindly send me the site's url so I can include it on my list of verified users . Please read license.txt -->
+      <br />
+      <a href="http://www.themesjoomla.com" rel="follow">Joomla Themes</a> by <a  rel="follow" href="http://www.themesjoomla.com"><strong>themesjoomla.com</strong></a></p>
+  </div>
+</div>
+          
+    </h:body>  
+</html>  

@@ -29,6 +29,7 @@
 
 package com.sun.faces.mock;
 
+import javax.el.ELContext;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
@@ -62,6 +63,9 @@ public class MockFacesContextFactory extends FacesContextFactory {
         Application application = (MockApplication) applicationFactory.getApplication();
         result.setApplication(application);
         
+	ELContext elContext = new MockELContext(new MockELResolver());
+	elContext.putContext(FacesContext.class, result);
+        result.setELContext(elContext);
         
         return result;
     }

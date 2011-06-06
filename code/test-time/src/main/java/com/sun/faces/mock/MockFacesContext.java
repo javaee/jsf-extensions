@@ -135,6 +135,10 @@ public class MockFacesContext extends FacesContext {
     public ELContext getELContext() {
 	return (this.elContext);
     }
+    
+    public void setELContext(ELContext elContext) {
+        this.elContext = elContext;
+    }
 
     // externalContext
     private ExternalContext externalContext = null;

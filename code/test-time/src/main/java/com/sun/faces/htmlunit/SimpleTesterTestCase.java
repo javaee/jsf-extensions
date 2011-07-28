@@ -88,6 +88,12 @@ public class SimpleTesterTestCase extends HtmlUnitFacesTestCase {
 
 
     private void doRegexp(String text) throws Exception {
+        if (null != System.getProperty("SimpleTesterTestCase.dumpText") &&
+            ("true".equalsIgnoreCase(System.getProperty("SimpleTesterTestCase.dumpText")))) {
+            System.out.flush();
+            System.out.println(text);
+            System.out.flush();
+        }
         if (null != regexp && 0 < regexp.length()) {
             assertTrue(text.matches(regexp));
         }

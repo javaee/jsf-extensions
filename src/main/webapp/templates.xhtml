@@ -1,0 +1,106 @@
+ <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
+    <html xmlns="http://www.w3.org/1999/xhtml"  
+      xmlns:h="http://java.sun.com/jsf/html"  
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">  
+       
+    <h:body>  
+      
+    <ui:composition template="#{template}">
+  
+      <ui:define name="menu">     
+     <ul>
+	      <li>
+			<h:link value="Home" outcome="index"/>
+		 </li>
+		
+		<li>
+			<h:link value="Templates" outcome="templates"/>
+			
+		</li>
+		
+		<li>
+			<h:link value="Gallery" outcome="gallery"/>
+		</li>
+		
+		<li>
+			<h:link value="About" outcome="about"/>
+		</li>
+		
+		</ul>
+      
+      </ui:define>
+
+	<ui:define name="content">
+	
+	<div>
+  
+	 <h3>
+	 TEMPLATES (#{templateManager.size})
+	 </h3>
+	 	 
+</div>
+
+<div style="margin-left:auto;margin-right:auto;width:100%">
+
+<table border="0" width="100%" cellpadding="8" cellspacing="8">
+
+<tbody>
+
+<tr>
+
+<td align="center">
+
+<h:form>
+	<h:dataTable value="#{templateManager.templates}" var="template"  border="0" cellpadding="5" cellspacing="3"  dir="LTR"  
+	style="margin-left:auto;margin-right:auto;width:100%;margin-top:5px;font-size:12px;">
+		
+		
+		<h:column>
+			<f:facet name="header">
+			<h:outputText value="Name"/>
+			</f:facet>
+			<h:commandLink value="#{template.name}" action="#{templateManager.setTemplate(template)}" immediate="true"/>
+		</h:column>
+ 		
+ 		<h:column>
+			<f:facet name="header">
+			<h:outputText value="Version"/>
+			</f:facet>
+			<h:outputText value="#{template.version}"/>
+		</h:column>
+ 		
+ 		<h:column>
+			<f:facet name="header">
+			<h:outputText value="Author"/>
+			</f:facet>
+			<h:outputText value="#{template.author}"/>
+		</h:column>
+ 		
+ 		<h:column>
+			<f:facet name="header">
+			<h:outputText value="Creation Date"/>
+			</f:facet>
+			<h:outputText value="#{template.creationDate}"/>
+		</h:column>
+		
+		
+	</h:dataTable>
+ </h:form>	
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+ 
+ </div>
+	
+	</ui:define>
+      
+      </ui:composition>        
+             
+    </h:body>  
+</html>  

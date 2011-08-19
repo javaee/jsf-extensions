@@ -40,9 +40,19 @@ public class Folder {
 		else
 			document=new Document(file+File.separator+resourceName);
 		return document.exists()?document:null;
+			
+	}
+	
+	public Document getDocument(String resourceName) {
 		
+		Document document=new Document(file+File.separator+resourceName);
+		return document.exists()?document:null;
 		
+	}
+	
+	public Folder getParentFolder() {
 		
+		return new Folder(file.getParentFile().getAbsolutePath());
 		
 	}
 	

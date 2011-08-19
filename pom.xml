@@ -16,15 +16,71 @@
                     <target>1.6</target>
                 </configuration>
             </plugin>
+            
+           <plugin>
+                <groupId>org.glassfish</groupId>
+                <artifactId>maven-embedded-glassfish-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <app>target/${project.artifactId}.war</app>
+                    <name>app</name>
+                    <ports>
+                        <http-listener>8080</http-listener>
+                        <https-listener>8181</https-listener>
+                    </ports>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>start</goal> <!-- this will run during pre-integration-test phase -->
+                            <goal>deploy</goal> <!-- this will run during pre-integration-test phase -->
+                            <goal>undeploy</goal> <!-- this will run during post-integration-test phase -->
+                            <goal>stop</goal> <!-- this will run during post-integration-test phase -->
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+	    <!-- Run maven tests during integration-test phase. 
+		 Because the Embeddeded GlassFish should be up & running with the app deployed
+		 in order to run the tests. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>integration-test</phase>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <configuration>
+                            <skip>false</skip>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+      
         </plugins>
     </build>
   <dependencies>
+  
+  
+  
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>3.8.1</version>
       <scope>test</scope>
     </dependency>
+    
+    <dependency>
+            <groupId>org.glassfish.extras</groupId>
+            <artifactId>glassfish-embedded-all</artifactId>
+            <version>3.1</version>
+            <scope>provided</scope>
+        </dependency>
     
       <dependency>
           <groupId>javax.servlet</groupId>
@@ -34,17 +90,29 @@
       </dependency>
       
       <dependency>
-       <groupId>javax.faces</groupId>
-        <artifactId>jsf-api</artifactId>
-        <version>2.1</version>
-        <scope>provided</scope>
+       <groupId>org.glassfish</groupId>
+        <artifactId>javax.faces</artifactId>
+        <version>2.1.2</version>
+        <scope>compile</scope>
     </dependency>
+      
+      <dependency>
+			<groupId>javax.el</groupId>
+			<artifactId>el-api</artifactId>
+			<version>2.2</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.glassfish.web</groupId>
+			<artifactId>el-impl</artifactId>
+			<version>2.2</version>
+		</dependency>
       
       <dependency>
           <groupId>commons-digester</groupId>
           <artifactId>commons-digester</artifactId>
           <version>1.5</version>
-          <scope>provided</scope>
+          <scope>compile</scope>
       </dependency>
   </dependencies>
   
@@ -67,8 +135,12 @@
             <url>http://ocpsoft.com/repository/com/ocpsoft/</url>
             <layout>default</layout>
         </repository>
+        
+        <repository>
+            <id>glassfish-releases</id>
+            <url>http://download.java.net/maven/glassfish</url>
+        </repository>
+        
     </repositories>
-  <properties>
-       <netbeans.hint.deploy.server>gfv3ee6</netbeans.hint.deploy.server>
-    </properties>
+ 
 </project>

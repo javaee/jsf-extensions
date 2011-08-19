@@ -39,6 +39,11 @@ hr{
 	border:0;
 	height:1px; 
 }
+
+td,th {
+	text-align:center;
+}
+
 /*****************************************/
 /*** Template specific layout elements ***/
 /*****************************************/

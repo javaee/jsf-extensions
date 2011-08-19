@@ -9,6 +9,11 @@ body, td, th {
 	color: #FFFFFF;
 	line-height: 160%;
 }
+
+td,th {
+ text-align:center;
+}
+
 h1, h4, h5, h6 {
 	font-size: 12px;
 	color: #fff;

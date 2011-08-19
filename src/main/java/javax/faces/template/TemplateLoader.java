@@ -1,6 +1,8 @@
 package javax.faces.template;
 
 import java.io.InputStream;
+
+import javax.faces.application.Resource;
 import javax.faces.plugin.PluginLoader;
 import org.apache.commons.digester.Digester;
 
@@ -26,13 +28,15 @@ public class TemplateLoader implements PluginLoader<Template>{
 	}
 	
 	@Override
-	public Template load(InputStream stream) throws Exception {
+	public Template load(Resource metadata) throws Exception {
 		
-		Template template=(Template) digester.parse(stream);
-		stream.close();
+		InputStream in=metadata.getInputStream();
+		Template template=(Template) digester.parse(in);
+		in.close();
 		return template;
 		
 	}
+
 
 	
 }

@@ -1,0 +1,58 @@
+    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
+    <html xmlns="http://www.w3.org/1999/xhtml"  
+      xmlns:h="http://java.sun.com/jsf/html"  
+      xmlns:ui="http://java.sun.com/jsf/facelets">  
+    
+     
+    <h:body>  
+      
+    <ui:composition template="#{template}">
+  
+      <ui:define name="menu">     
+     <ul>
+	      <li>
+			<h:link value="Home" outcome="index"/>
+		 </li>
+		
+		<li>
+			<h:link value="Templates" outcome="templates"/>
+			
+		</li>
+		
+		<li>
+			<h:link value="Gallery" outcome="gallery"/>
+		</li>
+		
+		<li>
+			<h:link value="About" outcome="about"/>
+		</li>
+		
+		</ul>
+		
+      </ui:define>
+
+	<ui:define name="content">
+
+<div style="margin-left:auto;margin-right:auto;width:100%">
+		
+	<h2>Multi-Templating System</h2>
+
+
+<p style="font-size:12px;margin-bottom:20px">
+<strong>Author:</strong> Mamadou Lamine Ba<br/>
+<strong>Version:</strong> 1.0<br />
+<strong>Description:</strong> Change the look and feel
+of your JSF 2.2 applications.
+</p>
+
+
+<p align="center"><iframe height="349" frameborder="0" width="500" allowfullscreen="" src="http://www.youtube.com/embed/6t-xB8wP8Rg"></iframe></p>
+
+</div>	
+	
+	</ui:define>
+      
+      </ui:composition>        
+             
+    </h:body>  
+</html>  

@@ -1,10 +1,10 @@
 package javax.faces.template;
 
 import java.io.IOException;
+import java.util.Map;
 import javax.faces.application.Resource;
 import javax.faces.application.ResourceHandler;
 import javax.faces.context.FacesContext;
-import javax.faces.plugin.Folder;
 
 
 public class ResourceHandlerImpl  extends ResourceHandler{
@@ -26,9 +26,9 @@ public class ResourceHandlerImpl  extends ResourceHandler{
 	public Resource createResource(String resourceName, String library) {
 		
 		FacesContext context=FacesContext.getCurrentInstance();
-		Template template=(Template) context.getExternalContext().getApplicationMap().get(TemplateManager.SELECTED_TEMPLATE);
-		Folder folder=template.getFolder();
-		Resource resource=folder.getDocument(resourceName, library);
+		Map<String,Object> map=context.getExternalContext().getApplicationMap();
+		Template template=(Template) map.get(TemplateManager.SELECTED_TEMPLATE);
+		Resource resource=template.getResource(resourceName, library);
 		if(resource!=null) return resource;
 		return wrapper.createResource(resourceName, library);
 	}

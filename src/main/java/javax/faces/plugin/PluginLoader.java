@@ -1,12 +1,11 @@
 package javax.faces.plugin;
 
-import java.io.InputStream;
-
+import javax.faces.application.Resource;
 
 public interface PluginLoader<T extends Plugin> {
 
 	
-	public T load(InputStream metadata) throws Exception;
+	public T load(Resource metadata) throws Exception;
 	
 	
 }

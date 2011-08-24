@@ -9,26 +9,7 @@
     <ui:composition template="#{template}">
   
       <ui:define name="menu">     
-     <ul>
-	      <li>
-			<h:link value="Home" outcome="index"/>
-		 </li>
-		
-		<li>
-			<h:link value="Templates" outcome="templates"/>
-			
-		</li>
-		
-		<li>
-			<h:link value="Gallery" outcome="gallery"/>
-		</li>
-		
-		<li>
-			<h:link value="About" outcome="about"/>
-		</li>
-		
-		</ul>
-      
+      	<ui:include src="menu.xhtml"/>
       </ui:define>
 
 	<ui:define name="content">
@@ -41,7 +22,12 @@
 	 	 
 </div>
 
+<h:outputScript library="js" name="jquery-1.4.2.min.js"/>
+<h:outputScript library="js" name="app.js"/>
+
+
 <div style="margin-left:auto;margin-right:auto;width:100%">
+
 
 <table border="0" width="100%" cellpadding="8" cellspacing="8">
 
@@ -55,12 +41,20 @@
 	<h:dataTable value="#{templateManager.templates}" var="template"  border="0" cellpadding="5" cellspacing="3"  dir="LTR"  
 	style="margin-left:auto;margin-right:auto;width:100%;margin-top:5px;font-size:12px;">
 		
+		<h:column>
+			<f:facet name="header">
+			<h:outputText value="#"/>
+			</f:facet>
+			<h:outputText value="#{template.index}"/>
+		</h:column>
 		
 		<h:column>
 			<f:facet name="header">
 			<h:outputText value="Name"/>
 			</f:facet>
-			<h:commandLink value="#{template.name}" action="#{templateManager.setTemplate(template)}" immediate="true"/>
+			<h:commandLink value="#{template.name}" action="#{templateManager.selectTemplate(template)}" immediate="true" styleClass="template_name">
+				<h:graphicImage  width="200px" height="150px" library="#{template.id}" name="template.png" styleClass="thumbnail"/>
+			</h:commandLink>
 		</h:column>
  		
  		<h:column>
@@ -75,6 +69,13 @@
 			<h:outputText value="Author"/>
 			</f:facet>
 			<h:outputText value="#{template.author}"/>
+		</h:column>
+ 		
+ 		<h:column>
+			<f:facet name="header">
+			<h:outputText value="License"/>
+			</f:facet>
+			<h:outputText value="#{template.license}"/>
 		</h:column>
  		
  		<h:column>

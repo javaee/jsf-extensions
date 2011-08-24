@@ -1,7 +1,6 @@
 package javax.faces.template;
 
 import java.io.IOException;
-import java.util.Map;
 import javax.faces.application.Resource;
 import javax.faces.application.ResourceHandler;
 import javax.faces.context.FacesContext;
@@ -25,12 +24,11 @@ public class ResourceHandlerImpl  extends ResourceHandler{
 	@Override
 	public Resource createResource(String resourceName, String library) {
 		
-		FacesContext context=FacesContext.getCurrentInstance();
-		Map<String,Object> map=context.getExternalContext().getApplicationMap();
-		Template template=(Template) map.get(TemplateManager.SELECTED_TEMPLATE);
-		Resource resource=template.getResource(resourceName, library);
+		TemplateManager templateManager=TemplateManager.getInstance();
+		Resource resource=templateManager.getResource(resourceName, library);
 		if(resource!=null) return resource;
 		return wrapper.createResource(resourceName, library);
+		
 	}
 
 	@Override

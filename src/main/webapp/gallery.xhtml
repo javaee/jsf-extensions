@@ -8,26 +8,7 @@
     <ui:composition template="#{template}">
   
       <ui:define name="menu">     
-     <ul>
-	      <li>
-			<h:link value="Home" outcome="index"/>
-		 </li>
-		
-		<li>
-			<h:link value="Templates" outcome="templates"/>
-			
-		</li>
-		
-		<li>
-			<h:link value="Gallery" outcome="gallery"/>
-		</li>
-		
-		<li>
-			<h:link value="About" outcome="about"/>
-		</li>
-		
-		</ul>
-      
+      	<ui:include src="menu.xhtml"/>
       </ui:define>
 
 	<ui:define name="content">
@@ -39,6 +20,9 @@
 	 </h3>
 		 
 </div>
+
+<h:outputScript library="js" name="jquery-1.4.2.min.js"/>
+<h:outputScript library="js" name="app.js"/>
 
 <div style="margin-left:auto;margin-right:auto;width:100%">
 
@@ -53,10 +37,11 @@
 	
 	<ui:repeat var="template" value="#{templateManager.templates}">
 		
- 		<div id="thumbnail" style="text-align:center;font-size:11px;float:left;width:95px;max-width:100px;margin-left:auto;margin-bottom:15px;margin-right:20px;padding:10px;">
+ 		<div  style="text-align:center;font-size:11px;float:left;width:95px;max-width:100px;margin-left:auto;margin-bottom:15px;margin-right:20px;padding:10px;">
  	
- 				
-			<h:graphicImage  width="100%" height="90px" library="#{template.id}" name="template.png"/>
+ 			
+			<h:graphicImage  width="100%" height="90px" library="#{template.id}" name="template.png" styleClass="thumbnail"/>
+			
 			
 			
 				#{template.name}

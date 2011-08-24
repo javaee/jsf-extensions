@@ -12,6 +12,8 @@ public abstract class Plugin  {
 	protected String author="";
 	protected String authorEmail="";
 	protected String authorUrl="";
+	protected String license="GPL";
+	protected int index;
     protected Folder folder;
     
 	
@@ -88,6 +90,22 @@ public abstract class Plugin  {
 	
 	public String getId() {
 		return folder.getName();
+	}
+
+	public String getLicense() {
+		return license;
+	}
+
+	public void setLicense(String license) {
+		this.license = license;
+	}
+
+	public int getIndex() {
+		return index;
+	}
+
+	public void setIndex(int index) {
+		this.index = index;
 	}
 
 }

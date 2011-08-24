@@ -18,10 +18,7 @@ public class Template extends Plugin {
     
     public Resource getResource(String resourceName,String library) {
     	
-    	if(resourceName.equals(THUMBNAIL))
-    		return folder.getParentFolder().getDocument(THUMBNAIL,library);
-    	Resource resource=folder.getDocument(resourceName, library);
-		return resource;
+    	return folder.getDocument(resourceName, library);
 		
     }
     

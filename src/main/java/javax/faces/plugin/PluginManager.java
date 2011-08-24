@@ -17,8 +17,9 @@ public abstract class PluginManager<T extends Plugin>  {
 
 	protected  final List<T> 	plugins;
 	protected  PluginLoader<T>  loader;
+	protected  Folder folder;
 	public static final Logger logger=Logger.getLogger("PluginManager");
-	   
+	
 	
 	public PluginManager() {
 		
@@ -43,17 +44,20 @@ public abstract class PluginManager<T extends Plugin>  {
 	
 	public void load(String path) {
 		
+		plugins.clear();
 		Manage manage=getClass().getAnnotation(Manage.class);
-		Folder pluginFolder=new Folder(path+File.separator+manage.folder());
-		for(Folder folder : pluginFolder.getSubFolders()) {
-			Document metadata=new Document(folder+File.separator+manage.metadata());
+		folder=new Folder(path+File.separator+manage.folder());
+		int count=1;
+		for(Folder subFolder : folder.getSubFolders()) {
+			Document metadata=new Document(subFolder+File.separator+manage.metadata());
 			if(metadata.exists()) {
 				try {
 					T plugin=load(metadata);
 					if(plugin!=null) {
-						plugin.setFolder(folder);
+						plugin.setFolder(subFolder);
+						plugin.setIndex(count);
 						add(plugin);
-						logger.info("adding plugin "+plugin.getId());
+						count++;
 					}
 				} catch(Exception e) {
 					logger.log(Level.SEVERE, "error while loading plugin "+metadata, e);
@@ -84,7 +88,7 @@ public abstract class PluginManager<T extends Plugin>  {
 	
 	public int getSize() {
 		
-		return plugins.size();
+			return plugins.size();
 		
 	}
 	

@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
+    <html xmlns="http://www.w3.org/1999/xhtml"  
+      xmlns:h="http://java.sun.com/jsf/html"  
+      xmlns:ui="http://java.sun.com/jsf/facelets">  
+  <h:head>
+  		<title>Pinkkitty</title>  
+          <h:outputStylesheet library="css" name="template.css"/>  
+    </h:head> 
+
+<body id="page_bg">
+	<div id="header">
+		<div id="logo">
+			<h:link value="Pinkkitty" outcome="index"/>
+		</div>	
+	</div>
+	<div class="pill_m">
+		<div id="pillmenu">
+			<ui:insert name="menu"/>
+		</div>
+		
+	</div>
+	<div class="clr"></div>
+	
+	<div class="center">		
+		<div id="wrapper">
+			<div id="content">
+				<ui:insert name="content"/>			
+			</div>
+		</div>
+	</div>
+	
+	<div id="footer">
+		<p>
+			Valid <a href="http://validator.w3.org/check/referer">XHTML</a> and <a href="http://jigsaw.w3.org/css-validator/check/referer">CSS</a>.
+		</p>
+		
+	</div>	
+</body>
+</html>

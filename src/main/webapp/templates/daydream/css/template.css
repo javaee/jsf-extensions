@@ -1,0 +1,156 @@
+*
+{
+border: 0;
+margin: 0;
+}
+
+body {
+margin:0px;
+font-family:Arial;
+font-size:12px;
+background:#243515;
+
+}
+
+#wrapper{
+width:1000px;
+margin-left: auto ;
+margin-right: auto ;
+
+
+}
+
+
+#header{
+height:312px;
+background:url(dreamin1.jpg?ln=images) no-repeat;
+
+}
+
+
+#content{
+margin-left:auto;
+margin-right:auto;
+padding:30px;
+margin-top:25px;
+height:800px;
+background: #efefef;
+width:925px;
+}
+
+#footer a
+	{
+		color: #ffffff;
+	}
+#footer
+	{	width:1000px;
+		background:url(footer.jpg?ln=images) no-repeat;	
+		height:125px;
+  		margin-left: auto ;
+  		margin-right: auto ;
+  		color: #ffffff;
+	}
+
+#menu ul{
+	margin-top:0px;
+	margin-right:0px;	
+	padding:0px;
+	left:0px;
+	float:left;
+	width:1000px;
+	background:url(navline.jpg?ln=images) no-repeat;
+	height:38px;	
+}
+
+
+#menu ul li{
+		margin: 0px;
+		padding: 0px;
+		display: inline;
+		float:left;
+		background:none !important;
+		position:relative;
+		top: 5px !important;
+
+}
+
+#menu ul li a, #menu ul li a:visited
+	{
+		display:block;
+		font-size:14px;
+		font-weight: bold;
+		color:#243515;
+		text-decoration:none;
+		padding-right:25px;
+		padding-left:25px;
+		padding-bottom:18px;
+		padding-top:5px;				
+		z-index:1;
+}
+	
+#menu ul li a:hover{
+		color:#66392E;
+		text-align:center;
+		padding-right:25px;
+		padding-left:25px;
+		padding-bottom:18px;
+		padding-top:5px;
+		
+}
+
+
+#logo , .anim {
+	 width:208px; 
+	 height:126px; 
+	 position:relative; 
+	 top:40px; 
+	 left:190px;
+	 background:url(headanim.gif?ln=images);
+	 margin:0px;
+	 padding:0px;
+	 color:rgb(113,70,56);
+	 font-size:19px;
+	 white-space:no-wrap;
+	 font-weight:bold;
+ }
+
+
+th {
+background:url(hover.gif?ln=images);
+color:white;
+text-align:center;
+font-size: 11px;
+-moz-border-radius: 10px;
+-webkit-border-radius: 10px;
+}
+
+td{
+text-align:center;
+font-size: 11px;
+}
+
+a {
+	color:rgb(0,0,32);
+}
+
+a:visited {
+	color:rgb(0,0,32);
+}
+
+a:hover {
+	color:red;
+}
+
+h3, h3 a, h3 a:link, h3 a:visited, h3 a:hover {
+	
+ 		color:#243515;
+		margin: 0px;
+		text-align:left;
+		font-size: 13px;
+		font-weight:bold;
+
+	
+
+}
+
+.ui-widget-content {  background:transparent}

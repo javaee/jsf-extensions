@@ -190,6 +190,11 @@ th {
 font-weight: bold;
 padding-left: 5px;
 text-align:center;
+background-color:rgb(0,0,0);
+color:gold;
+-moz-border-radius: 10px;
+-webkit-border-radius: 10px;
+line-height: 2em;
 }
 
 tr.tableheader {

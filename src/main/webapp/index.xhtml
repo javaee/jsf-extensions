@@ -8,26 +8,7 @@
     <ui:composition template="#{template}">
   
       <ui:define name="menu">     
-     <ul>
-	      <li>
-			<h:link value="Home" outcome="index"/>
-		 </li>
-		
-		<li>
-			<h:link value="Templates" outcome="templates"/>
-			
-		</li>
-		
-		<li>
-			<h:link value="Gallery" outcome="gallery"/>
-		</li>
-		
-		<li>
-			<h:link value="About" outcome="about"/>
-		</li>
-		
-		</ul>
-      
+    	<ui:include src="menu.xhtml"/>
       </ui:define>
 
 	<ui:define name="content">
@@ -36,7 +17,7 @@
 	
 <p>JavaServer™ Faces (JSF) is the standard component-oriented user interface (UI) framework for the Java EE platform. In terms which may sound more familiar, it's a Java-based web framework.
 JSF is included in the Java EE platform, so you can create applications that use JSF without adding any extra libraries in your project. JSF works equally as well as a standalone web framework, able to hook into bean containers such as Spring. How you use JSF is up to you.
-<b>To fastest way to get started</b> with JSF is to create a project using a Maven archetype. Instructions are provided on the <a href="http://www.javaserverfaces.org/get-started">Get Started</a> page.</p>
+<b>The fastest way to get started</b> with JSF is to create a project using a Maven archetype. Instructions are provided on the <a href="http://www.javaserverfaces.org/get-started">Get Started</a> page.</p>
 	
 	<h2>Ecosystem</h2>
 <p>Beyond just a web framework, JSF offers an ecosystem of portable UI component libraries and extensions. This means you can take a UI component from a library, such as a tree or scrollable table, and use it on any JSF implementation.

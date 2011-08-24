@@ -9,26 +9,7 @@
     <ui:composition template="#{template}">
   
       <ui:define name="menu">     
-     <ul>
-	      <li>
-			<h:link value="Home" outcome="index"/>
-		 </li>
-		
-		<li>
-			<h:link value="Templates" outcome="templates"/>
-			
-		</li>
-		
-		<li>
-			<h:link value="Gallery" outcome="gallery"/>
-		</li>
-		
-		<li>
-			<h:link value="About" outcome="about"/>
-		</li>
-		
-		</ul>
-		
+		<ui:include src="menu.xhtml"/>
       </ui:define>
 
 	<ui:define name="content">
@@ -38,11 +19,12 @@
 	<h2>Multi-Templating System</h2>
 
 
-<p style="font-size:12px;margin-bottom:20px">
-<strong>Author:</strong> Mamadou Lamine Ba<br/>
-<strong>Version:</strong> 1.0<br />
-<strong>Description:</strong> Change the look and feel
-of your JSF 2.2 applications.
+<p style="font-size:12px;margin-bottom:20px;line-height:200%">
+<span style="font-weight:bold">Author(s):</span> JSR 344 Expert Group<br/>
+<span style="font-weight:bold">Version:</span> 1.0<br />
+<span style="font-weight:bold">Requirements:</span> JSF 2.2<br />
+<span style="font-weight:bold">Description:</span> <span style="color:red"> Change the look and feel
+of your JSF applications.</span>
 </p>
 
 

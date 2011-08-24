@@ -1,0 +1,611 @@
+/*
+* A Joomla! Template
+* @name - newave
+* @author - Free CSS Templates
+* @version 1.5
+* @date - Aug 16, 2007
+* @website - www.freecsstemplates.org
+* @copyright (C) - 
+* @license - Creative Commons Attribution 2.5
+* @modifications - Modified for Joomla! by XOS - www.xtremeopensource.org 
+*/
+
+
+
+body {
+  color                 : #666666;
+  font-family           : "Trebuchet MS", Arial, Helvetica, sans-serif;
+  font-size             : 13px;
+  margin                : 0;
+  padding               : 0;
+  background            : url(img01.jpg?ln=images) #ffffff repeat-x;
+}
+
+
+input, textarea, select {
+  font                  : normal 1em "Trebuchet MS", Arial, Helvetica, sans-serif;
+}
+
+
+h1, h2 {
+  color                 : #7cd300;
+  font-weight           : normal;
+	
+}
+
+h1 {
+  font-size             : 2.6em;
+  letter-spacing        : -1px;
+	
+}
+
+h2 {
+  height                : 21px;
+	line-height           : 21px;
+  font-size             : 1.8em;
+}
+
+img {
+  border                : none;
+}
+
+
+/********** Header **********/
+
+#header {
+  width                 : 920px;
+  height                : 160px;
+  margin                : 0 auto;
+}
+
+
+/********** Logo ***********/
+
+#logo {
+  float                 : left;
+}
+
+#logo h1, #logo h2 {
+  text-transform        : lowercase;
+  margin                : 0;
+}
+
+#logo h1 {
+  color                 : #554D49;
+  font-size             : 4em;
+  padding-top           : 52px;
+}
+
+#logo h1 a {
+  color                 : #554D49;
+}
+
+#logo h2 {
+  color                 : #7F7772;
+  font-size             : 1.8em;
+  letter-spacing        : -1px;
+  margin-top            : -10px;
+  padding-left          : 1px;
+}
+
+#logo h2 a {
+  color                 : #7F7772;
+}
+
+#logo a {
+  text-decoration       : none;
+}
+
+
+
+/********** Menu **********/
+
+#topmenu {
+  float                 : right;
+}
+
+#topmenu ul {
+  list-style            : none;
+  margin                : 0;
+  padding               : 40px 0 0 0;
+}
+
+#topmenu li {
+  display               : inline;
+}
+
+#topmenu a {
+  width                 : 130px;
+  height                : 90px;
+	float                 : left;
+  color                 : #ffffff;
+	font-size             : 1.3em;
+  display               : block;
+  text-align            : center;
+  text-decoration       : none;
+  text-transform        : lowercase;
+	padding-top           : 30px;
+  background            : url(img02.jpg?ln=images) #73D000 no-repeat;
+}
+
+td {
+text-align:center;
+}
+
+th {
+font-weight: bold;
+padding-left: 5px;
+text-align:center;
+background-color:#554D49;
+color:white;
+-moz-border-radius: 10px;
+-webkit-border-radius: 10px;
+line-height: 1em;
+}
+
+
+/********** Main Content **********/
+#main_container {
+  width                 : 920px;
+  margin                : 0 auto;
+  padding-top           : 20px;
+}
+
+#content {
+  width                 : 480px;
+  float                 : left;
+	
+}
+
+#right {
+  width                 : 380px;
+  float                 : right;
+  padding               : 12px 0 0 30px;
+  background            : url(img03.gif?ln=images) repeat-y;
+}
+
+
+#dotted_separator {
+  background            : url(img04.gif?ln=images) repeat-x;
+}
+
+/********** Bottom Content **********/
+
+#bottom {
+  width                 : 920px;
+  clear                 : both;
+  color                 : #008c00;
+  background            :  url(img05.gif?ln=images) #cdeb8b no-repeat;
+}
+
+#bottom ul {
+  list-style            : vertical;
+  margin                : 0;
+  padding               : 0;
+}
+
+#bottom li {
+  width                 : 200px;
+	float                 : left;
+  display               : block;
+  padding               : 10px;
+}
+
+#bottom li ul {
+  line-height           : 1.8em;
+}
+
+#bottom li li {
+  width                 : auto;
+  display               : list-item;
+  float                 : none;
+  padding               : 0;
+}
+
+#bottom a {
+  color                 : #008c00;
+  text-decoration       : none;
+	padding               : 5px;
+}
+
+#bottom a:hover {
+  text-decoration       : underline;
+}
+
+
+
+/********** Footer **********/
+
+#footer {
+  width                 : 920px;
+  height                : 100px;
+  margin                : 0 auto;
+  background            : url(img06.gif?ln=images) no-repeat;
+}
+
+#footer p {
+  margin                : 0;
+  padding               : 15px;
+}
+
+#legal {
+  float                 : left;
+}
+
+#links {
+  float                 : right;
+}
+
+
+
+
+/*#################### Joomla! CSS ####################*/
+
+/********** Breadcrumbs **********/
+#breadcrumbs {
+  font-family           : Verdana, Helvetica, Arial, sans-serif;
+  font-size             : 9px;
+  padding-top           : 6px !important;
+  padding-top           : 7px;
+  padding-left          : 4px;
+}
+
+#breadcrumbs a:link, #breadcrumbs a:visited {
+  color                 : #000000;
+  font-weight           : normal;
+}
+
+#breadcrumbs a:hover {
+  color                 : #008c00;
+  font-weight           : normal;
+  text-decoration       : none;
+}
+
+
+/********** MainLevel Links **********/
+a.mainlevel:link, a.mainlevel:visited {
+  width                 : 100%;
+  height                : 20px;
+  line-height           : 20px;
+  color                 : #555555;
+  font-size             : 11px;
+  vertical-align        : middle;
+  text-align            : left;
+  text-decoration       : none;
+  padding-left: 10px;
+}
+
+a.mainlevel:hover {
+  color                 : #ff9900;
+  text-decoration       : underline;
+}
+
+
+
+/********** SubLevel Links **********/
+a.sublevel:link, a.sublevel:visited {
+  height                : 20px;
+  color                 : #000000;
+  font-size             : 11px;
+  vertical-align        : middle;
+  text-align            : left;
+  text-decoration       : none;
+  padding-left          : 1px;
+}
+
+a.sublevel:hover {
+  color                 : #336699; 
+  text-decoration       : none;
+}
+
+
+/********** Active MainLevel Links **********/
+#active_menu {
+  color                 :#ffcc00;
+  font-weight           : bold;
+}
+
+a#active_menu:hover {
+  color                 : #ff9900;
+}
+
+
+/********** MainMenu Links **********/
+a.mainmenu:link, a.mainmenu:visited {
+  color                 : #000080; 
+  font-family           : Verdana, Helvetica, Arial, sans-serif;
+  font-weight           : none;
+}
+
+a.mainmenu:hover {
+  color                 : #000080;
+  text-decoration       : underline; 
+}
+
+
+/********** Other Links **********/
+a:link, a:visited {
+  color                 : #7cd300;
+  text-underline        : underline;
+}
+
+a:hover {
+  text-decoration       : none;
+}
+  
+  
+/********** Modules **********/
+table.moduletable {
+  width                 : 100%;
+  padding               : 0px;
+	margin                : 20px 0 0 0;
+  border-spacing        : 0px;
+  border-collapse       : collapse;
+	
+}
+
+table.moduletable th {
+  height                : 21px;
+	line-height           : 21px;
+  color                 : #7cd300;
+  font-weight           : normal;
+  font-size             : 1.8em;
+  text-align            : left;
+  margin                : 0px 0px 2px 0px;
+}
+
+table.moduletable td {
+  font-weight           : normal;
+  padding               : 10px 0 0 0;
+  margin                : 0;
+}
+
+
+/********** User Modules **********/
+table.moduletable-user {
+  width                 : 100%;
+  margin-bottom         : 15px;
+  padding               : 0px;
+  border-spacing        : 0px;
+  border-collapse       : collapse;
+}
+
+table.moduletable-user th {
+  height                : 21px;
+  color                 : #7cd300;
+  font-weight           : normal;
+  font-size             : 1.8em;
+  line-height           : 21px;
+  text-align            : left;
+  margin                : 0px 0px 2px 0px;
+  padding-left          : 4px;
+}
+
+table.moduletable-user td {
+  font-weight           : normal;
+  padding               : 10px 0 0 0;
+  margin                : 0;
+}
+
+
+/********** Login Module **********/
+.moduletable-login {
+  margin                : 0 0 20px 0;
+}
+
+
+/********** Poll **********/
+.poll {
+  color                 : #666666;
+  line-height           : 14px;
+  font-family           : Arial, Helvetica, sans-serif;
+  font-size             : 10px;
+}
+
+.pollstableborder {
+  padding               : 1px;
+  border                : 1px solid;
+}
+
+
+
+
+/*############### CONTENT ###############*/
+
+/***** Header for contentpaneopen (Main Title) *****/
+.contentheading {
+  color                 : #7cd300;
+  font-size             : 2.6em;
+  text-align            : left;
+  padding-top           : 10px;
+}
+
+
+/***** Home, Mambo License, Blog, Lower Content for Advanced Search *****/
+.contentpaneopen {
+  width                 : 100%;
+}
+
+/***** Title for Blog, News Feeds, Wrapper, Links, Advanced Search, Contact Us   *****/
+.componentheading {
+  color                 : #000000;
+  font-size             : 14px;
+  font-weight           : bold;
+  text-align            : left;
+  padding-top           : 10px;
+  padding-left          : 10px;
+}
+
+/***** Top Content for Getting Started, FAQs, News Feeds, Links *****/
+.contentdescription {
+  padding-left          : 0px !important;
+  padding-left          : 10px;
+}
+
+/***** Lower Content for Getting Started, FAQs, News Feeds, Wrapper, Links, Contact Us *****/
+.contentpane {
+  padding-top           : 10px;
+  padding-left          : 10px;
+}
+
+
+/* For content item titles that are hyperlink instead of Read On */
+a.contentpagetitle:link, a.contentpagetitle:visited {
+  color                 : #000000;
+  font-size             : 12px;
+  font-weight           : bold;
+  text-align            : left;
+  text-decoration       : none;
+}
+
+a.contentpagetitle:hover {
+  color                 : #7B8DA1;
+  font-size             : 12px;
+  font-weight           : bold;
+  text-align            : left;
+  text-decoration       : underline;
+  
+}
+
+a.category:link, a.category:visited {
+  color                 : #333333;
+  font-size             : 11px;
+  font-weight           : bold;
+}
+
+a.category:hover {
+  color                 : #008c00;
+}
+
+
+/********** Inner Content **********/
+.sectiontableheader {
+  color                 : #7B8DA1;
+  font-weight           : bold;
+  background-color      : #CCCCCC;
+}
+
+.sectiontableentry1 {
+  background-color      : #F0F0F0;
+}
+
+.sectiontableentry2 {
+  background-color      : #E0E0E0;
+}
+
+
+/********** Rating **********/
+.content_rating {
+  padding               : 5px;
+}
+
+.small {
+  color                 : #bababa;
+  font-family           : Verdana, Arial, Helvetica, sans-serif;
+  font-size             : 10px;
+  text-decoration       : none;
+}
+
+.smalldark {
+  color                 : #000000;
+  font-family           : Verdana, Arial, Helvetica, sans-serif;
+  font-size             : 10px;
+  text-decoration       : none;
+}
+
+.createdate {
+  color                 : #bababa;
+  font-family           : Arial, Helvetica, sans-serif;
+  font-size             : 10px;
+  text-align            : left;
+}
+
+
+
+
+/* Styles for dhtml tabbed-pages */
+.ontab {
+  color                 : #FFFFFF;
+  font-weight           : bold;
+  text-align            : center;
+  background-color      : #ffae00;
+  border-left           : outset 2px #ff9900;
+  border-right          : outset 2px #808080;
+  border-top            : outset 2px #ff9900;
+  border-bottom         : solid 1px #d5d5d5;
+    /* Cannot use hand as its not a W3C CSS validator */
+	/*	cursor: hand;*/
+}
+
+.offtab {
+  font-weight           : normal;
+  text-align            : center;
+  background-color      : #e5e5e5;
+  border-left           : outset 2px #E0E0E0;
+  border-right          : outset 2px #E0E0E0;
+  border-top            : outset 2px #E0E0E0;
+  border-bottom         : solid 1px #d5d5d5;
+    /* Cannot use hand as its not a W3C CSS validator */
+	/*	cursor: hand;*/
+}
+
+.tabpadding {
+}
+
+.tabheading {
+  text-align            : left;
+  background-color      : #ffae00;
+}
+
+.pagetext {
+  visibility            : hidden;
+  display               : none;
+  position              : relative;
+  top                   : 0;
+}
+
+/* for modifying {moscode} output.  Don't set the colour! */
+.moscode {
+  background-color      : #f0f0f0;
+}
+.code {
+  background-color      : #f0f0f0;
+  border                : 1px solid #FFF;
+}
+
+/* Text passed with mosmsg url parameter */
+.message {
+  color                 : #ff6600;
+  font-family           : Verdana, Arial, Helvetica, sans-serif;
+  font-size             : 10pt;
+  font-weight           : bold;
+  text-align            : center;
+}
+
+/* Javascript Back button */
+.back_button {
+  text-align            : center;
+  margin-top            : 40px;
+}
+
+table.contenttoc {
+  color                 : #333300;
+  background-color      : #ffffff;
+  border                : 1px solid #333;
+}
+
+table.contenttoc td {
+  font-size             : 8pt;
+  font-weight           : normal;
+  text-align            : left;
+}
+
+table.searchinto {
+  width                 : 100%;
+}
+
+table.searchintro td {
+  color                 : #ffffff;
+  font-weight           : bold;
+  background-color      : #293C43;
+}

@@ -272,7 +272,7 @@ hr {
 
 #content {
 	float: left;
-	width: 420px;
+	width: 600px;
 }
 
 #content1 {
@@ -286,7 +286,20 @@ hr {
 	width: 100%;
 }
 
+th {
+font-weight: bold;
+padding-left: 5px;
+text-align:center;
+background-color:#B10961;
+color:black;
+-moz-border-radius: 10px;
+-webkit-border-radius: 10px;
+line-height: 2em;
+}
 
+td {
+text-align:center;
+}
 .post {
 	margin-right: 25px;
 }

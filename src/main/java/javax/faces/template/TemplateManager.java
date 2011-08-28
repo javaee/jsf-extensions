@@ -1,7 +1,10 @@
 package javax.faces.template;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+
+import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.application.Resource;
@@ -45,8 +48,7 @@ public class TemplateManager extends PluginManager<Template> implements PhaseLis
 	public void load() {
 		
 		super.load();
-		List<Template> templates=getTemplates();
-		if(templates.size()>0) {
+		if(getTemplates().size()>0) {
 			addPhaseListener();
 			initResourceHandler();
 		}	
@@ -66,6 +68,7 @@ public class TemplateManager extends PluginManager<Template> implements PhaseLis
 		Application application=context.getApplication();
 		ResourceHandler defaultHandler=application.getResourceHandler();
 		application.setResourceHandler(new ResourceHandlerImpl(defaultHandler));
+		
 	}
 	
 	private Map<String,Object> getSessionMap() {
@@ -121,11 +124,29 @@ public class TemplateManager extends PluginManager<Template> implements PhaseLis
 		}	
 	}
 	
-	public void selectTemplate(Template template) {
+	public String selectTemplate(Template template) {
 		
 		Map<String,Object> map=getSessionMap();
 		map.put(VIEW_TEMPLATE, template.getId());
 		map.put("template",getPage(template));
+		FacesContext ctx = FacesContext.getCurrentInstance();
+        ExternalContext extContext = ctx.getExternalContext();
+        String url = extContext.encodeActionURL(ctx.getApplication().getViewHandler().getActionURL(ctx, ctx.getViewRoot().getViewId()));
+        try {
+            extContext.redirect(url);
+        } catch (IOException ioe) {
+            throw new FacesException(ioe);
+
+        }
+		return null;
+	}
+	
+	public String selectTemplate() {
+		
+		FacesContext context=FacesContext.getCurrentInstance();
+		String id=context.getExternalContext().getRequestParameterMap().get("template");
+		Template template=get(id);
+		return selectTemplate(template);
 		
 	}
 	

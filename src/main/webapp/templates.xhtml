@@ -1,12 +1,7 @@
- <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
-    <html xmlns="http://www.w3.org/1999/xhtml"  
+ <ui:composition template="#{template}" xmlns="http://www.w3.org/1999/xhtml"  
       xmlns:h="http://java.sun.com/jsf/html"  
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:f="http://java.sun.com/jsf/core">  
-       
-    <h:body>  
-      
-    <ui:composition template="#{template}">
+      xmlns:f="http://java.sun.com/jsf/core">
   
       <ui:define name="menu">     
       	<ui:include src="menu.xhtml"/>
@@ -52,8 +47,9 @@
 			<f:facet name="header">
 			<h:outputText value="Name"/>
 			</f:facet>
-			<h:commandLink value="#{template.name}" action="#{templateManager.selectTemplate(template)}" immediate="true" styleClass="template_name">
+			<h:commandLink value="#{template.name}" action="#{templateManager.selectTemplate}" immediate="true" styleClass="template_name">
 				<h:graphicImage  width="200px" height="150px" library="#{template.id}" name="template.png" styleClass="thumbnail"/>
+				<f:param name="template" value="#{template.id}"/>
 			</h:commandLink>
 		</h:column>
  		
@@ -103,5 +99,3 @@
       
       </ui:composition>        
              
-    </h:body>  
-</html>  

@@ -1,11 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
-    <html xmlns="http://www.w3.org/1999/xhtml"  
+    <ui:composition template="#{template}" xmlns="http://www.w3.org/1999/xhtml"  
       xmlns:h="http://java.sun.com/jsf/html"  
-      xmlns:ui="http://java.sun.com/jsf/facelets">  
-       
-    <h:body>  
-      
-    <ui:composition template="#{template}">
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
   
       <ui:define name="menu">     
     	<ui:include src="menu.xhtml"/>
@@ -15,7 +11,7 @@
 	
 	<h2>Get Started</h2>
 	
-<p>JavaServer™ Faces (JSF) is the standard component-oriented user interface (UI) framework for the Java EE platform. In terms which may sound more familiar, it's a Java-based web framework.
+<p>JavaServer Faces (JSF) is the standard component-oriented user interface (UI) framework for the Java EE platform. In terms which may sound more familiar, it's a Java-based web framework.
 JSF is included in the Java EE platform, so you can create applications that use JSF without adding any extra libraries in your project. JSF works equally as well as a standalone web framework, able to hook into bean containers such as Spring. How you use JSF is up to you.
 <b>The fastest way to get started</b> with JSF is to create a project using a Maven archetype. Instructions are provided on the <a href="http://www.javaserverfaces.org/get-started">Get Started</a> page.</p>
 	
@@ -27,5 +23,3 @@ Most of the UI component libraries focus on providing rich UI components, and "r
       
       </ui:composition>        
              
-    </h:body>  
-</html>  

@@ -83,7 +83,6 @@ public class Document  extends Resource {
             uri = context.getApplication().getViewHandler()
             .getResourceURL(context,
                             uri);
-
       return uri;
 
 	        
@@ -112,7 +111,11 @@ public class Document  extends Resource {
 	
 	@Override
 	public Map<String, String> getResponseHeaders() {
-		return new HashMap<String, String>();
+		Map<String,String> map=new HashMap<String, String>();
+		map.put("Pragma","no-cache");
+		map.put("Expires", "0");
+		map.put("Cache-Control","no-cache");
+		return map;
 	}
 
 	@Override

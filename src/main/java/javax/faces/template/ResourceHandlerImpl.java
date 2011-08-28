@@ -26,7 +26,11 @@ public class ResourceHandlerImpl  extends ResourceHandler{
 		
 		TemplateManager templateManager=TemplateManager.getInstance();
 		Resource resource=templateManager.getResource(resourceName, library);
-		if(resource!=null) return resource;
+		if(resource!=null) {
+			 FacesContext context=FacesContext.getCurrentInstance();
+			 resource.setContentType(context.getExternalContext().getMimeType(resourceName));
+			 return resource;
+		}
 		return wrapper.createResource(resourceName, library);
 		
 	}

@@ -79,24 +79,30 @@ public class TemplateManager extends PluginManager<Template> implements PhaseLis
 		return map;
 	}
 	
-	private String getDefaultTemplate() {
+	private Template getDefaultTemplate() {
 		
 		FacesContext facesContext=FacesContext.getCurrentInstance();
-		return facesContext.getExternalContext().getInitParameter(VIEW_TEMPLATE);	
+		String id=facesContext.getExternalContext().getInitParameter(VIEW_TEMPLATE);
+		Template template=get(id);
+		return template!=null? template : getTemplates().get(0);
+		
 	}
 	
-	private String getSelectedTemplate() {
+	private Template getSelectedTemplate() {
 		
-		return getSessionMap().get(VIEW_TEMPLATE).toString();
+		Template template=null;
+		Object param=getSessionMap().get(VIEW_TEMPLATE);
+		if(param!=null) template=get(param.toString());
+		return template!=null? template : getDefaultTemplate();
 		
 	}
+	
 	
 	public Resource getResource(String resourceName,String library) {
 		
 		if(resourceName.equals(Template.THUMBNAIL))
     		return folder.getDocument(Template.THUMBNAIL,library);
-		Template template=get(getSelectedTemplate());
-		return template.getResource(resourceName, library);    
+		return getSelectedTemplate().getResource(resourceName, library);    
 		
 	}
 
@@ -104,6 +110,39 @@ public class TemplateManager extends PluginManager<Template> implements PhaseLis
 	public List<Template> getTemplates() {
 		
 		return plugins;
+		
+	}
+
+	public String selectTemplate() {
+		
+		FacesContext context=FacesContext.getCurrentInstance();
+		String id=context.getExternalContext().getRequestParameterMap().get("template");
+		return selectTemplate(get(id));
+		
+	}
+	
+	public String selectTemplate(Template template) {
+		
+		if(template!=null) {
+			Map<String,Object> map=getSessionMap();
+			map.put(VIEW_TEMPLATE, template.getId());
+			map.put("template",getPage(template));
+			FacesContext ctx = FacesContext.getCurrentInstance();
+	        ExternalContext extContext = ctx.getExternalContext();
+	        String url = extContext.encodeActionURL(ctx.getApplication().getViewHandler().getActionURL(ctx, ctx.getViewRoot().getViewId()));
+	        try {
+	            extContext.redirect(url);
+	        } catch (IOException ioe) {
+	            throw new FacesException(ioe);
+	
+	        }
+		}
+		return null;
+	}
+	
+	private String getPage(Template template) {
+		
+		return "/"+TEMPLATE_FOLDER+"/"+template.getId()+"/"+Template.PAGE;
 		
 	}
 
@@ -115,47 +154,12 @@ public class TemplateManager extends PluginManager<Template> implements PhaseLis
 	@Override
 	public void beforePhase(PhaseEvent event) {
 		
-		Map<String,Object> map=getSessionMap();
-		Object value=map.get(VIEW_TEMPLATE);
-		if(value==null) {
-			Template template=get(getDefaultTemplate());
-			if(template==null) template=getTemplates().get(0);
-			selectTemplate(template);
-		}	
-	}
-	
-	public String selectTemplate(Template template) {
-		
-		Map<String,Object> map=getSessionMap();
-		map.put(VIEW_TEMPLATE, template.getId());
-		map.put("template",getPage(template));
-		FacesContext ctx = FacesContext.getCurrentInstance();
-        ExternalContext extContext = ctx.getExternalContext();
-        String url = extContext.encodeActionURL(ctx.getApplication().getViewHandler().getActionURL(ctx, ctx.getViewRoot().getViewId()));
-        try {
-            extContext.redirect(url);
-        } catch (IOException ioe) {
-            throw new FacesException(ioe);
-
-        }
-		return null;
-	}
-	
-	public String selectTemplate() {
-		
-		FacesContext context=FacesContext.getCurrentInstance();
-		String id=context.getExternalContext().getRequestParameterMap().get("template");
-		Template template=get(id);
-		return selectTemplate(template);
+		Object value=getSessionMap().get(VIEW_TEMPLATE);
+		if(value==null) selectTemplate(getDefaultTemplate());
 		
 	}
 	
-	private String getPage(Template template) {
-		
-		return "/"+TEMPLATE_FOLDER+"/"+template.getId()+"/"+Template.PAGE;
-		
-	}
-
+	
 	@Override
 	public PhaseId getPhaseId() {
 		return PhaseId.RENDER_RESPONSE;
@@ -165,8 +169,7 @@ public class TemplateManager extends PluginManager<Template> implements PhaseLis
 		
 		FacesContext context=FacesContext.getCurrentInstance();
 		Map<String,Object> map=context.getExternalContext().getApplicationMap();
-		TemplateManager templateManager=(TemplateManager) map.get("templateManager");
-		return templateManager;
+		return (TemplateManager) map.get("templateManager");
 		
 	}
 	

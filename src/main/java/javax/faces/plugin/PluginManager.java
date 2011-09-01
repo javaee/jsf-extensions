@@ -18,8 +18,13 @@ public abstract class PluginManager<T extends Plugin>  {
 	protected  final List<T> 	plugins;
 	protected  PluginLoader<T>  loader;
 	protected  Folder folder;
-	public static final Logger logger=Logger.getLogger("PluginManager");
-	
+	public static final Logger logger=Logger.getLogger(PluginManager.class.getName());
+	/**
+     * <p>plugins folder</p>
+     */
+    
+    public static final String PLUGIN_FOLDER = "javax.faces.plugin.FOLDER";
+    
 	
 	public PluginManager() {
 		
@@ -36,10 +41,12 @@ public abstract class PluginManager<T extends Plugin>  {
 	@PostConstruct
 	public void load()  {
 			
-			ServletContext context=(ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
-			String realPath=context.getRealPath("/");
-			load(realPath);
-			
+		ServletContext context=(ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+		String repository=context.getInitParameter(PLUGIN_FOLDER);
+		if(repository!=null)
+			load(repository);
+		else 
+			load(context.getRealPath("/"));
 	}
 	
 	public void load(String path) {

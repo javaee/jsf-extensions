@@ -1,8 +1,7 @@
-
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2011 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -39,29 +38,67 @@
  * holder.
  */
 
-package com.oracle.faces.extensions.javajsf.vdl;
+package gms.demo.service.presentation.ui;
 
-import com.oracle.faces.extensions.javajsf.demo.MyApplication;
-import javax.faces.event.AbortProcessingException;
-import javax.faces.event.ListenerFor;
-import javax.faces.event.PostConstructApplicationEvent;
-import javax.faces.event.SystemEvent;
-import javax.faces.event.SystemEventListener;
+import com.vaadin.terminal.ExternalResource;
+import com.vaadin.terminal.Resource;
+import com.vaadin.ui.Link;
+import gms.demo.model.MemberInfo;
 
+import java.io.Serializable;
 
-@ListenerFor(systemEventClass=PostConstructApplicationEvent.class)
-public class ApplicationFinder implements SystemEventListener {
+/**
+ * "Flat" view of ModelInfo for use in forms and tables. There may
+ * be some built-in way to do this....
+ */
+public class FlatModelInfo implements Serializable {
 
-    public boolean isListenerForSource(Object source) {
-        return source instanceof javax.faces.application.Application;
+    static final String M_NAME = "Member Name";
+    static final String G_NAME = "Group Name";
+    static final String G_NAME_SPACE = "Group Name Space";
+    static final String IP_ADDR = "IP Address";
+    static final String PORT = "Port";
+    static final String PROT = "Protocol";
+
+    private final MemberInfo memberInfo;
+
+    public FlatModelInfo(MemberInfo memberInfo) {
+        this.memberInfo = memberInfo;
     }
 
-    public void processEvent(SystemEvent event) throws AbortProcessingException {
+    // todo: figure out how to exclude this from table if it's a getter
+    public MemberInfo returnMemberInfo() {
+        return memberInfo;
+    }
 
-        // Obviously we need some discovery mechanism.
-        Application app = new MyApplication();
-        app.init();
+    public String getGroupName() {
+        return memberInfo.getGroupId().getGroupName();
+    }
 
+    public String getGroupNameSpace() {
+        return memberInfo.getGroupId().getNameSpace();
+    }
+
+    public String getIpAddress() {
+        return memberInfo.getLocation().getIpAddress();
+    }
+
+    public Link getMemberName() {
+        StringBuilder sb = new StringBuilder("master/");
+        sb.append(getGroupName());
+        sb.append("/");
+        sb.append(getGroupNameSpace());
+        sb.append("/");
+        return new Link(memberInfo.getMemberName(),
+            new ExternalResource(sb.toString()));
+    }
+
+    public int getPort() {
+        return memberInfo.getLocation().getPort();
+    }
+
+    public String getProtocol() {
+        return memberInfo.getLocation().getProtocol();
     }
 
 }

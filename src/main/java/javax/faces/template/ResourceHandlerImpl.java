@@ -11,6 +11,7 @@ public class ResourceHandlerImpl  extends ResourceHandler{
 	
 	private ResourceHandler wrapper;
 	
+	
 	public ResourceHandlerImpl(ResourceHandler wrapper) {
 		
 		this.wrapper=wrapper;
@@ -26,11 +27,7 @@ public class ResourceHandlerImpl  extends ResourceHandler{
 		
 		TemplateManager templateManager=TemplateManager.getInstance();
 		Resource resource=templateManager.getResource(resourceName, library);
-		if(resource!=null) {
-			 FacesContext context=FacesContext.getCurrentInstance();
-			 resource.setContentType(context.getExternalContext().getMimeType(resourceName));
-			 return resource;
-		}
+		if(resource!=null) return resource;
 		return wrapper.createResource(resourceName, library);
 		
 	}

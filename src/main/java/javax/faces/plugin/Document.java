@@ -150,4 +150,12 @@ public class Document  extends Resource {
 		return new Folder(file.getParentFile());	
 	}
 	
+	@Override
+	public String getContentType() {
+		
+		FacesContext context=FacesContext.getCurrentInstance();
+		return context.getExternalContext().getMimeType(getResourceName());
+		
+	}
+	
 }

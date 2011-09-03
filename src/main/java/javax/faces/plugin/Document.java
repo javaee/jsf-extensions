@@ -29,6 +29,17 @@ public class Document  extends Resource {
 		
 	}
 
+	public Document(Folder parent,String fileName) {
+		
+		this.file=new File(parent+File.separator+fileName);
+		
+	}
+	
+	public Document(String parent,String fileName) {
+		
+		this(new Folder(parent),fileName);
+		
+	}
 	
 	public InputStream getInputStream() throws IOException {
 		
@@ -133,4 +144,10 @@ public class Document  extends Resource {
 	public boolean userAgentNeedsUpdate(FacesContext arg0) {
 		return true;
 	}
+	
+	public Folder getFolder() {
+		
+		return new Folder(file.getParentFile());	
+	}
+	
 }

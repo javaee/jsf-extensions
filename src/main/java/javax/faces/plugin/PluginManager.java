@@ -1,5 +1,4 @@
 package javax.faces.plugin;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -28,74 +27,87 @@ public abstract class PluginManager<T extends Plugin>  {
 	
 	public PluginManager() {
 		
-			plugins=new ArrayList<T>();
+		plugins=new ArrayList<T>();
 		
 	}
 	
 	public PluginManager(PluginLoader<T> loader) {
 	
-			this();
-			this.loader=loader;							
+		this();
+		this.loader=loader;							
 	}
 
 	@PostConstruct
 	public void load()  {
 			
-		ServletContext context=(ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+		FacesContext facesContext=FacesContext.getCurrentInstance();
+		ServletContext context=(ServletContext) facesContext.getExternalContext().getContext();
 		String repository=context.getInitParameter(PLUGIN_FOLDER);
 		if(repository!=null)
 			load(repository);
 		else 
 			load(context.getRealPath("/"));
+		
 	}
 	
 	public void load(String path) {
 		
 		plugins.clear();
-		Manage manage=getClass().getAnnotation(Manage.class);
-		folder=new Folder(path+File.separator+manage.folder());
-		int count=1;
-		for(Folder subFolder : folder.getSubFolders()) {
-			Document metadata=new Document(subFolder+File.separator+manage.metadata());
-			if(metadata.exists()) {
-				try {
-					T plugin=load(metadata);
-					if(plugin!=null) {
-						plugin.setFolder(subFolder);
-						plugin.setIndex(count);
-						add(plugin);
-						count++;
-					}
-				} catch(Exception e) {
-					logger.log(Level.SEVERE, "error while loading plugin "+metadata, e);
-				}
+		Manage configuration=getConfiguration();
+		this.folder=new Folder(path,configuration.folder());
+		for(Folder folder : this.folder.getSubFolders()) {
+		Document metadata=new Document(folder,configuration.metadata());
+		try {
+			  add(metadata);
+			} catch(Exception e) {
+				logger.log(Level.SEVERE, "error while loading plugin "+metadata, e);
 			}
-		} 		
+		}
 	}
 	
+	private Manage getConfiguration() {
+		
+		return getClass().getAnnotation(Manage.class);
+		
+	}
+	
+	public void add(Document metadata) throws Exception {
+		
+		if(metadata.exists()) {
+			T plugin=loader.load(metadata);
+			plugin.setFolder(metadata.getFolder());
+			add(plugin);
+		}
+		
+	}
+
 	public T load(Resource metadata) throws Exception{
 		
-			return loader.load(metadata);
+		return loader.load(metadata);
 	}
+	
 	
 	public void add(T plugin) {
 		
-			plugins.add(plugin);
+		plugin.setIndex(getSize());
+		plugins.add(plugin);
+		
 	}
 		
 	public void remove(T plugin)  {
 		
-			plugins.remove(plugin);
+		plugins.remove(plugin);
+		
 	}
 	
 	public List<T> getPlugins() {
 		
-			return plugins;
+		return plugins;
 	}
 	
 	public int getSize() {
 		
-			return plugins.size();
+		return plugins.size();
 		
 	}
 	

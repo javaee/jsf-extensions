@@ -20,6 +20,18 @@ public class Folder {
 		
 	}
 	
+	public Folder(Folder parent,String name) {
+		
+		this.file=new File(parent+File.separator+name);
+		
+	}
+	
+	public Folder(String parent,String name) {
+		
+		this(new Folder(parent),name);
+		
+	}
+	
 	public List<Folder> getSubFolders() {
 		
 		List<Folder> folders=new ArrayList<Folder>();

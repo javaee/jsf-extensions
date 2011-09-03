@@ -2,7 +2,7 @@ package javax.faces.template;
 
 import java.io.InputStream;
 
-import javax.faces.application.Resource;
+import javax.faces.plugin.Document;
 import javax.faces.plugin.PluginLoader;
 import org.apache.commons.digester.Digester;
 
@@ -28,7 +28,7 @@ public class TemplateLoader implements PluginLoader<Template>{
 	}
 	
 	@Override
-	public Template load(Resource metadata) throws Exception {
+	public Template load(Document metadata) throws Exception {
 		
 		InputStream in=metadata.getInputStream();
 		Template template=(Template) digester.parse(in);

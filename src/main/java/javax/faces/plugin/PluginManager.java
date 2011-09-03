@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.faces.application.Resource;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
@@ -14,15 +13,35 @@ import javax.servlet.ServletContext;
 @ApplicationScoped
 public abstract class PluginManager<T extends Plugin>  {
 
+	/**
+     * <p>plugins</p>
+     */
+	
 	protected  final List<T> 	plugins;
+	
+	/**
+     * <p>Plugin Loader</p>
+     */
+    
 	protected  PluginLoader<T>  loader;
-	protected  Folder folder;
-	public static final Logger logger=Logger.getLogger(PluginManager.class.getName());
+	
 	/**
      * <p>plugins folder</p>
      */
     
-    public static final String PLUGIN_FOLDER = "javax.faces.plugin.FOLDER";
+	protected  Folder folder;
+	
+	/**
+     * <p>logger</p>
+     */
+	
+	public static final Logger logger=Logger.getLogger(PluginManager.class.getName());
+	
+	/**
+     * <p>PLUGIN REPOSITORY</p>
+     */
+    
+    public static final String PLUGIN_REPOSITORY = "javax.faces.plugin.REPOSITORY";
     
 	
 	public PluginManager() {
@@ -38,62 +57,56 @@ public abstract class PluginManager<T extends Plugin>  {
 	}
 
 	@PostConstruct
-	public void load()  {
+	public void loadPlugins()  {
 			
 		FacesContext facesContext=FacesContext.getCurrentInstance();
 		ServletContext context=(ServletContext) facesContext.getExternalContext().getContext();
-		String repository=context.getInitParameter(PLUGIN_FOLDER);
+		String repository=context.getInitParameter(PLUGIN_REPOSITORY);
 		if(repository!=null)
-			load(repository);
+			loadPlugins(repository);
 		else 
-			load(context.getRealPath("/"));
-		
+			loadPlugins(context.getRealPath("/"));	
 	}
 	
-	public void load(String path) {
+	public void loadPlugins(String path) {
 		
 		plugins.clear();
 		this.folder=new Folder(path,getConfiguration().folder());
 		for(Folder folder : this.folder.getSubFolders()) {
 			Document metadata=new Document(folder,getConfiguration().metadata());
 			try {
-				  add(metadata);
+				  addPlugin(metadata);
 				} catch(Exception e) {
 					logger.log(Level.SEVERE, "error while loading plugin "+metadata, e);
 			}
 		}
 	}
 	
-	private Manage getConfiguration() {
-		
-		return getClass().getAnnotation(Manage.class);
-		
-	}
 	
-	public void add(Document metadata) throws Exception {
+	public void addPlugin(Document metadata) throws Exception {
 		
 		if(metadata.exists()) {
-			T plugin=loader.load(metadata);
+			T plugin=loadPlugin(metadata);
 			plugin.setFolder(metadata.getFolder());
-			add(plugin);
+			addPlugin(plugin);
 		}
 		
 	}
 
-	public T load(Resource metadata) throws Exception{
+	public T loadPlugin(Document metadata) throws Exception{
 		
 		return loader.load(metadata);
 	}
 	
 	
-	public void add(T plugin) {
+	public void addPlugin(T plugin) {
 		
 		plugin.setIndex(1+getSize());
 		plugins.add(plugin);
 		
 	}
 		
-	public void remove(T plugin)  {
+	public void removePlugin(T plugin)  {
 		
 		plugins.remove(plugin);
 		
@@ -110,7 +123,7 @@ public abstract class PluginManager<T extends Plugin>  {
 		
 	}
 	
-	public T get(String id) {
+	public T getPlugin(String id) {
 		
 		for(T plugin : plugins) {
 			if(plugin.getId().equalsIgnoreCase(id))
@@ -119,6 +132,12 @@ public abstract class PluginManager<T extends Plugin>  {
 		return null;
 	}
 
+	private Manage getConfiguration() {
+		
+		return getClass().getAnnotation(Manage.class);
+		
+	}
+	
 	public PluginLoader<T> getLoader() {
 		return loader;
 	}

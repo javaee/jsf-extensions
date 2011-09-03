@@ -29,7 +29,13 @@ public class TemplateManager extends PluginManager<Template> implements PhaseLis
 	/**
      * <p>context parameter</p>
      */
-    public static final String VIEW_TEMPLATE = "javax.faces.view.TEMPLATE";
+    public static final String SELECTED_TEMPLATE_ID = "javax.faces.view.TEMPLATE";
+    
+    /**
+     * <p>template var name</p>
+     */
+    
+    public static final String TEMPLATE_VAR_NAME = "template";
     
     /**
      * <p>templates folder</p>
@@ -45,10 +51,10 @@ public class TemplateManager extends PluginManager<Template> implements PhaseLis
 	}
 	
 	@Override
-	public void load() {
+	public void loadPlugins() {
 		
-		super.load();
-		if(getTemplates().size()>0) {
+		super.loadPlugins();
+		if(getSize()>0) {
 			addPhaseListener();
 			initResourceHandler();
 		}	
@@ -82,8 +88,8 @@ public class TemplateManager extends PluginManager<Template> implements PhaseLis
 	private Template getDefaultTemplate() {
 		
 		FacesContext facesContext=FacesContext.getCurrentInstance();
-		String id=facesContext.getExternalContext().getInitParameter(VIEW_TEMPLATE);
-		Template template=get(id);
+		String id=facesContext.getExternalContext().getInitParameter(SELECTED_TEMPLATE_ID);
+		Template template=getTemplate(id);
 		return template!=null? template : getTemplates().get(0);
 		
 	}
@@ -91,8 +97,8 @@ public class TemplateManager extends PluginManager<Template> implements PhaseLis
 	private Template getSelectedTemplate() {
 		
 		Template template=null;
-		Object param=getSessionMap().get(VIEW_TEMPLATE);
-		if(param!=null) template=get(param.toString());
+		Object id=getSessionMap().get(SELECTED_TEMPLATE_ID);
+		if(id!=null) template=getTemplate(id.toString());
 		return template!=null? template : getDefaultTemplate();
 		
 	}
@@ -113,19 +119,26 @@ public class TemplateManager extends PluginManager<Template> implements PhaseLis
 		
 	}
 
+	public Template getTemplate(String id) {
+		
+		return getPlugin(id);
+		
+	}
+	
 	public String selectTemplate() {
 		
 		FacesContext context=FacesContext.getCurrentInstance();
-		String id=context.getExternalContext().getRequestParameterMap().get("template");
-		return selectTemplate(get(id));
+		String id=context.getExternalContext().getRequestParameterMap().get(TEMPLATE_VAR_NAME);
+		return selectTemplate(getTemplate(id));
 		
 	}
+	
 	
 	public String selectTemplate(Template template) {
 		
 		if(template!=null) {
 			Map<String,Object> map=getSessionMap();
-			map.put(VIEW_TEMPLATE, template.getId());
+			map.put(SELECTED_TEMPLATE_ID, template.getId());
 			map.put("template",getPage(template));
 			FacesContext ctx = FacesContext.getCurrentInstance();
 	        ExternalContext extContext = ctx.getExternalContext();
@@ -154,7 +167,7 @@ public class TemplateManager extends PluginManager<Template> implements PhaseLis
 	@Override
 	public void beforePhase(PhaseEvent event) {
 		
-		Object value=getSessionMap().get(VIEW_TEMPLATE);
+		Object value=getSessionMap().get(SELECTED_TEMPLATE_ID);
 		if(value==null) selectTemplate(getDefaultTemplate());
 		
 	}

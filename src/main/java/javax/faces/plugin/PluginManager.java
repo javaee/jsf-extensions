@@ -53,14 +53,13 @@ public abstract class PluginManager<T extends Plugin>  {
 	public void load(String path) {
 		
 		plugins.clear();
-		Manage configuration=getConfiguration();
-		this.folder=new Folder(path,configuration.folder());
+		this.folder=new Folder(path,getConfiguration().folder());
 		for(Folder folder : this.folder.getSubFolders()) {
-		Document metadata=new Document(folder,configuration.metadata());
-		try {
-			  add(metadata);
-			} catch(Exception e) {
-				logger.log(Level.SEVERE, "error while loading plugin "+metadata, e);
+			Document metadata=new Document(folder,getConfiguration().metadata());
+			try {
+				  add(metadata);
+				} catch(Exception e) {
+					logger.log(Level.SEVERE, "error while loading plugin "+metadata, e);
 			}
 		}
 	}
@@ -89,7 +88,7 @@ public abstract class PluginManager<T extends Plugin>  {
 	
 	public void add(T plugin) {
 		
-		plugin.setIndex(getSize());
+		plugin.setIndex(1+getSize());
 		plugins.add(plugin);
 		
 	}

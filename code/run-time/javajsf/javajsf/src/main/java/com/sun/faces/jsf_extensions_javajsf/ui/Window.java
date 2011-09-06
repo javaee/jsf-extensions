@@ -39,29 +39,40 @@
  * holder.
  */
 
-package com.oracle.faces.extensions.javajsf.vdl;
+package com.sun.faces.jsf_extensions_javajsf.ui;
 
-import com.oracle.faces.extensions.javajsf.demo.MyApplication;
-import javax.faces.event.AbortProcessingException;
-import javax.faces.event.ListenerFor;
-import javax.faces.event.PostConstructApplicationEvent;
-import javax.faces.event.SystemEvent;
-import javax.faces.event.SystemEventListener;
+import javax.faces.component.UIPanel;
 
+import com.sun.faces.jsf_extensions_javajsf.vdl.Application;
 
-@ListenerFor(systemEventClass=PostConstructApplicationEvent.class)
-public class ApplicationFinder implements SystemEventListener {
+public class Window extends UIPanel {
+    
+    private String caption;
 
-    public boolean isListenerForSource(Object source) {
-        return source instanceof javax.faces.application.Application;
+    public Window(String caption) {
+        this.caption = caption;
+    }
+    
+    
+
+    private Application application;
+
+    public void setApplication(Application application) {
+        this.application = application;
     }
 
-    public void processEvent(SystemEvent event) throws AbortProcessingException {
+    /**
+     * <p>The standard component family for this component.</p>
+     */
+    @SuppressWarnings("FieldNameHidesFieldInSuperclass")
+    public static final String COMPONENT_FAMILY = "javajsf.Window";
 
-        // Obviously we need some discovery mechanism.
-        Application app = new MyApplication();
-        app.init();
 
+    @Override
+    public String getFamily() {
+        return COMPONENT_FAMILY;
     }
+
+
 
 }

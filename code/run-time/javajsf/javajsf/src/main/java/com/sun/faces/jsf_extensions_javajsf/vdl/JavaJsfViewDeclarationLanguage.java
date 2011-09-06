@@ -39,39 +39,41 @@
  * holder.
  */
 
-package com.oracle.faces.extensions.javajsf.vdl;
+package com.sun.faces.jsf_extensions_javajsf.vdl;
 
-import com.oracle.faces.extensions.javajsf.vdl.ui.Window;
-import java.util.Map;
-import javax.faces.component.UIComponent;
+import java.io.IOException;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+import javax.faces.view.ViewDeclarationLanguage;
+import javax.faces.view.ViewDeclarationLanguageWrapper;
 
 
-public abstract class Application  {
 
-    private javax.faces.application.Application jsfApplication;
+public class JavaJsfViewDeclarationLanguage extends ViewDeclarationLanguageWrapper {
 
-    void setJsfApplication(javax.faces.application.Application jsfApplication) {
-        this.jsfApplication = jsfApplication;
+    private ViewDeclarationLanguage parent;
+
+    public JavaJsfViewDeclarationLanguage(ViewDeclarationLanguage parent) {
+        this.parent = parent;
     }
 
-    private Window mainWindow;
-
-    public Window getMainWindow() {
-        return mainWindow;
+    @Override
+    public ViewDeclarationLanguage getWrapped() {
+        return parent;
     }
 
-    public void setMainWindow(Window mainWindow) {
-        this.mainWindow = mainWindow;
+    @Override
+    public void buildView(FacesContext context, UIViewRoot root) throws IOException {
+        getWrapped().buildView(context, root);
     }
 
-    private Map<Window, String> windows;
-
-    public abstract void init();
-
-    public UIComponent createComponent(String componentType, String rendererType) {
-        UIComponent result = null;
+    @Override
+    public UIViewRoot createView(FacesContext context, String viewId) {
+        UIViewRoot result = null;
 
         return result;
     }
+
+    
 
 }

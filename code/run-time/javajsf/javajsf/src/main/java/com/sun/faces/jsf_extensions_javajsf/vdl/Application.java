@@ -39,21 +39,39 @@
  * holder.
  */
 
-package com.oracle.faces.extensions.javajsf.demo;
+package com.sun.faces.jsf_extensions_javajsf.vdl;
 
-import com.sun.faces.jsf_extensions_javajsf.vdl.Application;
 import com.sun.faces.jsf_extensions_javajsf.ui.Window;
+import java.util.Map;
+import javax.faces.component.UIComponent;
 
 
+public abstract class Application  {
 
-public class MyApplication extends Application {
+    private javax.faces.application.Application jsfApplication;
 
-    @Override
-    public void init() {
-        Window main = new Window();
-
+    void setJsfApplication(javax.faces.application.Application jsfApplication) {
+        this.jsfApplication = jsfApplication;
     }
 
+    private Window mainWindow;
 
+    public Window getMainWindow() {
+        return mainWindow;
+    }
+
+    public void setMainWindow(Window mainWindow) {
+        this.mainWindow = mainWindow;
+    }
+
+    private Map<Window, String> windows;
+
+    public abstract void init();
+
+    public UIComponent createComponent(String componentType, String rendererType) {
+        UIComponent result = null;
+
+        return result;
+    }
 
 }

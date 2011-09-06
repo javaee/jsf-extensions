@@ -39,41 +39,43 @@
  * holder.
  */
 
-package com.oracle.faces.extensions.javajsf.vdl;
-
-import java.io.IOException;
-import javax.faces.component.UIViewRoot;
-import javax.faces.context.FacesContext;
-import javax.faces.view.ViewDeclarationLanguage;
-import javax.faces.view.ViewDeclarationLanguageWrapper;
+package com.sun.faces.jsf_extensions_javajsf.ui;
 
 
+import com.sun.faces.jsf_extensions_javajsf.vdl.Application;
+import javax.faces.component.UICommand;
 
-public class JavaJsfViewDeclarationLanguage extends ViewDeclarationLanguageWrapper {
-
-    private ViewDeclarationLanguage parent;
-
-    public JavaJsfViewDeclarationLanguage(ViewDeclarationLanguage parent) {
-        this.parent = parent;
-    }
-
-    @Override
-    public ViewDeclarationLanguage getWrapped() {
-        return parent;
-    }
-
-    @Override
-    public void buildView(FacesContext context, UIViewRoot root) throws IOException {
-        getWrapped().buildView(context, root);
-    }
-
-    @Override
-    public UIViewRoot createView(FacesContext context, String viewId) {
-        UIViewRoot result = null;
-
-        return result;
-    }
-
+public class Button extends UICommand {
     
+    private String caption;
+
+    public Button(String caption) {
+        this.caption = caption;
+    }
+    
+    public Button(String caption, Object target, String methodName) {
+        
+    }
+    
+
+    private Application application;
+
+    public void setApplication(Application application) {
+        this.application = application;
+    }
+
+    /**
+     * <p>The standard component family for this component.</p>
+     */
+    @SuppressWarnings("FieldNameHidesFieldInSuperclass")
+    public static final String COMPONENT_FAMILY = "javajsf.Button";
+
+
+    @Override
+    public String getFamily() {
+        return COMPONENT_FAMILY;
+    }
+
+
 
 }

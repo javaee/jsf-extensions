@@ -39,21 +39,25 @@
  * holder.
  */
 
-package com.oracle.faces.extensions.javajsf.demo;
+package com.sun.faces.jsf_extensions_javajsf.vdl;
 
-import com.sun.faces.jsf_extensions_javajsf.vdl.Application;
-import com.sun.faces.jsf_extensions_javajsf.ui.Window;
+import javax.faces.event.AbortProcessingException;
+import javax.faces.event.ListenerFor;
+import javax.faces.event.PostConstructApplicationEvent;
+import javax.faces.event.SystemEvent;
+import javax.faces.event.SystemEventListener;
 
 
+@ListenerFor(systemEventClass=PostConstructApplicationEvent.class)
+public class ApplicationFinder implements SystemEventListener {
 
-public class MyApplication extends Application {
-
-    @Override
-    public void init() {
-        Window main = new Window();
-
+    public boolean isListenerForSource(Object source) {
+        return source instanceof javax.faces.application.Application;
     }
 
+    public void processEvent(SystemEvent event) throws AbortProcessingException {
 
+
+    }
 
 }

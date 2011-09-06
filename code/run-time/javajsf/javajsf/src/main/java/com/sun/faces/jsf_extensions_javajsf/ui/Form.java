@@ -39,13 +39,21 @@
  * holder.
  */
 
-package com.oracle.faces.extensions.javajsf.vdl.ui;
+package com.sun.faces.jsf_extensions_javajsf.ui;
 
-import javax.faces.component.UIPanel;
 
-import com.oracle.faces.extensions.javajsf.vdl.Application;
+import com.sun.faces.jsf_extensions_javajsf.vdl.Application;
+import javax.faces.component.UIForm;
 
-public class Window extends UIPanel {
+public class Form extends UIForm {
+    
+    private String caption;
+
+    public Form(String caption) {
+        this.caption = caption;
+    }
+    
+    
 
     private Application application;
 
@@ -57,7 +65,7 @@ public class Window extends UIPanel {
      * <p>The standard component family for this component.</p>
      */
     @SuppressWarnings("FieldNameHidesFieldInSuperclass")
-    public static final String COMPONENT_FAMILY = "javajsf.Window";
+    public static final String COMPONENT_FAMILY = "javajsf.Form";
 
 
     @Override

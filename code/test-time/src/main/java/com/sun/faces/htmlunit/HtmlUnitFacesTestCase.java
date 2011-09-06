@@ -109,7 +109,7 @@ public abstract class HtmlUnitFacesTestCase extends TestCase {
     protected HtmlPage lastpage = null;
 
     // Possible containers - these should be the uppercase values of the possible container values in build.properties
-    protected enum Container { GLASSFISH, GLASSFISHV3PRELUDE, GLASSFISHV3, GLASSFISHV3_1, GLASSFISHV3_1_NO_CLUSTER, TOMCAT6, TOMCAT7, WLS_10_3_4_NO_CLUSTER }
+    protected enum Container { GLASSFISH, GLASSFISHV3PRELUDE, GLASSFISHV3, GLASSFISHV3_1, GLASSFISHV3_1_NO_CLUSTER, TOMCAT6, TOMCAT7, WLS_10_3_4_NO_CLUSTER, WLS_12_1_1_NO_CLUSTER }
 
     // Per-container exclusions
     protected Map<Container, Vector<String>> exclusions = null;

@@ -23,8 +23,10 @@ public class TemplateLoader implements PluginLoader<Template>{
 		digester.addBeanPropertySetter("template/author");
 		digester.addBeanPropertySetter("template/authorEmail");
 		digester.addBeanPropertySetter("template/authorUrl");
+		digester.addBeanPropertySetter("template/copyright");
 		digester.addBeanPropertySetter("template/license");
 		digester.addBeanPropertySetter("template/description");
+		
 	}
 	
 	@Override

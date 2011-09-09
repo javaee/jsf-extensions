@@ -13,6 +13,7 @@ public abstract class Plugin  {
 	protected String authorEmail="";
 	protected String authorUrl="";
 	protected String license="GPL";
+	protected String copyright="";
 	protected int index;
     protected Folder folder;
     
@@ -106,6 +107,14 @@ public abstract class Plugin  {
 
 	public void setIndex(int index) {
 		this.index = index;
+	}
+
+	public String getCopyright() {
+		return copyright;
+	}
+
+	public void setCopyright(String copyright) {
+		this.copyright = copyright;
 	}
 
 }

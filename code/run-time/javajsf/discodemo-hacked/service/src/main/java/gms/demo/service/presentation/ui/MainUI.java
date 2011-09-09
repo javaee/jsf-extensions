@@ -45,32 +45,18 @@ import com.sun.faces.jsf_extensions_javajsf.ui.VerticalLayout;
 import com.sun.faces.jsf_extensions_javajsf.ui.Window;
 import com.sun.faces.jsf_extensions_javajsf.vdl.Application;
 import com.sun.jersey.api.representation.Form;
-import gms.demo.model.MemberInfo;
 import gms.demo.service.boundary.DiscoveryService;
 
-import javax.annotation.security.DeclareRoles;
-import javax.ejb.EJB;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
+import javax.faces.event.PhaseId;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.Serializable;
-import java.util.Set;
+import javax.faces.component.ActionSource2;
+import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
+import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseListener;
 
-/**
- * This is a Vaadin-based web ui for showing and editing the information
- * currently stored in the discovery service. A Vaadin Application object
- * is created for each http session. All of this code runs in the server,
- * so we can access EJBs easily. This class is loaded by an inner Servlet
- * class that allows us to easily inject an EJB.
- *
- * For more info see http://vaadin.com/ or the blog
- * http://blogs.sun.com/bobby/entry/a_simple_ui_for_exploring
- *
- * API is here: http://vaadin.com/api/
- */
 public class MainUI extends Application
     implements Serializable, ActionListener, PhaseListener {
 
@@ -82,8 +68,10 @@ public class MainUI extends Application
     private Button removeButton = new Button("Remove Selected Members");
     private Button clearAllButton = new Button("Remove All Members");
     private Button createNewButton = new Button("Create New Member");
+    /*****
     private CreateMemberInfoPanel cmiPanel;
     private MasterListPanel mlPanel;
+     *******/
 
     private HttpServletRequest httpReq;
     private Form loginForm = new Form();
@@ -108,6 +96,7 @@ public class MainUI extends Application
          */
         setMainWindow(window);
 
+        /****
         initLoginContent();
         initDefaultContent();
 
@@ -116,8 +105,10 @@ public class MainUI extends Application
         } else {
             window.setContent(loginLayout);
         }
+         *****/
     }
 
+    /*********
     private void initLoginContent() {
         loginForm.setCaption("Login:");
         loginForm.setDescription(
@@ -190,15 +181,13 @@ public class MainUI extends Application
         defaultLayout.addComponent(mainLayout);
         defaultLayout.setComponentAlignment(mainLayout, Alignment.TOP_CENTER);
     }
+     ******/ 
+     
 
-    /*
-     * In a real app, I would create a separate handler
-     * class for each action. if/else-if/else-if isn't
-     * so pretty.
-     */
     @Override
-    public void buttonClick(Button.ClickEvent clickEvent) {
-        Button source = clickEvent.getButton();
+    public void processAction(ActionEvent clickEvent) {
+        ActionSource2 source = (ActionSource2) clickEvent.getSource();
+        /******
         if (refreshButton == source) {
             reloadMasterListPanel();
         } else if (removeButton == source) {
@@ -241,7 +230,10 @@ public class MainUI extends Application
                 warn(e.toString());
             }
         }
+         * ********/
     }
+    
+    /***********
     
     void reloadMasterListPanel() {
         mlPanel.initTableSource();
@@ -256,18 +248,24 @@ public class MainUI extends Application
         getMainWindow().showNotification(msg,
             Window.Notification.TYPE_WARNING_MESSAGE);
     }
+     *****/ 
 
     @Override
-    public void onRequestStart(HttpServletRequest httpReq,
-                               HttpServletResponse httpResp) {
-        this.httpReq = httpReq;
+    public void beforePhase(PhaseEvent e) {
     }
 
     @Override
-    public void onRequestEnd(HttpServletRequest httpReq,
-                             HttpServletResponse httpResp) {
-        this.httpReq = null;
+    public void afterPhase(PhaseEvent e) {
+
     }
+
+    public PhaseId getPhaseId() {
+        return PhaseId.ANY_PHASE;
+    }
+    
+    
+    
+    /*********
 
     // This is the Servlet class to load the Vaadin Application
     @DeclareRoles(GMS_USER)
@@ -289,5 +287,7 @@ public class MainUI extends Application
             return new MainUI(service);
         }
     }
+    
+     ********/
 
 }

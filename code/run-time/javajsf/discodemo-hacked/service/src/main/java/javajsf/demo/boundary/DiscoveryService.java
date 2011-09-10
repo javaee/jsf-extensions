@@ -38,12 +38,12 @@
  * holder.
  */
 
-package gms.demo.service.boundary;
+package javajsf.demo.boundary;
 
 import gms.demo.model.GroupId;
 import gms.demo.model.Location;
 import gms.demo.model.MemberInfo;
-import gms.demo.service.boundary.client.MirrorClient;
+import javajsf.demo.client.MirrorClient;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;

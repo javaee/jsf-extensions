@@ -38,11 +38,11 @@
  * holder.
  */
 
-package gms.demo.service.presentation.rest;
+package javajsf.demo.rest;
 
 import gms.demo.model.MemberInfo;
 import gms.demo.model.GroupId;
-import gms.demo.service.boundary.DiscoveryService;
+import javajsf.demo.boundary.DiscoveryService;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;

@@ -38,14 +38,14 @@
  * holder.
  */
 
-package gms.demo.service.presentation.ui;
+package javajsf.demo.ui;
 
 import com.sun.faces.jsf_extensions_javajsf.ui.Button;
 import com.sun.faces.jsf_extensions_javajsf.ui.VerticalLayout;
 import com.sun.faces.jsf_extensions_javajsf.ui.Window;
 import com.sun.faces.jsf_extensions_javajsf.vdl.Application;
 import com.sun.jersey.api.representation.Form;
-import gms.demo.service.boundary.DiscoveryService;
+import javajsf.demo.boundary.DiscoveryService;
 
 import javax.faces.event.PhaseId;
 import javax.servlet.http.HttpServletRequest;

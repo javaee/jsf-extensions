@@ -8,7 +8,8 @@ import javax.faces.plugin.PluginManager;
 
 @SuppressWarnings("serial")
 @Manage(folder="modules",metadata="module.xml")
-public class ModuleManager extends PluginManager<Module> {
+public final class ModuleManager extends PluginManager<Module> {
+	
 	
 	public ModuleManager() {
 		
@@ -17,7 +18,7 @@ public class ModuleManager extends PluginManager<Module> {
 	}
 
 	@Override
-	public Resource resolveResource(String resourceName, String library) {
+	public Resource resolveResource(String resourceName, String library,String contentType) {
 		return null;
 	}
 	

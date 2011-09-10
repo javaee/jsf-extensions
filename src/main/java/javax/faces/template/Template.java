@@ -2,9 +2,8 @@ package javax.faces.template;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.faces.application.Resource;
 import javax.faces.plugin.Plugin;
+
 
 public class Template extends Plugin {
 
@@ -27,14 +26,7 @@ public class Template extends Plugin {
     
     public Template() {
     	
-    	locations=new ArrayList<String>();
-    	
-    }
-    
-    public Resource getResource(String resourceName,String library) {
-    	
-    	return folder.getDocument(resourceName, library);
-		
+    	locations=new ArrayList<String>();	
     }
     
     public void addLocation(String name) {

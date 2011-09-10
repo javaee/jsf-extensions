@@ -3,20 +3,19 @@ package javax.faces.plugin;
 import javax.faces.application.Resource;
 import javax.faces.application.ResourceHandler;
 import javax.faces.application.ResourceHandlerWrapper;
-import javax.faces.plugin.PluginManager;
+import javax.faces.context.FacesContext;
 
 
-@SuppressWarnings("unchecked")
-public class ResourceHandlerImpl<T extends PluginManager> extends ResourceHandlerWrapper{
+public class ResourceHandlerImpl<T extends ResourceResolver> extends ResourceHandlerWrapper{
 	
-	private final T manager;
+	private final T resolver;
 	private final ResourceHandler wrapped;	
 	
 	
-	public ResourceHandlerImpl(T manager,ResourceHandler wrapped) {
+	public ResourceHandlerImpl(T resolver) {
 		
-		this.manager=manager;
-		this.wrapped=wrapped;
+		this.resolver=resolver;
+		this.wrapped=FacesContext.getCurrentInstance().getApplication().getResourceHandler();
 		
 	}
 		
@@ -36,7 +35,7 @@ public class ResourceHandlerImpl<T extends PluginManager> extends ResourceHandle
 	@Override
 	public Resource createResource(String resourceName, String library,String contentType) {
 		
-		Resource resource=manager.resolveResource(resourceName, library);
+		Resource resource=resolver.resolveResource(resourceName, library,contentType);
 		return resource!=null ? resource : wrapped.createResource(resourceName, library);
 		
 	}

@@ -26,6 +26,12 @@ public class Folder {
 		
 	}
 	
+	public Folder(File file,String name) {
+		
+		this(new Folder(file),name);
+		
+	}
+	
 	public Folder(String parent,String name) {
 		
 		this(new Folder(parent),name);
@@ -46,23 +52,21 @@ public class Folder {
 
 	public Document getDocument(String resourceName,String library) {
 		
-		Document document;
-		if(library!=null)
-			document=new Document(file+File.separator+library+File.separator+resourceName);
-		else
-			document=new Document(file+File.separator+resourceName);
+		Document document=library!=null?
+				new Document(file+File.separator+library,resourceName):
+				new Document(file,resourceName);
 		return document.exists()?document:null;
 			
 	}
 	
 	public Document getDocument(String resourceName) {
 		
-		Document document=new Document(file+File.separator+resourceName);
+		Document document=new Document(file,resourceName);
 		return document.exists()?document:null;
 		
 	}
 	
-	public Folder getParentFolder() {
+	public Folder getParent() {
 		
 		return new Folder(file.getParentFile().getAbsolutePath());
 		

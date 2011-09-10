@@ -1,4 +1,4 @@
-package javax.faces.template;
+package javax.faces.plugin;
 
 import java.io.IOException;
 import javax.faces.plugin.Document;

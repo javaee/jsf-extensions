@@ -22,7 +22,7 @@ import javax.servlet.ServletContext;
 
 @SuppressWarnings("serial")
 @ApplicationScoped
-public abstract class PluginManager<T extends Plugin> implements PhaseListener {
+public abstract class PluginManager<T extends Plugin> implements PhaseListener,ResourceResolver {
 
 	/**
      * <p>plugins</p>
@@ -72,12 +72,11 @@ public abstract class PluginManager<T extends Plugin> implements PhaseListener {
 	public void loadPlugins()  {
 			
 		String repository=getInitParameter(PLUGIN_REPOSITORY);
-		boolean loaded=repository!=null?loadPlugins(repository):loadPlugins(getRealPath());
-		if(loaded) {
+		boolean hasPlugins=repository!=null?loadPlugins(repository):loadPlugins(getRealPath());
+		if(hasPlugins) {
 			addPhaseListener();
 			addResourceHandler();
 		}
-		
 	}
 	
 	protected boolean loadPlugins(String path) {
@@ -117,7 +116,7 @@ public abstract class PluginManager<T extends Plugin> implements PhaseListener {
 	protected void addResourceHandler() {
 		
 		Application application=FacesContext.getCurrentInstance().getApplication();
-		application.setResourceHandler(new ResourceHandlerImpl(this,application.getResourceHandler()));
+		application.setResourceHandler(new ResourceHandlerImpl(this));
 		
 	}
 	
@@ -130,7 +129,7 @@ public abstract class PluginManager<T extends Plugin> implements PhaseListener {
 		
 	}
 	
-	public T loadPlugin(Document metadata) throws Exception{
+	public T loadPlugin(Resource metadata) throws Exception{
 		
 		return loader.load(metadata);
 		
@@ -147,10 +146,7 @@ public abstract class PluginManager<T extends Plugin> implements PhaseListener {
 		
 		plugins.remove(plugin);
 		
-	}
-	
-	public abstract Resource resolveResource(String resourceName,String library);
-		
+	}		
 	
 	protected String getRequestParameter(String key) {
 		

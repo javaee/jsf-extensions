@@ -15,10 +15,10 @@ import javax.faces.plugin.PluginManager;
 @SuppressWarnings("serial")
 @ManagedBean(eager=true)
 @Manage(folder="templates",metadata="template.xml")
-public class TemplateManager extends PluginManager<Template> {
+public final class TemplateManager extends PluginManager<Template> {
 
 	/**
-     * <p>select template parameter</p>
+     * <p>selected template parameter</p>
      */
     public static final String SELECTED_TEMPLATE = "javax.faces.view.TEMPLATE";
     
@@ -41,12 +41,12 @@ public class TemplateManager extends PluginManager<Template> {
 	}
 	
 	@Override
-	public Resource resolveResource(String resourceName,String library) {
+	public Resource resolveResource(String resourceName,String library,String contentType) {
 		
 		return resourceName.equals(Template.THUMBNAIL)?
 				folder.getDocument(Template.THUMBNAIL,library):
-				getSelectedTemplate().getResource(resourceName, library);    
-				
+				getSelectedTemplate()
+			   .getResource(resourceName, library);    
 	}
 
 	private Template getSelectedTemplate() {
@@ -67,8 +67,9 @@ public class TemplateManager extends PluginManager<Template> {
 	
 	public String selectTemplate() {
 		
-		return selectTemplate(getTemplate(getRequestParameter(TEMPLATE_VAR_NAME)));
-		
+		return selectTemplate(getTemplate(
+				getRequestParameter(TEMPLATE_VAR_NAME))
+				);
 	}
 	
 	public String selectTemplate(Template template) {
@@ -107,8 +108,10 @@ public class TemplateManager extends PluginManager<Template> {
 	@Override
 	public void beforePhase(PhaseEvent event) {
 		
-		if(getSessionParameter(SELECTED_TEMPLATE)==null) 
-			selectTemplate(getDefaultTemplate());
+		@SuppressWarnings("unused")
+		String selectTemplate=getSessionParameter(SELECTED_TEMPLATE)==null? 
+							  selectTemplate(getDefaultTemplate()):
+							  null;
 		
 	}
 	

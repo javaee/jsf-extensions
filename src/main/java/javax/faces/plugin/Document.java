@@ -35,6 +35,12 @@ public class Document  extends Resource {
 		
 	}
 	
+	public Document(File parent,String fileName) {
+		
+		this(new Folder(parent),fileName);
+		
+	}
+
 	public Document(String parent,String fileName) {
 		
 		this(new Folder(parent),fileName);

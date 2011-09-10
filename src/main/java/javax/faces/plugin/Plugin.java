@@ -1,5 +1,7 @@
 package javax.faces.plugin;
 
+import javax.faces.application.Resource;
+
 
 
 
@@ -17,8 +19,16 @@ public abstract class Plugin  {
 	protected int index;
     protected Folder folder;
     
-	
     
+    public Plugin() {
+    	
+    }
+    
+    public Resource getResource(String resourceName,String library) {
+    	
+    	return folder.getDocument(resourceName, library);
+    	
+    }
     
 	public String getName() {
 		return name;

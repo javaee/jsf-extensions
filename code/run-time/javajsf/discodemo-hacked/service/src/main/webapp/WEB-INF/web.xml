@@ -4,24 +4,24 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
 		  http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
          version="3.0">
+             
+    <context-param>
+        <param-name>javax.faces.PROJECT_STAGE</param-name>
+        <param-value>Development</param-value>
+    </context-param>
+    <context-param>
+        <param-name>javax.faces.FACELETS_RESOURCE_RESOLVER</param-name>
+        <param-value>com.sun.faces.jsf_extensions_javajsf.vdl.JavaJSFResourceResolver</param-value>
+    </context-param>
+             
 
     <servlet>
-        <servlet-name>index</servlet-name>
-        <jsp-file>index.jsp</jsp-file>
-    </servlet>
-    <servlet>
-        <servlet-name>ServletAdaptor</servlet-name>
-        <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
-        <load-on-startup>1</load-on-startup>
+       <servlet-name>Faces Servlet</servlet-name>
+       <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
     </servlet>
 
-    <!-- We'll map / to the welcome page and /* to our resources. -->
     <servlet-mapping>
-        <servlet-name>index</servlet-name>
-        <url-pattern>/</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>ServletAdaptor</servlet-name>
+        <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>/*</url-pattern>
     </servlet-mapping>
     

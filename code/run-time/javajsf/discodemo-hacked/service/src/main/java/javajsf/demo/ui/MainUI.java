@@ -49,7 +49,6 @@ import javajsf.demo.boundary.DiscoveryService;
 
 import javax.faces.event.PhaseId;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.Serializable;
 import javax.faces.component.ActionSource2;
 import javax.faces.event.ActionEvent;

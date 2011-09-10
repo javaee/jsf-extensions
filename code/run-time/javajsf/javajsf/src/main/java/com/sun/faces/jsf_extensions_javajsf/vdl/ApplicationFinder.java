@@ -51,13 +51,15 @@ import javax.faces.event.SystemEventListener;
 @ListenerFor(systemEventClass=PostConstructApplicationEvent.class)
 public class ApplicationFinder implements SystemEventListener {
 
+    @Override
     public boolean isListenerForSource(Object source) {
         return source instanceof javax.faces.application.Application;
     }
 
+    @Override
     public void processEvent(SystemEvent event) throws AbortProcessingException {
 
-
+        System.out.println("Received PostConstructApplicationEvent");
     }
 
 }

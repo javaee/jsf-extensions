@@ -11,6 +11,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <spec.snapshot.version>2.2-SNAPSHOT</spec.snapshot.version>
+    <netbeans.hint.deploy.server>gfv3ee6</netbeans.hint.deploy.server>
   </properties>
 
   <build>
@@ -163,11 +164,13 @@
        <artifactId>bobby-model</artifactId>
        <version>1.0</version>
     </dependency>
+<!--
     <dependency>
       <groupId>org.primefaces</groupId>
       <artifactId>primefaces</artifactId>
       <version>2.2</version>
     </dependency>
+-->
 
     <!--
     <dependency>

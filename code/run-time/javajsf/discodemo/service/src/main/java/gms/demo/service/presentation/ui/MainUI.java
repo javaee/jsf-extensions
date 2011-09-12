@@ -291,7 +291,7 @@ public class MainUI extends Application
         @Override
         protected Application getNewApplication(HttpServletRequest request)
             throws ServletException {
-
+            // This is called once per session.
             return new MainUI(service);
         }
     }

@@ -39,40 +39,39 @@
  * holder.
  */
 
-package com.sun.faces.jsf_extensions_javajsf.ui;
+package com.sun.faces.jsf_extensions_javajsf;
 
-import javax.faces.component.UIPanel;
+import com.sun.faces.jsf_extensions_javajsf.ui.Window;
+import java.util.Map;
+import javax.faces.component.UIComponent;
 
-import com.sun.faces.jsf_extensions_javajsf.Application;
 
-public class Window extends UIPanel {
-    
-    private String caption;
+public abstract class Application  {
 
-    public Window(String caption) {
-        this.caption = caption;
-    }
-    
-    
+    private javax.faces.application.Application jsfApplication;
 
-    private Application application;
-
-    public void setApplication(Application application) {
-        this.application = application;
+    void setJsfApplication(javax.faces.application.Application jsfApplication) {
+        this.jsfApplication = jsfApplication;
     }
 
-    /**
-     * <p>The standard component family for this component.</p>
-     */
-    @SuppressWarnings("FieldNameHidesFieldInSuperclass")
-    public static final String COMPONENT_FAMILY = "javajsf.Window";
+    private Window mainWindow;
 
-
-    @Override
-    public String getFamily() {
-        return COMPONENT_FAMILY;
+    public Window getMainWindow() {
+        return mainWindow;
     }
 
+    public void setMainWindow(Window mainWindow) {
+        this.mainWindow = mainWindow;
+    }
 
+    private Map<Window, String> windows;
+
+    public abstract void init();
+
+    public UIComponent createComponent(String componentType, String rendererType) {
+        UIComponent result = null;
+
+        return result;
+    }
 
 }

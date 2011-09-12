@@ -43,7 +43,8 @@ package javajsf.demo.ui;
 import com.sun.faces.jsf_extensions_javajsf.ui.Button;
 import com.sun.faces.jsf_extensions_javajsf.ui.VerticalLayout;
 import com.sun.faces.jsf_extensions_javajsf.ui.Window;
-import com.sun.faces.jsf_extensions_javajsf.vdl.Application;
+import com.sun.faces.jsf_extensions_javajsf.Application;
+import com.sun.faces.jsf_extensions_javajsf.JavaJSFApplication;
 import com.sun.jersey.api.representation.Form;
 import javajsf.demo.boundary.DiscoveryService;
 
@@ -56,6 +57,7 @@ import javax.faces.event.ActionListener;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseListener;
 
+@JavaJSFApplication
 public class MainUI extends Application
     implements Serializable, ActionListener, PhaseListener {
 

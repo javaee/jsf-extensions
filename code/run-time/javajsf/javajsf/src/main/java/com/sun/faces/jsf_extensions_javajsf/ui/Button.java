@@ -42,7 +42,7 @@
 package com.sun.faces.jsf_extensions_javajsf.ui;
 
 
-import com.sun.faces.jsf_extensions_javajsf.vdl.Application;
+import com.sun.faces.jsf_extensions_javajsf.Application;
 import javax.faces.component.UICommand;
 
 public class Button extends UICommand {

@@ -1,4 +1,3 @@
-
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
@@ -39,39 +38,42 @@
  * holder.
  */
 
-package com.sun.faces.jsf_extensions_javajsf.vdl;
+package com.sun.faces.jsf_extensions_javajsf;
 
-import com.sun.faces.jsf_extensions_javajsf.ui.Window;
-import java.util.Map;
-import javax.faces.component.UIComponent;
+import java.util.logging.Logger;
+
+/**
+ * <p/>
+ * An <code>enum</code> of all application <code>Logger</code>s.
+ * </p>
+ */
+public enum JavaJSFLogger {
+
+    VDL("vdl");
+
+    private static final String LOGGER_RESOURCES
+         = "com.sun.faces.jsf_extensions_javajsf.LogStrings";
+    public static final String JAVAJSF_LOGGER_NAME_PREFIX
+         = "javax.enterprise.resource.webcontainer.javajsf.";
+    private String loggerName;
 
 
-public abstract class Application  {
-
-    private javax.faces.application.Application jsfApplication;
-
-    void setJsfApplication(javax.faces.application.Application jsfApplication) {
-        this.jsfApplication = jsfApplication;
+    JavaJSFLogger(String loggerName) {
+        this.loggerName = JAVAJSF_LOGGER_NAME_PREFIX + loggerName;
     }
 
-    private Window mainWindow;
 
-    public Window getMainWindow() {
-        return mainWindow;
+    public String getLoggerName() {
+        return loggerName;
     }
 
-    public void setMainWindow(Window mainWindow) {
-        this.mainWindow = mainWindow;
+
+    public String getResourcesName() {
+        return LOGGER_RESOURCES;
     }
 
-    private Map<Window, String> windows;
-
-    public abstract void init();
-
-    public UIComponent createComponent(String componentType, String rendererType) {
-        UIComponent result = null;
-
-        return result;
+    public Logger getLogger() {
+        return Logger.getLogger(loggerName, LOGGER_RESOURCES);
     }
 
 }

@@ -41,6 +41,7 @@
 
 package com.sun.faces.jsf_extensions_javajsf.vdl;
 
+import com.sun.faces.jsf_extensions_javajsf.Application;
 import com.sun.faces.jsf_extensions_javajsf.JavaJSFLogger;
 import com.sun.faces.spi.AnnotationScanner;
 import com.sun.faces.spi.AnnotationScanner.ScannedAnnotation;
@@ -49,8 +50,10 @@ import com.sun.faces.spi.InjectionProviderException;
 import com.sun.faces.spi.InjectionProviderFactory;
 import java.lang.reflect.Method;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -58,22 +61,30 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.FactoryFinder;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ListenerFor;
+import javax.faces.event.PhaseEvent;
+import javax.faces.event.PhaseId;
+import javax.faces.event.PhaseListener;
 import javax.faces.event.PostConstructApplicationEvent;
+import javax.faces.event.PreDestroyApplicationEvent;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
+import javax.faces.lifecycle.Lifecycle;
+import javax.faces.lifecycle.LifecycleFactory;
 import javax.servlet.ServletContext;
 
 
 @ListenerFor(systemEventClass=PostConstructApplicationEvent.class)
-public class ApplicationFinder implements SystemEventListener {
+public class ApplicationFinder implements SystemEventListener, PhaseListener {
     
     private static final Logger LOGGER = JavaJSFLogger.VDL.getLogger();
     
     private static final Set<String> JAVAJSF_ANNOTATIONS;
+    
     static {
         HashSet<String> annotations = new HashSet<String>(8, 1.0f);
         // JAVASERVERFACES-1835 this collection has the same information twice.
@@ -84,7 +95,18 @@ public class ApplicationFinder implements SystemEventListener {
         JAVAJSF_ANNOTATIONS = Collections.unmodifiableSet(annotations);
     }
     
+    private enum PhaseListenerActionType {
+        ADD,
+        REMOVE
+    };
+    
+    private List<String> classesAnnotatedWithJavaJSFApplication;
 
+    public ApplicationFinder() {
+        classesAnnotatedWithJavaJSFApplication = new ArrayList<String>();
+    }
+    
+    // <editor-fold defaultstate="collapsed" desc="SystemEventListener implementation">
 
     @Override
     public boolean isListenerForSource(Object source) {
@@ -93,8 +115,9 @@ public class ApplicationFinder implements SystemEventListener {
 
     @Override
     public void processEvent(SystemEvent event) throws AbortProcessingException {
-
-        ExternalContext extContext = FacesContext.getCurrentInstance().getExternalContext();
+        
+        FacesContext context = FacesContext.getCurrentInstance();
+        ExternalContext extContext = context.getExternalContext();
         Object contextObject = extContext.getContext();
         if (!(contextObject instanceof ServletContext)) {
             if (LOGGER.isLoggable(Level.SEVERE)) {
@@ -102,21 +125,110 @@ public class ApplicationFinder implements SystemEventListener {
             }
             throw new AbortProcessingException();
         }
-        ServletContext sc = (ServletContext) contextObject;
         
-        InjectionProvider containerConnector = InjectionProviderFactory.createInstance(extContext);
-        if (containerConnector instanceof AnnotationScanner) {
-            Set<String> classList = new HashSet<String>();
-            
-            processAnnotations(containerConnector, extContext, sc, classList);
+        if (event instanceof PostConstructApplicationEvent) {
 
-        } else {
-            if (LOGGER.isLoggable(Level.SEVERE)) {
-                LOGGER.log(Level.SEVERE, "javajsf.vdl.invalid_runtime");
+            ServletContext sc = (ServletContext) contextObject;
+            
+            InjectionProvider containerConnector = InjectionProviderFactory.createInstance(extContext);
+            if (containerConnector instanceof AnnotationScanner) {
+                Set<String> classList = new HashSet<String>();
+                
+                processAnnotations(containerConnector, extContext, sc, classList);
+                
+                if (!classList.isEmpty()) {
+                    classesAnnotatedWithJavaJSFApplication.addAll(classList);
+                    context.getApplication().subscribeToEvent(PreDestroyApplicationEvent.class, this);
+                    addOrRemovePhaseListener(PhaseListenerActionType.ADD);
+                }
+                
+            } else {
+                if (LOGGER.isLoggable(Level.SEVERE)) {
+                    LOGGER.log(Level.SEVERE, "javajsf.vdl.invalid_runtime");
+                }
+                throw new AbortProcessingException();
             }
-            throw new AbortProcessingException();
-        }
+        } else {
+            assert(event instanceof PreDestroyApplicationEvent);
+            
+            if (!classesAnnotatedWithJavaJSFApplication.isEmpty()) {
+                addOrRemovePhaseListener(PhaseListenerActionType.REMOVE);
+                classesAnnotatedWithJavaJSFApplication.clear();
+            }
+        } 
     } 
+    
+    // </editor-fold>
+       
+    // <editor-fold defaultstate="collapsed" desc="PhaseListener implementation">
+    
+    private static final String JAVAJSF_APPLICATIONS_DATA_STRUCTURE = "com.sun.faces.jsf_extensions_javajsf.APPLICATIONS";
+
+    @Override
+    public void beforePhase(PhaseEvent event) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        ExternalContext extContext = context.getExternalContext();
+        // No-one complains when Vaadin insists that a session be created.
+        Map<String, Object> sessionMap = extContext.getSessionMap();
+        PerSessionJavaJSFApplicationManager appManager = 
+                (PerSessionJavaJSFApplicationManager) sessionMap.get(JAVAJSF_APPLICATIONS_DATA_STRUCTURE);
+        if (null == appManager) {
+            appManager = new PerSessionJavaJSFApplicationManager();
+            sessionMap.put(JAVAJSF_APPLICATIONS_DATA_STRUCTURE, appManager);
+        }
+        
+        // Have the JavaJSF applications been initialized for this session?
+        if (!appManager.isApplicationsInitialized()) {
+            boolean allAppsSuccessfullyInitialized = true;
+            for (String cur : classesAnnotatedWithJavaJSFApplication) {
+                ClassLoader cl = getCurrentLoader(this);
+                try {
+                    Class appClass = cl.loadClass(cur);
+                    Application app = (Application) appClass.newInstance();
+                    app.init();
+                    appManager.addApplication(cur, app);
+                } catch (Exception ex) {
+                    allAppsSuccessfullyInitialized = false;
+                    if (LOGGER.isLoggable(Level.SEVERE)) {
+                        Object [] params = new Object[]{ cur, ex };
+                        LOGGER.log(Level.SEVERE, "javajsf.vdl.cannot_create_application", params);
+                    }
+                } 
+            }
+            appManager.setApplicationsInitialized(allAppsSuccessfullyInitialized);
+            
+        }
+        
+    }
+
+    @Override
+    public PhaseId getPhaseId() {
+        return PhaseId.RESTORE_VIEW;
+    }
+    
+    @Override
+    public void afterPhase(PhaseEvent event) {
+        
+    }
+
+    // </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="Helper methods">
+    
+    private void addOrRemovePhaseListener(PhaseListenerActionType actionToTake) {
+        LifecycleFactory lifecycleFactory = (LifecycleFactory)
+                FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
+        Iterator<String> lifecycleIds = lifecycleFactory.getLifecycleIds();
+        while (lifecycleIds.hasNext()) {
+            Lifecycle lifecycle = lifecycleFactory.getLifecycle(lifecycleIds.next());
+            if (actionToTake.equals(PhaseListenerActionType.ADD)) {
+                lifecycle.addPhaseListener(this);
+            } else {
+                lifecycle.removePhaseListener(this);
+            }
+        }
+        
+    }
     
     private void processAnnotations(InjectionProvider containerConnector, 
             ExternalContext extContext,
@@ -221,7 +333,45 @@ public class ApplicationFinder implements SystemEventListener {
         result = appMap.get("com.sun.enterprise.web.WebModule.DeploymentContext");
         return result;
     }
-
     
+    public ClassLoader getCurrentLoader(Object fallbackClass) {
+        ClassLoader loader =
+            Thread.currentThread().getContextClassLoader();
+        if (loader == null) {
+            loader = fallbackClass.getClass().getClassLoader();
+        }
+        return loader;
+    }
+    
+
+    // </editor-fold>
+    
+    private class PerSessionJavaJSFApplicationManager {
+        
+        private boolean applicationsInitialized = false;
+        private Map<String, Application> apps;
+
+        public PerSessionJavaJSFApplicationManager() {
+            apps = new HashMap<String, Application>();
+        }
+        
+        public boolean isApplicationsInitialized() {
+            return applicationsInitialized;
+        }
+
+        public void setApplicationsInitialized(boolean applicationsInitialized) {
+            this.applicationsInitialized = applicationsInitialized;
+        }
+        
+        public void addApplication(String className, Application app) {
+            apps.put(className, app);
+        }
+        
+        public Application getApplication(String className) {
+            Application result = apps.get(className);
+            
+            return result;
+        }
+    }
 
 }

@@ -83,6 +83,10 @@ public class MainUI extends Application
     VerticalLayout defaultLayout;
 
     private static final String GMS_USER = "GMS_USER";
+    
+    public MainUI() {
+        
+    }
 
     public MainUI(DiscoveryService service) {
         this.service = service;
@@ -107,6 +111,11 @@ public class MainUI extends Application
             window.setContent(loginLayout);
         }
          *****/
+    }
+    
+    @Override
+    public void destroy() {
+        
     }
 
     /*********

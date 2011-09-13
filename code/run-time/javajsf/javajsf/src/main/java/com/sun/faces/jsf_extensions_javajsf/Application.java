@@ -67,6 +67,8 @@ public abstract class Application  {
     private Map<Window, String> windows;
 
     public abstract void init();
+    
+    public abstract void destroy();
 
     public UIComponent createComponent(String componentType, String rendererType) {
         UIComponent result = null;

@@ -14,11 +14,15 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
-        <url-pattern>/ui</url-pattern>
+        <url-pattern>/ui/*</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
             30
         </session-timeout>
     </session-config>
+    <welcome-file-list>
+     <welcome-file>ui/javajsf</welcome-file>
+    </welcome-file-list>
+    
 </web-app>

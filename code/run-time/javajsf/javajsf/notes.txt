@@ -1,0 +1,17 @@
+Vaadin requires two subclasses be created.
+
+1.  @WebServlet(urlPatterns = {"/ui/*", "/VAADIN/*"})
+    public static class MyServlet extends AbstractApplicationServlet
+
+2. public class MainUI extends Application
+
+In JavaJSF, I would like to avoid the necessity for 1.
+
+To do this, I want to introduce an annotation you stick on your
+Application class to declare it to the bootstrapping system.
+
+To do that, I need to expose the com.sun.faces.spi for InjectionProvider.
+
+InjectionProvider
+InjectionProviderFactory
+com.sun.faces.spi.AnnotationScanner

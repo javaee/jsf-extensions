@@ -45,12 +45,12 @@ import com.sun.faces.jsf_extensions_javajsf.ui.VerticalLayout;
 import com.sun.faces.jsf_extensions_javajsf.ui.Window;
 import com.sun.faces.jsf_extensions_javajsf.Application;
 import com.sun.faces.jsf_extensions_javajsf.JavaJSFApplication;
-import com.sun.jersey.api.representation.Form;
 import javajsf.demo.boundary.DiscoveryService;
 
 import javax.faces.event.PhaseId;
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
+import javax.faces.component.UIComponent;
 import javax.faces.component.ActionSource2;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
@@ -63,7 +63,7 @@ public class MainUI extends Application
 
     private DiscoveryService service;
 
-    private Window window = new Window("Discovery Service Prototype");
+    private UIComponent window;
 
     private Button refreshButton = new Button("Reload Members");
     private Button removeButton = new Button("Remove Selected Members");
@@ -75,9 +75,9 @@ public class MainUI extends Application
      *******/
 
     private HttpServletRequest httpReq;
-    private Form loginForm = new Form();
-    private Button loginButton = new Button("OK", loginForm, "commit");
-    private Button logoutButton = new Button("Logout");
+    private UIComponent loginForm ;
+    private Button loginButton;
+    private Button logoutButton;
 
     VerticalLayout loginLayout;
     VerticalLayout defaultLayout;
@@ -85,15 +85,23 @@ public class MainUI extends Application
     private static final String GMS_USER = "GMS_USER";
     
     public MainUI() {
-        
     }
 
     public MainUI(DiscoveryService service) {
+        this();
         this.service = service;
     }
 
     @Override
     public void init() {
+        window = createComponent("window");
+        loginForm = createComponent("form");
+        /***
+        Button loginButton = new Button("OK", loginForm, "commit");
+        Button logoutButton = new Button("Logout");
+         */
+
+        
         /*
          * Create main window. A window represents a browser tab. We don't
          * care about multiple browser tabs being open,
@@ -101,14 +109,17 @@ public class MainUI extends Application
          */
         setMainWindow(window);
 
-        /****
         initLoginContent();
+        /****
         initDefaultContent();
 
         if (httpReq.isUserInRole(GMS_USER)) {
             window.setContent(defaultLayout);
         } else {
             window.setContent(loginLayout);
+         */
+        window.getFacet("content").getChildren().add(loginForm); // the argument should be loginLayout
+        /*******
         }
          *****/
     }
@@ -118,14 +129,14 @@ public class MainUI extends Application
         
     }
 
-    /*********
     private void initLoginContent() {
-        loginForm.setCaption("Login:");
-        loginForm.setDescription(
-            "<br/>This application does not use your SSO or LDAP " +
+        loginForm.getAttributes().put("caption", "Login:");
+        loginForm.getAttributes().put("description", 
+                "<br/>This application does not use your SSO or LDAP " +
                 "passwords. So don't go giving me all your " +
                 "login info.");
 
+        /********
         loginForm.addField("user", new TextField("User:"));
         loginForm.addField("pass", new PasswordField("Password:"));
         loginForm.getFooter().addComponent(loginButton);
@@ -148,8 +159,12 @@ public class MainUI extends Application
         // this would center it on the page
 //        loginLayout.setSizeFull();
 //        loginLayout.setComponentAlignment(loginPanel, Alignment.MIDDLE_CENTER);
+         * 
+         * 
+         */ 
     }
 
+        /****
     private void initDefaultContent() {
 
         // add buttons to the main layout

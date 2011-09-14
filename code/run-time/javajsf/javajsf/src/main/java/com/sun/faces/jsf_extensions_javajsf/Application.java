@@ -41,39 +41,88 @@
 
 package com.sun.faces.jsf_extensions_javajsf;
 
-import com.sun.faces.jsf_extensions_javajsf.ui.Window;
+import java.util.List;
 import java.util.Map;
+import javax.faces.application.Resource;
+import javax.faces.application.ResourceHandler;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
 
 
 public abstract class Application  {
 
     private javax.faces.application.Application jsfApplication;
+    private ResourceHandler resourceHandler;
 
-    void setJsfApplication(javax.faces.application.Application jsfApplication) {
+    public void setJsfApplication(javax.faces.application.Application jsfApplication) {
         this.jsfApplication = jsfApplication;
+        this.resourceHandler = jsfApplication.getResourceHandler();
+    }
+    
+    public javax.faces.application.Application getJsfApplication() {
+        return this.jsfApplication;
     }
 
-    private Window mainWindow;
+    private UIComponent mainWindow;
 
-    public Window getMainWindow() {
+    public UIComponent getMainWindow() {
         return mainWindow;
     }
 
-    public void setMainWindow(Window mainWindow) {
+    public void setMainWindow(UIComponent mainWindow) {
         this.mainWindow = mainWindow;
+        FacesContext context = FacesContext.getCurrentInstance();
+        UIViewRoot root = context.getViewRoot();
+        UIComponent body = root.findComponent("javajsf_body");
+        List<UIComponent> bodyChildren = body.getChildren();
+        bodyChildren.clear();
+        bodyChildren.add(mainWindow);
     }
 
-    private Map<Window, String> windows;
+    private Map<UIComponent, String> windows;
 
     public abstract void init();
     
     public abstract void destroy();
+    
+    public UIComponent createComponent(String componentType) {
+        UIComponent result = null;
+        FacesContext context = FacesContext.getCurrentInstance();
+        result = createCompositeComponent(context, componentType);
+        return result;
+    }
+
 
     public UIComponent createComponent(String componentType, String rendererType) {
         UIComponent result = null;
-
+        FacesContext context = FacesContext.getCurrentInstance();
+        
+        // Ask JSF for a traditional component
+        result = jsfApplication.createComponent(context, componentType, rendererType);
+        if (null == result) {
+            // Look for a composite component
+            result = createCompositeComponent(context, componentType);
+        }
+        
         return result;
     }
+    
+    // <editor-fold defaultstate="collapsed" desc="Helper methods">
+    
+    private UIComponent createCompositeComponent(FacesContext context, String componentName) {
+        UIComponent result = null;
+        // PENDING(edburns): inspect all the resource libraries in the application, looking 
+        // for a composite component componentName.  For now, just hard code "javajsf"
+        String resourceName = componentName.endsWith(".xhtml") ? componentName : 
+                componentName + ".xhtml";
+        Resource compositeResource = resourceHandler.createResource(resourceName, "javajsf");
+        result = jsfApplication.createComponent(context, compositeResource);
+        
+        return result;
+    }
+    
+    // </editor-fold>
+    
 
 }

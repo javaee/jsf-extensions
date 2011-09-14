@@ -41,11 +41,25 @@
 
 package com.sun.faces.jsf_extensions_javajsf.vdl;
 
+import com.sun.faces.jsf_extensions_javajsf.ApplicationFinder;
+import com.sun.faces.jsf_extensions_javajsf.JavaJSFLogger;
+import java.beans.BeanInfo;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.faces.application.Resource;
+import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.view.AttachedObjectHandler;
+import javax.faces.view.StateManagementStrategy;
 import javax.faces.view.ViewDeclarationLanguage;
 import javax.faces.view.ViewDeclarationLanguageWrapper;
+import javax.faces.view.ViewMetadata;
 
 
 
@@ -53,21 +67,35 @@ public class JavaJsfViewDeclarationLanguage extends ViewDeclarationLanguageWrapp
 
     private ViewDeclarationLanguage parent;
     private ViewDeclarationLanguage faceletViewDeclarationLanguage;
+    private ApplicationFinder appFinder;
+    
+    private static final Logger LOGGER = JavaJSFLogger.JAVAJSF.getLogger();
 
     public JavaJsfViewDeclarationLanguage(ViewDeclarationLanguage faceletViewDeclarationLanguage,
             ViewDeclarationLanguage parent) {
         this.faceletViewDeclarationLanguage = faceletViewDeclarationLanguage;
         this.parent = parent;
     }
+    
+    public ApplicationFinder getAppFinder() {
+        return appFinder;
+    }
 
+    public void setAppFinder(ApplicationFinder appFinder) {
+        this.appFinder = appFinder;
+    }
+    
     @Override
     public ViewDeclarationLanguage getWrapped() {
         return parent;
     }
 
+    // <editor-fold defaultstate="collapsed" desc="ViewDeclarationLanguage implementation">
+
     @Override
     public void buildView(FacesContext context, UIViewRoot root) throws IOException {
         faceletViewDeclarationLanguage.buildView(context, root);
+        performPerSessionInitialization(context);
     }
 
     @Override
@@ -76,6 +104,147 @@ public class JavaJsfViewDeclarationLanguage extends ViewDeclarationLanguageWrapp
 
         return result;
     }
+    
+    // </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="ViewDeclarationLanguage implementation delegated to Facelets">
+    
+    @Override
+    public BeanInfo getComponentMetadata(FacesContext context, Resource componentResource) {
+        return faceletViewDeclarationLanguage.getComponentMetadata(context, componentResource);
+    }
+
+    @Override
+    public String getId() {
+        return faceletViewDeclarationLanguage.getId();
+    }
+
+    @Override
+    public Resource getScriptComponentResource(FacesContext context, Resource componentResource) {
+        return faceletViewDeclarationLanguage.getScriptComponentResource(context, componentResource);
+    }
+
+    @Override
+    public StateManagementStrategy getStateManagementStrategy(FacesContext context, String viewId) {
+        return faceletViewDeclarationLanguage.getStateManagementStrategy(context, viewId);
+    }
+
+    @Override
+    public ViewMetadata getViewMetadata(FacesContext context, String viewId) {
+        return faceletViewDeclarationLanguage.getViewMetadata(context, viewId);
+    }
+
+    @Override
+    public void renderView(FacesContext context, UIViewRoot view) throws IOException {
+        faceletViewDeclarationLanguage.renderView(context, view);
+    }
+
+    @Override
+    public UIViewRoot restoreView(FacesContext context, String viewId) {
+        return faceletViewDeclarationLanguage.restoreView(context, viewId);
+    }
+
+    @Override
+    public void retargetAttachedObjects(FacesContext context, UIComponent topLevelComponent, List<AttachedObjectHandler> handlers) {
+        faceletViewDeclarationLanguage.retargetAttachedObjects(context, topLevelComponent, handlers);
+    }
+
+    @Override
+    public void retargetMethodExpressions(FacesContext context, UIComponent topLevelComponent) {
+        faceletViewDeclarationLanguage.retargetMethodExpressions(context, topLevelComponent);
+    }
+
+    @Override
+    public boolean viewExists(FacesContext context, String viewId) {
+        return super.viewExists(context, viewId);
+    }
+    
+    // </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="Helper classes and methods">
+    
+    private static final String JAVAJSF_APPLICATIONS_DATA_STRUCTURE = "com.sun.faces.jsf_extensions_javajsf.APPLICATIONS";
+        
+
+    private void performPerSessionInitialization(FacesContext context) {
+        ExternalContext extContext = context.getExternalContext();
+        // No-one complains when Vaadin insists that a session be created.
+        Map<String, Object> sessionMap = extContext.getSessionMap();
+        PerSessionJavaJSFApplicationManager appManager = 
+                (PerSessionJavaJSFApplicationManager) sessionMap.get(JAVAJSF_APPLICATIONS_DATA_STRUCTURE);
+        if (null == appManager) {
+            appManager = new PerSessionJavaJSFApplicationManager();
+            sessionMap.put(JAVAJSF_APPLICATIONS_DATA_STRUCTURE, appManager);
+        }
+        
+        // Have the JavaJSF applications been initialized for this session?
+        if (!appManager.isApplicationsInitialized()) {
+            boolean allAppsSuccessfullyInitialized = true;
+            for (String cur : appFinder.getClassesAnnotatedWithJavaJSFApplication()) {
+                ClassLoader cl = getCurrentLoader(this);
+                try {
+                    Class appClass = cl.loadClass(cur);
+                    com.sun.faces.jsf_extensions_javajsf.Application app = 
+                            (com.sun.faces.jsf_extensions_javajsf.Application) appClass.newInstance();
+                    app.setJsfApplication(context.getApplication());
+                    appManager.addApplication(cur, app);
+                    appFinder.invokePostConstruct(extContext, app);
+                    appFinder.inject(extContext, app);
+                    app.init();
+                } catch (Exception ex) {
+                    allAppsSuccessfullyInitialized = false;
+                    if (LOGGER.isLoggable(Level.SEVERE)) {
+                        Object [] params = new Object[]{ cur, ex };
+                        LOGGER.log(Level.SEVERE, "javajsf.cannot_create_application", params);
+                    }
+                } 
+            }
+            appManager.setApplicationsInitialized(allAppsSuccessfullyInitialized);
+            
+        }
+        
+    }
+
+    private class PerSessionJavaJSFApplicationManager {
+        
+        private boolean applicationsInitialized = false;
+        private Map<String, com.sun.faces.jsf_extensions_javajsf.Application> apps;
+
+        public PerSessionJavaJSFApplicationManager() {
+            apps = new HashMap<String, com.sun.faces.jsf_extensions_javajsf.Application>();
+        }
+        
+        public boolean isApplicationsInitialized() {
+            return applicationsInitialized;
+        }
+
+        public void setApplicationsInitialized(boolean applicationsInitialized) {
+            this.applicationsInitialized = applicationsInitialized;
+        }
+        
+        public void addApplication(String className, 
+                com.sun.faces.jsf_extensions_javajsf.Application app) {
+            apps.put(className, app);
+        }
+        
+        public com.sun.faces.jsf_extensions_javajsf.Application getApplication(String className) {
+            com.sun.faces.jsf_extensions_javajsf.Application result = apps.get(className);
+            
+            return result;
+        }
+    }
+    
+    private ClassLoader getCurrentLoader(Object fallbackClass) {
+        ClassLoader loader =
+            Thread.currentThread().getContextClassLoader();
+        if (loader == null) {
+            loader = fallbackClass.getClass().getClassLoader();
+        }
+        return loader;
+    }
+    
+
+    // </editor-fold>
 
     
 

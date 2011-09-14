@@ -49,6 +49,7 @@ import java.util.logging.Logger;
  */
 public enum JavaJSFLogger {
 
+    JAVAJSF("javajsf"),
     VDL("vdl");
 
     private static final String LOGGER_RESOURCES

@@ -84,8 +84,8 @@ public class ApplicationFinder implements SystemEventListener {
         // JAVASERVERFACES-1835 this collection has the same information twice.
         // Once in javap -s format, and once as fully qualified Java class names.
         Collections.addAll(annotations,
-                           "Lcom/sun/faces/jsf_extensions_javajsf/JavaJSFApplication;",
-                           "com.sun.faces.jsf_extensions_javajsf.JavaJSFApplication");
+                           "Lcom/sun/faces/jsf_extensions_javajsf/JavaJsfApplication;",
+                           "com.sun.faces.jsf_extensions_javajsf.JavaJsfApplication");
         JAVAJSF_ANNOTATIONS = Collections.unmodifiableSet(annotations);
     }
 

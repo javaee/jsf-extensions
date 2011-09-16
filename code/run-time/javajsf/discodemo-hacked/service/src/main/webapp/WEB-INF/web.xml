@@ -15,6 +15,7 @@
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>/ui/*</url-pattern>
+        <url-pattern>/faces/*</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
@@ -22,7 +23,8 @@
         </session-timeout>
     </session-config>
     <welcome-file-list>
-     <welcome-file>ui/javajsf</welcome-file>
+     <!-- <welcome-file>ui/javajsf</welcome-file> -->
+     <welcome-file>faces/window_using.xhtml</welcome-file>
     </welcome-file-list>
     
 </web-app>

@@ -42,9 +42,11 @@
 package com.sun.faces.jsf_extensions_javajsf.vdl;
 
 import com.sun.faces.jsf_extensions_javajsf.ApplicationFinder;
+import com.sun.faces.jsf_extensions_javajsf.JavaJsfApplication;
 import com.sun.faces.jsf_extensions_javajsf.JavaJSFLogger;
 import java.beans.BeanInfo;
 import java.io.IOException;
+import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -94,12 +96,22 @@ public class JavaJsfViewDeclarationLanguage extends ViewDeclarationLanguageWrapp
 
     @Override
     public void buildView(FacesContext context, UIViewRoot root) throws IOException {
+        if (null == appFinder) {
+            getWrapped().buildView(context, root);
+            return;
+        }
+        instantiateAndInjectApplications(context);
         faceletViewDeclarationLanguage.buildView(context, root);
-        performPerSessionInitialization(context);
+        linkMainWindowToViewRoot(context, root);
+        
     }
 
     @Override
     public UIViewRoot createView(FacesContext context, String viewId) {
+        if (null == appFinder) {
+            return getWrapped().createView(context, viewId);
+        }
+
         UIViewRoot result = getWrapped().createView(context, "/javajsf.xhtml");
 
         return result;
@@ -165,8 +177,47 @@ public class JavaJsfViewDeclarationLanguage extends ViewDeclarationLanguageWrapp
     
     private static final String JAVAJSF_APPLICATIONS_DATA_STRUCTURE = "com.sun.faces.jsf_extensions_javajsf.APPLICATIONS";
         
+    
+    private void linkMainWindowToViewRoot(FacesContext context, UIViewRoot root) {
+        
+        com.sun.faces.jsf_extensions_javajsf.Application app = findCurrentApplication(context);
+        if (null != app) {
+            UIComponent body = root.findComponent("javajsf_body");
+            List<UIComponent> bodyChildren = body.getChildren();
+            bodyChildren.clear();
+            bodyChildren.add(app.getMainWindow());
+        }
+    }
+    
+    private boolean currentRequestMatchesApplication(FacesContext context, JavaJsfApplication appAnnotation) {
+        boolean result = true;
+        
+        // PENDING(edburns): implement
+        return result;
+    }
+    
+    private com.sun.faces.jsf_extensions_javajsf.Application findCurrentApplication(FacesContext context) {
+        com.sun.faces.jsf_extensions_javajsf.Application result = null;
+        ExternalContext extContext = context.getExternalContext();
+        Map<String, Object> sessionMap = extContext.getSessionMap();
+        PerSessionJavaJSFApplicationManager appManager = 
+                (PerSessionJavaJSFApplicationManager) sessionMap.get(JAVAJSF_APPLICATIONS_DATA_STRUCTURE);
+        assert(null != appManager);
+        for (String cur : appFinder.getClassesAnnotatedWithJavaJSFApplication()) {
+            com.sun.faces.jsf_extensions_javajsf.Application app = 
+                    (com.sun.faces.jsf_extensions_javajsf.Application) appManager.getApplication(cur);
+            JavaJsfApplication appAnnotation = (JavaJsfApplication) 
+                    app.getClass().getAnnotation(JavaJsfApplication.class);
+            if (currentRequestMatchesApplication(context, appAnnotation)) {
+                result = app;
+                break;
+            }
+        }
+        
+        return result;
+    }
 
-    private void performPerSessionInitialization(FacesContext context) {
+    private void instantiateAndInjectApplications(FacesContext context) {
         ExternalContext extContext = context.getExternalContext();
         // No-one complains when Vaadin insists that a session be created.
         Map<String, Object> sessionMap = extContext.getSessionMap();
@@ -178,36 +229,68 @@ public class JavaJsfViewDeclarationLanguage extends ViewDeclarationLanguageWrapp
         }
         
         // Have the JavaJSF applications been initialized for this session?
-        if (!appManager.isApplicationsInitialized()) {
-            boolean allAppsSuccessfullyInitialized = true;
+        if (!appManager.isApplicationsInstantiatedAndInjected()) {
+            boolean allAppsSuccessfullyInstantiatedAndInjected = true;
             for (String cur : appFinder.getClassesAnnotatedWithJavaJSFApplication()) {
                 ClassLoader cl = getCurrentLoader(this);
                 try {
                     Class appClass = cl.loadClass(cur);
-                    com.sun.faces.jsf_extensions_javajsf.Application app = 
-                            (com.sun.faces.jsf_extensions_javajsf.Application) appClass.newInstance();
-                    app.setJsfApplication(context.getApplication());
-                    appManager.addApplication(cur, app);
-                    appFinder.invokePostConstruct(extContext, app);
-                    appFinder.inject(extContext, app);
-                    app.init();
+                    
+                    JavaJsfApplication appAnnotation = (JavaJsfApplication) 
+                            appClass.getAnnotation(JavaJsfApplication.class);
+                    if (currentRequestMatchesApplication(context, appAnnotation)) {
+                        com.sun.faces.jsf_extensions_javajsf.Application app = 
+                                (com.sun.faces.jsf_extensions_javajsf.Application) appClass.newInstance();
+                        app.setJsfApplication(context.getApplication());
+                        app.setJsfViewDeclarationLanguage(this);
+                        appManager.addApplication(cur, app);
+                        appFinder.invokePostConstruct(extContext, app);
+                        appFinder.inject(extContext, app);
+                    }
                 } catch (Exception ex) {
-                    allAppsSuccessfullyInitialized = false;
+                    allAppsSuccessfullyInstantiatedAndInjected = false;
                     if (LOGGER.isLoggable(Level.SEVERE)) {
                         Object [] params = new Object[]{ cur, ex };
                         LOGGER.log(Level.SEVERE, "javajsf.cannot_create_application", params);
+                        LOGGER.log(Level.SEVERE, "", ex);
                     }
                 } 
             }
-            appManager.setApplicationsInitialized(allAppsSuccessfullyInitialized);
+            appManager.setApplicationsInstantiatedAndInjected(allAppsSuccessfullyInstantiatedAndInjected);
             
         }
         
     }
 
+    public void initApplications(FacesContext context) {
+        ExternalContext extContext = context.getExternalContext();
+        Map<String, Object> sessionMap = extContext.getSessionMap();
+        PerSessionJavaJSFApplicationManager appManager = 
+                (PerSessionJavaJSFApplicationManager) sessionMap.get(JAVAJSF_APPLICATIONS_DATA_STRUCTURE);
+        assert(null != appManager);
+        
+        // Have the JavaJSF applications been initialized for this session?
+        if (!appManager.isApplicationsInitialized()) {
+            boolean allAppsSuccessfullyInitialized = true;
+            for (String cur : appFinder.getClassesAnnotatedWithJavaJSFApplication()) {
+                com.sun.faces.jsf_extensions_javajsf.Application app = 
+                        (com.sun.faces.jsf_extensions_javajsf.Application) appManager.getApplication(cur);
+                JavaJsfApplication appAnnotation = (JavaJsfApplication) 
+                        app.getClass().getAnnotation(JavaJsfApplication.class);
+                if (currentRequestMatchesApplication(context, appAnnotation)) {
+                    app.init();
+                }
+            }
+            appManager.setApplicationsInitialized(allAppsSuccessfullyInitialized);
+        }
+        
+    }
+
+    
     private class PerSessionJavaJSFApplicationManager {
         
         private boolean applicationsInitialized = false;
+        private boolean applicationsInstantiatedAndInjected = false;
         private Map<String, com.sun.faces.jsf_extensions_javajsf.Application> apps;
 
         public PerSessionJavaJSFApplicationManager() {
@@ -220,6 +303,14 @@ public class JavaJsfViewDeclarationLanguage extends ViewDeclarationLanguageWrapp
 
         public void setApplicationsInitialized(boolean applicationsInitialized) {
             this.applicationsInitialized = applicationsInitialized;
+        }
+
+        public boolean isApplicationsInstantiatedAndInjected() {
+            return applicationsInstantiatedAndInjected;
+        }
+
+        public void setApplicationsInstantiatedAndInjected(boolean applicationsInstantiatedAndInjected) {
+            this.applicationsInstantiatedAndInjected = applicationsInstantiatedAndInjected;
         }
         
         public void addApplication(String className, 

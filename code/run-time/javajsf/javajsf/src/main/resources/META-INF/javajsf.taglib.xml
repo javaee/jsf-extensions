@@ -1,8 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 2010 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -40,23 +41,15 @@
 
 -->
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:jj="http://jsf.java.net/javajsf"
-      xmlns:f="http://java.sun.com/jsf/core">
-<h:head id="javajsf_head">
-    <title>JavaJSF Framework</title>
-    <link rel="shortcut icon" type="image/vnd.microsoft.icon" 
-          href="#{resource['javajsf:favicon.ico']}" />
-    <link rel="icon" type="image/vnd.microsoft.icon" 
-          href="#{resource['javajsf:favicon.ico']}" />
-</h:head>
+<facelet-taglib xmlns="http://java.sun.com/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facelettaglibrary_2_2.xsd"
+              version="2.2">
 
-<h:body id="javajsf_body">
+    <namespace>http://jsf.java.net/javajsf</namespace>
+    <tag>
+        <tag-name>javajsf</tag-name>
+        <handler-class>com.sun.faces.jsf_extensions_javajsf.vdl.JavaJsfTagHandler</handler-class>
+    </tag>
 
-  <jj:javajsf />
-
-</h:body>
-</html>
+</facelet-taglib>

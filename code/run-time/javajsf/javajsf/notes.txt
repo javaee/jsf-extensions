@@ -15,3 +15,52 @@ To do that, I need to expose the com.sun.faces.spi for InjectionProvider.
 InjectionProvider
 InjectionProviderFactory
 com.sun.faces.spi.AnnotationScanner
+
+How a composite component is created, initialized, and populated.
+
+0. ComponentTagHandlerDelegateImpl.apply() calls
+   CompositeComponentTagHandler.createComponent().
+
+1. CompositeComponentTagHandler.createComponent() calls
+   Application.createComponent(Resource).
+
+  2. FaceletVDL.getComponentMetadata() calls createComponentMetadata().
+     This creates a temporary NamingContainer UIComponent that serves as
+     the cc root and a temporary PanelGroup component that is set as the
+     COMPOSITE_FACET_NAME facet of the cc root.
+
+    3. If isBuildingMetadata is true, InterfaceHandler.apply() will call
+       imbueComponentWithMetadata(). This includes the
+       DeclareFacetHandler.
+
+  4. back in createComponentMetadata(), we extract the BeanInfo from the
+     temporary NamingContainer UIComponent and return it.
+
+  5. back in createComponent(), we create the *real* cc root and take
+     the BeanInfo and the ccresource and put them both in the cc root's
+     attr Map.
+
+2. back in ComponentTagHandlerDelegateImpl.apply(), we call
+     doNewComponentActions().  We don't need to replicate this in javajsf.
+
+3. assignUniqueId(): this is important, we must do this.  Copy from
+     ComponentTagHandlerDelegateImpl.assignUniqueId().
+
+4. in ComponentTagHandlerDelegateImpl.apply(), call
+     owner.applyNextHandler().  This is important.
+
+   This calls CompositeComponentTagHandler.applyNextHandler(), 
+
+    do setAttributes().  
+
+    skip super.applyNextHandler(). The point of this method is to let
+     the child elements of the cc component tag in the using page get
+     applied.  In javajsf, we don't have those yet.
+
+    do applyCompositeComponent().  We need to replicate these steps.
+
+    do the retargeting.
+
+
+    
+

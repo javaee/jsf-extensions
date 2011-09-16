@@ -37,19 +37,33 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.jsf_extensions_javajsf;
+package com.sun.faces.jsf_extensions_javajsf.vdl;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.io.IOException;
+import javax.faces.FactoryFinder;
+import javax.faces.component.UIComponent;
+import javax.faces.view.ViewDeclarationLanguageFactory;
+import javax.faces.view.facelets.FaceletContext;
+import javax.faces.view.facelets.TagConfig;
+import javax.faces.view.facelets.TagHandler;
 
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-@Inherited
-@Documented
-public @interface JavaJSFApplication {
+public class JavaJsfTagHandler extends TagHandler {
+    
+    public JavaJsfTagHandler(TagConfig config) {
+        super(config);
+    }
 
+    @Override
+    public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
+        ViewDeclarationLanguageFactory factory = (ViewDeclarationLanguageFactory)
+                FactoryFinder.getFactory(FactoryFinder.VIEW_DECLARATION_LANGUAGE_FACTORY);
+        JavaJsfViewDeclarationLanguage vdl = (JavaJsfViewDeclarationLanguage)
+                factory.getViewDeclarationLanguage("javajsf");
+        vdl.initApplications(ctx.getFacesContext());
+
+        
+    }
+    
+    
+    
 }

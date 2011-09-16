@@ -41,18 +41,26 @@
 
 package com.sun.faces.jsf_extensions_javajsf;
 
-import java.util.List;
+import java.io.IOException;
 import java.util.Map;
-import javax.faces.application.Resource;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.faces.FactoryFinder;
 import javax.faces.application.ResourceHandler;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIPanel;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewDeclarationLanguage;
+import javax.faces.view.facelets.Facelet;
+import javax.faces.view.facelets.FaceletFactory;
 
 
 public abstract class Application  {
-
+    
+    private static final Logger LOGGER = JavaJSFLogger.VDL.getLogger();
+    
     private javax.faces.application.Application jsfApplication;
+    private ViewDeclarationLanguage jsfVDL;
     private ResourceHandler resourceHandler;
 
     public void setJsfApplication(javax.faces.application.Application jsfApplication) {
@@ -64,6 +72,16 @@ public abstract class Application  {
         return this.jsfApplication;
     }
 
+    public ViewDeclarationLanguage getJsfViewDeclarationLanguage() {
+        return jsfVDL;
+    }
+
+    public void setJsfViewDeclarationLanguage(ViewDeclarationLanguage jsfVDL) {
+        this.jsfVDL = jsfVDL;
+    }
+    
+    
+
     private UIComponent mainWindow;
 
     public UIComponent getMainWindow() {
@@ -72,12 +90,6 @@ public abstract class Application  {
 
     public void setMainWindow(UIComponent mainWindow) {
         this.mainWindow = mainWindow;
-        FacesContext context = FacesContext.getCurrentInstance();
-        UIViewRoot root = context.getViewRoot();
-        UIComponent body = root.findComponent("javajsf_body");
-        List<UIComponent> bodyChildren = body.getChildren();
-        bodyChildren.clear();
-        bodyChildren.add(mainWindow);
     }
 
     private Map<UIComponent, String> windows;
@@ -112,12 +124,27 @@ public abstract class Application  {
     
     private UIComponent createCompositeComponent(FacesContext context, String componentName) {
         UIComponent result = null;
-        // PENDING(edburns): inspect all the resource libraries in the application, looking 
-        // for a composite component componentName.  For now, just hard code "javajsf"
-        String resourceName = componentName.endsWith(".xhtml") ? componentName : 
-                componentName + ".xhtml";
-        Resource compositeResource = resourceHandler.createResource(resourceName, "javajsf");
-        result = jsfApplication.createComponent(context, compositeResource);
+        
+        FaceletFactory faceletFactory = (FaceletFactory)
+                FactoryFinder.getFactory(FactoryFinder.FACELET_FACTORY);
+        Facelet usingPageFacelet = null;
+        
+        try {
+            usingPageFacelet = faceletFactory.getFacelet(componentName + "_using.xhtml");
+            UIPanel tmp = (UIPanel)
+                    jsfApplication.createComponent("javax.faces.Panel");
+            usingPageFacelet.apply(context, tmp);
+            result = tmp.findComponent("javajsf");
+            tmp.getChildren().clear();
+        } catch (IOException ioe) {
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                Object [] params = {
+                    componentName, ioe
+                };
+                LOGGER.log(Level.SEVERE, "javajsf.cannot_create_composite_component", params);
+                LOGGER.log(Level.SEVERE, "", ioe);
+            }
+        }
         
         return result;
     }

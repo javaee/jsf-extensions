@@ -104,6 +104,7 @@
     </plugins>
   </build>
 
+  <!--
   <repositories>
     <repository>
           <id>prime-repo</id>
@@ -111,7 +112,6 @@
           <url>http://repository.prime.com.tr/</url>
     </repository>
   </repositories>
-  <!--
   <pluginRepositories>
     <pluginRepository>
       <id>codehaus-snapshots</id>

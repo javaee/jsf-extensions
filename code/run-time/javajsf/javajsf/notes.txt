@@ -61,6 +61,71 @@ How a composite component is created, initialized, and populated.
 
     do the retargeting.
 
+SECTION: FACET
 
-    
+How a facet is added when using a regular composite component page.
 
+1. when the <f:facet> tag is applied, ComponentSupport.addComponent() is called.
+
+  This does parent.getFacets().put(facetName, child) where parent is the
+  UINamingContainer that is the composite component and child is the
+  direct child component of the <f:facet> element.
+
+2. RenderFacetHandler.onComponentPopulated() is called.  The parent is
+the UIPanel.  The child is the OutputCompositeFacet UIOutput. At
+this point, we *do* have the name of the facet, and we push this into
+the.  
+
+3. CompositeFacetRenderer.encodeChildren() is called.  
+
+
+Q: Is the OutputCompositeFacet getting created and added to the tree in
+the case of JavaJsf?
+A: yes.
+
+SECTION: ReapplySomeFaceletsAfterInit
+
+After fabricating the facelet and applying it, extract the first
+ComponentHandler you encounter in traversing the handlers and save it
+aside, along with the NamingContainer component.
+
+
+After the init() method returns, travese this list and re-apply the
+facelets to each composite component created.
+
+20110917
+
+In the case of javajsf, FACET.2 happens first.  Then app.init() get a
+crack at adding facets, which is the intent of FACET.1.  I try to
+re-apply the facelet to force FACET.1 and FACET.2 to happen again.
+
+Change ReapplySomeFaceletsAfterInit to simply, for each created
+composite component, manually take the steps in FACET.2.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+The thing do to might be to return to the approach of having javajsf
+create the composite compnent using
+application.createComponent(Resource), and make it so
+ReapplySomeFaceletsAfterInit is really ApplySomeFaceletsAfterInit and
+they happen to find the already created composite components.

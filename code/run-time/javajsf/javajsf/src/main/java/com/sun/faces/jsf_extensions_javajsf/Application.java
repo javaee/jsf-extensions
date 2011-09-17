@@ -42,6 +42,7 @@
 package com.sun.faces.jsf_extensions_javajsf;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -53,6 +54,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewDeclarationLanguage;
 import javax.faces.view.facelets.Facelet;
 import javax.faces.view.facelets.FaceletFactory;
+import javax.faces.view.facelets.FaceletHandler;
 
 
 public abstract class Application  {
@@ -102,6 +104,7 @@ public abstract class Application  {
         UIComponent result = null;
         FacesContext context = FacesContext.getCurrentInstance();
         result = createCompositeComponent(context, componentType);
+        result.setId(context.getViewRoot().createUniqueId());
         return result;
     }
 
@@ -116,6 +119,7 @@ public abstract class Application  {
             // Look for a composite component
             result = createCompositeComponent(context, componentType);
         }
+        result.setId(context.getViewRoot().createUniqueId());
         
         return result;
     }
@@ -131,8 +135,9 @@ public abstract class Application  {
         
         try {
             usingPageFacelet = faceletFactory.getFacelet(componentName + "_using.xhtml");
-            UIPanel tmp = (UIPanel)
-                    jsfApplication.createComponent("javax.faces.Panel");
+            UIComponent tmp = (UIComponent)
+                    jsfApplication.createComponent("javax.faces.NamingContainer");
+            tmp.setId(context.getViewRoot().createUniqueId());
             usingPageFacelet.apply(context, tmp);
             result = tmp.findComponent("javajsf");
             tmp.getChildren().clear();

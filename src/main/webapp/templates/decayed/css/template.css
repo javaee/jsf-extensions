@@ -154,8 +154,7 @@ p.postinfo a:hover {color: #CCC;}
 
 /* content */
 #content {
-position:relative;
-	left: 270px;
+	margin-left: 270px;
 	top: 90px;
 	width: 610px;
 }

@@ -1,4 +1,3 @@
-var prefsLoaded = false;
 var skins=["blue.css","green.css","orange.css","pink.css"];
 
 function setActiveStyleSheet(title) {

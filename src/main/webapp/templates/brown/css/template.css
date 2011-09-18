@@ -1,0 +1,237 @@
+body
+{
+	margin: 0 auto;
+	padding: 0;
+	background-color: #000000;
+	background-image: url('Page-BgTexture.jpg?ln=images');
+	background-repeat: repeat-x;
+	background-attachment: scroll;
+	background-position: top center;
+	font-family: Arial, Helvetica, Sans-Serif;
+	font-size: 12px;
+	font-style: normal;
+	font-weight: normal;
+  	color: #4A4A4A;
+	
+}
+
+#wrapper
+{
+	width: 1050px;
+	margin-left:auto;
+	margin-right:auto;
+
+}
+
+#header{
+	height: 400px;
+	background-image: url('Header.jpg?ln=images');
+	background-repeat: no-repeat;
+	background-position: center bottom;
+	border:1px solid black;
+}
+
+#logo{
+	background-image: url('logo.png?ln=images');
+	background-repeat: no-repeat;
+	background-position: top left;
+	height:143px;
+	margin-top:0px;
+	width:100%;
+	color:white;
+	font-family:"Comic Sans Ms";
+}
+
+#menu{
+  background-repeat:repeat;
+  background-image: url('nav.png?ln=images');
+  position:relative;
+  height:25px;
+  top:0px;
+  width:1050px;
+  margin-left:auto;
+  margin-right:auto;
+  left:auto;
+  right:auto;
+}
+
+#menu ul {
+	  
+	  float:left;
+	  position:absolute;
+	  top:-12px;
+	  
+ 
+}
+#menu ul li {
+ float:left;
+ line-height:25px;
+ text-align:center;
+ margin:0px;
+ display:inline;
+ color: #000000;
+font-family: Arial, Helvetica, Sans-Serif;
+font-size: 12px;
+font-style: normal;
+font-weight: normal;
+ 
+}
+
+#menu ul li a {
+	font-size:11px;
+	text-decoration:none;
+	text-transform:uppercase;
+	font-weight:bold;
+	width:100px;
+	display:block;
+	color: #000000;
+}
+
+#menu ul li a:hover
+{
+	color: #FFFFFF;
+	border-color: #533932;
+	background-position: 0 -20px;
+}
+
+
+#content{
+	width: 1050x;
+	margin-left:auto;
+	margin-right:auto;
+	background-color:rgb(250,250,250);
+	padding-top:20px;
+	height:700px;
+}
+p {
+margin: 0px 0px;
+font-family:Tahoma;
+line-height:200%;
+text-align:justify;
+}
+
+
+#content2{
+	width: 900px;
+	margin-left:auto;
+	margin-right:auto;
+	height:700px;
+}
+
+a
+{
+font-family: Arial, Helvetica, Sans-Serif;
+font-style: normal;
+font-weight: bold;
+text-decoration: none;
+  color: #533932;
+}
+
+/* Adds special style to an unvisited link. */
+a:link
+{
+font-family: Arial, Helvetica, Sans-Serif;
+font-style: normal;
+font-weight: bold;
+text-decoration: underline;
+  color: #533932;
+}
+
+/* :hover - adds special style to an element when you mouse over it. */
+a:hover, a.hover
+{
+font-family: Arial, Helvetica, Sans-Serif;
+text-decoration: none;
+ color: #683F3C;
+}
+
+/* Finish Content link style */
+
+/* Resert some headings default style & links default style for links in headings*/
+h1, h2, h3, h4, h5, h6,
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a
+h1 a:hover, h2 a:hover, h3 a:hover, h4 a:hover, h5 a:hover, h6 a:hover
+h1 a:visited, h2 a:visited, h3 a:visited, h4 a:visited, h5 a:visited, h6 a:visited
+{
+  font-weight: normal;
+  font-style: normal;
+  text-decoration: none;
+}
+
+
+/* Start Content headings Fonts & Colors  */
+h1, h1 a, h1 a:link, h1 a:visited, h1 a:hover
+{
+font-family: Arial, Helvetica, Sans-Serif;
+font-size: 28px;
+font-style: normal;
+font-weight: bold;
+text-align: left;
+  color: #523831;
+}
+
+h2, h2 a, h2 a:link, h2 a:visited, h2 a:hover
+{
+font-family: Arial, Helvetica, Sans-Serif;
+font-size: 22px;
+font-style: normal;
+font-weight: bold;
+text-align: left;
+  color: #432E28;
+}
+
+h3, h3 a, h3 a:link, h3 a:visited, h3 a:hover
+{
+font-family: Arial, Helvetica, Sans-Serif;
+font-size: 18px;
+font-style: normal;
+font-weight: bold;
+text-align: left;
+  color: #533932;
+}
+
+h4, h4 a, h4 a:link, h4 a:visited, h4 a:hover
+{
+font-family: Arial, Helvetica, Sans-Serif;
+font-size: 16px;
+font-style: normal;
+font-weight: bold;
+text-align: left;
+  color: #533932;
+}
+
+h5, h5 a, h5 a:link, h5 a:visited, h5 a:hover
+{
+font-family: Arial, Helvetica, Sans-Serif;
+font-size: 14px;
+font-style: normal;
+font-weight: bold;
+text-align: left;
+  color: #47312B;
+}
+
+h6, h6 a, h6 a:link, h6 a:visited, h6 a:hover
+{
+font-family: Arial, Helvetica, Sans-Serif;
+font-size: 14px;
+font-style: normal;
+font-weight: bold;
+text-align: left;
+  color: #47312B;
+}
+/* Finish Content headings Fonts & Colors  */
+
+th {
+	background-image:url(BlockHeader.png?ln=images);
+	color:white;
+    border: solid 1px #5E5E5E;
+    font-weight: bold;
+    font-family: Helvetica,Arial,sans-serif;
+  
+    
+}
+
+td {
+	text-align:center;
+	
+}

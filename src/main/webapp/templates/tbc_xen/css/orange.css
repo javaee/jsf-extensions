@@ -1,0 +1,84 @@
+/* Orange */
+
+a {
+color: #f9a82f;
+}
+
+blockquote {
+background: url(bq_orange.png?ln=images) 5px 5px no-repeat;
+}
+
+.code {
+border-left: 5px solid #f9a82f;
+}
+
+ul li {
+background: url(orange_ul.png?ln=images) no-repeat 0 6px;
+}
+
+#showcase_inner_right .moduletable h3,
+#showcase_inner_left .moduletable h3 {
+background: url(orange_bullet.png?ln=images) 2px 1px no-repeat;
+}
+
+.componentheading {
+background: url(orange_button.png?ln=images) 2px 2px no-repeat;
+}
+
+#showcase {
+background:#f9a82f;
+}
+
+#no_showcase {
+background:#f9a82f;
+}
+
+#menu a {
+background:#fff;
+border-left:3px solid #f9a82f; 
+border-right:3px solid #f9a82f; 
+border-top:3px solid #f9a82f; 
+}
+
+#menu a#active_menu {
+background:#f9a82f;
+}
+
+#rightcolwrap .moduletable {
+border:4px solid #f9a82f;
+}
+
+#rightcolwrap .moduletable h3 {
+background:#f9a82f url(orange_bullet.png?ln=images) 2px 0px no-repeat;
+color:#fff;
+}
+
+#rightcolwrap .moduletable-white h3 {
+background:#fff url(orange_bullet.png?ln=images) 2px 0px no-repeat;
+}
+
+#pathway {
+background:url(orange_bullet.png?ln=images) 0 0 no-repeat;
+}
+
+a.readon {
+border:3px solid #f9a82f;
+}
+
+a.readon:hover {
+color:white;
+background:#f9a82f;
+}
+
+.inputbox {
+border: 2px solid #f9a82f;
+}
+
+#footer {
+border-top:10px solid #f9a82f;
+}
+
+#rightcolwrap a.mainlevel,
+#showcase_inner_right a.mainlevel {
+	border-bottom:1px solid #f9a82f;
+}

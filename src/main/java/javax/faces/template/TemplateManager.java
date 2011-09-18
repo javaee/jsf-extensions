@@ -28,11 +28,6 @@ public final class TemplateManager extends PluginManager<Template> {
     
     public static final String TEMPLATE_VAR_NAME = "template";
     
-    /**
-     * <p>templates folder</p>
-     */
-    
-    public static final String TEMPLATE_FOLDER = "templates";
     
     
 	public TemplateManager() {
@@ -41,12 +36,11 @@ public final class TemplateManager extends PluginManager<Template> {
 	}
 	
 	@Override
-	public Resource resolveResource(String resourceName,String library,String contentType) {
+	public Resource createResource(String resourceName,String libraryName) {
 		
 		return resourceName.equals(Template.THUMBNAIL)?
-				folder.getDocument(Template.THUMBNAIL,library):
-				getSelectedTemplate()
-			   .getResource(resourceName, library);    
+				getTemplate(libraryName).getResource(resourceName):
+				getSelectedTemplate().getResource(resourceName, libraryName);    
 	}
 
 	private Template getSelectedTemplate() {
@@ -82,13 +76,13 @@ public final class TemplateManager extends PluginManager<Template> {
 	private void addSessionParameters(Template template) {
 	
 		addSessionParameter(SELECTED_TEMPLATE, template.getId());
-		addSessionParameter("template",getPage(template));
+		addSessionParameter(TEMPLATE_VAR_NAME,getPage(template));
 		
 	}
 	
 	private String getPage(Template template) {
 		
-		return "/"+TEMPLATE_FOLDER+"/"+template.getId()+"/"+Template.PAGE;
+		return "/"+getConfiguration().folder()+"/"+template.getId()+"/"+Template.PAGE;
 		
 	}
 	

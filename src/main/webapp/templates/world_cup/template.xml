@@ -1,0 +1,14 @@
+<template>
+
+<name>world_cup</name>
+<version>1.0.0</version>
+<creationDate>2010-06-15</creationDate>
+<author>Themza Team</author>
+<authorEmail>templates@themza.com</authorEmail>
+<authorUrl>http://www.themza.com</authorUrl>
+<copyright>ThemZa 2009</copyright>
+<license>ThemZa TOS</license>
+<description>World Cup Heroes</description>
+
+
+</template>

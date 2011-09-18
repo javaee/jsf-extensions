@@ -18,7 +18,7 @@ public final class ModuleManager extends PluginManager<Module> {
 	}
 
 	@Override
-	public Resource resolveResource(String resourceName, String library,String contentType) {
+	public Resource createResource(String resourceName, String libraryName) {
 		return null;
 	}
 	

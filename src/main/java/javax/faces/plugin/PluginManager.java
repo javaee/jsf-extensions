@@ -35,12 +35,7 @@ public abstract class PluginManager<T extends Plugin> implements PhaseListener,R
      */
     
 	protected  PluginLoader<T>  loader;
-	
-	/**
-     * <p>plugins folder</p>
-     */
-    
-	protected  Folder folder;
+
 	
 	/**
      * <p>logger</p>
@@ -81,9 +76,9 @@ public abstract class PluginManager<T extends Plugin> implements PhaseListener,R
 	
 	protected boolean loadPlugins(String path) {
 		
-		this.folder=new Folder(path,getConfiguration().folder());
-		for(Folder folder : this.folder.getSubFolders()) {
-			Document metadata=new Document(folder,getConfiguration().metadata());
+		Folder root=new Folder(path,getConfiguration().folder());
+		for(Folder folder : root.getSubFolders()) {
+			Document metadata=folder.getDocument(getConfiguration().metadata());
 			try {
 				  addPlugin(metadata);
 				} catch(Exception e) {
@@ -91,7 +86,6 @@ public abstract class PluginManager<T extends Plugin> implements PhaseListener,R
 			}
 		}
 		return plugins.size()>0;
-		
 	}
 	
 	protected String getRealPath() {
@@ -104,9 +98,9 @@ public abstract class PluginManager<T extends Plugin> implements PhaseListener,R
 	
 	public void addPlugin(Document metadata) throws Exception {
 		
-		if(metadata.exists()) {
+		if(metadata!=null) {
 			T plugin=loadPlugin(metadata);
-			plugin.setFolder(metadata.getFolder());
+			plugin.setMetadata(metadata);
 			addPlugin(plugin);
 		}	
 	}
@@ -201,7 +195,7 @@ public abstract class PluginManager<T extends Plugin> implements PhaseListener,R
 		return null;
 	}
 
-	private Manage getConfiguration() {
+	protected Manage getConfiguration() {
 		
 		return getClass().getAnnotation(Manage.class);
 		

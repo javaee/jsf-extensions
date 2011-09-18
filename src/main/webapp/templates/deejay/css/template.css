@@ -1,0 +1,242 @@
+body
+{
+  margin: 0 auto;
+  padding: 0;
+  background-color: #000000;
+  background-image: url('Page-BgTexture.jpg?ln=images');
+  background-repeat: repeat-x;
+  background-attachment: fixed;
+  background-position: top left;
+font-family: Lucida Console,Helvetica,Arial,sans-serif;
+  font-family: Arial, Helvetica, Sans-Serif;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: normal;
+  color: #CFCFCF;
+  
+}
+
+p {
+margin: 0px 0px;
+font-family:Verdana;
+line-height:250%;
+text-align:justify;
+}
+
+#wrapper{
+
+background-image: url(header.png?ln=images);
+background-repeat: no-repeat;
+background-position: left top;
+width:870px;
+margin-left:auto;
+margin-right:auto;
+
+}
+
+#header{
+color: #000000;
+text-align: right;
+height: 225px;
+background-image: url('header.jpg?ln=images');
+background-repeat: no-repeat;
+background-position: center center;
+width:870px;
+}
+
+#footer 
+{
+  background-repeat:no-repeat;
+  background-image: url('Footer.png?ln=images');
+  height: 100px;
+  
+}
+
+#content {
+	margin-top:20px;
+	padding:15px;
+	height:700px;
+	background-image: url('Page-BgGradient.jpg?ln=images');
+  
+	
+}
+
+#menu ul{
+  background-repeat:no-repeat;
+  background-image: url('nav.png?ln=images');
+  position:absolute;
+  top:225px;
+  width:870px;
+  
+}
+
+#menu ul li {
+ float:left;
+ line-height:27px;
+ text-align:center;
+ margin:0px;
+ 
+}
+
+#menu ul li a {
+	font-size:11px;
+	text-decoration:none;
+	text-transform:uppercase;
+	font-weight:bold;
+	width:100px;
+	display:block;
+	border-right: solid 1px #5E5E5E;
+	height: 27px;
+	background-image: url('menuItem.png?ln=images');
+	font-family: Arial, Helvetica, Sans-Serif;
+	font-size: 10px;
+	color: #1C1C1C;
+	margin-right:3px;
+}
+
+#menu ul li a:hover {
+	color: #F0F0F0;
+}
+#logo {
+
+	font-size:25px;
+	width:870px;
+	text-align:left;
+	font-family: Arial, Helvetica, Sans-Serif;
+	font-style: normal;
+	font-weight: bold;
+	color: #1F1F1F;
+	margin-left:50px;
+}
+
+a
+{
+  font-family: Arial, Helvetica, Sans-Serif;
+  text-decoration: underline;
+  color: #90A7E4;
+}
+
+/* Adds special style to an unvisited link. */
+a:link
+{
+  font-family: Arial, Helvetica, Sans-Serif;
+  text-decoration: underline;
+  color: #90A7E4;
+}
+
+
+
+/* :hover - adds special style to an element when you mouse over it. */
+a:hover, a.hover
+{
+  font-family: Arial, Helvetica, Sans-Serif;
+  text-decoration: none;
+  color: #BABABA;
+}
+
+/* Finish Content link style */
+
+/* Resert some headings default style & links default style for links in headings*/
+h1, h2, h3, h4, h5, h6,
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a
+h1 a:hover, h2 a:hover, h3 a:hover, h4 a:hover, h5 a:hover, h6 a:hover
+h1 a:visited, h2 a:visited, h3 a:visited, h4 a:visited, h5 a:visited, h6 a:visited
+{
+  font-weight: normal;
+  font-style: normal;
+  text-decoration: none;
+}
+
+
+/* Start Content headings Fonts & Colors  */
+h1, h1 a, h1 a:link, h1 a:visited, h1 a:hover
+{
+  font-family: Arial, Helvetica, Sans-Serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: bold;
+  text-align: left;
+  color: #90A7E4;
+}
+
+h2, h2 a, h2 a:link, h2 a:visited, h2 a:hover
+{
+  font-family: Arial, Helvetica, Sans-Serif;
+  font-size: 14px;
+  text-align: left;
+  color: #90A7E4;
+}
+
+h3, h3 a, h3 a:link, h3 a:visited, h3 a:hover
+{
+  font-family: Arial, Helvetica, Sans-Serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: bold;
+  text-align: left;
+  color: #B9C7EE;
+}
+
+h4, h4 a, h4 a:link, h4 a:visited, h4 a:hover
+{
+  font-family: Arial, Helvetica, Sans-Serif;
+  font-size: 13px;
+  text-align: left;
+  color: #CFCFCF;
+}
+
+h5, h5 a, h5 a:link, h5 a:visited, h5 a:hover
+{
+  font-family: Arial, Helvetica, Sans-Serif;
+  font-size: 11px;
+  text-align: left;
+  color: #CFCFCF;
+}
+
+h6, h6 a, h6 a:link, h6 a:visited, h6 a:hover
+{
+  font-family: Arial, Helvetica, Sans-Serif;
+  font-size: 10px;
+  text-align: left;
+  color: #CFCFCF;
+}
+ul
+{
+  list-style-type: none;
+  color: #1F1F1F;
+  margin:0;
+  padding:0;
+}
+
+li
+{
+  font-size: 11px;
+  text-align: left;
+}
+
+
+th {
+	background:rgb(226,229,238);
+	color:black;
+    border: solid 1px #5E5E5E;
+    font-weight: bold;
+    font-family: Helvetica,Arial,sans-serif;
+  	font-size:11px;
+    
+}
+
+td {
+	text-align:center;
+	
+}
+.ui-widget-content {  background:transparent;
+background-color: #363636;
+	border-color: #262626;
+	border-style: dashed;
+	border-width: 1px;
+	font-family: Tahoma,Arial, Helvetica, Sans-Serif;
+	font-style: normal;
+	font-weight: bold;
+	color: #8CA3E3;
+	font-size:11px;
+}

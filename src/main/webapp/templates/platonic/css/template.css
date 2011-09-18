@@ -1,0 +1,151 @@
+*
+{
+border: 0;
+margin: 0;
+}
+
+body {
+max-width:902px;
+margin-left:auto;
+margin-right:auto;
+font-family:Arial, "Times New Roman", Times, serif;
+line-height: 1.3em;
+font-size: 12px;
+color: #333;
+background: rgb(255,255,255);
+
+}
+
+
+
+#header {
+	height: 252px;
+	background: url(header.jpg?ln=images) top center no-repeat;
+	width:902px;
+	color:white;
+}
+
+h3,h2{
+	margin-bottom: 0px;
+	font-family: Georgia, "Times New Roman", Times, serif;
+	font-size: 20px;
+	text-align: left;
+	color: #A30E16;
+	padding: 10;
+}
+
+
+
+#content{
+margin-top:60px;
+height:700px;
+background-image:url(content.jpg?ln=images);
+margin-left:12px;
+margin-right:12px;
+}
+
+#content2{
+margin-left:auto;
+margin-right:auto;
+width:800px;
+}
+
+
+#footer{
+margin: 0 auto;
+width: 876px;
+height: 30px;
+text-align: center;
+vertical-align: top;
+padding-top: 10px;
+border:1px solid #FFFFFF;
+background-color:rgb(19,112,169);
+color:white;
+
+}
+
+#menu ul{
+	width:878px;
+	padding:0px;
+	background: url(menu.jpg?ln=images) top center;
+	float:left;
+	margin-left:12px;
+	list-style: none;
+}
+
+#menu ul li {
+	float: left;
+	margin: 0;
+	padding: 0;
+	line-height:36px;
+	height: 36px;
+	background: url(menu_li.jpg?ln=images) top right no-repeat;
+}
+
+p {
+margin: 10px;
+line-height:200%;
+text-align:justify;
+}
+
+#menu ul li a {
+	font-family: Georgia, "Times New Roman", Times, serif;
+	font-size: 13px;
+	float: left;
+	display: block;
+	line-height: 36px;
+	padding: 0 24px 0 16px;
+	color: #FFFFFF;
+	text-decoration: none;
+	font-weight: bold;
+	text-transform:uppercase;
+}
+
+#menu ul li a:hover {
+	color: #CCCCCC;
+}
+
+#logo {
+	font-weight: normal;
+	font-family: Georgia, "Times New Roman", Times, serif;
+	font-size: 36px;
+	padding: 0;
+	margin-top: 70px;
+	letter-spacing: 1px;
+	color: #FFFFFF;
+	text-decoration: none;
+	outline: none;
+	line-height: 36px;
+	
+}
+
+
+th {
+color:white;
+text-align:center;
+font-size: 10px;
+-moz-border-radius: 10px;
+-webkit-border-radius: 10px;
+text-transform:uppercase;
+background-color:rgb(19,112,169);
+	
+	
+}
+
+td {
+text-align:center;
+font-size: 11px;
+
+}
+
+a:link, a:visited {
+	text-decoration: underline;
+	color: #A30E16;
+	
+}
+
+a:hover {
+	text-decoration: none;
+	color: #333;
+}
+.ui-widget-content {  background:transparent}

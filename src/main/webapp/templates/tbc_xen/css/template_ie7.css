@@ -1,0 +1,44 @@
+#menu {
+margin-bottom:-1px;
+}
+
+#menu a {
+padding-top:1px;
+padding-bottom:1px;
+height:27px;
+}
+
+#showcase_inner_right .moduletable {
+margin-top:10px;
+}
+
+#header {
+width:100%;
+height:145px;
+}
+
+#slogan {
+position:relative;top:25px;left:40px;
+}
+
+#logo {
+position:relative;top:10px;right:50px;
+}
+
+#rightcolwrap .moduletable,
+#rightcolwrap .moduletable-white,
+#rightcolwrap .moduletable-blue,
+#rightcolwrap .moduletable-orange,
+#rightcolwrap .moduletable-green,
+#rightcolwrap .moduletable-pink {
+background:#fff url(../images/mod_corner.png) bottom-2px right-2px no-repeat;
+}
+
+.sectiontableentry1,
+.sectiontableentry2,
+.sectiontableentry3,
+.sectiontableentry4,
+.sectiontableentry5,
+.sectiontableentry6 {
+text-align:left;
+}

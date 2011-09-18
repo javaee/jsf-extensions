@@ -16,17 +16,24 @@ public abstract class Plugin  {
 	protected String authorUrl="";
 	protected String license="GPL";
 	protected String copyright="";
+	protected Document metadata;
 	protected int index;
-    protected Folder folder;
+	   
     
     
     public Plugin() {
     	
     }
     
-    public Resource getResource(String resourceName,String library) {
+    public Resource getResource(String resourceName) {
     	
-    	return folder.getDocument(resourceName, library);
+    	return metadata.getFolder().getDocument(resourceName);
+    	
+    }
+    
+    public Resource getResource(String resourceName,String libraryName) {
+    	
+    	return metadata.getFolder().getDocument(resourceName, libraryName);
     	
     }
     
@@ -90,17 +97,9 @@ public abstract class Plugin  {
 	public void setAuthorUrl(String authorUrl) {
 		this.authorUrl = authorUrl;
 	}
-
-	public Folder getFolder() {
-		return folder;
-	}
-
-	public void setFolder(Folder folder) {
-		this.folder = folder;
-	}	
 	
 	public String getId() {
-		return folder.getName();
+		return metadata.getFolder().getName();
 	}
 
 	public String getLicense() {
@@ -113,6 +112,14 @@ public abstract class Plugin  {
 
 	public int getIndex() {
 		return index;
+	}
+
+	public Document getMetadata() {
+		return metadata;
+	}
+
+	public void setMetadata(Document metadata) {
+		this.metadata = metadata;
 	}
 
 	public void setIndex(int index) {

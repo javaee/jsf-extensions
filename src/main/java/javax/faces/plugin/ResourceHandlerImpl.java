@@ -22,24 +22,18 @@ public class ResourceHandlerImpl<T extends ResourceResolver> extends ResourceHan
 	@Override
     public Resource createResource(String resourceName)
     {
-        return createResource(resourceName, null, null);
+        return createResource(resourceName, null);
     }
 
     @Override
     public Resource createResource(String resourceName, String libraryName)
     {
-        return createResource(resourceName, libraryName, null);
+    	Resource resource=resolver.createResource(resourceName, libraryName);
+		return resource!=null ? resource : wrapped.createResource(resourceName, libraryName);
+		
     }
 
-	
-	@Override
-	public Resource createResource(String resourceName, String library,String contentType) {
-		
-		Resource resource=resolver.resolveResource(resourceName, library,contentType);
-		return resource!=null ? resource : wrapped.createResource(resourceName, library);
-		
-	}
-
+    
 	@Override
 	public ResourceHandler getWrapped() {
 		return wrapped;

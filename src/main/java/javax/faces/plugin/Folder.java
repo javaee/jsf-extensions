@@ -50,19 +50,23 @@ public class Folder {
 		return folders;	
 	}
 
-	public Document getDocument(String resourceName,String library) {
+	public Document getDocument(String resourceName,String libraryName) {
 		
-		Document document=library!=null?
-				new Document(file+File.separator+library,resourceName):
+		Document document=libraryName!=null?
+				new Document(file+File.separator+libraryName,resourceName):
 				new Document(file,resourceName);
-		return document.exists()?document:null;
+		return document.exists()?
+				document:
+				null;
 			
 	}
 	
 	public Document getDocument(String resourceName) {
 		
 		Document document=new Document(file,resourceName);
-		return document.exists()?document:null;
+		return document.exists()?
+			   document:
+			   null;
 		
 	}
 	

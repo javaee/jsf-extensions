@@ -1,0 +1,107 @@
+body{
+	font-family:"Lucida Console",Tahoma;
+	font-size: 12px;
+	color: #fff;
+	line-height: 1.3em;
+	background: #000000 url(bg_page.jpg?ln=images) top center no-repeat;
+}
+a:link, a:visited {
+	text-decoration: none;
+	font-weight: normal;
+}
+
+a:hover {
+	text-decoration: underline;
+	font-weight: normal;
+}
+a:link, a:visited {
+	color: #941000;
+	text-decoration:underline;
+}
+
+a:hover {
+	color: #941000;
+	text-decoration:none;
+}
+
+
+p { margin-top: 0; margin-bottom: 5px; }
+
+#wrapper {
+	margin-left:auto;
+	margin-right:auto;
+	width: 1000px;
+	height:768px;
+	text-align:left;
+}
+
+#header{
+	margin:0px auto;
+	height:300px;
+	background: #FFF url(banner.jpg?ln=images) bottom center no-repeat;
+}
+
+#logo {
+	font-family:"Lucida Console",Tahoma;
+	display: block;
+	padding-top:0px;
+	margin-bottom:10px;
+	margin-left:10px;
+	width:600px;
+	font-size:20px;
+	font-weight:bold;
+	line-height: 90px;
+	background: url(logo2.gif?ln=images) bottom left no-repeat;
+	text-indent: 65px;
+	color:white;
+}
+
+p {
+margin: 0px 0px;
+font-family:Tahoma;
+line-height:250%;
+text-align:justify;
+}
+
+#menu{ position:relative;top:0px;height: 54px; width:1000px; margin:auto; padding:0px; font-weight: bold; }
+#menu ul { margin: 0px 0px 0px 11px; padding: 0; width: auto; float: left; list-style-type:none; }
+#menu ul li{ margin: 0; padding: 0; height: 54px; float: left; position: relative;border-right:1px solid white; }
+#menu ul li a{ text-transform:uppercase;color: #FFFFFF; font-weight: bold; text-decoration: none; padding: 14px 10px 0px 10px; height:40px; display: block; float: left; }
+#menu ul li a:hover{ background-color: #444444; text-decoration: none; font-weight: bold; color: #fff; }
+
+#menu{ background: #000 }
+#menu ul li a:hover{ background: #941000; }
+#mainmeni ul li a.active{ background: #941000; }
+
+
+#content {
+	height:700px;
+}
+
+#content2 {
+	width:850px;
+	margin-left:auto;
+	margin-right:auto;
+}
+
+th {
+	color:rgb(1,44,16);
+	background-color:rgb(254,157,1);
+	text-align:center;
+	font-size:13px;
+	-moz-border-radius-topleft: 15px;
+-moz-border-radius-topright: 15px;
+-webkit-border-radius-topleft: 15px;
+-webkit-border-radius-topright: 15px;
+	
+}
+
+td {
+	text-align:center;
+	
+}
+.ui-widget-content {  background:transparent}
+
+h1,h2,h3{
+	color:rgb(238,206,105);
+}

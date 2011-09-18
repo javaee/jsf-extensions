@@ -1,0 +1,247 @@
+/*#############################################################
+Name: Decayed
+Date: 2007-05-12
+Description: A dark trash style two-column website template. Wordpress theme version available at http://templates.arcsin.se/decayed-wordpress-theme/.
+Author: Viktor Persson
+URL: http://templates.arcsin.se
+
+Feel free to use and modify but please provide credits.
+#############################################################*/
+
+/* standard elements */
+html {min-height: 100%;}
+
+html, body, form, fieldset, div, span, table, tr, td, h1, h2, h3, h4, h5, h6, p, ul, ol, li {
+margin: 0;
+padding: 0;
+}
+
+a {color: #CC3;}
+a:hover {color: #FF3;}
+
+body {
+	background: #000 url(body.gif?ln=images) no-repeat; /*  url(img/bg.jpg) repeat-x; */
+	color: #DDD;
+	font: normal 62.5% "Trebuchet MS",Verdana,sans-serif;
+	padding-left: 90px;
+}
+
+p,code,ol {padding-bottom: 1.2em;}
+p {line-height:180%;}
+h1 {
+	color: #CCC;
+	font: normal 2em Impact,sans-serif;
+}
+h1 a {
+	color: #000;
+	text-decoration: none;
+}
+h1 a:hover {
+	color: #F00;
+}
+
+h2 {font: normal 1.8em Tahoma,sans-serif;}
+
+h1,h2 {padding-top: 6px;}
+
+blockquote {
+	color: #CCA;
+	display: block;
+	font-weight: bold;
+	padding-left: 28px;
+}
+
+img {border: none;}
+
+img.right {margin: 5px 0 5px 12px;}
+img.left {margin: 5px 12px 5px 0;}
+img.border {
+	background: #555;
+	display: block;
+	padding: 3px;
+}
+
+#title {
+padding-left:4px;
+}
+
+/* misc */
+
+#loginbox {
+border: 1px #333333 dashed; 
+padding:10px;
+}
+
+#loginbox a{
+color:#666;
+text-decoration:none;
+}
+
+#loginbox a:hover{
+color:#8DCA3F;
+text-decoration:none;
+}
+
+.clearer {
+	clear: both;
+	font-size: 0;
+}
+
+
+.left {float: left;}
+.right {float: right;}
+
+
+.decay,.decay-small, h3, .componentheading {
+	background: url(decay-long.gif?ln=images) no-repeat;
+	color: #000;
+	font: normal 2em Impact,sans-serif;
+	padding: 0 0 12px 22px;
+	width:100%;
+}
+
+.buttonheading {
+width:75px;
+height:30px;
+overflow:visible;
+}
+
+.contentheading { 
+	color: #999;
+	height:60px;
+	line-height:22px;
+	width:100%;
+	font: normal 2em Impact,sans-serif;
+	padding: 6px 0px 12px 0px;
+	font-size:140%;
+	margin-left:100%;
+}
+
+h3 {
+	color:#000;
+	font-size:150%;
+	padding-top:6px;
+	background:url(decay-small.gif?ln=images) no-repeat left center;
+
+}
+
+p.postinfo {
+	border-top: 1px dashed #333;
+	color: #666;
+	font: bold 0.9em sans-serif;
+	margin-bottom: 24px;
+	padding: 8px;
+}
+p.postinfo a {color: #888;}
+p.postinfo a:hover {color: #CCC;}
+
+/* structure */
+#container {
+	font-size: 1.3em;
+}
+
+/* title */
+#site-title {font: normal 3em Tahoma,sans-serif;}
+#site-title a {
+	color: #DDD;
+	text-decoration: line-through;
+}
+#site-title a:hover {
+	color: #FFF;
+	text-decoration: none;
+}
+#site-description {color: #CCC; }
+
+/* content */
+#content {
+position:relative;
+	left: 270px;
+	top: 90px;
+	width: 610px;
+}
+.createdate {
+	color:#8DC63F;
+	margin-bottom: 6px;
+}
+#content {
+color:#FFFFFF;
+}
+
+#content li {margin-left: 18px;}
+
+
+
+
+
+/* navigation */
+#navigation {
+	left: 120px;
+	position: absolute;
+	float:left;
+	top: 290px;
+	width: 210px;
+}
+#navigation h2 {
+	color: #000;
+	font-size: 1.5em;
+	letter-spacing: 0;
+	line-height: 30px;
+	margin: 0;
+}
+#navigation ul {margin: 0 0 0 1em;}
+#navigation li {list-style: none;}
+#navigation li a {
+	color: #777;
+	font-size: 1.1em;
+	line-height: 1.5em;
+	text-decoration: none;
+}
+#navigation li a:hover {color: #8DCA3F;}
+
+#navigation ul ul a:link, #navigation ul ul a:visited {
+color:#fff;
+padding-bottom:0px;
+margin-bottom:0px;
+}
+
+#navigation ul ul a:hover {
+color:#8DC63F;
+}
+
+/* footer */
+#footer {
+
+	border-top: 1px dashed #333;
+	color: #666;
+	font: normal 0.9em sans-serif;
+	width:600px;
+	padding: 0px 10px
+}
+#footer a {
+	color: #999;
+	text-decoration: none;
+}
+#footer a:hover {
+	color: #CCC;
+	text-decoration: underline;
+}
+#footer .left, #footer .right {padding: 10px 0;}
+#footer .right a {color: #777;}
+
+
+
+/* joomla fixes */ 
+
+th {
+	background:#FFFFF6;
+	color:rgb(50,4,2);
+	-moz-border-radius-topleft: 15px;
+	-moz-border-radius-topright: 15px;
+	-webkit-border-radius-topleft: 15px;
+	-webkit-border-radius-topright: 15px;
+}
+
+td {
+	text-align:center;
+	
+}

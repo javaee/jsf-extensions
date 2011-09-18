@@ -1,0 +1,13 @@
+<template>
+
+<name>autumn</name>
+<version>1.0.0</version>
+<creationDate>2010-11-11</creationDate>
+<author>Themza Team</author>
+<authorEmail>templates@themza.com</authorEmail>
+<authorUrl>http://www.themza.com</authorUrl>
+<copyright>ThemZa 2010</copyright>
+<license>ThemZa TOS</license>
+<description>Autumn Colors</description>
+
+</template>

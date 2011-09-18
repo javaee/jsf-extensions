@@ -1,0 +1,95 @@
+body, td{
+	font-family:"Lucida Console",Tahoma;
+	font-size: 12px;
+	color: #000000;
+	line-height: 1.3em;
+	background: #2E424B url(bg_page.png?ln=images) top center repeat-y;
+}
+
+a:link, a:visited {
+	text-decoration: none;
+	font-weight: normal;
+}
+
+a:hover {
+	text-decoration: underline;
+	font-weight: normal;
+}
+
+a:link, a:visited {
+	color: #DA2424;
+	text-decoration:underline;
+}
+
+a:hover {
+	color: #DA2424;
+	text-decoration:none;
+}
+
+#wrapper {
+	margin-left:auto;
+	margin-right:auto;
+	width: 980px;
+	height:768px;
+	text-align:left;
+}
+
+#header{
+	margin:0px auto;
+	height:280px;
+	background: #FFF url(forex-banner1.jpg?ln=images) top center no-repeat;
+}
+
+#logo {
+	font-family:"Lucida Console",Tahoma;
+	display: block;
+	float:left;
+	padding-top:0px;
+	margin-bottom:10px;
+	margin-left:10px;
+	width:600px;
+	font-size:20px;
+	font-weight:bold;
+	line-height: 65px;
+	background: url(logo4.gif?ln=images) bottom left no-repeat;
+	text-indent: 65px;
+	
+}
+
+#menu{ position:absolute;top:0px;height: 54px; width:980px; margin: 0px; padding:0px; font-weight: bold; }
+#menu ul { margin: 0px 0px 0px 11px; padding: 0; width: auto; float: left; list-style-type:none; }
+#menu ul li{ margin: 0; padding: 0; height: 54px; float: left; position: relative;text-transform:uppercase }
+#menu ul li a{ color: #FFFFFF; font-weight: bold; text-decoration: none; padding: 14px 10px 0px 10px; height:40px; display: block; float: left; }
+#menu ul li a:hover{ background-color: #444444; text-decoration: none; font-weight: bold; color: #fff; }
+
+#menu{ background: #0E192D url(top_menu_bg.png?ln=images) top repeat-x; }
+#menu ul li a:hover{ background: #D70600; }
+#menu ul li a.active{ background: #D70600; }
+
+
+#content {
+	height:700px;
+	margin-left:auto;
+	margin-right:auto;
+	width: 800px;
+	
+}
+
+p {
+margin: 0px 0px;
+font-family:Tahoma;
+line-height:200%;
+text-align:justify;
+}
+
+th {
+	background-image: url(bg_h3.png?ln=images);
+	color: #FFFF99;;
+	text-align:center;
+}
+
+td {
+	text-align:center;
+	
+}
+.ui-widget-content {  background:transparent}

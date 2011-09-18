@@ -1,0 +1,85 @@
+/* Blue */
+
+a {
+color: #7cbbef;
+}
+
+blockquote {
+background: url(bq_blue.png?ln=images) 5px 5px no-repeat;
+}
+
+.code {
+border-left: 5px solid #7cbbef;
+}
+
+ul li {
+background: url(blue_ul.png?ln=images) no-repeat 0 6px;
+}
+
+.componentheading {
+background: url(blue_button.png?ln=images) 2px 2px no-repeat;
+}
+
+#showcase_inner_right .moduletable h3,
+#showcase_inner_left .moduletable h3 {
+background: url(blue_bullet.png?ln=images) 2px 1px no-repeat;
+}
+
+#showcase {
+background:#7cbbef;
+}
+
+#no_showcase {
+background:#7cbbef;
+}
+
+#menu a {
+background:#fff;
+border-left:3px solid #7cbbef; 
+border-right:3px solid #7cbbef; 
+border-top:3px solid #7cbbef; 
+}
+
+#menu a#active_menu {
+background:#7cbbef;
+}
+
+#rightcolwrap .moduletable {
+border:4px solid #7cbbef;
+}
+
+#rightcolwrap .moduletable h3 {
+background:#7cbbef url(blue_bullet.png?ln=images) 2px 0px no-repeat;
+color:#fff;
+}
+
+#rightcolwrap .moduletable-white h3 {
+background:#fff url(blue_bullet.png?ln=images) 2px 0px no-repeat;
+}
+
+#pathway {
+background:url(blue_bullet.png?ln=images) 0 0 no-repeat;
+}
+
+a.readon {
+border:3px solid #7cbbef;
+color:black;
+}
+
+a.readon:hover {
+color:white;
+background:#7cbbef;
+}
+
+.inputbox {
+border: 2px solid #7cbbef;
+}
+
+#footer {
+border-top:10px solid #7cbbef;
+}
+
+#rightcolwrap a.mainlevel,
+#showcase_inner_right a.mainlevel {
+	border-bottom:1px solid #7cbbef;
+}

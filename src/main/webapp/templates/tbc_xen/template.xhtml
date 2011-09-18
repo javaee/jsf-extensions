@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
+    <html xmlns="http://www.w3.org/1999/xhtml"  
+      xmlns:h="http://java.sun.com/jsf/html"  
+      xmlns:ui="http://java.sun.com/jsf/facelets">  
+  <h:head>
+  		<title>XEN</title>  
+  		 <META HTTP-EQUIV="Cache-Control" CONTENT="max-age=0"/>
+		<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache"/>
+		<META http-equiv="expires" content="0"/>
+		<META HTTP-EQUIV="Expires" CONTENT="Tue, 01 Jan 1980 1:00:00 GMT"/>
+		<META HTTP-EQUIV="Pragma" CONTENT="no-cache"/> 
+         <h:outputStylesheet library="css" name="template.css"/>
+	`	<h:outputStylesheet library="css" name="blue.css"/>
+		<h:outputStylesheet library="css" name="green.css"/>
+		<h:outputStylesheet library="css" name="orange.css"/>
+		<h:outputStylesheet library="css" name="pink.css"/>
+        <h:outputScript library="js" name="styleswitcher.js"/>
+
+</h:head>
+
+<body class="mainbody">
+
+	<div id="center">
+		<div id="wrapper" style="width:1000px">
+			<div id="header">
+				<div id="switcher">
+					<a href="javascript:setActiveStyleSheet('blue.css')"><span class="style_button_blue"></span></a>
+					<a href="javascript:setActiveStyleSheet('orange.css')"><span class="style_button_orange"></span></a>
+					<a href="javascript:setActiveStyleSheet('green.css')"><span class="style_button_green"></span></a>
+					<a href="javascript:setActiveStyleSheet('pink.css')"><span class="style_button_pink"></span></a>
+				</div>
+				<div id="slogan"></div>
+				<div id="logo"></div>
+			</div>
+			<div id="menu">
+				<ui:insert name="menu"/>
+			</div>
+			<div id="showcase">
+				<div id="showcase_inner_left" style="width:650px">
+					<ui:insert name="user1"/>
+				</div>
+				<div id="showcase_inner_right" style="width:340px">
+					<ui:insert name="user2"/>
+				</div>
+			</div>
+			
+			<div id="mainwrap">
+				<div id="content" style="width:100%;">
+					<div id="contentwrap">
+						<ui:insert name="content"/>
+					</div>
+				</div>
+				
+			</div>
+			<div id="footer">
+				<p><b>tbc_Xen</b> copyright  2007. Designed by <a href="http://www.toolboxcreations.com">toolboxcreations.com</a><br /><a href="http://www.joomla.org">Joomla!</a> is Free Software released under the GNU/GPL License.</p>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

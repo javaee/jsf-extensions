@@ -21,6 +21,10 @@ background: url(orange_ul.png?ln=images) no-repeat 0 6px;
 background: url(orange_bullet.png?ln=images) 2px 1px no-repeat;
 }
 
+#showcase_inner_right h3{
+background: url(orange_bullet.png?ln=images) 2px 1px no-repeat;
+}
+
 .componentheading {
 background: url(orange_button.png?ln=images) 2px 2px no-repeat;
 }
@@ -81,4 +85,19 @@ border-top:10px solid #f9a82f;
 #rightcolwrap a.mainlevel,
 #showcase_inner_right a.mainlevel {
 	border-bottom:1px solid #f9a82f;
+}
+
+th {
+	background: #f9a82f;
+	color:white;
+	-moz-border-radius-topleft: 15px;
+	-moz-border-radius-topright: 15px;
+	-webkit-border-radius-topleft: 15px;
+	-webkit-border-radius-topright: 15px;
+	text-align:center;
+}
+
+td {
+	text-align:center;
+	
 }

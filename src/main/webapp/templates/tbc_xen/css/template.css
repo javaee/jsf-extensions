@@ -299,7 +299,20 @@ background:#575757 url(top_bg.png?ln=images) 0 0 repeat-y;
 display:block;
 padding:0;
 overflow:hidden;
+color:white;
 }
+#showcase_inner_right p {
+color:#fff;
+padding:0px 10px;
+margin-right:10px;
+font-family:tahoma;
+font-size:13px;
+}
+#showcase_inner_right h3{
+position:relative;
+padding:0px 0px 3px 22px;
+}
+
 
 #showcase_inner_right .moduletable,
 #showcase_inner_left .moduletable {
@@ -340,8 +353,10 @@ overflow:hidden;
 
 #contentwrap {
 margin-top:10px;
-width:98%;
+width:90%;
 padding-left:0;
+margin-left:auto;
+margin-right:auto;
 }
 
 #rightcolwrap {

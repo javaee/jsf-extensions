@@ -41,7 +41,6 @@
 package javajsf.demo.ui;
 
 import com.sun.faces.jsf_extensions_javajsf.ui.Button;
-import com.sun.faces.jsf_extensions_javajsf.ui.VerticalLayout;
 import com.sun.faces.jsf_extensions_javajsf.Application;
 import com.sun.faces.jsf_extensions_javajsf.JavaJsfApplication;
 import javajsf.demo.boundary.DiscoveryService;
@@ -55,6 +54,9 @@ import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseListener;
+import org.primefaces.component.layout.Layout;
+import org.primefaces.component.layout.LayoutUnit;
+import org.primefaces.component.panel.Panel;
 
 @JavaJsfApplication(urlPatterns = {"/ui/*"})
 public class MainUI extends Application
@@ -78,8 +80,8 @@ public class MainUI extends Application
     private Button loginButton;
     private Button logoutButton;
 
-    VerticalLayout loginLayout;
-    VerticalLayout defaultLayout;
+    Layout loginLayout;
+    Layout defaultLayout;
 
     private static final String GMS_USER = "GMS_USER";
     
@@ -115,9 +117,8 @@ public class MainUI extends Application
         if (httpReq.isUserInRole(GMS_USER)) {
             window.setContent(defaultLayout);
         } else {
-            window.setContent(loginLayout);
          */
-        window.getFacets().put("content", loginForm); // the argument should be loginLayout
+            window.getFacets().put("content", loginLayout);
         /*******
         }
          *****/
@@ -140,16 +141,29 @@ public class MainUI extends Application
         loginForm.addField("pass", new PasswordField("Password:"));
         loginForm.getFooter().addComponent(loginButton);
         loginButton.addListener(this);
+         */
 
         // a panel will make this look a little nicer
-        Panel loginPanel = new Panel();
-        loginPanel.addComponent(loginForm);
+        Panel loginPanel = (Panel) createComponent("org.primefaces.component.Panel",
+                "org.primefaces.component.PanelRenderer");
+        loginPanel.getChildren().add(loginForm);
+        /****
         loginPanel.setWidth(24f, Sizeable.UNITS_EM);
         loginPanel.setHeight(20f, Sizeable.UNITS_EM);
+         */ 
 
         // add the components to a root layout and center it
-        loginLayout = new VerticalLayout();
-        loginLayout.addComponent(loginPanel);
+        loginLayout = (Layout) createComponent("org.primefaces.component.Layout",
+                "org.primefaces.component.LayoutRenderer");
+        loginLayout.getAttributes().put("fullPage", Boolean.TRUE);
+        
+        LayoutUnit layoutUnit = (LayoutUnit) 
+                createComponent("org.primefaces.component.LayoutUnit",
+                "org.primefaces.component.LayoutUnitRenderer");
+        layoutUnit.getChildren().add(loginPanel);
+        loginLayout.getChildren().add(layoutUnit);
+        
+        /****
 
         // this will keep the form near the top of the page
         loginLayout.setMargin(true);

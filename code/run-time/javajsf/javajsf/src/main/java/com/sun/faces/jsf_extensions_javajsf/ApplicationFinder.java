@@ -67,6 +67,7 @@ import javax.faces.event.PostConstructApplicationEvent;
 import javax.faces.event.PreDestroyApplicationEvent;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
+import javax.faces.view.ViewDeclarationLanguage;
 import javax.faces.view.ViewDeclarationLanguageFactory;
 import javax.servlet.ServletContext;
 
@@ -138,9 +139,9 @@ public class ApplicationFinder implements SystemEventListener {
         }
         ViewDeclarationLanguageFactory vdlFactory = (ViewDeclarationLanguageFactory)
                 FactoryFinder.getFactory(FactoryFinder.VIEW_DECLARATION_LANGUAGE_FACTORY);
-        JavaJsfViewDeclarationLanguage javaJsfVDL = (JavaJsfViewDeclarationLanguage)
-                vdlFactory.getViewDeclarationLanguage("javajsf");
-        
+        ViewDeclarationLanguage vdl = vdlFactory.getViewDeclarationLanguage("javajsf");
+        assert(vdl instanceof JavaJsfViewDeclarationLanguage);
+        JavaJsfViewDeclarationLanguage javaJsfVDL = (JavaJsfViewDeclarationLanguage) vdl;
         
         if (event instanceof PostConstructApplicationEvent) {
 

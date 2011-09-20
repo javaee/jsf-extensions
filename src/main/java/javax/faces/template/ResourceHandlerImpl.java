@@ -1,4 +1,4 @@
-package javax.faces.plugin;
+package javax.faces.template;
 
 import javax.faces.application.Resource;
 import javax.faces.application.ResourceHandler;

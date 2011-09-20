@@ -1,38 +1,189 @@
 package javax.faces.template;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.faces.FacesException;
+import javax.faces.FactoryFinder;
+import javax.faces.application.Application;
 import javax.faces.application.Resource;
+import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;
-import javax.faces.plugin.Manage;
-import javax.faces.plugin.PluginManager;
+import javax.faces.event.PhaseId;
+import javax.faces.event.PhaseListener;
+import javax.faces.lifecycle.Lifecycle;
+import javax.faces.lifecycle.LifecycleFactory;
+import javax.servlet.ServletContext;
 
 
 @SuppressWarnings("serial")
+@ApplicationScoped
 @ManagedBean(eager=true)
-@Manage(folder="templates",metadata="template.xml")
-public final class TemplateManager extends PluginManager<Template> {
+public final class TemplateManager implements PhaseListener,ResourceResolver {
 
+	
+	/**
+     * <p>selected template parameter</p>
+     */
+    public static final String TEMPLATE_FOLDER = "templates";
+    
+	
 	/**
      * <p>selected template parameter</p>
      */
     public static final String SELECTED_TEMPLATE = "javax.faces.view.TEMPLATE";
     
+   
     /**
-     * <p>template var name</p>
+     * <p>template loader</p>
      */
     
-    public static final String TEMPLATE_VAR_NAME = "template";
     
+    private final TemplateLoader loader;
     
+    /**
+     * <p>templates</p>
+     */
+	
+	protected  final List<Template> templates;
+	
+    
+	/**
+     * <p>logger</p>
+     */
+	
+	public static final Logger logger=Logger.getLogger(TemplateManager.class.getName());
+	
     
 	public TemplateManager() {
 		
-		super(new TemplateLoader());	
+		this.loader=new TemplateLoader();	
+		templates=new ArrayList<Template>();	
+	}
+	
+	
+	@PostConstruct
+	public void load()  {
+			
+		boolean hasTemplates=load(getRealPath());
+		if(hasTemplates) {
+			addPhaseListener();
+			addResourceHandler();
+		}
+	}
+	
+	protected boolean load(String path) {
+		
+		Folder root=new Folder(path,TEMPLATE_FOLDER);
+		for(Folder folder : root.getSubFolders()) {
+			Document metadata=folder.getDocument(Template.METADATA);
+			try {
+				  add(metadata);
+				} catch(Exception e) {
+					logger.log(Level.SEVERE, "error while loading plugin "+metadata, e);
+			}
+		}
+		return templates.size()>0;
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void addResourceHandler() {
+		
+		Application application=FacesContext.getCurrentInstance().getApplication();
+		application.setResourceHandler(new ResourceHandlerImpl(this));
+		
+	}
+
+	
+	private void addPhaseListener() {
+		
+		LifecycleFactory factory = (LifecycleFactory)
+		FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
+		Lifecycle lifecycle= factory.getLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE);
+		lifecycle.addPhaseListener(this);
+		
+	}
+	
+	protected String getRealPath() {
+		
+		FacesContext facesContext=FacesContext.getCurrentInstance();
+		ServletContext context=(ServletContext) facesContext.getExternalContext().getContext();
+		return context.getRealPath("/");
+		
+	}
+	
+	public void add(Document metadata) throws Exception {
+		
+		if(metadata!=null) {
+			Template template=load(metadata);
+			template.setMetadata(metadata);
+			add(template);
+		}	
+	}
+	
+
+	public Template load(Resource metadata) throws Exception{
+		
+		return loader.load(metadata);
+		
+	}
+	
+	public void add(Template template) {
+		
+		template.setIndex(1+getSize());
+		templates.add(template);
+		
+	}
+		
+	public void remove(Template template)  {
+		
+		templates.remove(template);
+		
+	}		
+	
+	protected String getRequestParameter(String key) {
+		
+		FacesContext context=FacesContext.getCurrentInstance();
+		return context.getExternalContext().getRequestParameterMap().get(key);	
+	}
+	
+	protected String getInitParameter(String key) {
+		
+		FacesContext facesContext=FacesContext.getCurrentInstance();
+		return facesContext.getExternalContext().getInitParameter(key);
+	}
+	
+	protected Object getSessionParameter(String key) {
+		
+		return getSessionMap().get(key);
+		
+	}
+	
+	protected void addSessionParameter(String key,String value) {
+		
+		getSessionMap().put(key, value);
+		
+	}
+	
+	protected Map<String,Object> getSessionMap() {
+		
+		FacesContext facesContext=FacesContext.getCurrentInstance();
+		ExternalContext externalContext=facesContext.getExternalContext();
+		Map<String,Object> map=externalContext.getSessionMap();
+		return map;
+		
+	}
+	
+	public int getSize() {
+		
+		return templates.size();	
 	}
 	
 	@Override
@@ -62,7 +213,7 @@ public final class TemplateManager extends PluginManager<Template> {
 	public String selectTemplate() {
 		
 		return selectTemplate(getTemplate(
-				getRequestParameter(TEMPLATE_VAR_NAME))
+				getRequestParameter(Template.VAR_NAME))
 				);
 	}
 	
@@ -76,13 +227,13 @@ public final class TemplateManager extends PluginManager<Template> {
 	private void addSessionParameters(Template template) {
 	
 		addSessionParameter(SELECTED_TEMPLATE, template.getId());
-		addSessionParameter(TEMPLATE_VAR_NAME,getPage(template));
+		addSessionParameter(Template.VAR_NAME,getPage(template));
 		
 	}
 	
 	private String getPage(Template template) {
 		
-		return "/"+getConfiguration().folder()+"/"+template.getId()+"/"+Template.PAGE;
+		return "/"+TEMPLATE_FOLDER+"/"+template.getId()+"/"+Template.PAGE;
 		
 	}
 	
@@ -105,19 +256,33 @@ public final class TemplateManager extends PluginManager<Template> {
 		@SuppressWarnings("unused")
 		String selectTemplate=getSessionParameter(SELECTED_TEMPLATE)==null? 
 							  selectTemplate(getDefaultTemplate()):
-							  null;
+							  null;	
+	}
+	
+	@Override
+	public void afterPhase(PhaseEvent event) {
 		
 	}
 	
+	@Override
+	public PhaseId getPhaseId() {
+		return PhaseId.RENDER_RESPONSE;
+	}
+	
+	
 	public List<Template> getTemplates() {
 		
-		return plugins;
+		return templates;
 		
 	}
 
 	public Template getTemplate(String id) {
 		
-		return getPlugin(id);
+		for(Template template : templates) {
+			if(template.getId().equalsIgnoreCase(id))
+				return template;
+		}
+		return null;
 	}
 	
 }

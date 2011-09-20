@@ -1,7 +1,7 @@
 package javax.faces.plugin;
 
 import java.io.IOException;
-import javax.faces.plugin.Document;
+import javax.faces.template.Document;
 import javax.faces.template.Template;
 import javax.faces.template.TemplateLoader;
 import junit.framework.TestCase;

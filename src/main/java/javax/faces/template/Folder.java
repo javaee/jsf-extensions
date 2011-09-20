@@ -1,4 +1,4 @@
-package javax.faces.plugin;
+package javax.faces.template;
 
 import java.io.File;
 import java.util.ArrayList;

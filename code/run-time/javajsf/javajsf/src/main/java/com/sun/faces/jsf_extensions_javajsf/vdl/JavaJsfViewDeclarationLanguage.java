@@ -46,15 +46,19 @@ import com.sun.faces.jsf_extensions_javajsf.JavaJsfApplication;
 import com.sun.faces.jsf_extensions_javajsf.JavaJSFLogger;
 import java.beans.BeanInfo;
 import java.io.IOException;
-import java.lang.annotation.Annotation;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.application.Application;
 import javax.faces.application.Resource;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
+import javax.faces.component.behavior.AjaxBehavior;
+import javax.faces.component.html.HtmlForm;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.view.AttachedObjectHandler;
@@ -185,12 +189,27 @@ public class JavaJsfViewDeclarationLanguage extends ViewDeclarationLanguageWrapp
             UIComponent body = root.findComponent("javajsf_body");
             List<UIComponent> bodyChildren = body.getChildren();
             bodyChildren.clear();
+            Application jsfApplication = context.getApplication();
+            
             // Enclose everything in an HtmlForm
-            UIComponent form = context.getApplication().createComponent(context,
-                    "javax.faces.Form", "javax.faces.Form");
+            HtmlForm form = new HtmlForm();
             form.setId(root.createUniqueId());
             form.getChildren().add(app.getMainWindow());
             bodyChildren.add(form);
+            
+            // Ajaxify the form
+            AjaxBehavior ajaxBehavior = (AjaxBehavior) 
+                    jsfApplication.createBehavior("javax.faces.behavior.Ajax");
+            List<String> ids = new ArrayList<String>();
+            ids.add(form.getClientId(context));
+            ajaxBehavior.setExecute(ids);
+            ajaxBehavior.setRender(ids);
+            Collection<String> supportedEventNames = form.getEventNames();
+            for (String cur : supportedEventNames) {
+                form.addClientBehavior(cur, ajaxBehavior);
+            }                
+
+            
         }
     }
     

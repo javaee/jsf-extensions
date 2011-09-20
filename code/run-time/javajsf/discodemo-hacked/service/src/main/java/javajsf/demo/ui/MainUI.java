@@ -50,13 +50,11 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import javax.faces.component.UIComponent;
 import javax.faces.component.ActionSource2;
+import javax.faces.component.UICommand;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseListener;
-import org.primefaces.component.layout.Layout;
-import org.primefaces.component.layout.LayoutUnit;
-import org.primefaces.component.panel.Panel;
 
 @JavaJsfApplication(urlPatterns = {"/ui/*"})
 public class MainUI extends Application
@@ -77,11 +75,11 @@ public class MainUI extends Application
 
     private HttpServletRequest httpReq;
     private UIComponent loginForm ;
-    private Button loginButton;
+    private UICommand loginButton;
     private Button logoutButton;
 
-    Layout loginLayout;
-    Layout defaultLayout;
+    UIComponent loginLayout;
+    UIComponent defaultLayout;
 
     private static final String GMS_USER = "GMS_USER";
     
@@ -97,8 +95,10 @@ public class MainUI extends Application
     public void init() {
         window = createComponent("window");
         loginForm = createComponent("form");
-        /***
-        Button loginButton = new Button("OK", loginForm, "commit");
+        loginButton = (UICommand) createComponent("org.primefaces.component.CommandButton",
+                "org.primefaces.component.CommandButtonRenderer");
+        loginButton.setValue("OK");
+        /**
         Button logoutButton = new Button("Logout");
          */
 
@@ -136,15 +136,46 @@ public class MainUI extends Application
                 "passwords. So don't go giving me all your " +
                 "login info.");
 
-        /********
-        loginForm.addField("user", new TextField("User:"));
-        loginForm.addField("pass", new PasswordField("Password:"));
-        loginForm.getFooter().addComponent(loginButton);
-        loginButton.addListener(this);
-         */
+        UIComponent formLayout = createComponent("org.primefaces.component.Layout",
+                "org.primefaces.component.LayoutRenderer");
+        formLayout.getAttributes().put("style", "width:400px;height:200px;");
+        
+        UIComponent layoutUnit = 
+                createComponent("org.primefaces.component.LayoutUnit",
+                "org.primefaces.component.LayoutUnitRenderer");
+        UIComponent field = createComponent("field");
+        field.setId("user");
+        field.getAttributes().put("label", "User:");
+        UIComponent text = (UIComponent) createComponent("org.primefaces.component.InputText", 
+                "org.primefaces.component.InputTextRenderer");
+        field.getFacets().put("input", text);
+        layoutUnit.getChildren().add(field);
+        formLayout.getChildren().add(layoutUnit);
+        
+        layoutUnit = 
+                createComponent("org.primefaces.component.LayoutUnit",
+                "org.primefaces.component.LayoutUnitRenderer");
+        field = createComponent("field");
+        field.setId("pass");
+        field.getAttributes().put("label", "Password:");
+        text = (UIComponent) createComponent("org.primefaces.component.Password", 
+                "org.primefaces.component.PasswordRenderer");
+        field.getFacets().put("input", text);
+        layoutUnit.getChildren().add(field);
+        formLayout.getChildren().add(layoutUnit);
+        
+        layoutUnit = 
+                createComponent("org.primefaces.component.LayoutUnit",
+                "org.primefaces.component.LayoutUnitRenderer");
+        layoutUnit.getChildren().add(loginButton);
+        formLayout.getChildren().add(layoutUnit);
+        
+        loginForm.getFacets().put("body", formLayout);
+        
+        loginButton.addActionListener(this);
 
         // a panel will make this look a little nicer
-        Panel loginPanel = (Panel) createComponent("org.primefaces.component.Panel",
+        UIComponent loginPanel = createComponent("org.primefaces.component.Panel",
                 "org.primefaces.component.PanelRenderer");
         loginPanel.getChildren().add(loginForm);
         /****
@@ -153,11 +184,11 @@ public class MainUI extends Application
          */ 
 
         // add the components to a root layout and center it
-        loginLayout = (Layout) createComponent("org.primefaces.component.Layout",
+        loginLayout = createComponent("org.primefaces.component.Layout",
                 "org.primefaces.component.LayoutRenderer");
         loginLayout.getAttributes().put("fullPage", Boolean.TRUE);
         
-        LayoutUnit layoutUnit = (LayoutUnit) 
+        layoutUnit = 
                 createComponent("org.primefaces.component.LayoutUnit",
                 "org.primefaces.component.LayoutUnitRenderer");
         layoutUnit.getChildren().add(loginPanel);

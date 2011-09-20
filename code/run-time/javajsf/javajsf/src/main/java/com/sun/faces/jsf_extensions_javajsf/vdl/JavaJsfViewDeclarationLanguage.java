@@ -92,7 +92,7 @@ public class JavaJsfViewDeclarationLanguage extends ViewDeclarationLanguageWrapp
         return parent;
     }
 
-    // <editor-fold defaultstate="collapsed" desc="ViewDeclarationLanguage implementation">
+    // <editor-fold desc="ViewDeclarationLanguage implementation">
 
     @Override
     public void buildView(FacesContext context, UIViewRoot root) throws IOException {
@@ -185,7 +185,12 @@ public class JavaJsfViewDeclarationLanguage extends ViewDeclarationLanguageWrapp
             UIComponent body = root.findComponent("javajsf_body");
             List<UIComponent> bodyChildren = body.getChildren();
             bodyChildren.clear();
-            bodyChildren.add(app.getMainWindow());
+            // Enclose everything in an HtmlForm
+            UIComponent form = context.getApplication().createComponent(context,
+                    "javax.faces.Form", "javax.faces.Form");
+            form.setId(root.createUniqueId());
+            form.getChildren().add(app.getMainWindow());
+            bodyChildren.add(form);
         }
     }
     

@@ -49,6 +49,7 @@ import java.util.logging.Logger;
 import javax.faces.FactoryFinder;
 import javax.faces.application.ResourceHandler;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UINamingContainer;
 import javax.faces.component.UIPanel;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewDeclarationLanguage;
@@ -139,7 +140,7 @@ public abstract class Application  {
                     jsfApplication.createComponent("javax.faces.NamingContainer");
             tmp.setId(context.getViewRoot().createUniqueId());
             usingPageFacelet.apply(context, tmp);
-            result = tmp.findComponent("javajsf");
+                result = tmp.findComponent("javajsf");
             tmp.getChildren().clear();
         } catch (IOException ioe) {
             if (LOGGER.isLoggable(Level.SEVERE)) {

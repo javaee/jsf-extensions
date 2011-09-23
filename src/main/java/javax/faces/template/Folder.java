@@ -1,8 +1,16 @@
 package javax.faces.template;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 
 public class Folder {
@@ -35,14 +43,15 @@ public class Folder {
 	public Folder(String parent,String name) {
 		
 		this(new Folder(parent),name);
-		
-	}
 	
+	}
+
 	public List<Folder> getSubFolders() {
 		
 		List<Folder> folders=new ArrayList<Folder>();
-		if(file.listFiles()!=null) {
-			for(File file : this.file.listFiles()) {
+		File[] files=file.listFiles();  
+		if(files!=null) {
+			for(File file : files) {
 					if(file.isDirectory())
 						folders.add(new Folder(file));
 			}
@@ -76,6 +85,58 @@ public class Folder {
 		
 	}
 	
+	public void zip(OutputStream out) throws IOException {
+		
+		ZipOutputStream zip=new ZipOutputStream(out);
+		zip(file,file,zip);
+		zip.close();
+	}
+		
+	
+	private void zip(File root,File folder,ZipOutputStream zip) throws IOException {
+		
+		String path=root.getParentFile().getAbsolutePath();
+		File[] files=folder.listFiles();
+		if(files!=null) {
+			for(File file : files) {
+				String entryName=path.endsWith(File.separator)?
+						file.getAbsolutePath().substring(path.length()):
+						file.getAbsolutePath().substring(path.length()+1);
+				if(file.isFile()) {
+					ZipEntry entry=new ZipEntry(entryName);
+					zip.putNextEntry(entry);
+					InputStream in=new FileInputStream(file);
+					write(in,zip);
+					in.close();
+					zip.closeEntry();
+					
+				}
+				else if(file.isDirectory()) {
+					ZipEntry entry=new ZipEntry(entryName+"/");
+					zip.putNextEntry(entry);
+					zip.closeEntry();
+					zip(root,file,zip);
+				}
+
+				
+			}
+		}
+		
+	}
+	
+
+	public static void write(InputStream in,OutputStream out) throws IOException {
+		
+		in=new BufferedInputStream(in,512);
+		out=new BufferedOutputStream(out,512);
+		byte[] buffer=new byte[512];
+		int c=0;
+			while( (c=in.read(buffer,0,buffer.length))!=-1)
+				out.write(buffer,0,c);
+		out.flush();
+		
+	}
+	
 	public String toString() {
 		
 		return file.toString();
@@ -87,4 +148,5 @@ public class Folder {
 		return file.getName();
 		
 	}
+	
 }

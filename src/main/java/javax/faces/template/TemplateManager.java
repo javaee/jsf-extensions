@@ -26,7 +26,7 @@ import javax.servlet.ServletContext;
 @SuppressWarnings("serial")
 @ApplicationScoped
 @ManagedBean(eager=true)
-public final class TemplateManager implements PhaseListener,ResourceResolver {
+public class TemplateManager implements PhaseListener,ResourceResolver {
 
 	/**
      * <p>templates folder</p>

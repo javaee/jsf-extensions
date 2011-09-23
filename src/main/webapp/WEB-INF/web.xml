@@ -46,12 +46,27 @@
  <servlet>
  <servlet-name>Faces Servlet</servlet-name>
  <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+ <load-on-startup>1</load-on-startup>
 </servlet>
 
 <servlet-mapping>
  <servlet-name>Faces Servlet</servlet-name>
  <url-pattern>/faces/*</url-pattern>
 </servlet-mapping>
+
+<servlet>
+	<servlet-name>JerseyServlet</servlet-name>
+	<servlet-class>
+		com.sun.jersey.spi.container.servlet.ServletContainer
+	</servlet-class>
+	<load-on-startup>2</load-on-startup>
+</servlet>
+
+<servlet-mapping>
+<servlet-name>JerseyServlet</servlet-name>
+<url-pattern>/services/*</url-pattern>
+</servlet-mapping>
+  
 
 <welcome-file-list>
         <welcome-file>faces/index.xhtml</welcome-file>

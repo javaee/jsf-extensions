@@ -4,6 +4,19 @@ import javax.faces.application.Resource;
 
 public class Template {
 
+	
+	protected String name="";
+	protected String description="";
+	protected String creationDate="";
+	protected String version="1.0";
+	protected String author="";
+	protected String authorEmail="";
+	protected String authorUrl="";
+	protected String license="GPL";
+	protected String copyright="";
+	protected Document metadata;
+	protected int index;
+	
 	 /**
      * <p>Facelets page.</p>
      */
@@ -20,20 +33,6 @@ public class Template {
      */
     public static final String METADATA = "template.xml";
     
-    
-    
-    protected String name="";
-	protected String description="";
-	protected String creationDate="";
-	protected String version="1.0";
-	protected String author="";
-	protected String authorEmail="";
-	protected String authorUrl="";
-	protected String license="GPL";
-	protected String copyright="";
-	protected Document metadata;
-	protected int index;
-	
 	
 	public Template() {
 		
@@ -142,6 +141,5 @@ public class Template {
 	public void setIndex(int index) {
 		this.index = index;
 	}
-    
     
 }

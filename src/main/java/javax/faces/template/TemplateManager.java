@@ -1,9 +1,9 @@
 package javax.faces.template;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -28,33 +28,35 @@ import javax.servlet.ServletContext;
 @ManagedBean(eager=true)
 public final class TemplateManager implements PhaseListener,ResourceResolver {
 
-	
 	/**
-     * <p>selected template parameter</p>
+     * <p>templates folder</p>
      */
     public static final String TEMPLATE_FOLDER = "templates";
     
-	
 	/**
      * <p>selected template parameter</p>
      */
     public static final String SELECTED_TEMPLATE = "javax.faces.view.TEMPLATE";
-    
    
+    /**
+     * <p>template var name</p>
+     */
+    
+    public static final String TEMPLATE_VAR_NAME = "template";
+
+    
     /**
      * <p>template loader</p>
      */
     
-    
     private final TemplateLoader loader;
     
     /**
-     * <p>templates</p>
+     * <p>templates list</p>
      */
 	
-	protected  final List<Template> templates;
+	private  final List<Template> templates;
 	
-    
 	/**
      * <p>logger</p>
      */
@@ -65,27 +67,28 @@ public final class TemplateManager implements PhaseListener,ResourceResolver {
 	public TemplateManager() {
 		
 		this.loader=new TemplateLoader();	
-		templates=new ArrayList<Template>();	
+		templates=new CopyOnWriteArrayList<Template>();
+		
 	}
 	
 	
 	@PostConstruct
 	public void load()  {
 			
-		boolean hasTemplates=load(getRealPath());
+		boolean hasTemplates=loadTemplates(getRealPath());
 		if(hasTemplates) {
 			addPhaseListener();
 			addResourceHandler();
-		}
+		}	
 	}
 	
-	protected boolean load(String path) {
+	public boolean loadTemplates(String path) {
 		
 		Folder root=new Folder(path,TEMPLATE_FOLDER);
 		for(Folder folder : root.getSubFolders()) {
 			Document metadata=folder.getDocument(Template.METADATA);
 			try {
-				  add(metadata);
+				  addTemplate(metadata);
 				} catch(Exception e) {
 					logger.log(Level.SEVERE, "error while loading plugin "+metadata, e);
 			}
@@ -111,7 +114,7 @@ public final class TemplateManager implements PhaseListener,ResourceResolver {
 		
 	}
 	
-	protected String getRealPath() {
+	private String getRealPath() {
 		
 		FacesContext facesContext=FacesContext.getCurrentInstance();
 		ServletContext context=(ServletContext) facesContext.getExternalContext().getContext();
@@ -119,60 +122,60 @@ public final class TemplateManager implements PhaseListener,ResourceResolver {
 		
 	}
 	
-	public void add(Document metadata) throws Exception {
+	public void addTemplate(Document metadata) throws Exception {
 		
 		if(metadata!=null) {
-			Template template=load(metadata);
+			Template template=loadTemplate(metadata);
 			template.setMetadata(metadata);
-			add(template);
+			addTemplate(template);
 		}	
 	}
 	
 
-	public Template load(Resource metadata) throws Exception{
+	public Template loadTemplate(Document metadata) throws Exception{
 		
 		return loader.load(metadata);
 		
 	}
 	
-	public void add(Template template) {
+	public void addTemplate(Template template) {
 		
 		template.setIndex(1+getSize());
 		templates.add(template);
 		
 	}
 		
-	public void remove(Template template)  {
+	public void removeTemplate(Template template)  {
 		
 		templates.remove(template);
 		
 	}		
 	
-	protected String getRequestParameter(String key) {
+	private String getRequestParameter(String key) {
 		
 		FacesContext context=FacesContext.getCurrentInstance();
 		return context.getExternalContext().getRequestParameterMap().get(key);	
 	}
 	
-	protected String getInitParameter(String key) {
+	private String getInitParameter(String key) {
 		
 		FacesContext facesContext=FacesContext.getCurrentInstance();
 		return facesContext.getExternalContext().getInitParameter(key);
 	}
 	
-	protected Object getSessionParameter(String key) {
+	private Object getSessionParameter(String key) {
 		
 		return getSessionMap().get(key);
 		
 	}
 	
-	protected void addSessionParameter(String key,String value) {
+	private void addSessionParameter(String key,String value) {
 		
 		getSessionMap().put(key, value);
 		
 	}
 	
-	protected Map<String,Object> getSessionMap() {
+	private Map<String,Object> getSessionMap() {
 		
 		FacesContext facesContext=FacesContext.getCurrentInstance();
 		ExternalContext externalContext=facesContext.getExternalContext();
@@ -213,7 +216,7 @@ public final class TemplateManager implements PhaseListener,ResourceResolver {
 	public String selectTemplate() {
 		
 		return selectTemplate(getTemplate(
-				getRequestParameter(Template.VAR_NAME))
+				getRequestParameter(TEMPLATE_VAR_NAME))
 				);
 	}
 	
@@ -227,7 +230,7 @@ public final class TemplateManager implements PhaseListener,ResourceResolver {
 	private void addSessionParameters(Template template) {
 	
 		addSessionParameter(SELECTED_TEMPLATE, template.getId());
-		addSessionParameter(Template.VAR_NAME,getPage(template));
+		addSessionParameter(TEMPLATE_VAR_NAME,getPage(template));
 		
 	}
 	

@@ -1,7 +1,6 @@
 package javax.faces.template;
 
 import java.io.InputStream;
-import javax.faces.application.Resource;
 import org.apache.commons.digester.Digester;
 
 
@@ -28,7 +27,7 @@ public class TemplateLoader {
 		
 	}
 	
-	public Template load(Resource metadata) throws Exception {
+	public Template load(Document metadata) throws Exception {
 		
 		InputStream in=metadata.getInputStream();
 		Template template=(Template) digester.parse(in);

@@ -20,12 +20,7 @@ public class Template {
      */
     public static final String METADATA = "template.xml";
     
-    /**
-     * <p>template var name</p>
-     */
     
-    public static final String VAR_NAME = "template";
-
     
     protected String name="";
 	protected String description="";

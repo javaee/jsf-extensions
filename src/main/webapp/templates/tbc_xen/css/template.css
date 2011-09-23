@@ -113,15 +113,6 @@ margin-bottom: 15px;
 list-style: none;
 }
 
-ul li {
-position:relative;
-z-index:10000;
-padding-left: 18px;
-background: url(blue_ul.png?ln=images) no-repeat 0 6px;
-line-height: 150%;
-font-size:13px;
-
-}
 
 th {
 padding: 4px;

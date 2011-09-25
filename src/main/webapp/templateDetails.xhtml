@@ -1,0 +1,202 @@
+<ui:composition template="#{template}" xmlns="http://www.w3.org/1999/xhtml"  
+      xmlns:h="http://java.sun.com/jsf/html"  
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+  
+      <ui:define name="menu">     
+      	<ui:include src="menu.xhtml"/>
+      </ui:define>
+
+	<ui:define name="content">
+	
+<style>
+
+.comment{margin:0;margin-left:5px;padding:0;margin-top:10px;width:60%;}
+.comment-details{border-top:1px solid #bbb;padding:.25em .5em;text-align:left;}
+.comment-links{float:right;margin-top:1px;padding:.25em;}
+.comment-body{padding:.25em .5em;margin-bottom:20px;text-align:left}
+strong {white-space:nowrap}
+td{font-size:12px}
+</style>
+
+<h:outputScript library="js" name="jquery-1.4.2.min.js"/>
+<h:outputScript library="js" name="app.js"/>
+
+<table width="90%"><tr>
+
+<td  width="70%" valign="top" style="text-align: left">
+<h3>
+	 Template Details
+</h3>
+<div>
+ 
+
+<div style="margin-left:auto;margin-right:auto;">
+
+ 			
+<table  style="margin-top:20px;margin-bottom:20px;">	
+<tr>
+
+<td>
+<h:graphicImage  width="206px" height="150px" library="#{templateManager.selectedTemplate.id}" name="template.png" styleClass="thumbnail" style="margin-bottom:10px"/>
+</td>	
+			
+<td>
+<table  cellpadding="7" cellspacing="7" style="margin-top:5px;font-size:9px" >
+							
+		<tr>
+		<td colspan="2">
+		<a href="#{facesContext.externalContext.request.contextPath}/services/templates/download/#{templateManager.selectedTemplate.index}">
+			   [download]
+		</a>
+		</td>
+		
+		</tr>
+		
+		<tr>
+			<td  style="text-align:right"><strong>name :</strong></td>
+			<td  style="text-align:left">#{templateManager.selectedTemplate.name}</td>
+		</tr>
+	
+	
+		<tr>
+			<td  style="text-align:right"><strong>version :</strong></td>
+			<td   style="text-align:left">#{templateManager.selectedTemplate.version}</td>
+		</tr>
+		
+		
+	
+		<tr>
+			<td style="text-align:right"><strong>Creation date :</strong></td>
+			<td  style="text-align:left">#{templateManager.selectedTemplate.creationDate}</td>
+		</tr>
+		
+		<tr>
+			<td style="text-align:right"><strong>Author :</strong></td>
+			<td  style="text-align:left">#{templateManager.selectedTemplate.author}</td>
+		</tr>
+	
+		<tr>
+			<td style="text-align:right"><strong>Author Url :</strong></td>
+			<td  style="text-align:left">#{templateManager.selectedTemplate.authorUrl}</td>
+		</tr>
+		
+		<tr>
+			<td style="text-align:right"><strong>Author Email :</strong></td>
+			<td  style="text-align:left">#{templateManager.selectedTemplate.authorEmail}</td>
+		</tr>
+		
+		<tr>
+			<td style="text-align:right"><strong>copyright :</strong></td>
+			<td  style="text-align:left">#{templateManager.selectedTemplate.copyright}</td>
+		</tr>
+		
+		<tr>
+			<td style="text-align:right"><strong>license :</strong></td>
+			<td  style="text-align:left">#{templateManager.selectedTemplate.license}</td>
+		</tr>
+										
+		</table>
+	
+</td>
+</tr>
+</table>
+
+	</div>
+
+<div style="margin-top:40px">
+  
+	 <h3>
+	 Comments
+	 </h3>
+</div>
+<div id="comments">
+
+<div class="comment">
+    <div class="comment-links">
+    [ <a href="">Hide </a> ]
+    </div>
+    <div class="comment-details" style="overflow: hidden; height: 1em;">
+        <a href="">arjan tijms</a>
+        - 13/Sep/11 02:08 PM       
+     </div>
+</div>
+  	
+ <div class="comment-body">
+            nice template     
+  </div>
+ 
+ 
+ <div class="comment">
+    <div class="comment-links">
+    [ <a href="">Hide </a> ]
+    </div>
+    <div class="comment-details" style="overflow: hidden; height: 1em;">
+        <a href="">edburns</a>
+        - 13/Sep/11 02:08 PM       
+     </div>
+</div>
+  	
+ <div class="comment-body">
+            awesome
+  </div>
+   
+<div class="comment">
+    <div class="comment-links">
+    [ <a href="">Hide </a> ]
+    </div>
+    <div class="comment-details" style="overflow: hidden; height: 1em;">
+        <a href="">lamineba</a>
+        - 13/Sep/11 02:08 PM       
+     </div>
+</div>
+  	
+ <div class="comment-body">
+            beautiful 
+  </div>
+   
+</div>   
+   
+	 
+</div>
+</td>
+
+<td>
+<h3>
+	 Suggestions
+</h3>
+<hr />
+<div align="right" style="text-align:left;width:100%">
+
+<h:form>
+<table  align="left" style="margin-top:0px">
+
+<ui:repeat var="template" value="#{templateManager.templates}">
+	
+ 		<tr><td>	
+			<h:graphicImage  width="60px" height="60px" library="#{template.id}" name="template.png" styleClass="thumbnail" style="margin-bottom:10px"/>
+		</td>
+		<td valign="top" style="text-align: left">
+		
+			<h:commandLink value="#{template.name}" action="#{templateManager.selectTemplate}">
+			 	<f:param name="template" value="#{template.id}"/>
+			 	<f:param name="view" value="templateDetails.xhtml"/>
+			</h:commandLink>
+			    <br/>
+			    <span style="font-size:9px;">de #{template.author} </span>
+			     </td>
+		</tr>
+	</ui:repeat>
+</table>
+</h:form>	
+
+</div>
+
+</td>
+
+</tr>
+
+</table>
+	</ui:define>
+      
+      </ui:composition>        

@@ -114,7 +114,13 @@ a,a:visited
 #content
 {
 	margin-top:15px;
-	font-size:0.9em;
+	font-size:0.8em;
+	width:80%;
+	margin-left:auto;
+	margin-right:auto;
+	color: #38271C;
+	font-weight: bold;
+		
 }
 
 #content p
@@ -179,7 +185,7 @@ a,a:visited
 #primaryContent
 {
 
-	padding: 1.5em;
+	padding: 0px;
 }
 
 #primaryContent h2, #primaryContent h3
@@ -436,3 +442,24 @@ fieldset, form
 		padding-right:20px;
 		margin-top:-2px;
 	}
+	
+th {
+color: black;
+text-align: center;
+padding-left: 4px;
+height: 21px;
+line-height: 21px;
+font-weight: bold;
+font-size: 10px;
+text-transform: uppercase;
+margin: 0 0 2px 0;
+border:1px solid #762e0b;
+}
+
+
+
+td {
+text-align:center;
+font-size: 11px;
+}
+	

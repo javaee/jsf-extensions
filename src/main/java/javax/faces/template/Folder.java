@@ -109,7 +109,6 @@ public class Folder {
 					write(in,zip);
 					in.close();
 					zip.closeEntry();
-					
 				}
 				else if(file.isDirectory()) {
 					ZipEntry entry=new ZipEntry(entryName+"/");
@@ -125,7 +124,7 @@ public class Folder {
 	}
 	
 
-	public static void write(InputStream in,OutputStream out) throws IOException {
+	private void write(InputStream in,OutputStream out) throws IOException {
 		
 		in=new BufferedInputStream(in,512);
 		out=new BufferedOutputStream(out,512);

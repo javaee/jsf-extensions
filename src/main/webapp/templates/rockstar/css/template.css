@@ -18,7 +18,6 @@ table, caption, tbody, tfoot, thead, tr, th, td {
 	font-style: inherit;
 	font-size: 100%;
 	font-family: inherit;
-	vertical-align: baseline;
 	line-height: 1.2em;
 }
 
@@ -61,7 +60,7 @@ background-attachment: fixed;
 }
 
 #wrapper {
-width: 860px;
+width: 950px;
 height: 800px;
 left: 0px;
 margin-right: auto;
@@ -129,7 +128,7 @@ a:active {color: #898989; font-weight: bold;  text-decoration: none;}
 
 #content {
 float: right;
-width: 600px;
+width: 700px;
 height: 600px;
 background: #fff;
 padding: 40px;

@@ -74,11 +74,23 @@
 			<h:outputText value="#{template.license}"/>
 		</h:column>
  		
- 		<h:column>
+		<h:column>
 			<f:facet name="header">
-			<h:outputText value="Creation Date"/>
+			<h:outputText value="Details"/>
 			</f:facet>
-			<h:outputText value="#{template.creationDate}"/>
+			<h:commandLink value="see" action="#{templateManager.selectTemplate}">
+			 	<f:param name="template" value="#{template.id}"/>
+			 	<f:param name="view" value="templateDetails.xhtml"/>
+			</h:commandLink>
+		</h:column>
+		
+		<h:column>
+			<f:facet name="header">
+			<h:outputText value="Download"/>
+			</f:facet>
+			<a href="#{facesContext.externalContext.request.contextPath}/services/templates/download/#{template.index}">
+			   download
+			</a>
 		</h:column>
 		
 		

@@ -1,8 +1,8 @@
-package javax.faces.remote;
+package javax.faces.template;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
-import javax.faces.template.TemplateManager;
 import javax.servlet.ServletContext;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -12,7 +12,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
-import javax.faces.template.Template;
+import javax.ws.rs.core.Response.ResponseBuilder;
 
 @Path("/templates")
 public class TemplateService {
@@ -79,23 +79,40 @@ public class TemplateService {
 	
 	@GET @Path("/download/{id}")
 	@Produces("application/zip")
-	public StreamingOutput download(@Context final ServletContext context,@PathParam("id")final int index)  {
+	public Response download(@Context final ServletContext context,@PathParam("id")final int index)  {
 		
-		return new StreamingOutput() {
-				public void write(OutputStream out) throws IOException,WebApplicationException {
-					
-					TemplateManager templateManager=(TemplateManager) context.getAttribute("templateManager");
-					Template template;
-					try {
-						template=templateManager.getTemplates().get(index-1);
-					} catch(ArrayIndexOutOfBoundsException e) {
-						throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND).build());
-					}
-					template.getMetadata().getFolder().zip(out);
-			}
-		};
+		TemplateManager templateManager=(TemplateManager) context.getAttribute("templateManager");
+		final Template template;
+		try {
+			template=templateManager.getTemplates().get(index-1);
+		} catch(ArrayIndexOutOfBoundsException e) {
+			throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND).build());
+		}
+		ResponseBuilder response = Response.ok(new StreamingOutput() {
+			public void write(OutputStream out) throws IOException {	
+				template.getMetadata().getFolder().zip(out);
+		}
+		});
+		response.header("Content-Disposition",
+			"attachment; filename="+template.getId()+".zip");
+		return response.build();
+		
 		
 	}
 	
+	@GET @Path("/thumbnail/{id}")
+	@Produces("image/png")
+	public InputStream getThumbnail(@Context final ServletContext context,@PathParam("id")final int index) throws WebApplicationException, IOException {
+						
+		TemplateManager templateManager=(TemplateManager) context.getAttribute("templateManager");
+		Template template;
+		try {
+			template=templateManager.getTemplates().get(index-1);
+		} catch(ArrayIndexOutOfBoundsException e) {
+			throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND).build());
+		}
+		return template.getResource(Template.THUMBNAIL).getInputStream();
+		
+	}
 	
 }

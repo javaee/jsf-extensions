@@ -68,9 +68,8 @@ public class TemplateManager implements PhaseListener,ResourceResolver {
 		
 		this.loader=new TemplateLoader();	
 		templates=new CopyOnWriteArrayList<Template>();
-		
+
 	}
-	
 	
 	@PostConstruct
 	public void load()  {
@@ -84,16 +83,11 @@ public class TemplateManager implements PhaseListener,ResourceResolver {
 	
 	public boolean loadTemplates(String path) {
 		
-		Folder root=new Folder(path,TEMPLATE_FOLDER);
-		for(Folder folder : root.getSubFolders()) {
-			Document metadata=folder.getDocument(Template.METADATA);
-			try {
-				  addTemplate(metadata);
-				} catch(Exception e) {
-					logger.log(Level.SEVERE, "error while loading plugin "+metadata, e);
-			}
-		}
+		Folder folder=new Folder(path,TEMPLATE_FOLDER);
+		for(Folder child : folder.getSubFolders()) 
+			addTemplate(child);
 		return templates.size()>0;
+		
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -122,20 +116,18 @@ public class TemplateManager implements PhaseListener,ResourceResolver {
 		
 	}
 	
-	public void addTemplate(Document metadata) throws Exception {
+	public void addTemplate(Folder folder) {
 		
+		Document metadata=folder.getDocument(Template.METADATA);
 		if(metadata!=null) {
-			Template template=loadTemplate(metadata);
-			template.setMetadata(metadata);
-			addTemplate(template);
+			try {
+				Template template=loader.load(metadata); 
+				template.setMetadata(metadata);
+				addTemplate(template);
+			} catch(Exception e) {
+				logger.log(Level.SEVERE, "error while loading template ", e);
+			}
 		}	
-	}
-	
-
-	public Template loadTemplate(Document metadata) throws Exception{
-		
-		return loader.load(metadata);
-		
 	}
 	
 	public void addTemplate(Template template) {
@@ -197,7 +189,7 @@ public class TemplateManager implements PhaseListener,ResourceResolver {
 				getSelectedTemplate().getResource(resourceName, libraryName);    
 	}
 
-	private Template getSelectedTemplate() {
+	public Template getSelectedTemplate() {
 		
 		Object id=getSessionParameter(SELECTED_TEMPLATE);
 		return id!=null?
@@ -244,7 +236,9 @@ public class TemplateManager implements PhaseListener,ResourceResolver {
 		
 		FacesContext ctx = FacesContext.getCurrentInstance();
         ExternalContext extContext = ctx.getExternalContext();
-        String url = extContext.encodeActionURL(ctx.getApplication().getViewHandler().getActionURL(ctx, ctx.getViewRoot().getViewId()));
+        String view=getRequestParameter("view");
+        String url = view==null?extContext.encodeActionURL(ctx.getApplication().getViewHandler().getActionURL(ctx, ctx.getViewRoot().getViewId())):
+        	extContext.encodeActionURL(ctx.getApplication().getViewHandler().getActionURL(ctx, "/"+view));
         try {
             extContext.redirect(url);
         } catch (IOException ioe) {

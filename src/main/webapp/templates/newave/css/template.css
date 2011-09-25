@@ -152,9 +152,9 @@ line-height: 1em;
 }
 
 #content {
-  width                 : 480px;
+  width                 : 100%;
   float                 : left;
-	
+ 	
 }
 
 #right {

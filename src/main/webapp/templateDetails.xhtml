@@ -37,16 +37,16 @@ td{font-size:12px}
 <table  style="margin-top:20px;margin-bottom:20px;">	
 <tr>
 
-<td>
-<h:graphicImage  width="206px" height="150px" library="#{templateManager.selectedTemplate.id}" name="template.png" styleClass="thumbnail" style="margin-bottom:10px"/>
+<td valign="top">
+<h:graphicImage  width="150px" height="150px" library="#{templateManager.selectedTemplate.id}" name="template.png" styleClass="thumbnail" style="margin-bottom:10px"/>
 </td>	
 			
 <td>
-<table  cellpadding="7" cellspacing="7" style="margin-top:5px;font-size:9px" >
+<table  cellpadding="3" cellspacing="3" style="margin-top:5px;font-size:9px" >
 							
 		<tr>
 		<td colspan="2">
-		<a href="#{facesContext.externalContext.request.contextPath}/services/templates/download/#{templateManager.selectedTemplate.index}">
+		<a href="#{facesContext.externalContext.request.contextPath}/services/templates/#{templateManager.selectedTemplate.index}/download">
 			   [download]
 		</a>
 		</td>
@@ -95,6 +95,16 @@ td{font-size:12px}
 			<td style="text-align:right"><strong>license :</strong></td>
 			<td  style="text-align:left">#{templateManager.selectedTemplate.license}</td>
 		</tr>
+			
+		<tr>
+			<td style="text-align:right"><strong>REST link :</strong></td>
+			<td  style="text-align:left">
+			<a href="#{facesContext.externalContext.request.contextPath}/services/templates/#{templateManager.selectedTemplate.index}">
+			   #{facesContext.externalContext.request.contextPath}/services/templates/#{templateManager.selectedTemplate.index}
+			</a>
+			
+			</td>
+		</tr>
 										
 		</table>
 	
@@ -104,6 +114,7 @@ td{font-size:12px}
 
 	</div>
 
+<h:outputText value="#{templateManager.selectedTemplate.description}" escape="false"/>
 <div style="margin-top:40px">
   
 	 <h3>
@@ -174,7 +185,7 @@ td{font-size:12px}
 <ui:repeat var="template" value="#{templateManager.templates}">
 	
  		<tr><td>	
-			<h:graphicImage  width="60px" height="60px" library="#{template.id}" name="template.png" styleClass="thumbnail" style="margin-bottom:10px"/>
+			<h:graphicImage  width="60px" height="40px" library="#{template.id}" name="template.png" styleClass="thumbnail" style="margin-bottom:10px"/>
 		</td>
 		<td valign="top" style="text-align: left">
 		
@@ -183,7 +194,7 @@ td{font-size:12px}
 			 	<f:param name="view" value="templateDetails.xhtml"/>
 			</h:commandLink>
 			    <br/>
-			    <span style="font-size:9px;">de #{template.author} </span>
+			    <span style="font-size:9px;">by #{template.author} </span>
 			     </td>
 		</tr>
 	</ui:repeat>

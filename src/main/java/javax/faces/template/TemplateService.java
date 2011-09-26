@@ -109,7 +109,6 @@ public class TemplateService {
 		response.header("Content-Disposition","attachment; filename="+template.getId()+".zip");
 		return response.build();
 		
-		
 	}
 	
 	@GET @Path("{id}/thumbnail")

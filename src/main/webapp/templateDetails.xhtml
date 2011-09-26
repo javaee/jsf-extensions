@@ -189,10 +189,9 @@ td{font-size:12px}
 		</td>
 		<td valign="top" style="text-align: left">
 		
-			<h:commandLink value="#{template.name}" action="#{templateManager.selectTemplate}">
+			<h:link value="#{template.name}" outcome="templateDetails">
 			 	<f:param name="template" value="#{template.id}"/>
-			 	<f:param name="view" value="templateDetails.xhtml"/>
-			</h:commandLink>
+			</h:link>
 			    <br/>
 			    <span style="font-size:9px;">by #{template.author} </span>
 			     </td>

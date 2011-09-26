@@ -1,13 +1,11 @@
 package javax.faces.template;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.application.Resource;
@@ -205,24 +203,19 @@ public class TemplateManager implements PhaseListener,ResourceResolver {
 			   getTemplates().get(0);
 	}
 	
-	public String selectTemplate() {
+	public void selectTemplate() {
 		
-		return selectTemplate(getTemplate(
-				getRequestParameter(TEMPLATE_VAR_NAME))
-				);
-	}
-	
-	public String selectTemplate(Template template) {
-	
-		addSessionParameters(template);
-		return redirect();
+		String id=getRequestParameter(TEMPLATE_VAR_NAME);
+		if(id!=null)selectTemplate(getTemplate(id));
 		
 	}
 	
-	private void addSessionParameters(Template template) {
+	private void selectTemplate(Template template) {
 	
-		addSessionParameter(SELECTED_TEMPLATE, template.getId());
-		addSessionParameter(TEMPLATE_VAR_NAME,getPage(template));
+		if(template!=null) {
+			addSessionParameter(SELECTED_TEMPLATE, template.getId());
+			addSessionParameter(TEMPLATE_VAR_NAME,getPage(template));
+		}
 		
 	}
 	
@@ -232,28 +225,13 @@ public class TemplateManager implements PhaseListener,ResourceResolver {
 		
 	}
 	
-	private String redirect() {
-		
-		FacesContext ctx = FacesContext.getCurrentInstance();
-        ExternalContext extContext = ctx.getExternalContext();
-        String view=getRequestParameter("view");
-        String url = view==null?extContext.encodeActionURL(ctx.getApplication().getViewHandler().getActionURL(ctx, ctx.getViewRoot().getViewId())):
-        	extContext.encodeActionURL(ctx.getApplication().getViewHandler().getActionURL(ctx, "/"+view));
-        try {
-            extContext.redirect(url);
-        } catch (IOException ioe) {
-            throw new FacesException(ioe);
-        }
-        return null;
-	}
-	
 	@Override
 	public void beforePhase(PhaseEvent event) {
 		
-		@SuppressWarnings("unused")
-		String selectTemplate=getSessionParameter(SELECTED_TEMPLATE)==null? 
-							  selectTemplate(getDefaultTemplate()):
-							  null;	
+		selectTemplate();
+		if(getSessionParameter(SELECTED_TEMPLATE)==null) 
+			selectTemplate(getDefaultTemplate());
+							  
 	}
 	
 	@Override

@@ -47,10 +47,10 @@
 			<f:facet name="header">
 			<h:outputText value="Name"/>
 			</f:facet>
-			<h:commandLink value="#{template.name}" action="#{templateManager.selectTemplate}" immediate="true" styleClass="template_name">
+			<h:link value="#{template.name}" outcome="templates"  styleClass="template_name">
 				<h:graphicImage  width="200px" height="150px" library="#{template.id}" name="template.png" styleClass="thumbnail"/>
 				<f:param name="template" value="#{template.id}"/>
-			</h:commandLink>
+			</h:link>
 		</h:column>
  		
  		<h:column>
@@ -78,10 +78,9 @@
 			<f:facet name="header">
 			<h:outputText value="Details"/>
 			</f:facet>
-			<h:commandLink value="see" action="#{templateManager.selectTemplate}">
+			<h:link value="see" outcome="templateDetails">
 			 	<f:param name="template" value="#{template.id}"/>
-			 	<f:param name="view" value="templateDetails.xhtml"/>
-			</h:commandLink>
+			</h:link>
 		</h:column>
 		
 		<h:column>

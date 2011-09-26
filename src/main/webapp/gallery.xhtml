@@ -43,9 +43,9 @@
 			
 			
 				
-				<h:commandLink value="#{template.name}" action="#{templateManager.selectTemplate}" immediate="true" styleClass="template_name">
+				<h:link value="#{template.name}" outcome="gallery" styleClass="template_name">
 					<f:param name="template" value="#{template.id}"/>
-			    </h:commandLink>
+			    </h:link>
 	
 
 		</div>

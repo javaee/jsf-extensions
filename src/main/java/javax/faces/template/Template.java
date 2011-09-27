@@ -5,7 +5,7 @@ import javax.faces.application.Resource;
 public class Template {
 
 	
-	protected String name="";
+	protected String name;
 	protected String description="";
 	protected String creationDate="";
 	protected String version="1.0";
@@ -33,6 +33,20 @@ public class Template {
      */
     public static final String METADATA = "template.xml";
     
+    
+    /**
+     * <p>selected template parameter</p>
+     */
+    public static final String SELECTED = "javax.faces.view.TEMPLATE";
+   
+    
+    /**
+     * <p>template var name</p>
+     */
+    
+    public static final String VAR_NAME = "template";
+
+    
 	
 	public Template() {
 		
@@ -55,7 +69,7 @@ public class Template {
 	}
     
 	public String getName() {
-		return name;
+		return name!=null?name:getId();
 	}
 
 	public void setName(String name) {

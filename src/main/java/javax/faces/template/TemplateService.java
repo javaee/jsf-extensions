@@ -21,6 +21,7 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 @Path("/templates")
 public class TemplateService {
 
+	
 	@GET
 	@Produces("application/xml")
 	public String getTemplatesAsXML(@Context ServletContext context,@Context UriInfo uriInfo)  {

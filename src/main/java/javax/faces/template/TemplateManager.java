@@ -31,18 +31,6 @@ public class TemplateManager implements PhaseListener,ResourceResolver {
      */
     public static final String TEMPLATE_FOLDER = "templates";
     
-	/**
-     * <p>selected template parameter</p>
-     */
-    public static final String SELECTED_TEMPLATE = "javax.faces.view.TEMPLATE";
-   
-    /**
-     * <p>template var name</p>
-     */
-    
-    public static final String TEMPLATE_VAR_NAME = "template";
-
-    
     /**
      * <p>template loader</p>
      */
@@ -66,7 +54,7 @@ public class TemplateManager implements PhaseListener,ResourceResolver {
 		
 		this.loader=new TemplateLoader();	
 		templates=new CopyOnWriteArrayList<Template>();
-
+	
 	}
 	
 	@PostConstruct
@@ -85,25 +73,6 @@ public class TemplateManager implements PhaseListener,ResourceResolver {
 		for(Folder child : folder.getSubFolders()) 
 			addTemplate(child);
 		return templates.size()>0;
-		
-	}
-	
-	@SuppressWarnings("unchecked")
-	private void addResourceHandler() {
-		
-		Application application=FacesContext.getCurrentInstance().getApplication();
-		application.setResourceHandler(new ResourceHandlerImpl(this));
-		
-	}
-
-	
-	private void addPhaseListener() {
-		
-		LifecycleFactory factory = (LifecycleFactory)
-		FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
-		Lifecycle lifecycle= factory.getLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE);
-		lifecycle.addPhaseListener(this);
-		
 	}
 	
 	private String getRealPath() {
@@ -111,10 +80,24 @@ public class TemplateManager implements PhaseListener,ResourceResolver {
 		FacesContext facesContext=FacesContext.getCurrentInstance();
 		ServletContext context=(ServletContext) facesContext.getExternalContext().getContext();
 		return context.getRealPath("/");
-		
 	}
 	
-	public void addTemplate(Folder folder) {
+	private void addPhaseListener() {
+		
+		LifecycleFactory factory = (LifecycleFactory)
+		FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
+		Lifecycle lifecycle= factory.getLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE);
+		lifecycle.addPhaseListener(this);
+	}
+
+	@SuppressWarnings("unchecked")
+	private void addResourceHandler() {
+		
+		Application application=FacesContext.getCurrentInstance().getApplication();
+		application.setResourceHandler(new ResourceHandlerImpl(this));		
+	}
+
+	private void addTemplate(Folder folder) {
 		
 		Document metadata=folder.getDocument(Template.METADATA);
 		if(metadata!=null) {
@@ -123,7 +106,7 @@ public class TemplateManager implements PhaseListener,ResourceResolver {
 				template.setMetadata(metadata);
 				addTemplate(template);
 			} catch(Exception e) {
-				logger.log(Level.SEVERE, "error while loading template ", e);
+				logger.log(Level.SEVERE, "error while loading template "+metadata, e);
 			}
 		}	
 	}
@@ -189,7 +172,7 @@ public class TemplateManager implements PhaseListener,ResourceResolver {
 
 	public Template getSelectedTemplate() {
 		
-		Object id=getSessionParameter(SELECTED_TEMPLATE);
+		Object id=getSessionParameter(Template.SELECTED);
 		return id!=null?
 			   getTemplate(id.toString()):
 			   getDefaultTemplate();
@@ -197,24 +180,25 @@ public class TemplateManager implements PhaseListener,ResourceResolver {
 	
 	private Template getDefaultTemplate() {
 		
-		Template template=getTemplate(getInitParameter(SELECTED_TEMPLATE));
+		Template template=getTemplate(getInitParameter(Template.SELECTED));
 		return template!=null?
 			   template :
-			   getTemplates().get(0);
+			   templates.get(0);
 	}
 	
-	public void selectTemplate() {
+	private boolean selectTemplate() {
 		
-		String id=getRequestParameter(TEMPLATE_VAR_NAME);
+		String id=getRequestParameter(Template.VAR_NAME);
 		if(id!=null)selectTemplate(getTemplate(id));
+		return getSessionParameter(Template.SELECTED)!=null;
 		
 	}
 	
 	private void selectTemplate(Template template) {
 	
 		if(template!=null) {
-			addSessionParameter(SELECTED_TEMPLATE, template.getId());
-			addSessionParameter(TEMPLATE_VAR_NAME,getPage(template));
+			addSessionParameter(Template.SELECTED, template.getId());
+			addSessionParameter(Template.VAR_NAME,getPage(template));
 		}
 		
 	}
@@ -228,8 +212,7 @@ public class TemplateManager implements PhaseListener,ResourceResolver {
 	@Override
 	public void beforePhase(PhaseEvent event) {
 		
-		selectTemplate();
-		if(getSessionParameter(SELECTED_TEMPLATE)==null) 
+		if(!selectTemplate())
 			selectTemplate(getDefaultTemplate());
 							  
 	}

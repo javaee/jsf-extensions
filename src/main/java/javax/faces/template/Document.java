@@ -47,6 +47,7 @@ public class Document  extends Resource {
 		
 	}
 	
+    @Override
 	public InputStream getInputStream() throws IOException {
 		
 		return new FileInputStream(file);
@@ -59,6 +60,7 @@ public class Document  extends Resource {
 		
 	}
 	
+    @Override
 	public String toString() {
 		
 		return file.toString();

@@ -58,7 +58,14 @@
 
 <h:body id="javajsf_body">
     
-  <jj:javajsf />
+    <h:form prependId="false" id="javajsf_form">
+        <f:ajax execute="@all" render="@all">
+    
+          <jj:javajsf />
+      
+        </f:ajax>
+  
+    </h:form>
   
   <ui:debug />
   

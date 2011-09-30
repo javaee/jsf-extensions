@@ -40,9 +40,9 @@
 
 package javajsf.demo.ui;
 
-import com.sun.faces.jsf_extensions_javajsf.ui.Button;
 import com.sun.faces.jsf_extensions_javajsf.Application;
 import com.sun.faces.jsf_extensions_javajsf.JavaJsfApplication;
+import com.sun.faces.jsf_extensions_javajsf.ui.Form;
 import javajsf.demo.boundary.DiscoveryService;
 
 import javax.faces.event.PhaseId;
@@ -64,19 +64,19 @@ public class MainUI extends Application
 
     private UIComponent window;
 
-    private Button refreshButton = new Button("Reload Members");
-    private Button removeButton = new Button("Remove Selected Members");
-    private Button clearAllButton = new Button("Remove All Members");
-    private Button createNewButton = new Button("Create New Member");
+    private UICommand refreshButton; // = new Button("Reload Members");
+    private UICommand removeButton; // = new Button("Remove Selected Members");
+    private UICommand clearAllButton; // = new Button("Remove All Members");
+    private UICommand createNewButton; // = new Button("Create New Member");
     /*****
     private CreateMemberInfoPanel cmiPanel;
     private MasterListPanel mlPanel;
      *******/
 
     private HttpServletRequest httpReq;
-    private UIComponent loginForm ;
+    private Form loginForm ;
     private UICommand loginButton;
-    private Button logoutButton;
+    private UICommand logoutButton;
 
     UIComponent loginLayout;
     UIComponent defaultLayout;
@@ -94,7 +94,7 @@ public class MainUI extends Application
     @Override
     public void init() {
         window = createComponent("window");
-        loginForm = createComponent("form");
+        loginForm = (Form) createComponent("form");
         loginButton = (UICommand) createComponent("org.primefaces.component.CommandButton",
                 "org.primefaces.component.CommandButtonRenderer");
         loginButton.setValue("OK");
@@ -256,10 +256,10 @@ public class MainUI extends Application
     @Override
     public void processAction(ActionEvent clickEvent) {
         ActionSource2 source = (ActionSource2) clickEvent.getSource();
-        /******
         if (refreshButton == source) {
-            reloadMasterListPanel();
+//            reloadMasterListPanel();
         } else if (removeButton == source) {
+            /******
             Set<MemberInfo> masters = mlPanel.getSelectedMasters();
             if (masters != null && masters.size() >0) {
                 for (MemberInfo target : masters) {
@@ -269,11 +269,16 @@ public class MainUI extends Application
             } else {
                 warn("No masters selected in table");
             }
+             * ****/
         } else if (clearAllButton == source) {
+            /***
             service.removeAllMasters();
             reloadMasterListPanel();
+            ***/
         } else if (createNewButton == source) {
+            /***
             cmiPanel.setVisible(true);
+             * **/
         } else if (loginButton == source) {
                 String name = (String) loginForm.getField("user").getValue();
                 String pass = (String) loginForm.getField("pass").getValue();
@@ -284,12 +289,13 @@ public class MainUI extends Application
 
                     // if that succeeded, reload page
                     System.out.println("LOGIN OK: " + name);
-                    window.setContent(defaultLayout);
+                    //window.setContent(defaultLayout);
                 } catch (Exception e) {
                     System.out.println("LOGIN FAIL: " + name);
                     warn(String.format("Login failed for '%s'", name));
                 }
         } else if (logoutButton == source) {
+            /***
             try {
                 httpReq.logout();
                 loginForm.getField("pass").setValue("");
@@ -298,8 +304,8 @@ public class MainUI extends Application
             } catch (ServletException e) {
                 warn(e.toString());
             }
+             * ***/
         }
-         * ********/
     }
     
     /***********
@@ -311,13 +317,13 @@ public class MainUI extends Application
     public DiscoveryService getService() {
         return service;
     }
+     *****/ 
 
     // utility method
     void warn(String msg) {
-        getMainWindow().showNotification(msg,
-            Window.Notification.TYPE_WARNING_MESSAGE);
+        //getMainWindow().showNotification(msg,
+          //  Window.Notification.TYPE_WARNING_MESSAGE);
     }
-     *****/ 
 
     @Override
     public void beforePhase(PhaseEvent e) {

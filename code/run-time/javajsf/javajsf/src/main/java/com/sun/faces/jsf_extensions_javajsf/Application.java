@@ -42,20 +42,16 @@
 package com.sun.faces.jsf_extensions_javajsf;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.FactoryFinder;
 import javax.faces.application.ResourceHandler;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UINamingContainer;
-import javax.faces.component.UIPanel;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewDeclarationLanguage;
 import javax.faces.view.facelets.Facelet;
 import javax.faces.view.facelets.FaceletFactory;
-import javax.faces.view.facelets.FaceletHandler;
 
 
 public abstract class Application  {

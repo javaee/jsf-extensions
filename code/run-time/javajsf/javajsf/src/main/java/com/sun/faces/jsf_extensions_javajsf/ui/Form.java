@@ -42,35 +42,28 @@
 package com.sun.faces.jsf_extensions_javajsf.ui;
 
 
-import com.sun.faces.jsf_extensions_javajsf.Application;
-import javax.faces.component.UIForm;
+import javax.faces.component.EditableValueHolder;
+import javax.faces.component.FacesComponent;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UINamingContainer;
 
-public class Form extends UIForm {
+@FacesComponent(value = "javajsf.Form")
+public class Form extends UINamingContainer {
     
-    private String caption;
-
-    public Form(String caption) {
-        this.caption = caption;
+    public Form() {
     }
     
     
-
-    private Application application;
-
-    public void setApplication(Application application) {
-        this.application = application;
-    }
-
-    /**
-     * <p>The standard component family for this component.</p>
-     */
-    @SuppressWarnings("FieldNameHidesFieldInSuperclass")
-    public static final String COMPONENT_FAMILY = "javajsf.Form";
-
-
-    @Override
-    public String getFamily() {
-        return COMPONENT_FAMILY;
+    public EditableValueHolder getField(String propertyId) {
+        EditableValueHolder result = null;
+        
+        UIComponent body = this.getFacets().get("body");
+        UIComponent field = body.findComponent(propertyId);
+        if (null != field) {
+            result = (EditableValueHolder) field.getFacets().get("input");
+        }
+        
+        return result;
     }
 
 

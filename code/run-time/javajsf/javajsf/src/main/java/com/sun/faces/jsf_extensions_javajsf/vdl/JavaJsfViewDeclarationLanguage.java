@@ -47,7 +47,6 @@ import com.sun.faces.jsf_extensions_javajsf.JavaJSFLogger;
 import java.beans.BeanInfo;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,10 +56,10 @@ import javax.faces.application.Application;
 import javax.faces.application.Resource;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
-import javax.faces.component.behavior.AjaxBehavior;
-import javax.faces.component.html.HtmlForm;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.event.PostAddToViewEvent;
+import javax.faces.event.SystemEventListener;
 import javax.faces.view.AttachedObjectHandler;
 import javax.faces.view.StateManagementStrategy;
 import javax.faces.view.ViewDeclarationLanguage;
@@ -182,34 +181,27 @@ public class JavaJsfViewDeclarationLanguage extends ViewDeclarationLanguageWrapp
     private static final String JAVAJSF_APPLICATIONS_DATA_STRUCTURE = "com.sun.faces.jsf_extensions_javajsf.APPLICATIONS";
         
     
-    private void linkMainWindowToViewRoot(FacesContext context, UIViewRoot root) {
+    public void linkMainWindowToViewRoot(FacesContext context, UIViewRoot root) {
         
-        com.sun.faces.jsf_extensions_javajsf.Application app = findCurrentApplication(context);
-        if (null != app) {
-            UIComponent body = root.findComponent("javajsf_body");
-            List<UIComponent> bodyChildren = body.getChildren();
-            bodyChildren.clear();
-            Application jsfApplication = context.getApplication();
+        List<SystemEventListener> listeners = root.getViewListenersForEventClass(PostAddToViewEvent.class);
+        List<SystemEventListener> listenersCopy = new ArrayList(listeners);
+        listeners.clear();
+        
+        try {
             
-            // Enclose everything in an HtmlForm
-            HtmlForm form = new HtmlForm();
-            form.setId(root.createUniqueId());
-            form.getChildren().add(app.getMainWindow());
-            bodyChildren.add(form);
-            
-            // Ajaxify the form
-            AjaxBehavior ajaxBehavior = (AjaxBehavior) 
-                    jsfApplication.createBehavior("javax.faces.behavior.Ajax");
-            List<String> ids = new ArrayList<String>();
-            ids.add(form.getClientId(context));
-            ajaxBehavior.setExecute(ids);
-            ajaxBehavior.setRender(ids);
-            Collection<String> supportedEventNames = form.getEventNames();
-            for (String cur : supportedEventNames) {
-                form.addClientBehavior(cur, ajaxBehavior);
-            }                
-
-            
+            com.sun.faces.jsf_extensions_javajsf.Application app = findCurrentApplication(context);
+            if (null != app) {
+                UIComponent form = root.findComponent("javajsf_form");
+                List<UIComponent> formChildren = form.getChildren();
+                formChildren.clear();
+                
+                formChildren.add(app.getMainWindow());
+                
+            }
+        }
+        finally {
+            listeners.addAll(listenersCopy);
+            listenersCopy.clear();
         }
     }
     

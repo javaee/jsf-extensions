@@ -129,3 +129,16 @@ create the composite compnent using
 application.createComponent(Resource), and make it so
 ReapplySomeFaceletsAfterInit is really ApplySomeFaceletsAfterInit and
 they happen to find the already created composite components.
+
+
+The issue of making it so the instances created by a call to
+application.init() are correctly state managed.
+
+Consider using createComponent(ValueExpression, FacesContext, componentType, rendererType)
+
+*But* this doesn't work for composite components.  This is bug
+JAVASERVERFACES_SPEC_PUBLIC-600.
+
+
+form is 31d908 on save, same on postback.
+

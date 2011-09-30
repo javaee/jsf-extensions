@@ -57,7 +57,7 @@ import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseListener;
 
 @JavaJsfApplication(urlPatterns = {"/ui/*"})
-public class MainUI extends Application
+public class MainUI_primefaces extends Application
     implements Serializable, ActionListener, PhaseListener {
 
     private DiscoveryService service;
@@ -83,10 +83,10 @@ public class MainUI extends Application
 
     private static final String GMS_USER = "GMS_USER";
     
-    public MainUI() {
+    public MainUI_primefaces() {
     }
 
-    public MainUI(DiscoveryService service) {
+    public MainUI_primefaces(DiscoveryService service) {
         this();
         this.service = service;
     }
@@ -95,9 +95,10 @@ public class MainUI extends Application
     public void init() {
         window = createComponent("window");
         loginForm = (Form) createComponent("form");
-        loginButton = (UICommand) createComponent("javax.faces.Command",
-                "javax.faces.Button");
+        loginButton = (UICommand) createComponent("org.primefaces.component.CommandButton",
+                "org.primefaces.component.CommandButtonRenderer");
         loginButton.setValue("OK");
+        loginButton.getAttributes().put("ajax", false); // Ajax handled by enclosing component
         /**
         Button logoutButton = new Button("Logout");
          */
@@ -136,26 +137,40 @@ public class MainUI extends Application
                 "passwords. So don't go giving me all your " +
                 "login info.");
 
-        UIComponent formLayout = createComponent("javax.faces.Panel",
-                "javax.faces.Grid");
+        UIComponent formLayout = createComponent("org.primefaces.component.Layout",
+                "org.primefaces.component.LayoutRenderer");
+        formLayout.getAttributes().put("style", "width:400px;height:200px;");
         
+        UIComponent layoutUnit = 
+                createComponent("org.primefaces.component.LayoutUnit",
+                "org.primefaces.component.LayoutUnitRenderer");
         UIComponent field = createComponent("field");
         field.setId("user");
         field.getAttributes().put("label", "User:");
-        UIComponent text = (UIComponent) createComponent("javax.faces.Input", 
-                "javax.faces.Text");
+        UIComponent text = (UIComponent) createComponent("org.primefaces.component.InputText", 
+                "org.primefaces.component.InputTextRenderer");
         field.getFacets().put("input", text);
-        formLayout.getChildren().add(field);
+        layoutUnit.getChildren().add(field);
+        formLayout.getChildren().add(layoutUnit);
         
+        layoutUnit = 
+                createComponent("org.primefaces.component.LayoutUnit",
+                "org.primefaces.component.LayoutUnitRenderer");
         field = createComponent("field");
         field.setId("pass");
         field.getAttributes().put("label", "Password:");
-        text = (UIComponent) createComponent("javax.faces.Input", 
-                "javax.faces.Secret");
+        text = (UIComponent) createComponent("org.primefaces.component.Password", 
+                "org.primefaces.component.PasswordRenderer");
+        text.getAttributes().put("feedback", false);
         field.getFacets().put("input", text);
-        formLayout.getChildren().add(field);
+        layoutUnit.getChildren().add(field);
+        formLayout.getChildren().add(layoutUnit);
         
-        formLayout.getChildren().add(loginButton);
+        layoutUnit = 
+                createComponent("org.primefaces.component.LayoutUnit",
+                "org.primefaces.component.LayoutUnitRenderer");
+        layoutUnit.getChildren().add(loginButton);
+        formLayout.getChildren().add(layoutUnit);
         
         loginForm.getFacets().put("body", formLayout);
         
@@ -175,7 +190,7 @@ public class MainUI extends Application
                 "org.primefaces.component.LayoutRenderer");
         loginLayout.getAttributes().put("fullPage", Boolean.TRUE);
         
-        UIComponent layoutUnit = 
+        layoutUnit = 
                 createComponent("org.primefaces.component.LayoutUnit",
                 "org.primefaces.component.LayoutUnitRenderer");
         layoutUnit.getChildren().add(loginPanel);

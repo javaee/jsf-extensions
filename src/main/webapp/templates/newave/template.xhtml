@@ -3,7 +3,7 @@
       xmlns:h="http://java.sun.com/jsf/html"  
       xmlns:ui="http://java.sun.com/jsf/facelets">  
   <h:head>
-  		<title>Newave</title>  
+  		<title><ui:insert name="title">Newave</ui:insert></title>  
   		 <META HTTP-EQUIV="Cache-Control" CONTENT="max-age=0"/>
 		<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache"/>
 		<META http-equiv="expires" content="0"/>
@@ -21,7 +21,9 @@
 	    <h2><a href="http://www.xtremeopensource.org/">Modified for JSF</a></h2>
 	  </div>
 	  <div id="topmenu">
-	    <ui:insert name="menu"/>
+	    <ui:insert name="menu">
+			<ui:include src="/menu.xhtml"/>
+		</ui:insert>
 	  </div>
   </div>
  

@@ -3,7 +3,7 @@
       xmlns:h="http://java.sun.com/jsf/html"  
       xmlns:ui="http://java.sun.com/jsf/facelets">  
   <h:head>
-  		<title>Pinkkitty</title>  
+  		<title><ui:insert name="title">Pinkkitty</ui:insert></title>  
   		<META HTTP-EQUIV="Cache-Control" CONTENT="max-age=0"/>
 		<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache"/>
 		<META http-equiv="expires" content="0"/>
@@ -20,7 +20,9 @@
 	</div>
 	<div class="pill_m">
 		<div id="pillmenu">
-			<ui:insert name="menu"/>
+			<ui:insert name="menu">
+				<ui:include src="/menu.xhtml"/>
+			</ui:insert>
 		</div>
 		
 	</div>

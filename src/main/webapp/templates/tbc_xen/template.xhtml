@@ -3,7 +3,7 @@
       xmlns:h="http://java.sun.com/jsf/html"  
       xmlns:ui="http://java.sun.com/jsf/facelets">  
   <h:head>
-  		<title>XEN</title>  
+  		<title><ui:insert name="title">XEN</ui:insert></title>  
   		 <META HTTP-EQUIV="Cache-Control" CONTENT="max-age=0"/>
 		<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache"/>
 		<META http-equiv="expires" content="0"/>
@@ -33,7 +33,9 @@
 				<div id="logo"></div>
 			</div>
 			<div id="menu">
-				<ui:insert name="menu"/>
+				<ui:insert name="menu">
+					<ui:include src="/menu.xhtml"/>
+				</ui:insert>
 			</div>
 			<div id="showcase">
 				<div id="showcase_inner_left" style="width:650px">

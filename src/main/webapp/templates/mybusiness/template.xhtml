@@ -3,7 +3,7 @@
       xmlns:h="http://java.sun.com/jsf/html"  
       xmlns:ui="http://java.sun.com/jsf/facelets">  
        <h:head>  
-       	<title>MyBusiness</title>
+       	<title><ui:insert name="title">MyBusiness</ui:insert></title>
        	<META HTTP-EQUIV="Cache-Control" CONTENT="max-age=0"/>
 		<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache"/>
 		<META http-equiv="expires" content="0"/>
@@ -18,8 +18,8 @@
     <div id="logo"><a href="$path"><h:graphicImage library="images" name="logo.png" /></a></div>
     <div id="menu">
       <ui:insert name="menu">
-         your menu here
-      </ui:insert>
+			<ui:include src="/menu.xhtml"/>
+		</ui:insert>
     </div>
   </div>
 </div>

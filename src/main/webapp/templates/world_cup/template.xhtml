@@ -3,7 +3,7 @@
       xmlns:h="http://java.sun.com/jsf/html"  
       xmlns:ui="http://java.sun.com/jsf/facelets">  
   <h:head>
-  		<title>WORLD CUP</title>  
+  		<title><ui:insert name="title">WORLD CUP</ui:insert></title>  
   		<META HTTP-EQUIV="Cache-Control" CONTENT="max-age=0"/>
 		<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache"/>
 		<META http-equiv="expires" content="0"/>
@@ -20,7 +20,6 @@
 
 <div id="header">
 
-<ui:insert name="header"/>
 <div id="logo">
 </div>
 </div><!--header-->
@@ -28,7 +27,9 @@
 
 <div id="menu">
 
-<ui:insert name="menu"/>
+		<ui:insert name="menu">
+			<ui:include src="/menu.xhtml"/>
+		</ui:insert>
 
 </div><!--navigation-->
 

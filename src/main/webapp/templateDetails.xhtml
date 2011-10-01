@@ -3,11 +3,10 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://java.sun.com/jsf/core">
   
-      <ui:define name="menu">     
-      	<ui:include src="menu.xhtml"/>
-      </ui:define>
+<ui:define name="title">Template Details</ui:define>
 
-	<ui:define name="content">
+
+<ui:define name="content">
 	
 <style>
 
@@ -95,6 +94,17 @@ td{font-size:12px}
 			<td style="text-align:right"><strong>license :</strong></td>
 			<td  style="text-align:left">#{templateManager.selectedTemplate.license}</td>
 		</tr>
+		
+		<tr>
+			<td style="text-align:right"><strong>Positions :</strong></td>
+			<td  style="text-align:left">
+			<h:link value="click to see" outcome="templateDetails" target="_blank">
+				<f:param name="template" value="#{templateManager.selectedTemplate.id}"/>
+				<f:param name="highlight" value="true"/>
+			</h:link>
+			
+			</td>
+		</tr>
 			
 		<tr>
 			<td style="text-align:right"><strong>REST link :</strong></td>
@@ -105,6 +115,8 @@ td{font-size:12px}
 			
 			</td>
 		</tr>
+		
+		
 										
 		</table>
 	
@@ -173,14 +185,11 @@ td{font-size:12px}
 </td>
 
 <td>
-<h3>
-	 Suggestions
-</h3>
-<hr />
+
 <div align="right" style="text-align:left;width:100%">
 
 <h:form>
-<table  align="left" style="margin-top:0px">
+<table  align="left" style="margin-top:70px">
 
 <ui:repeat var="template" value="#{templateManager.templates}">
 	

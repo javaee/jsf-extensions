@@ -3,7 +3,7 @@
       xmlns:h="http://java.sun.com/jsf/html"  
       xmlns:ui="http://java.sun.com/jsf/facelets">  
   <h:head>
-  		<title>lookAT</title>  
+  		<title><ui:insert name="title">lookAT</ui:insert></title>  
   		<META HTTP-EQUIV="Cache-Control" CONTENT="max-age=0"/>
 		<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache"/>
 		<META http-equiv="expires" content="0"/>
@@ -20,14 +20,14 @@
 
 <div id="header">
 
-<ui:insert name="header"/>
-
 </div><!--header-->
 
 
 <div id="menu">
 
-<ui:insert name="menu"/>
+<ui:insert name="menu">
+	<ui:include src="/menu.xhtml"/>
+</ui:insert>
 
 </div><!--navigation-->
 

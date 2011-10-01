@@ -142,3 +142,13 @@ JAVASERVERFACES_SPEC_PUBLIC-600.
 
 form is 31d908 on save, same on postback.
 
+
+Replicate the following functionality from AjaxBehaviors.
+
+  in JavaJsfTagHandler.apply, before calling vdl.initApplications(), create an AjaxBehavior instance just as is done in AjaxHandler.applyWrapping()
+
+1101344
+
+root.children[3].children[0]
+
+  

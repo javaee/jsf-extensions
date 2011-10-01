@@ -51,5 +51,11 @@
         <tag-name>javajsf</tag-name>
         <handler-class>com.sun.faces.jsf_extensions_javajsf.vdl.JavaJsfTagHandler</handler-class>
     </tag>
+    <tag>
+        <tag-name>c</tag-name>
+        <component>
+            <handler-class>com.sun.faces.jsf_extensions_javajsf.vdl.JavaJsfComponentHandler</handler-class>
+        </component>
+    </tag>
 
 </facelet-taglib>

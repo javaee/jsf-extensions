@@ -52,13 +52,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.faces.application.Application;
 import javax.faces.application.Resource;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PostAddToViewEvent;
+import javax.faces.event.PreRemoveFromViewEvent;
 import javax.faces.event.SystemEventListener;
 import javax.faces.view.AttachedObjectHandler;
 import javax.faces.view.StateManagementStrategy;
@@ -183,9 +183,13 @@ public class JavaJsfViewDeclarationLanguage extends ViewDeclarationLanguageWrapp
     
     public void linkMainWindowToViewRoot(FacesContext context, UIViewRoot root) {
         
-        List<SystemEventListener> listeners = root.getViewListenersForEventClass(PostAddToViewEvent.class);
-        List<SystemEventListener> listenersCopy = new ArrayList(listeners);
-        listeners.clear();
+        List<SystemEventListener> postAddListeners = root.getViewListenersForEventClass(PostAddToViewEvent.class);
+        List<SystemEventListener> postAddListenersCopy = new ArrayList(postAddListeners);
+        postAddListeners.clear();
+        
+        List<SystemEventListener> preRemoveListeners = root.getViewListenersForEventClass(PreRemoveFromViewEvent.class);
+        List<SystemEventListener> preRemoveListenersCopy = new ArrayList(preRemoveListeners);
+        preRemoveListeners.clear();
         
         try {
             
@@ -200,8 +204,11 @@ public class JavaJsfViewDeclarationLanguage extends ViewDeclarationLanguageWrapp
             }
         }
         finally {
-            listeners.addAll(listenersCopy);
-            listenersCopy.clear();
+            postAddListeners.addAll(postAddListenersCopy);
+            postAddListenersCopy.clear();
+
+            preRemoveListeners.addAll(preRemoveListenersCopy);
+            preRemoveListenersCopy.clear();
         }
     }
     

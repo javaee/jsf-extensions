@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://java.sun.com/jsf/composite"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+    <!-- INTERFACE -->
+    <cc:interface name="javajsf.Form" componentType="javajsf.Form">
+        
+        <cc:facet name="body" />
+        <cc:facet name="footer" />
+        <cc:attribute name="caption" type="java.lang.String" />
+        <cc:attribute name="description" type="java.lang.String" />
+        
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+        
+        
+        <p>#{cc.attributes.caption}</p>
+        <p>#{cc.attributes.description}</p>
+        
+        <cc:renderFacet name="body" />
+        
+        <hr />
+        <cc:renderFacet name="footer" />                    
+        
+    </cc:implementation>
+</html>

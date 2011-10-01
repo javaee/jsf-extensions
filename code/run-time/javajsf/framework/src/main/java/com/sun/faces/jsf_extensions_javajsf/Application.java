@@ -45,6 +45,7 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.ResourceHandler;
 import javax.faces.component.UIComponent;
@@ -100,7 +101,15 @@ public abstract class Application  {
     public UIComponent createComponent(String componentType) {
         UIComponent result = null;
         FacesContext context = FacesContext.getCurrentInstance();
-        result = createCompositeComponent(context, componentType);
+        
+        try {
+            result = useFaceletsToCreateComponent(context, componentType, null);
+        } catch (FacesException fe) {
+            
+        }
+        if (null == result) {
+            result = createCompositeComponent(context, componentType);
+        }
         result.setId(context.getViewRoot().createUniqueId());
         return result;
     }
@@ -111,9 +120,8 @@ public abstract class Application  {
         FacesContext context = FacesContext.getCurrentInstance();
         
         // Ask JSF for a traditional component
-        result = jsfApplication.createComponent(context, componentType, rendererType);
+        result = useFaceletsToCreateComponent(context, componentType, rendererType);  
         if (null == result) {
-            // Look for a composite component
             result = createCompositeComponent(context, componentType);
         }
         result.setId(context.getViewRoot().createUniqueId());
@@ -122,6 +130,42 @@ public abstract class Application  {
     }
     
     // <editor-fold defaultstate="collapsed" desc="Helper methods">
+    
+    private UIComponent useFaceletsToCreateComponent(FacesContext context, String componentType, String rendererType) {
+        FaceletFactory faceletFactory = (FaceletFactory)
+                FactoryFinder.getFactory(FactoryFinder.FACELET_FACTORY);
+        Facelet usingPageFacelet = null;
+        Map contextAttrs = context.getAttributes();
+        final String componentTypeAttrName = "com.sun.faces.jsf_extensions_javajsf.componentTypeAttrName";
+        final String rendererTypeAttrName = "com.sun.faces.jsf_extensions_javajsf.rendererTypeAttrName";
+        contextAttrs.put(componentTypeAttrName, componentType);
+        contextAttrs.put(rendererTypeAttrName, rendererType);
+        UIComponent result = null;
+        
+        try {
+            usingPageFacelet = faceletFactory.getFacelet("c_using.xhtml");
+            UIComponent tmp = (UIComponent)
+                    jsfApplication.createComponent("javax.faces.NamingContainer");
+            tmp.setId(context.getViewRoot().createUniqueId());
+            usingPageFacelet.apply(context, tmp);
+                result = tmp.findComponent("javajsf_c");
+            tmp.getChildren().clear();
+        } catch (IOException ioe) {
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                Object [] params = {
+                    componentType + " " + rendererType, ioe
+                };
+                LOGGER.log(Level.SEVERE, "javajsf.cannot_create_composite_component", params);
+                LOGGER.log(Level.SEVERE, "", ioe);
+            }
+        } finally {
+            contextAttrs.remove(componentTypeAttrName);
+            contextAttrs.remove(rendererTypeAttrName);
+        }
+        return result;
+    }
+    
+    
     
     private UIComponent createCompositeComponent(FacesContext context, String componentName) {
         UIComponent result = null;

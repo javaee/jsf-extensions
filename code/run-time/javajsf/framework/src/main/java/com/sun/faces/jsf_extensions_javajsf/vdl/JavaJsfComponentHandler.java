@@ -55,7 +55,7 @@ public class JavaJsfComponentHandler extends ComponentHandler {
     }
     
     @Override
-    public UIComponent createComponent(FaceletContext ctx) {
+    public UIComponent createCustomComponent(FaceletContext ctx) {
         UIComponent result = null;
         FacesContext context = ctx.getFacesContext();
         Map contextAttrs = context.getAttributes();

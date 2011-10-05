@@ -55,7 +55,7 @@ import javax.faces.event.ActionListener;
 @JavaJsfApplication(urlPatterns = {"/ui/*"})
 public class MainUI extends Application
     implements Serializable, ActionListener {
-    
+    public static final String JAVAJSF_URI = "http://jsf.java.net/javajsf";
     UICommand button;
     Form form;
 
@@ -66,7 +66,7 @@ public class MainUI extends Application
     public void init() {
         
         UIComponent input = createComponent("javax.faces.HtmlInputText");
-        UIComponent field = createComponent("field");
+        UIComponent field = createFaceletsComponent(JAVAJSF_URI, "field");
         field.setId("input");
         field.getAttributes().put("label", "Enter some text: ");
         field.getFacets().put("input", input);
@@ -80,12 +80,12 @@ public class MainUI extends Application
         layout.getChildren().add(field);
         layout.getChildren().add(button);
         
-        form = (Form) createComponent("form");
+        form = (Form) createFaceletsComponent(JAVAJSF_URI, "form");
         form.getAttributes().put("caption", "Caption text");
         form.getAttributes().put("description", "Description text");
         form.getFacets().put("body", layout);
         
-        UIComponent window = createComponent("window");
+        UIComponent window = createFaceletsComponent(JAVAJSF_URI, "window");
         window.getFacets().put("content", form);
         
         this.setMainWindow(window);

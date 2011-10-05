@@ -46,6 +46,7 @@ import com.sun.faces.jsf_extensions_javajsf.JavaJsfApplication;
 import com.sun.faces.jsf_extensions_javajsf.JavaJSFLogger;
 import java.beans.BeanInfo;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -310,7 +311,7 @@ public class JavaJsfViewDeclarationLanguage extends ViewDeclarationLanguageWrapp
     }
 
     
-    private class PerSessionJavaJSFApplicationManager {
+    private class PerSessionJavaJSFApplicationManager implements Serializable {
         
         private boolean applicationsInitialized = false;
         private boolean applicationsInstantiatedAndInjected = false;

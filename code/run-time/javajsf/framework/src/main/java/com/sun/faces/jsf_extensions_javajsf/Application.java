@@ -41,7 +41,7 @@
 
 package com.sun.faces.jsf_extensions_javajsf;
 
-import java.io.IOException;
+import java.util.Collections;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -99,35 +99,43 @@ public abstract class Application  {
     public abstract void destroy();
     
     public UIComponent createComponent(String componentType) {
-        UIComponent result = null;
-        FacesContext context = FacesContext.getCurrentInstance();
+        UIComponent result = createComponent(componentType, null);
         
-        try {
-            result = useFaceletsToCreateComponent(context, componentType, null);
-        } catch (FacesException fe) {
-            
-        }
-        if (null == result) {
-            result = createCompositeComponent(context, componentType);
-        }
-        result.setId(context.getViewRoot().createUniqueId());
         return result;
     }
-
-
+    
     public UIComponent createComponent(String componentType, String rendererType) {
         UIComponent result = null;
         FacesContext context = FacesContext.getCurrentInstance();
         
-        // Ask JSF for a traditional component
-        result = useFaceletsToCreateComponent(context, componentType, rendererType);  
-        if (null == result) {
-            result = createCompositeComponent(context, componentType);
+        try{
+            result = useFaceletsToCreateComponent(context, componentType, null);
+            result.setId(context.getViewRoot().createUniqueId());
+        } catch (FacesException fe) {
         }
-        result.setId(context.getViewRoot().createUniqueId());
-        
+                
         return result;
     }
+    
+    public UIComponent createFaceletsComponent(String taglibUri, String tagName) {
+        return createFaceletsComponent(taglibUri, tagName, Collections.EMPTY_MAP);
+    }
+    
+    public UIComponent createFaceletsComponent(String taglibUri, String tagName,
+            Map<String,Object> attrs) {
+        UIComponent result = null;
+        
+        FaceletFactory faceletFactory = (FaceletFactory)
+                FactoryFinder.getFactory(FactoryFinder.FACELET_FACTORY);
+        
+        result = faceletFactory.createComponent(taglibUri,
+                tagName, attrs);
+        
+        return result;
+        
+    }
+
+
     
     // <editor-fold defaultstate="collapsed" desc="Helper methods">
     
@@ -143,14 +151,14 @@ public abstract class Application  {
         UIComponent result = null;
         
         try {
-            usingPageFacelet = faceletFactory.getFacelet("c_using.xhtml");
+            usingPageFacelet = faceletFactory.getFacelet("/javajsf_using.xhtml");
             UIComponent tmp = (UIComponent)
                     jsfApplication.createComponent("javax.faces.NamingContainer");
             tmp.setId(context.getViewRoot().createUniqueId());
             usingPageFacelet.apply(context, tmp);
                 result = tmp.findComponent("javajsf_c");
             tmp.getChildren().clear();
-        } catch (IOException ioe) {
+        } catch (Exception ioe) {
             if (LOGGER.isLoggable(Level.SEVERE)) {
                 Object [] params = {
                     componentType + " " + rendererType, ioe
@@ -165,35 +173,6 @@ public abstract class Application  {
         return result;
     }
     
-    
-    
-    private UIComponent createCompositeComponent(FacesContext context, String componentName) {
-        UIComponent result = null;
-        
-        FaceletFactory faceletFactory = (FaceletFactory)
-                FactoryFinder.getFactory(FactoryFinder.FACELET_FACTORY);
-        Facelet usingPageFacelet = null;
-        
-        try {
-            usingPageFacelet = faceletFactory.getFacelet(componentName + "_using.xhtml");
-            UIComponent tmp = (UIComponent)
-                    jsfApplication.createComponent("javax.faces.NamingContainer");
-            tmp.setId(context.getViewRoot().createUniqueId());
-            usingPageFacelet.apply(context, tmp);
-                result = tmp.findComponent("javajsf");
-            tmp.getChildren().clear();
-        } catch (IOException ioe) {
-            if (LOGGER.isLoggable(Level.SEVERE)) {
-                Object [] params = {
-                    componentName, ioe
-                };
-                LOGGER.log(Level.SEVERE, "javajsf.cannot_create_composite_component", params);
-                LOGGER.log(Level.SEVERE, "", ioe);
-            }
-        }
-        
-        return result;
-    }
     
     // </editor-fold>
     

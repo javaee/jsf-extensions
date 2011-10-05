@@ -48,14 +48,23 @@
 
     <namespace>http://jsf.java.net/javajsf</namespace>
     <tag>
-        <tag-name>javajsf</tag-name>
-        <handler-class>com.sun.faces.jsf_extensions_javajsf.vdl.JavaJsfTagHandler</handler-class>
-    </tag>
-    <tag>
-        <tag-name>c</tag-name>
+        <tag-name>field</tag-name>
         <component>
-            <handler-class>com.sun.faces.jsf_extensions_javajsf.vdl.JavaJsfComponentHandler</handler-class>
+            <resource-id>javajsf/field.xhtml</resource-id>
         </component>
     </tag>
+    <tag>
+        <tag-name>form</tag-name>
+        <component>
+            <resource-id>javajsf/form.xhtml</resource-id>
+        </component>
+    </tag>
+    <tag>
+        <tag-name>window</tag-name>
+        <component>
+            <resource-id>javajsf/window.xhtml</resource-id>
+        </component>
+    </tag>
+    
 
 </facelet-taglib>

@@ -49,15 +49,20 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.ActionSource2;
 import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UICommand;
+import javax.faces.component.UISelectBoolean;
+import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
+import javax.faces.event.ValueChangeEvent;
+import javax.faces.event.ValueChangeListener;
 
 @JavaJsfApplication(urlPatterns = {"/ui/*"})
 public class MainUI extends Application
-    implements Serializable, ActionListener {
+    implements Serializable, ActionListener, ValueChangeListener {
     public static final String JAVAJSF_URI = "http://jsf.java.net/javajsf";
     UICommand button;
-    Form form;
+    Form loginForm;
+    Form defaultForm;
 
     public MainUI() {
     }
@@ -65,6 +70,17 @@ public class MainUI extends Application
     @Override
     public void init() {
         
+        UIComponent window = createFaceletsComponent(JAVAJSF_URI, "window");
+        this.setMainWindow(window);
+
+        initLoginContent();
+        initDefaultContent();
+
+        window.getFacets().put("content", loginForm);
+
+    }
+    
+    private void initLoginContent() {
         UIComponent input = createComponent("javax.faces.HtmlInputText");
         UIComponent field = createFaceletsComponent(JAVAJSF_URI, "field");
         field.setId("input");
@@ -80,15 +96,34 @@ public class MainUI extends Application
         layout.getChildren().add(field);
         layout.getChildren().add(button);
         
-        form = (Form) createFaceletsComponent(JAVAJSF_URI, "form");
-        form.getAttributes().put("caption", "Caption text");
-        form.getAttributes().put("description", "Description text");
-        form.getFacets().put("body", layout);
+        loginForm = (Form) createFaceletsComponent(JAVAJSF_URI, "form");
+        loginForm.getAttributes().put("caption", "This is the Login Form");
+        loginForm.getAttributes().put("description", "This is the Login Form");
+        loginForm.getFacets().put("body", layout);
         
-        UIComponent window = createFaceletsComponent(JAVAJSF_URI, "window");
-        window.getFacets().put("content", form);
         
-        this.setMainWindow(window);
+    }
+    
+    private void initDefaultContent() {
+
+        UISelectBoolean checkbox = (UISelectBoolean) createComponent("javax.faces.HtmlSelectBooleanCheckbox");
+        checkbox.addValueChangeListener(this);
+
+        UIComponent field = createFaceletsComponent(JAVAJSF_URI, "field");
+        field.setId("checkbox");
+        field.getAttributes().put("label", "checkbox: ");
+        field.getFacets().put("input", checkbox);
+        
+        
+        UIComponent layout = createComponent("javax.faces.HtmlPanelGrid");
+        
+        layout.getChildren().add(field);
+        
+        defaultForm = (Form) createFaceletsComponent(JAVAJSF_URI, "form");
+        defaultForm.getAttributes().put("caption", "Default Content");
+        defaultForm.getAttributes().put("description", "description of default content");
+        defaultForm.getFacets().put("body", layout);
+
         
     }
     
@@ -102,10 +137,19 @@ public class MainUI extends Application
         ActionSource2 source = (ActionSource2) clickEvent.getSource();
         EditableValueHolder input;
         if (source == button) {
-            input = form.getField("input");
+            input = loginForm.getField("input");
             System.out.println("value: " + input.getValue());
+            if ("a".equals(input.getValue())) {
+                getMainWindow().getFacets().put("content", defaultForm);
+            }
         }
     }
+
+    @Override
+    public void processValueChange(ValueChangeEvent event) throws AbortProcessingException {
+        getMainWindow().getFacets().put("content", loginForm);
+    }
+    
     
 
 }

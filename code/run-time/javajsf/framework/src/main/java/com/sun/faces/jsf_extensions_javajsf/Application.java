@@ -118,12 +118,15 @@ public abstract class Application  {
     }
     
     public UIComponent createFaceletsComponent(String taglibUri, String tagName) {
-        return createFaceletsComponent(taglibUri, tagName, Collections.EMPTY_MAP);
+        UIComponent result = createFaceletsComponent(taglibUri, tagName, Collections.EMPTY_MAP);
+        
+        return result;
     }
     
     public UIComponent createFaceletsComponent(String taglibUri, String tagName,
             Map<String,Object> attrs) {
         UIComponent result = null;
+        FacesContext context = FacesContext.getCurrentInstance();
         
         FaceletFactory faceletFactory = (FaceletFactory)
                 FactoryFinder.getFactory(FactoryFinder.FACELET_FACTORY);
@@ -131,6 +134,7 @@ public abstract class Application  {
         result = faceletFactory.createComponent(taglibUri,
                 tagName, attrs);
         
+        result.setId(context.getViewRoot().createUniqueId());
         return result;
         
     }

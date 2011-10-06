@@ -40,8 +40,10 @@
 package com.sun.faces.jsf_extensions_javajsf.vdl;
 
 import java.net.URL;
+import javax.faces.view.facelets.FaceletsResourceResolver;
 import javax.faces.view.facelets.ResourceResolver;
 
+@FaceletsResourceResolver
 public class JavaJSFResourceResolver extends ResourceResolver {
 
     private ResourceResolver wrapped;

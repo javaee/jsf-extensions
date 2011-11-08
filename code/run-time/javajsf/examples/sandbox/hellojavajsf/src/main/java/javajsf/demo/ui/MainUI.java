@@ -98,7 +98,7 @@ public class MainUI extends Application
         
         loginForm = (Form) createFaceletsComponent(JAVAJSF_URI, "form");
         loginForm.getAttributes().put("caption", "This is the Login Form");
-        loginForm.getAttributes().put("description", "This is the Login Form");
+        loginForm.getAttributes().put("description", "This is the Login Form Caption");
         loginForm.getFacets().put("body", layout);
         
         

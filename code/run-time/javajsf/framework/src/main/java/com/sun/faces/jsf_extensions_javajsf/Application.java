@@ -111,6 +111,7 @@ public abstract class Application  {
         try{
             result = useFaceletsToCreateComponent(context, componentType, null);
             result.setId(context.getViewRoot().createUniqueId());
+            result.setTransient(true);
         } catch (FacesException fe) {
         }
                 
@@ -133,6 +134,7 @@ public abstract class Application  {
         
         result = faceletFactory.createComponent(taglibUri,
                 tagName, attrs);
+        result.setTransient(true);
         
         result.setId(context.getViewRoot().createUniqueId());
         return result;

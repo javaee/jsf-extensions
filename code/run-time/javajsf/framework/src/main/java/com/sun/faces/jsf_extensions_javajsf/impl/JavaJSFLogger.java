@@ -1,8 +1,8 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
-
- * Copyright (c) 2011 Oracle and/or its affiliates. All rights reserved.
-
+ *
+ * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
@@ -11,20 +11,20 @@
  * https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
  * or packager/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
-
+ *
  * When distributing the software, include this License Header Notice in each
  * file and include the License file at packager/legal/LICENSE.txt.
-
+ *
  * GPL Classpath Exception:
  * Oracle designates this particular file as subject to the "Classpath"
  * exception as provided by Oracle in the GPL Version 2 section of the License
  * file that accompanied this code.
-
+ *
  * Modifications:
  * If applicable, add the following below the License Header, with the fields
  * enclosed by brackets [] replaced by your own identifying information:
  * "Portions Copyright [year] [name of copyright owner]"
-
+ *
  * Contributor(s):
  * If you wish your version of this file to be governed by only the CDDL or
  * only the GPL Version 2, indicate your decision by adding "[Contributor]
@@ -37,33 +37,44 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.jsf_extensions_javajsf;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+package com.sun.faces.jsf_extensions_javajsf.impl;
+
+import java.util.logging.Logger;
 
 /**
- * <p>Place this annotion on your {@link Application} subclass to both
- * declare it to the runtime and define the url patterns to which this
- * application should be mapped.</p>
+ * <p/>
+ * An <code>enum</code> of all application <code>Logger</code>s.
+ * </p>
  */
+public enum JavaJSFLogger {
 
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-@Inherited
-@Documented
-public @interface JavaJsfApplication {
+    JAVAJSF("javajsf"),
+    VDL("vdl");
 
-    /**
-     * <p>A comma separated list of string values conforming to the
-     * syntax of the <code>&lt;url-pattern&gt;</code> element in a
-     * web.xml file.</p>
-     */
-    
-    String[] urlPatterns() default { "/faces/*" };
+    private static final String LOGGER_RESOURCES
+         = "com.sun.faces.jsf_extensions_javajsf.LogStrings";
+    public static final String JAVAJSF_LOGGER_NAME_PREFIX
+         = "javax.enterprise.resource.webcontainer.javajsf.";
+    private String loggerName;
+
+
+    JavaJSFLogger(String loggerName) {
+        this.loggerName = JAVAJSF_LOGGER_NAME_PREFIX + loggerName;
+    }
+
+
+    public String getLoggerName() {
+        return loggerName;
+    }
+
+
+    public String getResourcesName() {
+        return LOGGER_RESOURCES;
+    }
+
+    public Logger getLogger() {
+        return Logger.getLogger(loggerName, LOGGER_RESOURCES);
+    }
 
 }

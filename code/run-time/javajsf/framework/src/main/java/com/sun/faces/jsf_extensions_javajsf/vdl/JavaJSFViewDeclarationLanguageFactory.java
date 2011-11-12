@@ -60,15 +60,18 @@ public class JavaJSFViewDeclarationLanguageFactory extends ViewDeclarationLangua
     public ViewDeclarationLanguage getViewDeclarationLanguage(String viewId) {
         ViewDeclarationLanguage result = getWrapped().getViewDeclarationLanguage(viewId);
 
-        if (viewId.contains("javajsf")) {
-            if (null == vdl) {
-                ViewDeclarationLanguage faceletViewDeclarationLanguage = 
-                        getWrapped().getViewDeclarationLanguage("index.xhtml");
-                vdl = new JavaJsfViewDeclarationLanguage(faceletViewDeclarationLanguage,
-                        getWrapped().getViewDeclarationLanguage(viewId));
-            }
-            result = vdl;
-        } 
+        // PENDING(edburns): check that the viewId matches one of the configured
+        // urlPatterns.  For now, just assume it does.
+        // Do this by asking the vdl for the list of urlPatterns, caching the result
+        // and looking for a match.
+        if (null == vdl) {
+            ViewDeclarationLanguage faceletViewDeclarationLanguage = 
+                    getWrapped().getViewDeclarationLanguage("index.xhtml");
+            vdl = new JavaJsfViewDeclarationLanguage(faceletViewDeclarationLanguage,
+                    getWrapped().getViewDeclarationLanguage(viewId));
+        }
+        result = vdl;
+
         return result;
     }
     

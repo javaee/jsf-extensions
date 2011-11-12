@@ -5,7 +5,45 @@
    <artifactId>jsf-extensions-javajsf</artifactId>
    <packaging>jar</packaging>
    <name>jsf-extensions-javajsf</name>
-   <version>1.0-SNAPSHOT</version>
+   <version>0.1-SNAPSHOT</version>
+    <licenses>
+        <license>
+            <name>
+                COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) plus GPL
+            </name>
+            <url>http://glassfish.java.net/nonav/public/CDDL+GPL.html</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <scm>
+        <url>http://java.net/projects/jsf-extensions/sources</url>
+        <connection>scm:svn:https://svn.java.net/svn/jsf-extensions~svn</connection>
+    </scm>
+    <developers>
+        <developer>
+            <id>edburns</id>
+            <name>Ed Burns</name>
+            <email>edward.burns@oracle.com</email>
+            <organization>Oracle America, Inc.</organization>
+            <roles>
+                <role>project-owner</role>
+            </roles>
+            <timezone>-6</timezone>
+        </developer>
+    </developers>
+    <distributionManagement>
+      <snapshotRepository>
+        <id>jvnet-nexus-snapshots</id>
+        <name>Java.net Nexus Snapshots Repository</name>
+        <url>https://maven.java.net/content/repositories/snapshots/</url>
+      </snapshotRepository>
+      <repository>
+        <id>jvnet-nexus-staging</id>
+        <name>Java.net Nexus Staging Repository</name>
+        <url>https://maven.java.net/service/local/staging/deploy/maven2/</url>
+      </repository>
+    </distributionManagement>
+
 
    <properties>
       <spec.snapshot.version>2.2-SNAPSHOT</spec.snapshot.version>
@@ -48,5 +86,24 @@
          </plugin>
       </plugins>
    </build>
+
+    <issueManagement>
+        <system>jira</system>
+        <url>http://java.net/jira/browse/JSF_EXTENSIONS</url>
+    </issueManagement>
+
+   <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.8</version>
+        <configuration>
+          <excludePackageNames>com.sun.faces.jsf_extensions_javajsf.impl:com.sun.faces.jsf_extensions_javajsf.vdl</excludePackageNames>
+        </configuration>
+      </plugin>
+    </plugins>
+  </reporting>
+
 
 </project>

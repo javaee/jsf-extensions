@@ -44,6 +44,15 @@ holder.
         <meta http-equiv="Content-Type" content="text/html; charset=MacRoman">
     </head>
     <body>
-        Do not document the ApplicationFinder and JavaJSFLogger classes.
+        <p>This package is for people who want to use JSF but do
+        everything in Java.  The basic idea is you extend {@link
+        com.sun.faces.jsf_extensions_javajsf.Application}, tagging it with the {@link
+        com.sun.faces.jsf_extensions_javajsf.JavaJsfApplication}
+        annotation, override the {@link
+        com.sun.faces.jsf_extensions_javajsf.Application#init()} method,
+        and in there you build your UI and away you go.</p>
+
+        <p>There are few classes in this package because most of the
+        work is done by JSF and its component libraries.</p>
     </body>
 </html>

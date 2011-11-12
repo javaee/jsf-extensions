@@ -41,13 +41,14 @@
 
 package com.sun.faces.jsf_extensions_javajsf;
 
+import com.sun.faces.jsf_extensions_javajsf.impl.JavaJSFLogger;
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
-import javax.faces.application.ResourceHandler;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewDeclarationLanguage;
@@ -55,32 +56,54 @@ import javax.faces.view.facelets.Facelet;
 import javax.faces.view.facelets.FaceletFactory;
 
 
-public abstract class Application  {
+/**
+ * <p>Your application must extend this class and build the initial UI
+ * during the {@link #init} method. Your subclass is advertised to the
+ * runtime by means of having the {@link JavaJsfApplication} annotation,
+ * which also declares the servlet mapping for the application.</p>
+
+ * <p>Usage Example</p>
+ *
+ * <code><pre>
+&#x0040;JavaJsfApplication(urlPatterns = {"/ui/*"})
+public class MainUI extends Application
+    implements ActionListener, ValueChangeListener {
+    public static final String JAVAJSF_URI = "http://jsf.java.net/javajsf";
+    UICommand button;
+
+    public MainUI() {
+    }
+
+    &#x0040;Override
+    public void init() {
+        
+        UIComponent window = createFaceletsComponent(JAVAJSF_URI, "window");
+        this.setMainWindow(window);
+
+        button = (UICommand) createComponent("javax.faces.HtmlCommandButton");
+        button.setId("button");
+        button.setValue("submit");
+        button.addActionListener(this);
+
+        window.getFacets().put("content", button);
+
+    }
+}
+ * </pre></code>
+ */
+public abstract class Application implements Serializable {
     
     private static final Logger LOGGER = JavaJSFLogger.VDL.getLogger();
     
     private javax.faces.application.Application jsfApplication;
-    private ViewDeclarationLanguage jsfVDL;
-    private ResourceHandler resourceHandler;
 
     public void setJsfApplication(javax.faces.application.Application jsfApplication) {
         this.jsfApplication = jsfApplication;
-        this.resourceHandler = jsfApplication.getResourceHandler();
     }
     
     public javax.faces.application.Application getJsfApplication() {
         return this.jsfApplication;
     }
-
-    public ViewDeclarationLanguage getJsfViewDeclarationLanguage() {
-        return jsfVDL;
-    }
-
-    public void setJsfViewDeclarationLanguage(ViewDeclarationLanguage jsfVDL) {
-        this.jsfVDL = jsfVDL;
-    }
-    
-    
 
     private UIComponent mainWindow;
 
@@ -98,11 +121,26 @@ public abstract class Application  {
     
     public abstract void destroy();
     
+    /**
+     * <p>Create a JSF <code>UIComponent</code>. You must explicitly managed
+     * the state of the component.
+     * @param componentType the JSF component-type, for example "javax.faces.Input"
+     * @return the UIComponent instance
+     */
+
     public UIComponent createComponent(String componentType) {
         UIComponent result = createComponent(componentType, null);
         
         return result;
     }
+    
+    /**
+     * <p>Create a JSF <code>UIComponent</code>. You must explicitly managed
+     * the state of the component.
+     * @param componentType the JSF component-type, for example "javax.faces.Input"
+     * @param rendererType the JSF renderer-type, for example "javax.faces.Text"
+     * @return the UIComponent instance
+     */
     
     public UIComponent createComponent(String componentType, String rendererType) {
         UIComponent result = null;
@@ -118,12 +156,32 @@ public abstract class Application  {
         return result;
     }
     
+    /**
+     * <p>Return a component initialized as if it had appeared in a JSF markup page.
+     * You must explicitly managed the state of the component. This method enables
+     * composite components to be used identically to non-composite components.</p>
+     * 
+     * @param taglibUri the Facelets Tag Library URI in which this component resides
+     * @param tagName the tag name for this component.
+     * @return the UIComponent instance
+     */
     public UIComponent createFaceletsComponent(String taglibUri, String tagName) {
         UIComponent result = createFaceletsComponent(taglibUri, tagName, Collections.EMPTY_MAP);
         
         return result;
     }
     
+    /**
+     * <p>Return a component initialized as if it had appeared in a JSF markup page.
+     * You must explicitly managed the state of the component. This method enables
+     * composite components to be used identically to non-composite components.</p>
+     * 
+     * @param taglibUri the Facelets Tag Library URI in which this component resides
+     * @param tagName the tag name for this component.
+     * @param attrs the attributes that would have appeared on the tag 
+     * if this were a tag in a Facelets page.
+     * @return the UIComponent instance.
+     */
     public UIComponent createFaceletsComponent(String taglibUri, String tagName,
             Map<String,Object> attrs) {
         UIComponent result = null;

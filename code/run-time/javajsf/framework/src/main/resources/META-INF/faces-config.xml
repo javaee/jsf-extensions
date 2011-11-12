@@ -48,7 +48,7 @@
 
   <application>
       <system-event-listener>
-          <system-event-listener-class>com.sun.faces.jsf_extensions_javajsf.ApplicationFinder</system-event-listener-class>
+          <system-event-listener-class>com.sun.faces.jsf_extensions_javajsf.impl.ApplicationFinder</system-event-listener-class>
           <system-event-class>javax.faces.event.PostConstructApplicationEvent</system-event-class>
       </system-event-listener>
   </application>

@@ -39,8 +39,9 @@
  * holder.
  */
 
-package com.sun.faces.jsf_extensions_javajsf;
+package com.sun.faces.jsf_extensions_javajsf.impl;
 
+import com.sun.faces.jsf_extensions_javajsf.JavaJsfApplication;
 import com.sun.faces.jsf_extensions_javajsf.vdl.JavaJsfViewDeclarationLanguage;
 import com.sun.faces.spi.AnnotationScanner;
 import com.sun.faces.spi.AnnotationScanner.ScannedAnnotation;
@@ -60,6 +61,9 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.FactoryFinder;
+import javax.faces.application.Application;
+import javax.faces.application.ViewHandler;
+import javax.faces.application.ViewHandlerWrapper;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
@@ -69,14 +73,22 @@ import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
 import javax.faces.view.ViewDeclarationLanguage;
 import javax.faces.view.ViewDeclarationLanguageFactory;
+import javax.faces.webapp.FacesServlet;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import javax.servlet.ServletRegistration;
+import javax.servlet.annotation.WebListener;
 
-
-public class ApplicationFinder implements SystemEventListener {
+@WebListener
+public class ApplicationFinder implements SystemEventListener, ServletContextListener {
     
     // <editor-fold defaultstate="collapsed" desc="Class Variables">
     
     private static final Logger LOGGER = JavaJSFLogger.VDL.getLogger();
+    
+    private static final String CLASSES_ANNOTATED_WITH_JAVAJSF_APPLICATION_KEY = 
+            ApplicationFinder.class.getPackage().getName().concat(".CLASSES_ANNOTATED_WITH_JAVAJSF_APPLICATION_KEY");
     
     private static final Set<String> JAVAJSF_ANNOTATIONS;
     
@@ -92,15 +104,28 @@ public class ApplicationFinder implements SystemEventListener {
 
     // </editor-fold>
     
-    private List<String> classesAnnotatedWithJavaJSFApplication;
     private InjectionProvider containerConnector;
 
     public ApplicationFinder() {
-        classesAnnotatedWithJavaJSFApplication = new ArrayList<String>();
+        
     }
 
-    public List<String> getClassesAnnotatedWithJavaJSFApplication() {
-        return Collections.unmodifiableList(classesAnnotatedWithJavaJSFApplication);
+    private List<String> getClassesAnnotatedWithJavaJSFApplication() {
+        List<String> result = null;
+        FacesContext context = FacesContext.getCurrentInstance();
+        ExternalContext extContext = context.getExternalContext();
+        Map<String, Object> appMap = extContext.getApplicationMap();
+        if (!appMap.containsKey(CLASSES_ANNOTATED_WITH_JAVAJSF_APPLICATION_KEY)) {
+            result = new ArrayList<String>();
+            appMap.put(CLASSES_ANNOTATED_WITH_JAVAJSF_APPLICATION_KEY, result);
+        } else {
+            result = (List<String>) appMap.get(CLASSES_ANNOTATED_WITH_JAVAJSF_APPLICATION_KEY);
+        }
+        return result;
+    }
+    
+    public List<String> getClassesAnnotatedWithJavaJSFApplicationImmutable() {
+        return Collections.unmodifiableList(getClassesAnnotatedWithJavaJSFApplication());
     }
     
     public void invokePostConstruct(ExternalContext extContext, Object obj) throws InjectionProviderException {
@@ -152,11 +177,14 @@ public class ApplicationFinder implements SystemEventListener {
                 Set<String> classList = new HashSet<String>();
                 
                 processAnnotations(container, extContext, sc, classList);
-                
                 if (!classList.isEmpty()) {
-                    classesAnnotatedWithJavaJSFApplication.addAll(classList);
-                    context.getApplication().subscribeToEvent(PreDestroyApplicationEvent.class, this);
+                    getClassesAnnotatedWithJavaJSFApplication().addAll(classList);
+                    Application app = context.getApplication();
+                    app.subscribeToEvent(PreDestroyApplicationEvent.class, this);
                     javaJsfVDL.setAppFinder(this);
+                    ViewHandler currentViewHandler = app.getViewHandler();
+                    IgnoreViewIdViewHandler wrappingViewHandler = new IgnoreViewIdViewHandler(currentViewHandler);
+                    app.setViewHandler(wrappingViewHandler);
                 }
                 
             } else {
@@ -168,16 +196,59 @@ public class ApplicationFinder implements SystemEventListener {
         } else {
             assert(event instanceof PreDestroyApplicationEvent);
             
-            if (!classesAnnotatedWithJavaJSFApplication.isEmpty()) {
-                classesAnnotatedWithJavaJSFApplication.clear();
+            if (!getClassesAnnotatedWithJavaJSFApplication().isEmpty()) {
+                getClassesAnnotatedWithJavaJSFApplication().clear();
+                Application app = context.getApplication();
+                if (app.getViewHandler() instanceof IgnoreViewIdViewHandler) {
+                    app.setViewHandler(((IgnoreViewIdViewHandler)app.getViewHandler()).getWrapped());
+                }
+
                 javaJsfVDL.setAppFinder(null);
             }
         } 
     } 
     
     // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="ServletContextListener Implementation">
+
+    @Override
+    public void contextDestroyed(ServletContextEvent sce) {
+        LOGGER.log(Level.SEVERE, "ContextDestroyed");
+    }
+
+    @Override
+    public void contextInitialized(ServletContextEvent sce) {
+        LOGGER.log(Level.SEVERE, "ContextInitialized");
+        installServletMappingsForFoundApplications(sce.getServletContext());
+    }
+    
+    
+    // </editor-fold>
        
     // <editor-fold defaultstate="collapsed" desc="Helper methods">
+    
+    private void installServletMappingsForFoundApplications(ServletContext sc) {
+        for (String cur : getClassesAnnotatedWithJavaJSFApplicationImmutable()) {
+            ClassLoader cl = Util.getCurrentLoader(this);
+            try {
+                Class appClass = cl.loadClass(cur);
+                
+                JavaJsfApplication appAnnotation = (JavaJsfApplication) 
+                        appClass.getAnnotation(JavaJsfApplication.class);
+                ServletRegistration.Dynamic registration = 
+                        sc.addServlet("Faces Servlet", FacesServlet.class);
+                registration.addMapping(appAnnotation.urlPatterns());
+
+            } catch (Exception ex) {
+                if (LOGGER.isLoggable(Level.SEVERE)) {
+                    Object [] params = new Object[]{ cur, ex };
+                    LOGGER.log(Level.SEVERE, "javajsf.cannot_create_application", params);
+                    LOGGER.log(Level.SEVERE, "", ex);
+                }
+            }
+        }
+    }
     
     private InjectionProvider getInjectionProvider(ExternalContext extContext) {
         
@@ -208,7 +279,7 @@ public class ApplicationFinder implements SystemEventListener {
                                 uri = iter.next();
                                 uriString = uri.toASCIIString();
                                 
-                                // If the class is in the current web module
+                                // If the class is in the currentViewHandler web module
                                 boolean currentClassIsInCurrentWebModule =
                                         (uriString.endsWith("WEB-INF/classes") || uriString.endsWith("WEB-INF/classes/"))
                                         && uriString.contains(archiveName);
@@ -291,6 +362,31 @@ public class ApplicationFinder implements SystemEventListener {
         return result;
     }
     
+    private static class IgnoreViewIdViewHandler extends ViewHandlerWrapper {
+        final ViewHandler parent;
+
+        public IgnoreViewIdViewHandler(ViewHandler parent) {
+            this.parent = parent;
+        }
+        
+        @Override
+        public String deriveLogicalViewId(FacesContext context, String input) {
+            return "/javajsf.xhtml";
+        }
+        
+        @Override
+        public String deriveViewId(FacesContext context, String input) {
+            return "/javajsf.xhtml";
+        }
+        
+        @Override
+        public ViewHandler getWrapped() {
+            return parent;
+        }
+
+                    
+
+    }
 
     // </editor-fold>
 

@@ -41,9 +41,10 @@
 
 package com.sun.faces.jsf_extensions_javajsf.vdl;
 
-import com.sun.faces.jsf_extensions_javajsf.ApplicationFinder;
+import com.sun.faces.jsf_extensions_javajsf.impl.ApplicationFinder;
 import com.sun.faces.jsf_extensions_javajsf.JavaJsfApplication;
-import com.sun.faces.jsf_extensions_javajsf.JavaJSFLogger;
+import com.sun.faces.jsf_extensions_javajsf.impl.JavaJSFLogger;
+import com.sun.faces.jsf_extensions_javajsf.impl.Util;
 import java.beans.BeanInfo;
 import java.io.IOException;
 import java.io.Serializable;
@@ -117,6 +118,7 @@ public class JavaJsfViewDeclarationLanguage extends ViewDeclarationLanguageWrapp
         }
 
         UIViewRoot result = getWrapped().createView(context, "/javajsf.xhtml");
+        result.setViewId("/javajsf.xhtml");
 
         return result;
     }
@@ -147,7 +149,10 @@ public class JavaJsfViewDeclarationLanguage extends ViewDeclarationLanguageWrapp
 
     @Override
     public ViewMetadata getViewMetadata(FacesContext context, String viewId) {
-        return faceletViewDeclarationLanguage.getViewMetadata(context, viewId);
+        // if the viewId is one of the declared urlPatterns, pass "/javajsf.xhtml"
+        // otherwise, pass it through unmodified.
+        // PENDING(edburns): for now, just hard code it.
+        return faceletViewDeclarationLanguage.getViewMetadata(context, "/javajsf.xhtml");
     }
 
     @Override
@@ -227,7 +232,7 @@ public class JavaJsfViewDeclarationLanguage extends ViewDeclarationLanguageWrapp
         PerSessionJavaJSFApplicationManager appManager = 
                 (PerSessionJavaJSFApplicationManager) sessionMap.get(JAVAJSF_APPLICATIONS_DATA_STRUCTURE);
         assert(null != appManager);
-        for (String cur : appFinder.getClassesAnnotatedWithJavaJSFApplication()) {
+        for (String cur : appFinder.getClassesAnnotatedWithJavaJSFApplicationImmutable()) {
             com.sun.faces.jsf_extensions_javajsf.Application app = 
                     (com.sun.faces.jsf_extensions_javajsf.Application) appManager.getApplication(cur);
             JavaJsfApplication appAnnotation = (JavaJsfApplication) 
@@ -255,8 +260,8 @@ public class JavaJsfViewDeclarationLanguage extends ViewDeclarationLanguageWrapp
         // Have the JavaJSF applications been initialized for this session?
         if (!appManager.isApplicationsInstantiatedAndInjected()) {
             boolean allAppsSuccessfullyInstantiatedAndInjected = true;
-            for (String cur : appFinder.getClassesAnnotatedWithJavaJSFApplication()) {
-                ClassLoader cl = getCurrentLoader(this);
+            for (String cur : appFinder.getClassesAnnotatedWithJavaJSFApplicationImmutable()) {
+                ClassLoader cl = Util.getCurrentLoader(this);
                 try {
                     Class appClass = cl.loadClass(cur);
                     
@@ -266,7 +271,6 @@ public class JavaJsfViewDeclarationLanguage extends ViewDeclarationLanguageWrapp
                         com.sun.faces.jsf_extensions_javajsf.Application app = 
                                 (com.sun.faces.jsf_extensions_javajsf.Application) appClass.newInstance();
                         app.setJsfApplication(context.getApplication());
-                        app.setJsfViewDeclarationLanguage(this);
                         appManager.addApplication(cur, app);
                         appFinder.invokePostConstruct(extContext, app);
                         appFinder.inject(extContext, app);
@@ -296,7 +300,7 @@ public class JavaJsfViewDeclarationLanguage extends ViewDeclarationLanguageWrapp
         // Have the JavaJSF applications been initialized for this session?
         if (!appManager.isApplicationsInitialized()) {
             boolean allAppsSuccessfullyInitialized = true;
-            for (String cur : appFinder.getClassesAnnotatedWithJavaJSFApplication()) {
+            for (String cur : appFinder.getClassesAnnotatedWithJavaJSFApplicationImmutable()) {
                 com.sun.faces.jsf_extensions_javajsf.Application app = 
                         (com.sun.faces.jsf_extensions_javajsf.Application) appManager.getApplication(cur);
                 JavaJsfApplication appAnnotation = (JavaJsfApplication) 
@@ -349,16 +353,6 @@ public class JavaJsfViewDeclarationLanguage extends ViewDeclarationLanguageWrapp
         }
     }
     
-    private ClassLoader getCurrentLoader(Object fallbackClass) {
-        ClassLoader loader =
-            Thread.currentThread().getContextClassLoader();
-        if (loader == null) {
-            loader = fallbackClass.getClass().getClassLoader();
-        }
-        return loader;
-    }
-    
-
     // </editor-fold>
 
     

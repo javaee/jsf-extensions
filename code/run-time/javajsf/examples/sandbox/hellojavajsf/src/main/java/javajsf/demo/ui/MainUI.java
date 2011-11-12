@@ -44,7 +44,6 @@ import com.sun.faces.jsf_extensions_javajsf.Application;
 import com.sun.faces.jsf_extensions_javajsf.JavaJsfApplication;
 
 import com.sun.faces.jsf_extensions_javajsf.ui.Form;
-import java.io.Serializable;
 import javax.faces.component.UIComponent;
 import javax.faces.component.ActionSource2;
 import javax.faces.component.EditableValueHolder;
@@ -58,7 +57,7 @@ import javax.faces.event.ValueChangeListener;
 
 @JavaJsfApplication(urlPatterns = {"/ui/*"})
 public class MainUI extends Application
-    implements Serializable, ActionListener, ValueChangeListener {
+    implements ActionListener, ValueChangeListener {
     public static final String JAVAJSF_URI = "http://jsf.java.net/javajsf";
     UICommand button;
     Form loginForm;

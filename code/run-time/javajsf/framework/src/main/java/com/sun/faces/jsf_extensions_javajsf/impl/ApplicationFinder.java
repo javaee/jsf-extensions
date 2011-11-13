@@ -198,10 +198,6 @@ public class ApplicationFinder implements SystemEventListener, ServletContextLis
             
             if (!getClassesAnnotatedWithJavaJSFApplication().isEmpty()) {
                 getClassesAnnotatedWithJavaJSFApplication().clear();
-                Application app = context.getApplication();
-                if (app.getViewHandler() instanceof IgnoreViewIdViewHandler) {
-                    app.setViewHandler(((IgnoreViewIdViewHandler)app.getViewHandler()).getWrapped());
-                }
 
                 javaJsfVDL.setAppFinder(null);
             }

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.sun.faces</groupId>
+  <artifactId>hellojavajsf</artifactId>
+  <packaging>war</packaging>
+  <version>1.0</version>
+  <name>hellojavajsf</name>
+  <description>The simplest JavaJsf App that could possibly work</description>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <spec.snapshot.version>2.2-SNAPSHOT</spec.snapshot.version>
+  </properties>
+
+  <build>
+    <finalName>hellojavajsf</finalName>
+
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>2.3.2</version>
+        <configuration>
+          <source>1.6</source>
+          <target>1.6</target>
+        </configuration>
+      </plugin>
+      <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-war-plugin</artifactId>
+          <version>2.1.1</version>
+          <configuration>
+              <failOnMissingWebXml>false</failOnMissingWebXml>
+          </configuration>
+          
+      </plugin>
+
+    </plugins>
+  </build>
+
+  <dependencies>
+    <dependency>
+       <groupId>com.sun.faces</groupId>
+       <artifactId>jsf-extensions-javajsf</artifactId>
+       <version>0.1-SNAPSHOT</version>
+    </dependency>
+        <dependency>
+            <groupId>javax.faces</groupId>
+            <artifactId>javax.faces-api</artifactId>
+            <version>${spec.snapshot.version}</version>
+            <scope>provided</scope>
+        </dependency>
+      <dependency>
+         <groupId>javax</groupId>
+         <artifactId>javaee-api</artifactId>
+         <version>6.0</version>
+         <scope>provided</scope>
+      </dependency>
+
+  </dependencies>
+
+</project>

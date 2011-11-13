@@ -119,7 +119,9 @@ public abstract class Application implements Serializable {
 
     public abstract void init();
     
-    public abstract void destroy();
+    public void destroy() {
+        
+    }
     
     /**
      * <p>Create a JSF <code>UIComponent</code>. You must explicitly managed

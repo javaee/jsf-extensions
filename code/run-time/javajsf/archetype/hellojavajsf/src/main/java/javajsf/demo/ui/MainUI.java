@@ -1,14 +1,3 @@
-
-import com.sun.faces.jsf_extensions_javajsf.Application;
-import com.sun.faces.jsf_extensions_javajsf.JavaJsfApplication;
-import java.text.DateFormat;
-import java.util.Date;
-import javax.faces.component.UICommand;
-import javax.faces.component.UIComponent;
-import javax.faces.event.AbortProcessingException;
-import javax.faces.event.ActionEvent;
-import javax.faces.event.ActionListener;
-
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
@@ -48,6 +37,17 @@ import javax.faces.event.ActionListener;
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+
+package javajsf.demo.ui;
+
+import com.sun.faces.jsf_extensions_javajsf.Application;
+import com.sun.faces.jsf_extensions_javajsf.JavaJsfApplication;
+import java.text.DateFormat;
+import java.util.Date;
+import javax.faces.component.UICommand;
+import javax.faces.component.UIComponent;
+import javax.faces.event.ActionEvent;
+import javax.faces.event.ActionListener;
 
 
 @JavaJsfApplication(urlPatterns = {"/hello/*"})

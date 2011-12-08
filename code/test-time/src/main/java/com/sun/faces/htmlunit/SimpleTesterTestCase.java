@@ -40,6 +40,8 @@
 
 package com.sun.faces.htmlunit;
 
+import com.gargoylesoftware.htmlunit.Page;
+import com.gargoylesoftware.htmlunit.TextPage;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import java.io.BufferedReader;
 import java.io.File;
@@ -56,6 +58,8 @@ public class SimpleTesterTestCase extends HtmlUnitFacesTestCase {
     }
 
     private String regexp = null;
+    
+    private boolean isTextPage;
 
     public static Test suite() {
         return (new TestSuite(SimpleTesterTestCase.class));
@@ -73,8 +77,21 @@ public class SimpleTesterTestCase extends HtmlUnitFacesTestCase {
             regexp = System.getProperty("regexp");
         }
 
+        String textPageValue = System.getProperty("textPage");
+        if (null != textPageValue && 0 < textPageValue.length()) {
+            isTextPage = "true".equalsIgnoreCase(textPageValue);
+        }
 
     }
+    
+    protected TextPage getTextPage(String path) throws Exception {
+
+        TextPage result  = (TextPage) client.getPage(getURL(path));
+        return result;
+
+    }
+
+    
 
     private String readLineFromFile(File file) throws Exception {
         String result = null;
@@ -108,10 +125,16 @@ public class SimpleTesterTestCase extends HtmlUnitFacesTestCase {
         assertTrue("invalid request attribute", 0 < request.length());
 
         String status = System.getProperty("status");
+        Page page = null;
 
-        HtmlPage page = getPage(request);
-
-        doRegexp(page.asXml());
+        if (!isTextPage) {
+            page = getPage(request);
+            
+            doRegexp(((HtmlPage)page).asXml());
+        } else {
+            page = getTextPage(request);
+            doRegexp(((TextPage)page).getContent());
+        }
 
         if (null != status && 0 < status.length()) {
             int expected = Integer.parseInt(status);

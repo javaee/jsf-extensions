@@ -31,6 +31,7 @@ package com.sun.faces.htmlunit;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.CookieManager;
+import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
 import com.gargoylesoftware.htmlunit.ProxyConfig;
 import com.gargoylesoftware.htmlunit.WebClient;
@@ -266,6 +267,22 @@ public abstract class HtmlUnitFacesTestCase extends TestCase {
         }
         return lastpage;
 
+    }
+    
+    protected HtmlPage getPageWithRetry(String path, int retries) throws Exception {
+        int i = 0;
+        boolean success = false;
+        do {
+            try {
+                getPage(path);
+                success = true;
+            } catch (FailingHttpStatusCodeException fhse) {
+                Thread.sleep(3000);
+            }                
+        } while (!success && ++i < retries);
+        
+        
+        return lastpage;
     }
 
     protected HtmlPage getPageSticky(String path) throws Exception {

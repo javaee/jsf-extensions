@@ -72,8 +72,6 @@ import junit.framework.Assert;
  * ServletTestCase instance that uses it.
  *
  * @version $Id: FacesTestCaseService.java,v 1.2 2005/10/26 02:24:05 edburns Exp $
- * @see    com.sun.faces.context.FacesContextFactoryImpl
- * @see    com.sun.faces.context.FacesContextImpl
  */
 
 public class FacesTestCaseService extends Object {

@@ -32,6 +32,7 @@ package com.sun.faces.mock;
 
 import java.io.BufferedReader;
 import java.security.Principal;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Locale;
@@ -156,27 +157,27 @@ public class MockHttpServletRequest implements HttpServletRequest {
 
 
     public long getDateHeader(String name) {
-        throw new UnsupportedOperationException();
+        return -1;
     }
 
 
     public String getHeader(String name) {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
 
     public Enumeration getHeaderNames() {
-        throw new UnsupportedOperationException();
+        return Collections.enumeration(Collections.EMPTY_LIST);
     }
 
 
     public Enumeration getHeaders(String name) {
-        throw new UnsupportedOperationException();
+        return Collections.enumeration(Collections.EMPTY_LIST);
     }
 
 
     public int getIntHeader(String name) {
-        throw new UnsupportedOperationException();
+        return -1;
     }
 
 

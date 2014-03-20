@@ -167,14 +167,14 @@ public class FacesTestCaseService extends Object {
         this.configureListener = new ConfigureListener();
         ServletContextEvent e = new ServletContextEvent(this.servletContext);
 
-        // make sure this gets called once per ServletContext instance.
-        if (null == (servletContext.getAttribute(FacesServlet.CONFIG_FILES_ATTR))) {
-            System.out.println("INVOKING CONFIGLISTENER");
-            configureListener.contextDestroyed(e);
-            FactoryFinder.releaseFactories();
+//        // make sure this gets called once per ServletContext instance.
+//        if (null == (servletContext.getAttribute(FacesServlet.CONFIG_FILES_ATTR))) {
+//            System.out.println("INVOKING CONFIGLISTENER");
+//            configureListener.contextDestroyed(e);
+//            FactoryFinder.releaseFactories();
             configureListener.contextInitialized(e);
-            FacesContext.getCurrentInstance().release();
-        }
+//            FacesContext.getCurrentInstance().release();
+//        }
 
         initFacesContext();
 

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+      <groupId>com.sun.faces.mt-safety</groupId>
+      <artifactId>pom</artifactId>
+      <version>1.0</version>
+    </parent>
+    <groupId>com.sun.faces.mt-safety</groupId>
+    <artifactId>app</artifactId>
+    <version>1.0</version>
+    <packaging>war</packaging>
+    <name>${project.artifactId}</name>
+    <description>Use the jars</description>
+    <url>http://jsf-spec.java.net/</url>
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+            <plugin>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                  <failOnMissingWebXml>false</failOnMissingWebXml>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+    <dependencies>
+      <dependency>
+        <groupId>com.sun.faces.mt-safety</groupId>
+        <artifactId>decorate-exceptionhandlerfactory</artifactId>
+        <version>1.0</version>
+      </dependency>
+      <dependency>
+        <groupId>com.sun.faces.mt-safety</groupId>
+        <artifactId>decorate-flashfactory</artifactId>
+        <version>1.0</version>
+      </dependency>
+    </dependencies>
+</project>

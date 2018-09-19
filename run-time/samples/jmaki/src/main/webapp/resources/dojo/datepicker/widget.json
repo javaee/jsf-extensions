@@ -1,7 +1,0 @@
- {
-    "name": "Date Picker",
-    "type": "dojo",
-    "image": "images/dojo-date-picker.jpg",
-    "description": "This widget is a date picker which for which the value can mapped to a managed bean when using JSF.",
-    "value": {"required":"false", "type": "DATE"}
-  }

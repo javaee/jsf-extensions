@@ -1,7 +1,0 @@
-{"config": {
-    "version": "1.2",
-    "glue" : {
-       "includes": ["resources/glue.js", "static/META-INF/glue-df.js.jsf"]
-    }
-  }
-}

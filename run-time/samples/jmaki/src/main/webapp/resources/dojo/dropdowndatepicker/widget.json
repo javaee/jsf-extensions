@@ -1,7 +1,0 @@
- {
-    "name": "Drop Down Date Picker",
-    "type": "dojo",
-    "image": "images/dojo-drop-down-date-picker.jpg",
-    "description": "This widget is a drop down date picker.",
-    "value": {"required":"false", "type": "DATE"}
-  }

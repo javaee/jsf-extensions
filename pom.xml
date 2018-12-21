@@ -44,9 +44,16 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
+  <parent>
+	<groupId>com.sun.faces.extensions.maven</groupId>
+	<artifactId>jsf-extensions-master</artifactId>
+	<version>0.1.1-SNAPSHOT</version>
+	<relativePath>maven/master-pom/pom.xml</relativePath>
+  </parent>
+
   <groupId>com.sun.faces.extensions</groupId>
   <artifactId>jsf-extensions</artifactId>
-  <version>0.1-SNAPSHOT</version>
+  <version>0.1.1-SNAPSHOT</version>
   <packaging>pom</packaging>
   <description>
 
@@ -96,6 +103,48 @@
 	 <artifactId>maven-war-plugin</artifactId>
 	 <version>2.0</version>
        </plugin>
+       <plugin>
+                <inherited>true</inherited>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <inherited>true</inherited>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                        <doclint>none</doclint>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                 <groupId>org.apache.maven.plugins</groupId>
+                 <artifactId>maven-gpg-plugin</artifactId>
+                 <executions>
+                         <execution>
+                                 <id>sign-artifacts</id>
+                                 <phase>verify</phase>
+                                 <goals>
+                                         <goal>sign</goal>
+                                 </goals>
+                         </execution>
+                 </executions>
+             </plugin>
     </plugins>
   </build>
   <dependencies>
@@ -105,12 +154,12 @@
       <version>5</version>
       <scope>provided</scope>
     </dependency>
-    <dependency>
+    <!--<dependency>
       <groupId>net.sourceforge.maven-taglib</groupId>
       <artifactId>maven-taglib-plugin</artifactId>
       <version>2.2.1</version>
       <scope>provided</scope>
-    </dependency>
+    </dependency>-->
     <dependency>
       <groupId>org.apache.shale</groupId>
       <artifactId>shale-remoting</artifactId>
@@ -130,7 +179,7 @@
     <dependency>
       <groupId>com.sun.faces.extensions</groupId>
       <artifactId>jsf-extensions-dynamic-faces</artifactId>
-      <version>0.1-SNAPSHOT</version>
+      <version>0.1.1-SNAPSHOT</version>
     </dependency>
   </dependencies>
   <reporting>
@@ -158,12 +207,12 @@
       </activation>
       <modules>
 	<module>maven/master-pom</module>
-<!--	<module>test-time</module>-->
-	<module>dev-time</module>
+<!--	<module>test-time</module>
+	<module>dev-time</module>-->
 	<module>run-time/common</module>
-	<module>run-time/flash</module>
+	<!--<module>run-time/flash</module>-->
 	<module>run-time/avatar</module>
-	<module>run-time/samples/blank-facelets</module>
+	<!--<module>run-time/samples/blank-facelets</module>
 	<module>run-time/samples/blank-jsp</module>
 	<module>run-time/samples/cardemo</module>
 	<module>run-time/samples/flash</module>
@@ -172,7 +221,7 @@
 	<module>run-time/samples/j1</module>
 	<module>run-time/samples/simple-events</module>
 	<module>run-time/samples/simple-partial-update</module>
-	<module>run-time/samples/dynafaces-getting-started</module>
+	<module>run-time/samples/dynafaces-getting-started</module>-->
       </modules>
     </profile>
     <profile>

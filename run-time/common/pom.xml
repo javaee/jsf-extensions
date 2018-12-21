@@ -54,7 +54,7 @@
   <parent>
     <groupId>com.sun.faces.extensions.maven</groupId>
     <artifactId>jsf-extensions-master</artifactId>
-    <version>0.1.1</version>
+    <version>0.1.2-SNAPSHOT</version>
     <relativePath>../../maven/master-pom/pom.xml</relativePath>
   </parent>
 
@@ -62,7 +62,7 @@
     <connection>scm:git:ssh://git@github.com/javaee/jsf-extensions.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/javaee/jsf-extensions.git</developerConnection>
     <url>https://github.com/javaee/jsf-extensions</url>
-    <tag>jsf-extensions-0.1.1</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <build>

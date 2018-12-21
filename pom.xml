@@ -46,13 +46,13 @@
   <parent>
 	<groupId>com.sun.faces.extensions.maven</groupId>
 	<artifactId>jsf-extensions-master</artifactId>
-	<version>0.1.1</version>
+	<version>0.1.2-SNAPSHOT</version>
 	<relativePath>maven/master-pom/pom.xml</relativePath>
   </parent>
 
   <groupId>com.sun.faces.extensions</groupId>
   <artifactId>jsf-extensions</artifactId>
-  <version>0.1.1</version>
+  <version>0.1.2-SNAPSHOT</version>
   <packaging>pom</packaging>
   <description>
 
@@ -68,7 +68,7 @@
     <connection>scm:git:ssh://git@github.com/javaee/jsf-extensions.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/javaee/jsf-extensions.git</developerConnection>
     <url>https://github.com/javaee/jsf-extensions</url>
-    <tag>jsf-extensions-0.1.1</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <build>
@@ -178,7 +178,7 @@
     <dependency>
       <groupId>com.sun.faces.extensions</groupId>
       <artifactId>jsf-extensions-dynamic-faces</artifactId>
-      <version>0.1.1</version>
+      <version>0.1.2-SNAPSHOT</version>
     </dependency>
   </dependencies>
   <reporting>

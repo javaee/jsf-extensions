@@ -52,7 +52,7 @@
   <artifactId>jsf-extensions-master</artifactId>
   <packaging>pom</packaging>
   <name>Master POM</name>
-  <version>0.1.1-SNAPSHOT</version>
+  <version>0.1.1</version>
   <description>This is a master POM that is meant to be used by the various jsf-extensions modules.  It contains information that is 
      common to all projects.</description>
   <url>https://jsf-extensions.dev.java.net/</url>
@@ -114,7 +114,7 @@
       <id>jhook</id>
       <name>Jacob Hookom</name>
       <email>jacob@hookom.net</email>
-      <organization></organization>
+      <organization />
       <roles>
         <role>developer</role>
       </roles>
@@ -144,6 +144,7 @@
     <connection>scm:git:ssh://git@github.com/javaee/jsf-extensions.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/javaee/jsf-extensions.git</developerConnection>
     <url>https://github.com/javaee/jsf-extensions</url>
+    <tag>jsf-extensions-0.1.1</tag>
   </scm>
   <organization>
     <name>Sun Microsystems, Inc</name>
@@ -239,7 +240,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-project-info-reports-plugin</artifactId>
-        <reportSets><reportSet><reports/></reportSet></reportSets>
+        <reportSets><reportSet><reports /></reportSet></reportSets>
       </plugin>
     </plugins>
   </reporting>

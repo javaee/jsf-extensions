@@ -40,20 +40,19 @@
 
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
   <parent>
 	<groupId>com.sun.faces.extensions.maven</groupId>
 	<artifactId>jsf-extensions-master</artifactId>
-	<version>0.1.1-SNAPSHOT</version>
+	<version>0.1.1</version>
 	<relativePath>maven/master-pom/pom.xml</relativePath>
   </parent>
 
   <groupId>com.sun.faces.extensions</groupId>
   <artifactId>jsf-extensions</artifactId>
-  <version>0.1.1-SNAPSHOT</version>
+  <version>0.1.1</version>
   <packaging>pom</packaging>
   <description>
 
@@ -69,6 +68,7 @@
     <connection>scm:git:ssh://git@github.com/javaee/jsf-extensions.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/javaee/jsf-extensions.git</developerConnection>
     <url>https://github.com/javaee/jsf-extensions</url>
+    <tag>jsf-extensions-0.1.1</tag>
   </scm>
 
   <build>
@@ -85,8 +85,7 @@
                  <property name="cp" refid="maven.compile.classpath" />
                  <echo message="${cp}" />
                  <echo message="${pom.version}" />
-                 <ant antfile="src/site/javadoc-build.xml" inheritAll="true"
-                      inheritRefs="true">
+                 <ant antfile="src/site/javadoc-build.xml" inheritAll="true" inheritRefs="true">
                    <property name="pom.version" value="${pom.version}" />
                    <property name="pom.artifactId" value="${pom.artifactId}" />
                  </ant>
@@ -179,7 +178,7 @@
     <dependency>
       <groupId>com.sun.faces.extensions</groupId>
       <artifactId>jsf-extensions-dynamic-faces</artifactId>
-      <version>0.1.1-SNAPSHOT</version>
+      <version>0.1.1</version>
     </dependency>
   </dependencies>
   <reporting>

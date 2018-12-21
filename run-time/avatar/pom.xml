@@ -61,9 +61,9 @@
   </parent>
 
   <scm>
-    <connection>scm:svn:http://jsf-extensions.dev.java.net/svn/jsf-extensions/trunk</connection>
-    <developerConnection>scm:svn:https://jsf-extensions.dev.java.net/svn/jsf-extensions/trunk</developerConnection>
-    <url>https://jsf-extensions.dev.java.net/source/browse/jsf-extensions/</url>
+    <connection>scm:git:ssh://git@github.com/javaee/jsf-extensions.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/javaee/jsf-extensions.git</developerConnection>
+    <url>https://github.com/javaee/jsf-extensions</url>
   </scm>
 
   <build>

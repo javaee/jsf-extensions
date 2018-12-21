@@ -42,6 +42,12 @@
 -->
 
   <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>net.java</groupId>
+    <artifactId>jvnet-parent</artifactId>
+    <version>5</version>
+  </parent>
+
   <groupId>com.sun.faces.extensions.maven</groupId>
   <artifactId>jsf-extensions-master</artifactId>
   <packaging>pom</packaging>
@@ -162,32 +168,19 @@
 	 <artifactId>maven-war-plugin</artifactId>
 	 <version>2.0</version>
        </plugin>
+       <plugin>
+           <groupId>org.apache.maven.plugins</groupId>
+           <artifactId>maven-release-plugin</artifactId>
+           <version>2.4</version>
+           <configuration>
+                 <arguments>-Pjvnet-release -Dgpg.passphrase=${gpg.passphrase}</arguments>
+           </configuration>
+        </plugin>
      </plugins>
    </pluginManagement>
 
   </build>
 
-  <repositories>
-    <repository>
-      <snapshots />
-      <id>java.net</id>
-      <name>Java.net Maven 1.x Repository for external projects</name>
-      <url>https://maven-repository.dev.java.net/nonav/repository</url>
-      <layout>legacy</layout>
-    </repository>
-    <repository>
-      <snapshots />
-      <id>java.net.shared</id>
-      <name>Java.net Maven 1.x Repository for glassfish dependencies</name>
-      <url>http://download.java.net/javaee5/external/shared</url>
-      <layout>legacy</layout>
-    </repository>
-    <repository>
-      <snapshots />
-      <id>ibiblio</id>
-      <url>http://www.ibiblio.org/maven2/</url>
-    </repository>
-  </repositories>
   <dependencies>
     <dependency>
       <groupId>javaee</groupId>
